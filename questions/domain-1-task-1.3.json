@@ -419,5 +419,101 @@
     ],
     "explanation": "Image-only PDFs contain no machine-readable text, so a standard text extractor produces nothing. Adding OCR \u2014 for example using Amazon Textract during pre-processing \u2014 converts the scanned images to text, which can then be chunked and embedded. Embedding dimension, chunk size, and temperature are unrelated to the absence of a text layer.",
     "source_topic": "Amazon Textract, OCR pipeline for knowledge base ingestion"
+  },
+  {
+    "id": "d1-q0520",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "LoRA fine-tuning technique",
+    "difficulty": "hard",
+    "question_text": "A machine learning team wants to fine-tune a large foundation model on domain-specific data without updating all model weights, to minimize storage and compute cost. Which technique achieves this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Low-Rank Adaptation (LoRA) \u2014 trains small low-rank matrices added to frozen base model weights"
+      },
+      {
+        "key": "B",
+        "text": "Full fine-tuning \u2014 retrains all layers of the base model"
+      },
+      {
+        "key": "C",
+        "text": "Prompt engineering \u2014 modifies only the input text with no weight updates"
+      },
+      {
+        "key": "D",
+        "text": "Model distillation \u2014 trains a smaller student model from scratch using teacher model outputs"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "LoRA freezes the base model weights and trains small low-rank adapter matrices (typically added to attention layers). At inference these are merged with the base weights, producing an adapted model at a fraction of the compute and storage cost of full fine-tuning. Full fine-tuning updates all weights. Prompt engineering changes only the input with no training. Distillation creates a new smaller model \u2014 it does not adapt an existing one efficiently.",
+    "source_topic": "LoRA, parameter-efficient fine-tuning, Bedrock customization"
+  },
+  {
+    "id": "d1-q0521",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Amazon MSK for real-time GenAI data ingestion",
+    "difficulty": "medium",
+    "question_text": "A company produces millions of customer events per second (clicks, transactions, sensor readings) and wants to feed this real-time stream into a GenAI pipeline for contextual recommendations. Which AWS service provides a fully managed Apache Kafka cluster for high-throughput event streaming?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon MSK (Managed Streaming for Apache Kafka) \u2014 fully managed Kafka for high-throughput, low-latency event streaming"
+      },
+      {
+        "key": "B",
+        "text": "Amazon SQS \u2014 a simple message queue not designed for high-throughput streaming"
+      },
+      {
+        "key": "C",
+        "text": "AWS Glue \u2014 an ETL service, not a real-time streaming platform"
+      },
+      {
+        "key": "D",
+        "text": "Amazon S3 \u2014 object storage without native streaming semantics"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Amazon MSK is a fully managed Apache Kafka service purpose-built for high-throughput, low-latency event streaming at scale. Consumers (including GenAI pipelines) can subscribe to topics and process events in real time. SQS is a simpler queue with lower throughput ceilings and no Kafka semantics. Glue is batch/micro-batch ETL. S3 is object storage with no push-based streaming.",
+    "source_topic": "Amazon MSK, Kafka, real-time data ingestion for GenAI"
+  },
+  {
+    "id": "d1-q0522",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Amazon EMR \u2014 Spark for large-scale GenAI data prep",
+    "difficulty": "medium",
+    "question_text": "A data engineering team needs to preprocess a 50 TB corpus of text documents \u2014 deduplication, tokenisation counting, quality filtering \u2014 before fine-tuning an FM. The job should run on a temporary distributed cluster that scales down after completion. Which AWS service is MOST appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon EMR with Apache Spark \u2014 provides a managed, auto-scaling distributed compute cluster for large-scale data processing jobs"
+      },
+      {
+        "key": "B",
+        "text": "AWS Lambda \u2014 serverless functions limited to 15 minutes and 10 GB memory, unsuitable for 50 TB jobs"
+      },
+      {
+        "key": "C",
+        "text": "Amazon RDS \u2014 a relational database not designed for distributed data processing"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Comprehend \u2014 an NLP service for entity extraction, not distributed ETL"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Amazon EMR (Elastic MapReduce) provides managed Apache Spark (and Hadoop) clusters that scale to hundreds of nodes for large-scale distributed data processing. It auto-terminates after the job, making it cost-efficient for one-time large corpus preparation. Lambda's 15-minute timeout and 10 GB memory limit make it unsuitable for 50 TB. RDS is a transactional database. Comprehend is an NLP inference service.",
+    "source_topic": "Amazon EMR, Apache Spark, large-scale GenAI data preparation"
   }
 ]

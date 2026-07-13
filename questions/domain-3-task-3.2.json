@@ -28,7 +28,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 3.2.1 cites VPC endpoints to isolate networks for protected AI environments. AWS PrivateLink VPC endpoints for Bedrock allow Lambda or EC2 in a private subnet to call Bedrock without internet connectivity — traffic stays within the AWS backbone. A public subnet + TLS still routes over the public internet. CloudFront is a CDN, not a VPC-to-service private connector. Shield protects against DDoS attacks — not internet exposure of outbound traffic.",
+    "explanation": "Skill 3.2.1 cites VPC endpoints to isolate networks for protected AI environments. AWS PrivateLink VPC endpoints for Bedrock allow Lambda or EC2 in a private subnet to call Bedrock without internet connectivity \u2014 traffic stays within the AWS backbone. A public subnet + TLS still routes over the public internet. CloudFront is a CDN, not a VPC-to-service private connector. Shield protects against DDoS attacks \u2014 not internet exposure of outbound traffic.",
     "source_topic": "VPC endpoints, PrivateLink, Bedrock network isolation"
   },
   {
@@ -97,7 +97,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 3.2.2 cites Amazon S3 Lifecycle configurations for data retention policies. S3 Lifecycle rules can be set to automatically expire (delete) objects after a specified number of days — fully managed, no code required, and audit-ready. Manual Lambda deletion is error-prone and requires ongoing maintenance. Glacier Vault Lock enforces write-once retention — designed for compliance that prevents early deletion, not a deletion schedule. KMS key rotation changes the encryption key — it doesn't delete the data.",
+    "explanation": "Skill 3.2.2 cites Amazon S3 Lifecycle configurations for data retention policies. S3 Lifecycle rules can be set to automatically expire (delete) objects after a specified number of days \u2014 fully managed, no code required, and audit-ready. Manual Lambda deletion is error-prone and requires ongoing maintenance. Glacier Vault Lock enforces write-once retention \u2014 designed for compliance that prevents early deletion, not a deletion schedule. KMS key rotation changes the encryption key \u2014 it doesn't delete the data.",
     "source_topic": "S3 Lifecycle, data retention, compliance"
   },
   {
@@ -106,7 +106,7 @@
     "task_statement": "3.2",
     "topic": "Lake Formation for granular data access",
     "difficulty": "hard",
-    "question_text": "A RAG system retrieves documents from a data lake. Different user roles should only retrieve documents they are authorised to see — analysts can see marketing data, not HR data; HR staff can see HR data, not financial data. Which service enforces column- and row-level access controls on the data lake?",
+    "question_text": "A RAG system retrieves documents from a data lake. Different user roles should only retrieve documents they are authorised to see \u2014 analysts can see marketing data, not HR data; HR staff can see HR data, not financial data. Which service enforces column- and row-level access controls on the data lake?",
     "question_type": "single",
     "options": [
       {
@@ -129,7 +129,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 3.2.1 cites AWS Lake Formation for granular data access in protected AI environments. Lake Formation provides table-, column-, and row-level permissions on top of the AWS Glue Data Catalog — far more granular than S3 bucket or prefix policies. S3 public ACLs grant open access — the opposite of what's needed. VPC security groups control network access, not data-level permissions. IAM S3 prefix policies don't offer column or row-level granularity.",
+    "explanation": "Skill 3.2.1 cites AWS Lake Formation for granular data access in protected AI environments. Lake Formation provides table-, column-, and row-level permissions on top of the AWS Glue Data Catalog \u2014 far more granular than S3 bucket or prefix policies. S3 public ACLs grant open access \u2014 the opposite of what's needed. VPC security groups control network access, not data-level permissions. IAM S3 prefix policies don't offer column or row-level granularity.",
     "source_topic": "AWS Lake Formation, fine-grained access control"
   },
   {
@@ -161,7 +161,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 3.2.3 describes data masking techniques and anonymisation strategies for FM interactions. Tokenisation replaces PII with reversible placeholders — the FM processes anonymised content, and the mapping vault restores original values for downstream reporting. Permanent deletion is irreversible — data is lost for reporting. MD5 is a one-way hash — not reversible and not suitable for restoring original values. Instructing the FM to 'ignore PII' sends PII to the model — violating the privacy requirement.",
+    "explanation": "Skill 3.2.3 describes data masking techniques and anonymisation strategies for FM interactions. Tokenisation replaces PII with reversible placeholders \u2014 the FM processes anonymised content, and the mapping vault restores original values for downstream reporting. Permanent deletion is irreversible \u2014 data is lost for reporting. MD5 is a one-way hash \u2014 not reversible and not suitable for restoring original values. Instructing the FM to 'ignore PII' sends PII to the model \u2014 violating the privacy requirement.",
     "source_topic": "Data masking, tokenisation, FM privacy"
   },
   {
@@ -175,7 +175,7 @@
     "options": [
       {
         "key": "A",
-        "text": "AWS-managed keys (SSE-S3) — default encryption managed by AWS"
+        "text": "AWS-managed keys (SSE-S3) \u2014 default encryption managed by AWS"
       },
       {
         "key": "B",
@@ -193,7 +193,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 3.2.1 describes IAM policies and secure data access patterns for protected AI environments. When compliance and audit requirements demand full key control, Customer-Managed Keys (CMK) in AWS KMS must be used: the customer controls key policy, rotation schedule, and every key usage event is logged by CloudTrail. AWS-managed keys (SSE-S3, AWS-owned) are managed by AWS — customers have no key-policy control and limited audit depth. Client-side encryption with keys in application code is a security anti-pattern — keys are exposed in source code.",
+    "explanation": "Skill 3.2.1 describes IAM policies and secure data access patterns for protected AI environments. When compliance and audit requirements demand full key control, Customer-Managed Keys (CMK) in AWS KMS must be used: the customer controls key policy, rotation schedule, and every key usage event is logged by CloudTrail. AWS-managed keys (SSE-S3, AWS-owned) are managed by AWS \u2014 customers have no key-policy control and limited audit depth. Client-side encryption with keys in application code is a security anti-pattern \u2014 keys are exposed in source code.",
     "source_topic": "AWS KMS CMK, compliance encryption, CloudTrail audit"
   },
   {
@@ -225,7 +225,39 @@
     "correct_answers": [
       "A"
     ],
-    "explanation": "Skill 3.2.1 and 3.2.2 describe secure data access patterns. (1) Secrets Manager is designed for high-security secrets with automatic rotation — exactly right for API keys that must rotate every 30 days. (2) Parameter Store is optimised for static, non-sensitive configuration values (URLs, env names) — cheap and hierarchical. (3) AppConfig provides dynamic feature flags that can change at runtime without redeployment — perfect for model routing switches with canary rollout and automatic rollback.",
+    "explanation": "Skill 3.2.1 and 3.2.2 describe secure data access patterns. (1) Secrets Manager is designed for high-security secrets with automatic rotation \u2014 exactly right for API keys that must rotate every 30 days. (2) Parameter Store is optimised for static, non-sensitive configuration values (URLs, env names) \u2014 cheap and hierarchical. (3) AppConfig provides dynamic feature flags that can change at runtime without redeployment \u2014 perfect for model routing switches with canary rollout and automatic rollback.",
     "source_topic": "Secrets Manager, Parameter Store, AppConfig"
+  },
+  {
+    "id": "d3-q0407",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Amazon Macie for PII discovery in S3",
+    "difficulty": "easy",
+    "question_text": "Before building a Bedrock Knowledge Base from an S3 data lake, a security team must identify which buckets contain personally identifiable information (PII) such as social security numbers and credit card data. Which AWS service automates this discovery?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Macie \u2014 uses ML to automatically discover, classify, and report sensitive data (PII, financial data) in Amazon S3"
+      },
+      {
+        "key": "B",
+        "text": "AWS Config \u2014 tracks resource configuration changes"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Inspector \u2014 scans EC2 instances and container images for vulnerabilities"
+      },
+      {
+        "key": "D",
+        "text": "Amazon GuardDuty \u2014 detects threats and malicious activity in AWS accounts"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Amazon Macie is the purpose-built service for sensitive data discovery in S3. It uses ML to identify PII (names, SSNs, credit card numbers, etc.) and generates findings with bucket-level and object-level detail. AWS Config tracks configuration changes (not data content). Inspector scans for software vulnerabilities. GuardDuty detects threats like credential compromise \u2014 not data classification.",
+    "source_topic": "Amazon Macie, PII discovery, S3 sensitive data classification"
   }
 ]

@@ -28,7 +28,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 2.3.1 describes API-based integrations with legacy systems and event-driven architectures for loose coupling. Lambda adapter functions translate between the ERP's protocol and Bedrock's API; EventBridge decouples producers from consumers so the ERP and GenAI layer evolve independently. Direct FM-to-DB coupling is a security and maintenance anti-pattern. Replacing the ERP is a multi-year project — not a GenAI integration approach. Kendra is being retired to new customers and is search-specific.",
+    "explanation": "Skill 2.3.1 describes API-based integrations with legacy systems and event-driven architectures for loose coupling. Lambda adapter functions translate between the ERP's protocol and Bedrock's API; EventBridge decouples producers from consumers so the ERP and GenAI layer evolve independently. Direct FM-to-DB coupling is a security and maintenance anti-pattern. Replacing the ERP is a multi-year project \u2014 not a GenAI integration approach. Kendra is being retired to new customers and is search-specific.",
     "source_topic": "Enterprise integration, event-driven, Lambda, EventBridge"
   },
   {
@@ -60,7 +60,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 2.3.3 describes identity federation between FM services and enterprise systems. IAM Identity Center (SSO) integrates with Active Directory via SAML or OIDC, allowing employees to assume time-limited IAM roles — no long-term keys needed. Individual IAM users with long-term keys are hard to manage at scale and violate least-privilege principles. Shared credentials eliminate per-user auditability. Embedding keys in front-end code is a critical security vulnerability.",
+    "explanation": "Skill 2.3.3 describes identity federation between FM services and enterprise systems. IAM Identity Center (SSO) integrates with Active Directory via SAML or OIDC, allowing employees to assume time-limited IAM roles \u2014 no long-term keys needed. Individual IAM users with long-term keys are hard to manage at scale and violate least-privilege principles. Shared credentials eliminate per-user auditability. Embedding keys in front-end code is a critical security vulnerability.",
     "source_topic": "IAM Identity Center, identity federation, Bedrock access"
   },
   {
@@ -97,7 +97,7 @@
       "A",
       "B"
     ],
-    "explanation": "Skill 2.3.5 explicitly cites AWS CodePipeline and AWS CodeBuild for CI/CD pipelines with automated testing frameworks, security scans, and rollback support for GenAI components. CodePipeline orchestrates the stages (source → build → test → deploy); CodeBuild runs the actual build and test commands including prompt regression tests and security scans. Kendra indexes documents — not deployment artefacts. Polly is text-to-speech. QuickSight is BI visualisation, not CI/CD.",
+    "explanation": "Skill 2.3.5 explicitly cites AWS CodePipeline and AWS CodeBuild for CI/CD pipelines with automated testing frameworks, security scans, and rollback support for GenAI components. CodePipeline orchestrates the stages (source \u2192 build \u2192 test \u2192 deploy); CodeBuild runs the actual build and test commands including prompt regression tests and security scans. Kendra indexes documents \u2014 not deployment artefacts. Polly is text-to-speech. QuickSight is BI visualisation, not CI/CD.",
     "source_topic": "AWS CodePipeline, CodeBuild, CI/CD for GenAI"
   },
   {
@@ -147,7 +147,7 @@
       },
       {
         "key": "B",
-        "text": "Deploy a GenAI gateway — API Gateway + Lambda — that centralises auth, rate limiting, logging, and model routing for all consumers"
+        "text": "Deploy a GenAI gateway \u2014 API Gateway + Lambda \u2014 that centralises auth, rate limiting, logging, and model routing for all consumers"
       },
       {
         "key": "C",
@@ -161,7 +161,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 2.3.5 describes centralised abstraction layers and observability/control mechanisms as part of secure GenAI gateway architectures. An API Gateway + Lambda gateway centralises: authentication (API keys/Cognito), usage plans and rate limiting, request/response logging, model routing, and cost attribution. Direct team access scatters governance. S3 presigned URLs are for object access — unrelated to Bedrock. A shared IAM role eliminates per-team auditability.",
+    "explanation": "Skill 2.3.5 describes centralised abstraction layers and observability/control mechanisms as part of secure GenAI gateway architectures. An API Gateway + Lambda gateway centralises: authentication (API keys/Cognito), usage plans and rate limiting, request/response logging, model routing, and cost attribution. Direct team access scatters governance. S3 presigned URLs are for object access \u2014 unrelated to Bedrock. A shared IAM role eliminates per-team auditability.",
     "source_topic": "GenAI gateway, API Gateway, centralised observability"
   },
   {
@@ -202,7 +202,7 @@
     "task_statement": "2.3",
     "topic": "Lambda Durable Functions for long-running workflows",
     "difficulty": "hard",
-    "question_text": "A company runs a multi-step AI document-review workflow: triage → wait for human expert input (up to 3 days) → generate final report. They want a fault-tolerant, serverless implementation that avoids managing state machines or containers. Which new AWS capability fits best?",
+    "question_text": "A company runs a multi-step AI document-review workflow: triage \u2192 wait for human expert input (up to 3 days) \u2192 generate final report. They want a fault-tolerant, serverless implementation that avoids managing state machines or containers. Which new AWS capability fits best?",
     "question_type": "single",
     "options": [
       {
@@ -211,7 +211,7 @@
       },
       {
         "key": "B",
-        "text": "AWS Lambda Durable Functions — checkpoint-aware Lambda that can sleep for up to a year without incurring compute cost"
+        "text": "AWS Lambda Durable Functions \u2014 checkpoint-aware Lambda that can sleep for up to a year without incurring compute cost"
       },
       {
         "key": "C",
@@ -225,7 +225,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "AWS Lambda Durable Functions (launched re:Invent Dec 2025, Skill 2.3.1 — enterprise connectivity and Skill 2.5 — development tools) allows sequential, fault-tolerant workflows written as ordinary Lambda code that can suspend for up to ~366 days with no compute cost while waiting. It auto-checkpoints progress so failures replay from the last checkpoint — exactly right for a 3-day human-wait step. Standard Lambda has a 15-minute cap. Step Functions (C) also works for this pattern but requires writing ASL JSON state definitions — more operational complexity than Durable Functions. ECS Fargate incurs continuous cost even when waiting.",
+    "explanation": "AWS Lambda Durable Functions (launched re:Invent Dec 2025, Skill 2.3.1 \u2014 enterprise connectivity and Skill 2.5 \u2014 development tools) allows sequential, fault-tolerant workflows written as ordinary Lambda code that can suspend for up to ~366 days with no compute cost while waiting. It auto-checkpoints progress so failures replay from the last checkpoint \u2014 exactly right for a 3-day human-wait step. Standard Lambda has a 15-minute cap. Step Functions (C) also works for this pattern but requires writing ASL JSON state definitions \u2014 more operational complexity than Durable Functions. ECS Fargate incurs continuous cost even when waiting.",
     "source_topic": "AWS Lambda Durable Functions, long-running workflows"
   },
   {
@@ -243,7 +243,7 @@
       },
       {
         "key": "B",
-        "text": "AWS AppSync GraphQL API — resolves multiple data sources (Bedrock, DynamoDB, OpenSearch) in one query"
+        "text": "AWS AppSync GraphQL API \u2014 resolves multiple data sources (Bedrock, DynamoDB, OpenSearch) in one query"
       },
       {
         "key": "C",
@@ -257,7 +257,71 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "AWS AppSync is a managed GraphQL API that can resolve fields from multiple backends (Lambda calling Bedrock, DynamoDB for chat history, OpenSearch for citations) in a single client query, eliminating multi-round-trip overhead (Skill 2.3.2 — integrating AI capabilities into existing applications). REST APIs require separate requests per data source. SQS is asynchronous message queuing — not a synchronous multi-source query resolver. Step Functions calls services sequentially, not in a unified single response.",
+    "explanation": "AWS AppSync is a managed GraphQL API that can resolve fields from multiple backends (Lambda calling Bedrock, DynamoDB for chat history, OpenSearch for citations) in a single client query, eliminating multi-round-trip overhead (Skill 2.3.2 \u2014 integrating AI capabilities into existing applications). REST APIs require separate requests per data source. SQS is asynchronous message queuing \u2014 not a synchronous multi-source query resolver. Step Functions calls services sequentially, not in a unified single response.",
     "source_topic": "AWS AppSync, GraphQL, multi-source FM integration"
+  },
+  {
+    "id": "d2-q0513",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "AppConfig for dynamic FM selection without code changes",
+    "difficulty": "medium",
+    "question_text": "A team wants to swap the underlying foundation model powering their Bedrock application without redeploying code. New models are released frequently and the team needs to change the model ID in production within minutes of approval. Which AWS service enables this with no code deployment?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS AppConfig \u2014 store the model ID as a configuration value; the application reads it at runtime, so changing the config immediately takes effect without a code deployment"
+      },
+      {
+        "key": "B",
+        "text": "AWS CodePipeline \u2014 redeploy the Lambda on every model change"
+      },
+      {
+        "key": "C",
+        "text": "AWS CloudFormation \u2014 update the stack with the new model ARN each time"
+      },
+      {
+        "key": "D",
+        "text": "Hardcode the model ID in the Lambda environment variable and restart manually"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "AWS AppConfig allows configuration values (such as a Bedrock model ID) to be changed dynamically without any code deployment or Lambda restart. The application polls AppConfig at runtime and picks up the new value within seconds. CodePipeline and CloudFormation require deployment pipelines that take minutes and involve code/infra changes. Hardcoded environment variables require a manual redeploy.",
+    "source_topic": "AppConfig, dynamic FM selection, feature flags"
+  },
+  {
+    "id": "d2-q0514",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "SageMaker Custom Model Import to Bedrock",
+    "difficulty": "hard",
+    "question_text": "A data science team has fine-tuned a custom model in Amazon SageMaker and wants to serve it through the Amazon Bedrock API to benefit from managed serverless inference. What is the correct path?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Bedrock Custom Model Import to import the SageMaker-trained model into Bedrock, then invoke it via the standard Bedrock Converse or InvokeModel API"
+      },
+      {
+        "key": "B",
+        "text": "Directly call the SageMaker endpoint from the client using the Bedrock SDK"
+      },
+      {
+        "key": "C",
+        "text": "Export model weights to S3 and call them directly via a Lambda function"
+      },
+      {
+        "key": "D",
+        "text": "Re-train the model from scratch using Bedrock's fine-tuning job instead"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Bedrock Custom Model Import lets teams bring custom models trained in SageMaker (or elsewhere) into Bedrock, unlocking serverless inference, IAM-based access, Guardrails, and the standard Bedrock APIs. Calling a SageMaker endpoint via the Bedrock SDK does not work \u2014 they are separate APIs. Calling raw weights via Lambda bypasses all Bedrock management features. Re-training from scratch discards the existing work.",
+    "source_topic": "Bedrock Custom Model Import, SageMaker to Bedrock workflow"
   }
 ]

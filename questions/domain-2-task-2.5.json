@@ -28,7 +28,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 2.5.4 explicitly cites Amazon Q Developer for generating and refactoring code, code suggestions for API assistance, AI component testing, and performance optimisation. Amazon Q Developer integrates into VS Code, JetBrains IDEs, and the AWS Console. CodeGuru Reviewer performs static code analysis for security/quality — not interactive generation. CloudShell is a browser-based CLI environment. SageMaker Studio is an ML development environment.",
+    "explanation": "Skill 2.5.4 explicitly cites Amazon Q Developer for generating and refactoring code, code suggestions for API assistance, AI component testing, and performance optimisation. Amazon Q Developer integrates into VS Code, JetBrains IDEs, and the AWS Console. CodeGuru Reviewer performs static code analysis for security/quality \u2014 not interactive generation. CloudShell is a browser-based CLI environment. SageMaker Studio is an ML development environment.",
     "source_topic": "Amazon Q Developer, developer productivity"
   },
   {
@@ -60,7 +60,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 2.5.2 cites AWS Amplify for developing declarative UI components for AI interfaces. Amplify's AI kit includes pre-built React/Vue components for conversational AI, streaming responses, and FM interaction — abstracting the underlying Bedrock API complexity. A custom EC2 WebSocket server requires significant boilerplate. Lightsail and S3/CloudFront static hosting serve files but provide no AI-specific UI components.",
+    "explanation": "Skill 2.5.2 cites AWS Amplify for developing declarative UI components for AI interfaces. Amplify's AI kit includes pre-built React/Vue components for conversational AI, streaming responses, and FM interaction \u2014 abstracting the underlying Bedrock API complexity. A custom EC2 WebSocket server requires significant boilerplate. Lightsail and S3/CloudFront static hosting serve files but provide no AI-specific UI components.",
     "source_topic": "AWS Amplify, GenAI UI, conversational interfaces"
   },
   {
@@ -69,7 +69,7 @@
     "task_statement": "2.5",
     "topic": "Bedrock Data Automation",
     "difficulty": "medium",
-    "question_text": "A company wants to automate extraction of structured data from unstructured documents at scale — invoices, contracts, and reports — using GenAI without building a custom pipeline. Which service enables this?",
+    "question_text": "A company wants to automate extraction of structured data from unstructured documents at scale \u2014 invoices, contracts, and reports \u2014 using GenAI without building a custom pipeline. Which service enables this?",
     "question_type": "single",
     "options": [
       {
@@ -92,7 +92,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 2.5.3 cites Amazon Bedrock Data Automation for automated data processing workflows. Bedrock Data Automation uses FMs to intelligently extract, classify, and summarise data from documents, images, audio, and video at scale — going beyond Textract's fixed-template extraction. Textract extracts text/tables from structured layouts but lacks semantic understanding for unstructured contracts. Comprehend Medical is healthcare NLP specifically. Glue DataBrew is a data preparation tool for structured datasets.",
+    "explanation": "Skill 2.5.3 cites Amazon Bedrock Data Automation for automated data processing workflows. Bedrock Data Automation uses FMs to intelligently extract, classify, and summarise data from documents, images, audio, and video at scale \u2014 going beyond Textract's fixed-template extraction. Textract extracts text/tables from structured layouts but lacks semantic understanding for unstructured contracts. Comprehend Medical is healthcare NLP specifically. Glue DataBrew is a data preparation tool for structured datasets.",
     "source_topic": "Amazon Bedrock Data Automation"
   },
   {
@@ -124,7 +124,7 @@
     "correct_answers": [
       "A"
     ],
-    "explanation": "Skill 2.5.6 explicitly cites CloudWatch Logs Insights for analysing prompts and responses to improve troubleshooting efficiency. With Bedrock Model Invocation Logging enabled, prompts and responses are logged to CloudWatch Logs, enabling Logs Insights queries to filter by time window, response quality signals, and error codes. Inspector is a security scanner. AWS Config tracks configuration changes — not FM I/O logs. Athena queries S3 files — useful if logs are archived to S3, but CloudWatch Logs Insights is the real-time first step.",
+    "explanation": "Skill 2.5.6 explicitly cites CloudWatch Logs Insights for analysing prompts and responses to improve troubleshooting efficiency. With Bedrock Model Invocation Logging enabled, prompts and responses are logged to CloudWatch Logs, enabling Logs Insights queries to filter by time window, response quality signals, and error codes. Inspector is a security scanner. AWS Config tracks configuration changes \u2014 not FM I/O logs. Athena queries S3 files \u2014 useful if logs are archived to S3, but CloudWatch Logs Insights is the real-time first step.",
     "source_topic": "CloudWatch Logs Insights, Bedrock Model Invocation Logs"
   },
   {
@@ -138,7 +138,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Bedrock Prompt Flows — a visual, no-code workflow builder for FM prompt chaining"
+        "text": "Amazon Bedrock Prompt Flows \u2014 a visual, no-code workflow builder for FM prompt chaining"
       },
       {
         "key": "B",
@@ -156,7 +156,7 @@
     "correct_answers": [
       "A"
     ],
-    "explanation": "Skill 2.5.2 cites Amazon Bedrock Prompt Flows as a no-code workflow builder. Prompt Flows provides a visual drag-and-drop interface for creating FM prompt chains, conditional branching, and integrating tools — requiring no code. Lambda layers share code between Lambda functions — requires programming. SageMaker Pipelines is for ML training workflows. Step Functions can orchestrate Bedrock calls but requires JSON/YAML definitions.",
+    "explanation": "Skill 2.5.2 cites Amazon Bedrock Prompt Flows as a no-code workflow builder. Prompt Flows provides a visual drag-and-drop interface for creating FM prompt chains, conditional branching, and integrating tools \u2014 requiring no code. Lambda layers share code between Lambda functions \u2014 requires programming. SageMaker Pipelines is for ML training workflows. Step Functions can orchestrate Bedrock calls but requires JSON/YAML definitions.",
     "source_topic": "Amazon Bedrock Prompt Flows, no-code GenAI"
   },
   {
@@ -188,7 +188,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 2.5.2 cites OpenAPI specifications for API-first development approaches. Defining the OpenAPI spec first allows consumers to generate client SDKs, write integration tests, and develop in parallel — before any backend implementation exists. API Gateway can import the OpenAPI spec directly to create routes, validation, and documentation. Code-first documentation risks inconsistency. Sharing Lambda ARNs is an internal implementation detail, not a consumer-facing contract. EventBridge schema registry is for event schemas, not request/response API contracts.",
+    "explanation": "Skill 2.5.2 cites OpenAPI specifications for API-first development approaches. Defining the OpenAPI spec first allows consumers to generate client SDKs, write integration tests, and develop in parallel \u2014 before any backend implementation exists. API Gateway can import the OpenAPI spec directly to create routes, validation, and documentation. Code-first documentation risks inconsistency. Sharing Lambda ARNs is an internal implementation detail, not a consumer-facing contract. EventBridge schema registry is for event schemas, not request/response API contracts.",
     "source_topic": "OpenAPI specification, API-first development, API Gateway"
   },
   {
@@ -206,7 +206,7 @@
       },
       {
         "key": "B",
-        "text": "Amazon Q Business — managed enterprise RAG with built-in ACL inheritance from connected data sources"
+        "text": "Amazon Q Business \u2014 managed enterprise RAG with built-in ACL inheritance from connected data sources"
       },
       {
         "key": "C",
@@ -220,7 +220,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Amazon Q Business (Skill 2.5.2, accessible AI interfaces) is a fully managed enterprise RAG service that inherits access control lists (ACL) directly from connected data sources like SharePoint — users only see documents they already have permission to access, enforced automatically. It provides a built-in web experience with no custom UI code needed. Bedrock Knowledge Bases (A) provides flexible RAG but requires building a custom access-control layer. Kendra (C) is being closed to new customers (July 2026). Custom LangChain (D) maximises flexibility but is the highest-effort option — opposite of minimal development.",
+    "explanation": "Amazon Q Business (Skill 2.5.2, accessible AI interfaces) is a fully managed enterprise RAG service that inherits access control lists (ACL) directly from connected data sources like SharePoint \u2014 users only see documents they already have permission to access, enforced automatically. It provides a built-in web experience with no custom UI code needed. Bedrock Knowledge Bases (A) provides flexible RAG but requires building a custom access-control layer. Kendra (C) is being closed to new customers (July 2026). Custom LangChain (D) maximises flexibility but is the highest-effort option \u2014 opposite of minimal development.",
     "source_topic": "Amazon Q Business, ACL, managed enterprise RAG"
   },
   {
@@ -234,11 +234,11 @@
     "options": [
       {
         "key": "A",
-        "text": "Q Business Data Connectors — extend them to write back to Jira"
+        "text": "Q Business Data Connectors \u2014 extend them to write back to Jira"
       },
       {
         "key": "B",
-        "text": "Q Business Plugins — pre-built enterprise connectors (Jira, ServiceNow, Salesforce) that enable write actions"
+        "text": "Q Business Plugins \u2014 pre-built enterprise connectors (Jira, ServiceNow, Salesforce) that enable write actions"
       },
       {
         "key": "C",
@@ -246,13 +246,173 @@
       },
       {
         "key": "D",
-        "text": "Q Business cannot take write actions — it is read-only"
+        "text": "Q Business cannot take write actions \u2014 it is read-only"
       }
     ],
     "correct_answers": [
       "B"
     ],
-    "explanation": "Q Business Plugins are pre-built enterprise connectors (Jira, ServiceNow, Salesforce, Zendesk) that enable write actions directly from the chat interface. Data Connectors (A) are read-only ingestion connectors — they index documents but cannot write back to source systems. Bedrock Agents action groups are a different product not embedded in Q Business. Q Business supports write actions via Plugins — it is not read-only.",
+    "explanation": "Q Business Plugins are pre-built enterprise connectors (Jira, ServiceNow, Salesforce, Zendesk) that enable write actions directly from the chat interface. Data Connectors (A) are read-only ingestion connectors \u2014 they index documents but cannot write back to source systems. Bedrock Agents action groups are a different product not embedded in Q Business. Q Business supports write actions via Plugins \u2014 it is not read-only.",
     "source_topic": "Amazon Q Business Plugins, enterprise write actions"
+  },
+  {
+    "id": "d2-q0515",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "SageMaker ML Lineage Tracking for audit",
+    "difficulty": "medium",
+    "question_text": "A regulated financial services firm needs to audit their ML pipeline to trace which training dataset version produced a given deployed model endpoint. Which SageMaker capability provides this end-to-end lineage tracking?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "SageMaker ML Lineage Tracking \u2014 automatically tracks relationships between datasets, training jobs, models, and endpoints; queryable via the LineageQuery API"
+      },
+      {
+        "key": "B",
+        "text": "SageMaker Model Monitor \u2014 detects data drift in production traffic"
+      },
+      {
+        "key": "C",
+        "text": "SageMaker Clarify \u2014 explains model predictions with SHAP values"
+      },
+      {
+        "key": "D",
+        "text": "SageMaker Ground Truth \u2014 labels training data"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "SageMaker ML Lineage Tracking creates and stores a graph of ML workflow entities (datasets, training jobs, models, endpoints) and their associations. The LineageQuery API lets you trace forward and backward through this graph \u2014 e.g. find all endpoints using a specific dataset. Model Monitor detects data drift, Clarify explains predictions, and Ground Truth labels data; none of these provide lineage tracking.",
+    "source_topic": "SageMaker Lineage Tracking, ML audit, LineageQuery API"
+  },
+  {
+    "id": "d2-q0516",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "SageMaker Ground Truth \u2014 training data labeling",
+    "difficulty": "easy",
+    "question_text": "A company is building a custom image classification model and needs to label 50,000 images efficiently. They want a managed AWS service that combines automated pre-labeling with a human review workflow. Which service is purpose-built for this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon SageMaker Ground Truth \u2014 provides automated labeling and a managed workforce (Mechanical Turk, private, or vendor) for human review"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Rekognition \u2014 automatically labels images without human review"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Textract \u2014 extracts text from images"
+      },
+      {
+        "key": "D",
+        "text": "Amazon A2I \u2014 routes already-labeled data for human review only"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "SageMaker Ground Truth is AWS's managed data labeling service. It uses automated pre-labeling to label high-confidence examples and routes uncertain examples to a human workforce (Amazon Mechanical Turk, private team, or AWS-managed vendors). Rekognition performs inference but does not build training datasets through human labeling pipelines. Textract extracts text. A2I is for augmenting model predictions with human review \u2014 not for building initial training label sets.",
+    "source_topic": "SageMaker Ground Truth, training data labeling, HITL"
+  },
+  {
+    "id": "d2-q0517",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "SageMaker Feature Store",
+    "difficulty": "medium",
+    "question_text": "A data science team wants a centralized, reusable repository for ML features that supports both real-time (online) lookups for inference and batch (offline) access for training. Which AWS service provides this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon SageMaker Feature Store \u2014 provides an online store (low-latency lookup) and offline store (S3-backed for batch training), with feature versioning and sharing"
+      },
+      {
+        "key": "B",
+        "text": "Amazon DynamoDB \u2014 a NoSQL database with no ML-specific feature management"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Redshift \u2014 a data warehouse for analytical SQL queries only"
+      },
+      {
+        "key": "D",
+        "text": "Amazon ElastiCache \u2014 an in-memory cache for general application data"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "SageMaker Feature Store is purpose-built for ML feature management. It has an online store (low-latency reads for real-time inference) and an offline store (S3-backed for batch training access) in a single managed service, with feature group versioning. DynamoDB is a general NoSQL database with no feature lineage or dual-store design. Redshift is an analytical warehouse. ElastiCache is a general-purpose cache.",
+    "source_topic": "SageMaker Feature Store, online/offline store, feature engineering"
+  },
+  {
+    "id": "d2-q0519",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "SageMaker Unified Studio \u2014 integrated lakehouse workspace",
+    "difficulty": "easy",
+    "question_text": "A cross-functional team of data engineers, data scientists, and ML engineers wants a single web-based workspace where they can access Amazon Bedrock, Amazon Q, QuickSight dashboards, and SageMaker notebooks without switching between consoles. Which service provides this unified experience?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon SageMaker Unified Studio \u2014 a single interface integrating data, analytics, ML, and AI services including Bedrock and Q"
+      },
+      {
+        "key": "B",
+        "text": "AWS Management Console \u2014 the general AWS console, not a unified data/ML workspace"
+      },
+      {
+        "key": "C",
+        "text": "Amazon QuickSight \u2014 a BI tool, not a multi-service developer workspace"
+      },
+      {
+        "key": "D",
+        "text": "AWS Cloud9 \u2014 a cloud-based code editor, not an ML/data lakehouse workspace"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "SageMaker Unified Studio is a web application that brings together Bedrock, Amazon Q, QuickSight, SageMaker notebooks, and data lakehouse capabilities into one interface, enabling full-stack data and AI workflows. The AWS console is a general management UI. QuickSight is BI only. Cloud9 is a code editor.",
+    "source_topic": "SageMaker Unified Studio, integrated workspace, lakehouse"
+  },
+  {
+    "id": "d2-q0520",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "Amazon Q Apps \u2014 low-code GenAI app builder",
+    "difficulty": "easy",
+    "question_text": "A business analyst (non-developer) wants to create a custom GenAI application using the company's Q Business index \u2014 for example a meeting summary generator \u2014 without writing any code. Which Amazon Q capability is designed for this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Q Apps \u2014 allows non-developers to build custom GenAI apps from templates using the Q Business index, no code required"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Q Developer \u2014 helps developers write and debug code"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Bedrock Prompt Flows \u2014 a visual workflow builder for technical users"
+      },
+      {
+        "key": "D",
+        "text": "AWS Amplify \u2014 a full-stack framework requiring front-end development skills"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Amazon Q Apps enables non-technical business users to create purpose-built GenAI apps using templates on top of their Q Business knowledge index, without writing code. Q Developer targets software developers. Bedrock Prompt Flows is visual but targets technical GenAI builders. Amplify requires front-end development skills.",
+    "source_topic": "Amazon Q Apps, low-code GenAI, Q Business"
   }
 ]

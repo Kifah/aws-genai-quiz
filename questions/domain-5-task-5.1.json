@@ -37,7 +37,7 @@
     "task_statement": "5.1",
     "topic": "LLM-as-a-judge evaluation",
     "difficulty": "hard",
-    "question_text": "A team needs to evaluate whether FM-generated customer support responses are helpful, accurate, and professional at scale — without human labellers for every response. Which evaluation approach scales this?",
+    "question_text": "A team needs to evaluate whether FM-generated customer support responses are helpful, accurate, and professional at scale \u2014 without human labellers for every response. Which evaluation approach scales this?",
     "question_type": "single",
     "options": [
       {
@@ -46,7 +46,7 @@
       },
       {
         "key": "B",
-        "text": "Use an LLM-as-a-Judge approach — configure a judge FM that evaluates each response against helpfulness, accuracy, and professionalism rubrics"
+        "text": "Use an LLM-as-a-Judge approach \u2014 configure a judge FM that evaluates each response against helpfulness, accuracy, and professionalism rubrics"
       },
       {
         "key": "C",
@@ -54,13 +54,13 @@
       },
       {
         "key": "D",
-        "text": "Measure response length — longer responses indicate higher quality"
+        "text": "Measure response length \u2014 longer responses indicate higher quality"
       }
     ],
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 5.1.5 describes automated quality assessment with LLM-as-a-Judge techniques. A capable judge FM (e.g., Claude) evaluates each response against a structured rubric — scalable, consistent, and available in Amazon Bedrock Model Evaluations as an automated evaluator. Weekly random sampling has high variance and misses systematic failures. BLEU/ROUGE score lexical overlap — poor proxies for conversational quality. Response length has no correlation with quality.",
+    "explanation": "Skill 5.1.5 describes automated quality assessment with LLM-as-a-Judge techniques. A capable judge FM (e.g., Claude) evaluates each response against a structured rubric \u2014 scalable, consistent, and available in Amazon Bedrock Model Evaluations as an automated evaluator. Weekly random sampling has high variance and misses systematic failures. BLEU/ROUGE score lexical overlap \u2014 poor proxies for conversational quality. Response length has no correlation with quality.",
     "source_topic": "LLM-as-a-Judge, automated evaluation, Bedrock"
   },
   {
@@ -74,30 +74,30 @@
     "options": [
       {
         "key": "A",
-        "text": "Context Recall — the proportion of relevant information from the knowledge base that was successfully retrieved"
+        "text": "Context Recall \u2014 the proportion of relevant information from the knowledge base that was successfully retrieved"
       },
       {
         "key": "B",
-        "text": "Answer Faithfulness — whether the generated answer is grounded in the retrieved context (not hallucinated)"
+        "text": "Answer Faithfulness \u2014 whether the generated answer is grounded in the retrieved context (not hallucinated)"
       },
       {
         "key": "C",
-        "text": "FM parameter count — larger models produce higher RAG scores"
+        "text": "FM parameter count \u2014 larger models produce higher RAG scores"
       },
       {
         "key": "D",
-        "text": "Token latency — faster retrieval indicates better RAG quality"
+        "text": "Token latency \u2014 faster retrieval indicates better RAG quality"
       },
       {
         "key": "E",
-        "text": "Embedding model release date — newer embeddings always retrieve better"
+        "text": "Embedding model release date \u2014 newer embeddings always retrieve better"
       }
     ],
     "correct_answers": [
       "A",
       "B"
     ],
-    "explanation": "Skill 5.1.5 and 5.1.6 describe RAG evaluation covering retrieval quality and context matching. Context Recall measures retrieval completeness (did we retrieve all relevant chunks?). Answer Faithfulness measures generation quality (does the answer stay grounded in retrieved context?). RAGAS and similar frameworks operationalise both. Parameter count doesn't predict RAG-specific quality. Token latency measures speed — not retrieval/generation quality. Embedding recency is irrelevant — quality depends on domain fit, not release date.",
+    "explanation": "Skill 5.1.5 and 5.1.6 describe RAG evaluation covering retrieval quality and context matching. Context Recall measures retrieval completeness (did we retrieve all relevant chunks?). Answer Faithfulness measures generation quality (does the answer stay grounded in retrieved context?). RAGAS and similar frameworks operationalise both. Parameter count doesn't predict RAG-specific quality. Token latency measures speed \u2014 not retrieval/generation quality. Embedding recency is irrelevant \u2014 quality depends on domain fit, not release date.",
     "source_topic": "RAG evaluation, context recall, answer faithfulness, RAGAS"
   },
   {
@@ -115,7 +115,7 @@
       },
       {
         "key": "B",
-        "text": "Use canary testing — route 5% of production traffic to the new model, monitor quality metrics, and gradually increase the percentage if metrics stay within thresholds"
+        "text": "Use canary testing \u2014 route 5% of production traffic to the new model, monitor quality metrics, and gradually increase the percentage if metrics stay within thresholds"
       },
       {
         "key": "C",
@@ -129,7 +129,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 5.1.2 cites canary testing of FMs. Canary deployments route a small traffic percentage to the new model, monitor quality and error metrics, and progressively increase the canary weight — limiting blast radius if the new model underperforms. Full simultaneous rollout exposes all users to regression risk. Weekend deployments mask monitoring data. SageMaker Autopilot is for traditional ML model selection, not FM deployment strategy.",
+    "explanation": "Skill 5.1.2 cites canary testing of FMs. Canary deployments route a small traffic percentage to the new model, monitor quality and error metrics, and progressively increase the canary weight \u2014 limiting blast radius if the new model underperforms. Full simultaneous rollout exposes all users to regression risk. Weekend deployments mask monitoring data. SageMaker Autopilot is for traditional ML model selection, not FM deployment strategy.",
     "source_topic": "Canary testing, FM deployment, quality gates"
   },
   {
@@ -143,7 +143,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Evaluate only the final output — task completion rate is sufficient"
+        "text": "Evaluate only the final output \u2014 task completion rate is sufficient"
       },
       {
         "key": "B",
@@ -151,17 +151,17 @@
       },
       {
         "key": "C",
-        "text": "Measure response latency — faster agents are better agents"
+        "text": "Measure response latency \u2014 faster agents are better agents"
       },
       {
         "key": "D",
-        "text": "Count the number of tool calls — fewer calls always means better performance"
+        "text": "Count the number of tool calls \u2014 fewer calls always means better performance"
       }
     ],
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 5.1.7 cites Amazon Bedrock Agent Evaluations for task completion rate measurements, tool usage effectiveness evaluations, and reasoning quality assessment in multi-step workflows. Evaluating only final output misses intermediate reasoning errors and inefficient tool use. Latency measures speed — not correctness. Fewer tool calls is sometimes more efficient, but an agent that skips necessary tool calls produces incorrect results — completeness matters more than count.",
+    "explanation": "Skill 5.1.7 cites Amazon Bedrock Agent Evaluations for task completion rate measurements, tool usage effectiveness evaluations, and reasoning quality assessment in multi-step workflows. Evaluating only final output misses intermediate reasoning errors and inefficient tool use. Latency measures speed \u2014 not correctness. Fewer tool calls is sometimes more efficient, but an agent that skips necessary tool calls produces incorrect results \u2014 completeness matters more than count.",
     "source_topic": "Amazon Bedrock Agent Evaluations, agent evaluation"
   },
   {
@@ -193,7 +193,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 5.1.9 describes deployment validation systems using synthetic user workflows and AI-specific output validation for hallucination rates and semantic drift. Automated semantic similarity tests against golden responses provide an objective, repeatable quality gate in CI/CD — far more reliable than manual review. Parameter count doesn't predict output quality. API reachability is a health check — not a quality gate.",
+    "explanation": "Skill 5.1.9 describes deployment validation systems using synthetic user workflows and AI-specific output validation for hallucination rates and semantic drift. Automated semantic similarity tests against golden responses provide an objective, repeatable quality gate in CI/CD \u2014 far more reliable than manual review. Parameter count doesn't predict output quality. API reachability is a health check \u2014 not a quality gate.",
     "source_topic": "Deployment validation, semantic drift, quality gates, CI/CD"
   },
   {
@@ -239,25 +239,89 @@
     "options": [
       {
         "key": "A",
-        "text": "C → B → A → D → E"
+        "text": "C \u2192 B \u2192 A \u2192 D \u2192 E"
       },
       {
         "key": "B",
-        "text": "B → C → A → E → D"
+        "text": "B \u2192 C \u2192 A \u2192 E \u2192 D"
       },
       {
         "key": "C",
-        "text": "A → B → C → D → E"
+        "text": "A \u2192 B \u2192 C \u2192 D \u2192 E"
       },
       {
         "key": "D",
-        "text": "C → A → B → D → E"
+        "text": "C \u2192 A \u2192 B \u2192 D \u2192 E"
       }
     ],
     "correct_answers": [
       "A"
     ],
-    "explanation": "Skill 5.1.2 describes systematic model evaluation systems. The correct sequence is: (C) Define metrics first — establish what 'good' looks like (the yardstick); (B) Create test dataset — build the 'test paper' with diverse cases, shared to both models; (A) Conduct A/B testing — put both models through the test; (D) Implement automated quality gates via Step Functions — 'machine judge' enforces thresholds and requires human approval before promoting; (E) Analyse and generate report — compile evidence for decision-making. You cannot measure without first defining metrics, and you cannot test without a dataset.",
+    "explanation": "Skill 5.1.2 describes systematic model evaluation systems. The correct sequence is: (C) Define metrics first \u2014 establish what 'good' looks like (the yardstick); (B) Create test dataset \u2014 build the 'test paper' with diverse cases, shared to both models; (A) Conduct A/B testing \u2014 put both models through the test; (D) Implement automated quality gates via Step Functions \u2014 'machine judge' enforces thresholds and requires human approval before promoting; (E) Analyse and generate report \u2014 compile evidence for decision-making. You cannot measure without first defining metrics, and you cannot test without a dataset.",
     "source_topic": "Model evaluation workflow, Step Functions, quality gates"
+  },
+  {
+    "id": "d5-q0209",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Amazon A2I \u2014 human review for low-confidence FM outputs",
+    "difficulty": "medium",
+    "question_text": "A medical document processing system uses an FM to extract clinical entities from patient records. The team needs to route low-confidence extractions to human reviewers before they enter the downstream database. Which AWS service is purpose-built for this human-in-the-loop review workflow?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Augmented AI (A2I) \u2014 integrates with Bedrock/SageMaker to route low-confidence predictions to a human review workflow"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Rekognition \u2014 auto-approves all predictions without human review"
+      },
+      {
+        "key": "C",
+        "text": "AWS Step Functions \u2014 builds workflows but has no built-in human review UI or worker task routing"
+      },
+      {
+        "key": "D",
+        "text": "Amazon SageMaker Ground Truth \u2014 labels new training data, not production inference outputs"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Amazon A2I provides a managed human review loop: it catches low-confidence model predictions and routes them to a workforce (private team, Mechanical Turk, or AWS Marketplace vendors) via a purpose-built review UI. Step Functions can orchestrate workflows but has no built-in human review task management or worker portal. Ground Truth labels training data. Rekognition does not have a human-in-the-loop review capability.",
+    "source_topic": "Amazon A2I, human-in-the-loop, low-confidence review workflow"
+  },
+  {
+    "id": "d5-q0210",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Amazon Kendra vs Bedrock Knowledge Bases",
+    "difficulty": "medium",
+    "question_text": "A company has an existing Amazon Kendra index for enterprise search and wants to understand when to migrate to Bedrock Knowledge Bases for a RAG use case versus keeping Kendra. Which statement is MOST accurate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Bedrock Knowledge Bases is the recommended new-build path for GenAI RAG; Kendra GenAI Index is closing to new customers in July 2026, making Bedrock Knowledge Bases the forward-looking choice"
+      },
+      {
+        "key": "B",
+        "text": "Kendra is always preferable to Bedrock Knowledge Bases for all RAG workloads"
+      },
+      {
+        "key": "C",
+        "text": "Both services are identical and the choice makes no difference"
+      },
+      {
+        "key": "D",
+        "text": "Kendra is being replaced by Amazon Lex for all search use cases"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Amazon Kendra GenAI Index is closing to new customers on July 30, 2026. AWS's recommended new-build path for GenAI RAG is Amazon Bedrock Knowledge Bases, which provides native vector search integration, multiple data source connectors, and tight coupling with Bedrock FMs. Kendra is not always preferable, the two services are not identical, and Lex is a conversational AI service unrelated to document search.",
+    "source_topic": "Amazon Kendra deprecation, Bedrock Knowledge Bases, RAG service selection"
   }
 ]

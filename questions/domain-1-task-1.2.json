@@ -10,7 +10,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Choose the model with the highest parameter count — more parameters always mean better accuracy"
+        "text": "Choose the model with the highest parameter count \u2014 more parameters always mean better accuracy"
       },
       {
         "key": "B",
@@ -92,7 +92,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Amazon Bedrock Cross-Region Inference lets an application in one region invoke a model available only in another region, and can route to alternate regions for resilience — directly matching Skill 1.2.3. Provisioned Throughput provides reserved capacity within a single region and doesn't solve cross-region model availability. Global Accelerator optimises network routing but doesn't address FM model availability. CloudFront caches static content — not appropriate for dynamic FM invocations.",
+    "explanation": "Amazon Bedrock Cross-Region Inference lets an application in one region invoke a model available only in another region, and can route to alternate regions for resilience \u2014 directly matching Skill 1.2.3. Provisioned Throughput provides reserved capacity within a single region and doesn't solve cross-region model availability. Global Accelerator optimises network routing but doesn't address FM model availability. CloudFront caches static content \u2014 not appropriate for dynamic FM invocations.",
     "source_topic": "Amazon Bedrock Cross-Region Inference"
   },
   {
@@ -110,7 +110,7 @@
       },
       {
         "key": "B",
-        "text": "Use AWS Step Functions to implement a circuit breaker — open the circuit after a failure threshold and return a cached or default response"
+        "text": "Use AWS Step Functions to implement a circuit breaker \u2014 open the circuit after a failure threshold and return a cached or default response"
       },
       {
         "key": "C",
@@ -124,7 +124,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 1.2.3 explicitly names AWS Step Functions circuit breaker patterns for AI system resilience. When failure rate exceeds a threshold the circuit opens and callers receive a fallback immediately — preventing cascades. Increasing Lambda timeout merely delays failures without adding a fallback path. Disabling retries removes resilience without substituting a fallback. Synchronous polling wastes compute and fails just as hard.",
+    "explanation": "Skill 1.2.3 explicitly names AWS Step Functions circuit breaker patterns for AI system resilience. When failure rate exceeds a threshold the circuit opens and callers receive a fallback immediately \u2014 preventing cascades. Increasing Lambda timeout merely delays failures without adding a fallback path. Disabling retries removes resilience without substituting a fallback. Synchronous polling wastes compute and fails just as hard.",
     "source_topic": "Circuit breaker, AWS Step Functions, Bedrock resilience"
   },
   {
@@ -156,7 +156,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "LoRA (Low-Rank Adaptation) freezes most model parameters and injects small trainable low-rank matrices, dramatically cutting GPU memory and compute versus full fine-tuning. It is explicitly listed under Skill 1.2.4 as a parameter-efficient adaptation technique. Full fine-tuning trains all billions of parameters — very expensive. Pre-training from scratch is even more expensive. Zero-shot prompting doesn't update model weights at all.",
+    "explanation": "LoRA (Low-Rank Adaptation) freezes most model parameters and injects small trainable low-rank matrices, dramatically cutting GPU memory and compute versus full fine-tuning. It is explicitly listed under Skill 1.2.4 as a parameter-efficient adaptation technique. Full fine-tuning trains all billions of parameters \u2014 very expensive. Pre-training from scratch is even more expensive. Zero-shot prompting doesn't update model weights at all.",
     "source_topic": "LoRA, parameter-efficient fine-tuning, Bedrock custom models"
   },
   {
@@ -193,7 +193,7 @@
       "A",
       "C"
     ],
-    "explanation": "Skill 1.2.4 cites SageMaker Model Registry for versioning and deploying customised models, and SageMaker AI endpoints with automated deployment pipelines and rollback strategies. CodeCommit/Git LFS is not suited to multi-gigabyte model artefacts. AWS Backup targets workload data/resources, not ML model lifecycle. S3 Lifecycle policies archive or delete objects — they provide no deployment or rollback capability.",
+    "explanation": "Skill 1.2.4 cites SageMaker Model Registry for versioning and deploying customised models, and SageMaker AI endpoints with automated deployment pipelines and rollback strategies. CodeCommit/Git LFS is not suited to multi-gigabyte model artefacts. AWS Backup targets workload data/resources, not ML model lifecycle. S3 Lifecycle policies archive or delete objects \u2014 they provide no deployment or rollback capability.",
     "source_topic": "SageMaker Model Registry, SageMaker endpoints, model lifecycle"
   },
   {
@@ -225,7 +225,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 1.2.2 describes flexible architecture patterns that enable dynamic model selection — an API Gateway + Lambda GenAI gateway is the canonical pattern. It centralises auth (via Cognito/API key/IAM), enables per-team usage logging, and allows backend model routing changes without client code changes. Direct per-team IAM access scatters governance. Sharing an IAM user credential is a security anti-pattern. CloudFront is a CDN/edge proxy — not designed for dynamic FM routing and auth.",
+    "explanation": "Skill 1.2.2 describes flexible architecture patterns that enable dynamic model selection \u2014 an API Gateway + Lambda GenAI gateway is the canonical pattern. It centralises auth (via Cognito/API key/IAM), enables per-team usage logging, and allows backend model routing changes without client code changes. Direct per-team IAM access scatters governance. Sharing an IAM user credential is a security anti-pattern. CloudFront is a CDN/edge proxy \u2014 not designed for dynamic FM routing and auth.",
     "source_topic": "GenAI gateway, API Gateway, Lambda, Bedrock"
   },
   {
@@ -243,7 +243,7 @@
       },
       {
         "key": "B",
-        "text": "Amazon Bedrock Provisioned Throughput — reserve model units (MUs) for dedicated capacity"
+        "text": "Amazon Bedrock Provisioned Throughput \u2014 reserve model units (MUs) for dedicated capacity"
       },
       {
         "key": "C",
@@ -257,7 +257,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Amazon Bedrock Provisioned Throughput lets you purchase Model Units (MUs) — dedicated capacity for a specific model — guaranteeing consistent throughput regardless of shared-service contention. This is referenced in Skill 2.2.1 as a deployment option for specific performance requirements. On-demand inference is subject to throttling. SageMaker endpoints are for non-Bedrock models. Lambda reserved concurrency governs Lambda invocations, not Bedrock model capacity.",
+    "explanation": "Amazon Bedrock Provisioned Throughput lets you purchase Model Units (MUs) \u2014 dedicated capacity for a specific model \u2014 guaranteeing consistent throughput regardless of shared-service contention. This is referenced in Skill 2.2.1 as a deployment option for specific performance requirements. On-demand inference is subject to throttling. SageMaker endpoints are for non-Bedrock models. Lambda reserved concurrency governs Lambda invocations, not Bedrock model capacity.",
     "source_topic": "Amazon Bedrock Provisioned Throughput"
   },
   {
@@ -283,13 +283,13 @@
       },
       {
         "key": "D",
-        "text": "Bedrock only supports text modality — no image or embedding models are available"
+        "text": "Bedrock only supports text modality \u2014 no image or embedding models are available"
       }
     ],
     "correct_answers": [
       "B"
     ],
-    "explanation": "Amazon Bedrock is a fully managed service that offers foundation models from Amazon (Titan), Anthropic (Claude), Meta (Llama), Mistral, Cohere, AI21 Labs, and others through a single API surface. This is a core architectural advantage — model switching without multi-vendor contract management. Bedrock also offers embedding models (Amazon Titan Embeddings) and image generation models (Amazon Titan Image, Stability AI).",
+    "explanation": "Amazon Bedrock is a fully managed service that offers foundation models from Amazon (Titan), Anthropic (Claude), Meta (Llama), Mistral, Cohere, AI21 Labs, and others through a single API surface. This is a core architectural advantage \u2014 model switching without multi-vendor contract management. Bedrock also offers embedding models (Amazon Titan Embeddings) and image generation models (Amazon Titan Image, Stability AI).",
     "source_topic": "Amazon Bedrock model catalogue"
   },
   {
@@ -321,7 +321,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "The stop_sequences inference parameter instructs the Bedrock server to halt token generation the instant the specified string is produced — a 100% reliable server-side brake. Prompt instructions (A) are advisory and the FM may ignore them, especially at higher creativity settings. Temperature (C) controls randomness, not stopping behaviour. top_k (D) limits vocabulary breadth, not where generation ends.",
+    "explanation": "The stop_sequences inference parameter instructs the Bedrock server to halt token generation the instant the specified string is produced \u2014 a 100% reliable server-side brake. Prompt instructions (A) are advisory and the FM may ignore them, especially at higher creativity settings. Temperature (C) controls randomness, not stopping behaviour. top_k (D) limits vocabulary breadth, not where generation ends.",
     "source_topic": "Stop sequences, inference parameters, Amazon Bedrock"
   },
   {
@@ -335,11 +335,11 @@
     "options": [
       {
         "key": "A",
-        "text": "On-Demand — pay per token, no commitment"
+        "text": "On-Demand \u2014 pay per token, no commitment"
       },
       {
         "key": "B",
-        "text": "Provisioned Throughput — purchase Model Units for a committed term to guarantee dedicated capacity"
+        "text": "Provisioned Throughput \u2014 purchase Model Units for a committed term to guarantee dedicated capacity"
       },
       {
         "key": "C",
@@ -353,7 +353,103 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Bedrock Provisioned Throughput purchases dedicated Model Units for a 1-6 month commitment, guaranteeing stable latency with no shared-queue contention — ideal for large, predictable, high-volume batch workloads. On-Demand is pay-per-token but subject to throttling under shared load. Bedrock has no Spot pricing option. Lambda reserved concurrency governs Lambda invocations, not Bedrock model capacity.",
+    "explanation": "Bedrock Provisioned Throughput purchases dedicated Model Units for a 1-6 month commitment, guaranteeing stable latency with no shared-queue contention \u2014 ideal for large, predictable, high-volume batch workloads. On-Demand is pay-per-token but subject to throttling under shared load. Bedrock has no Spot pricing option. Lambda reserved concurrency governs Lambda invocations, not Bedrock model capacity.",
     "source_topic": "Bedrock Provisioned Throughput, On-Demand pricing"
+  },
+  {
+    "id": "d1-q0517",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Amazon Nova model family selection",
+    "difficulty": "medium",
+    "question_text": "A team is building a multimodal assistant on Amazon Bedrock that must process text, images, and video inputs. They need a cost-effective AWS-native model family that supports all three modalities. Which Amazon FM family is specifically designed for this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Nova (Nova Pro / Nova Lite / Nova Micro) \u2014 AWS's latest multimodal model family"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Titan Text Express \u2014 optimized for long text generation only"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Titan Image Generator \u2014 image generation only"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Lex \u2014 conversational AI for voice and text only"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Amazon Nova is AWS's latest foundation model family, with Nova Pro and Nova Lite supporting text, image, and video inputs (multimodal), and Nova Micro optimized for text at lowest cost. Titan Text Express handles text only, Titan Image Generator generates images but does not accept video/text input for reasoning, and Lex is a conversational AI service \u2014 not a general FM.",
+    "source_topic": "Amazon Nova, multimodal model selection"
+  },
+  {
+    "id": "d1-q0518",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Reasoning models \u2014 cost vs accuracy trade-off",
+    "difficulty": "medium",
+    "question_text": "A developer is choosing between a standard FM and a reasoning-enabled FM for a complex multi-step financial analysis task on Amazon Bedrock. Which statement CORRECTLY describes the trade-off of enabling model reasoning?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Reasoning models apply chain-of-thought internally, yielding higher accuracy on complex tasks but at higher token cost and increased latency"
+      },
+      {
+        "key": "B",
+        "text": "Reasoning models are always cheaper because they use fewer tokens"
+      },
+      {
+        "key": "C",
+        "text": "Reasoning models disable the system prompt, so they cannot follow instructions"
+      },
+      {
+        "key": "D",
+        "text": "Reasoning models only work with image inputs, not text"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Enabling reasoning on a foundation model activates chain-of-thought processing: the model breaks a complex task into internal reasoning steps before producing the final answer. This improves accuracy on complex problems but uses more tokens (thinking tokens + output tokens) and adds latency. Reasoning models do not reduce token usage, do not disable system prompts, and work with text inputs.",
+    "source_topic": "Reasoning models, chain-of-thought, cost-latency trade-off"
+  },
+  {
+    "id": "d1-q0519",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Amazon Titan Multimodal Embeddings \u2014 input format",
+    "difficulty": "hard",
+    "question_text": "A developer is indexing product images and descriptions into a single vector index using Amazon Titan Multimodal Embeddings G1. How must image data be provided to this model's API?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "As base64-encoded binary within a structured JSON request body"
+      },
+      {
+        "key": "B",
+        "text": "As a raw JPEG file uploaded to a dedicated image endpoint"
+      },
+      {
+        "key": "C",
+        "text": "As an S3 presigned URL passed directly in plain text"
+      },
+      {
+        "key": "D",
+        "text": "As a multipart/form-data POST with separate text and image parts"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Amazon Titan Multimodal Embeddings G1 requires image data to be base64-encoded and included inside a structured JSON request body alongside the text inputs. Raw file uploads, plain presigned URLs, and multipart form-data are not the accepted input format for this API.",
+    "source_topic": "Amazon Titan Multimodal Embeddings, API input format"
   }
 ]

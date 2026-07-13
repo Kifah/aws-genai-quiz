@@ -269,5 +269,101 @@
     ],
     "explanation": "ThrottlingException indicates the invocation rate has exceeded the on-demand quota. Exponential backoff with jitter (option A) is the standard immediate mitigation \u2014 it spreads retries over time and prevents a retry storm. Provisioned Throughput (option B) is the long-term fix: it reserves dedicated model capacity ensuring sustained throughput. Lowering temperature, using a larger context window, or disabling guardrails do not affect throttling quotas.",
     "source_topic": "Throttling, Provisioned Throughput, exponential backoff, quota management"
+  },
+  {
+    "id": "d5-q0211",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Amazon Polly \u2014 text-to-speech in GenAI pipeline",
+    "difficulty": "easy",
+    "question_text": "A GenAI virtual assistant generates text responses. The team wants to add voice output so users can listen to answers on a mobile app. Which AWS service converts the FM-generated text to natural-sounding speech?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Polly \u2014 converts text to lifelike speech, supporting multiple languages and neural voices"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Transcribe \u2014 converts speech to text (the opposite direction)"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Lex \u2014 builds conversational interfaces but does not output audio directly"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Rekognition \u2014 analyzes audio and video content"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Amazon Polly is AWS's text-to-speech service, producing lifelike audio from text in dozens of languages using standard and neural voices. Transcribe is speech-to-text (the reverse). Lex builds conversational AI chatbots and does use Polly under the hood, but Lex itself is not directly invoked for text-to-speech synthesis in a custom pipeline. Rekognition analyzes visual media \u2014 not audio synthesis.",
+    "source_topic": "Amazon Polly, text-to-speech, GenAI voice interface"
+  },
+  {
+    "id": "d5-q0212",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Amazon Athena \u2014 querying S3 data lakes for GenAI evaluation",
+    "difficulty": "medium",
+    "question_text": "A team stores FM invocation logs and evaluation metrics in Amazon S3 in Parquet format. They want to run ad-hoc SQL queries against this data to identify patterns in hallucinations and latency spikes without loading data into a database. Which service enables serverless SQL directly on S3?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Athena \u2014 runs serverless SQL queries directly on S3 data using standard SQL, with no data movement or ETL"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Redshift \u2014 requires loading data into a managed warehouse first"
+      },
+      {
+        "key": "C",
+        "text": "Amazon DynamoDB \u2014 a NoSQL key-value store that does not support SQL"
+      },
+      {
+        "key": "D",
+        "text": "Amazon RDS \u2014 a relational database requiring data migration from S3"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Amazon Athena is a serverless interactive query service that runs SQL directly on data in S3 (Parquet, CSV, JSON, ORC, etc.) with no ETL or data loading required. This is ideal for ad-hoc analysis of FM invocation logs. Redshift requires loading data into a warehouse. DynamoDB is NoSQL. RDS requires migration from S3.",
+    "source_topic": "Amazon Athena, serverless SQL on S3, GenAI observability"
+  },
+  {
+    "id": "d5-q0213",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Amazon QuickSight \u2014 BI dashboards for GenAI metrics",
+    "difficulty": "easy",
+    "question_text": "A GenAI platform team wants to build visual dashboards showing token usage trends, cost per team, and guardrail trigger rates over time, accessible to non-technical stakeholders. Which AWS service is purpose-built for this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon QuickSight \u2014 a serverless BI service for building interactive dashboards from AWS data sources including Athena, S3, and CloudWatch"
+      },
+      {
+        "key": "B",
+        "text": "Amazon CloudWatch \u2014 provides metrics and alarms but is not a BI dashboarding tool for business stakeholders"
+      },
+      {
+        "key": "C",
+        "text": "AWS Cost Explorer \u2014 shows cost trends but cannot be customized for GenAI-specific metrics like guardrail triggers"
+      },
+      {
+        "key": "D",
+        "text": "Amazon SageMaker Studio \u2014 a development IDE, not a BI dashboard platform"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Amazon QuickSight is AWS's managed BI service, enabling rich visual dashboards for business stakeholders with no infrastructure to manage. It connects to Athena, S3, CloudWatch, RDS, and more, making it suitable for GenAI usage analytics. CloudWatch is operational monitoring (not stakeholder-facing BI). Cost Explorer is limited to billing dimensions. SageMaker Studio is a data science IDE.",
+    "source_topic": "Amazon QuickSight, BI dashboards, GenAI metrics visualization"
   }
 ]

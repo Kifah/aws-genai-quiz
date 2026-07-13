@@ -360,5 +360,37 @@
     ],
     "explanation": "Tenant-level metadata filtering (option A) is an efficient single-index approach: each chunk is tagged with a tenant identifier and only matching chunks are returned. Separate knowledge bases per tenant (option B) provide full physical isolation. The model's context window provides no isolation (C). Temperature affects generation randomness, not retrieval isolation (D). Post-filtering after retrieval (E) is insecure because documents from other tenants could still be passed to the model before being filtered.",
     "source_topic": "Multi-tenant RAG, metadata filtering, knowledge base isolation"
+  },
+  {
+    "id": "d1-q0523",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "Neptune Analytics \u2014 graph + vector search",
+    "difficulty": "hard",
+    "question_text": "A knowledge graph application stores entities (products, customers, suppliers) and their relationships. The team wants to augment retrieval by combining graph traversal with vector similarity search \u2014 for example finding products similar to a description AND connected to a supplier in a specific region. Which AWS service supports this graph+vector hybrid approach?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Neptune Analytics \u2014 supports vector similarity search alongside graph analytics on the same dataset"
+      },
+      {
+        "key": "B",
+        "text": "Amazon DynamoDB \u2014 a key-value store with no graph or vector search"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Redshift \u2014 a columnar warehouse without graph traversal"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Kinesis \u2014 a streaming service with no storage or query capability"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Amazon Neptune Analytics adds vector search to Neptune's graph engine, enabling queries that traverse relationships (graph) and simultaneously find semantically similar nodes (vector). This is uniquely suited to knowledge graph RAG use cases. DynamoDB is a key-value store. Redshift is a columnar warehouse. Kinesis is a streaming ingest service.",
+    "source_topic": "Neptune Analytics, graph vector search, knowledge graph RAG"
   }
 ]

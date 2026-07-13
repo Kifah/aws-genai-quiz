@@ -264,5 +264,37 @@
     ],
     "explanation": "Custom (fine-tuned) models on Amazon Bedrock require Provisioned Throughput to be purchased before they can be invoked for inference \u2014 they cannot be called on-demand like base models. The staged approach (staging PT \u2192 quality validation \u2192 production PT) limits blast radius. EC2 + SSH and a public S3 bucket are not valid Bedrock deployment paths and expose model weights unnecessarily.",
     "source_topic": "Bedrock custom model deployment, Provisioned Throughput for fine-tuned models"
+  },
+  {
+    "id": "d2-q0518",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "SageMaker JumpStart model hub",
+    "difficulty": "easy",
+    "question_text": "A team wants to quickly deploy an open-source LLM (such as Llama 3) on AWS infrastructure with a managed endpoint, without building training infrastructure from scratch. Which SageMaker feature provides a curated catalog of pre-trained models that can be deployed in one click?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "SageMaker JumpStart \u2014 a model hub with pre-trained FMs and ML models deployable to SageMaker endpoints"
+      },
+      {
+        "key": "B",
+        "text": "SageMaker Ground Truth \u2014 a data labeling service"
+      },
+      {
+        "key": "C",
+        "text": "SageMaker Clarify \u2014 a model explainability tool"
+      },
+      {
+        "key": "D",
+        "text": "SageMaker Pipelines \u2014 a CI/CD workflow service for ML"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "SageMaker JumpStart is a model hub offering pre-trained FMs (including Llama, Mistral, and others), algorithms, and ML solutions that can be deployed to a SageMaker endpoint with minimal configuration. Ground Truth labels data, Clarify explains predictions, and Pipelines orchestrates ML workflows \u2014 none provide a model catalog for one-click deployment.",
+    "source_topic": "SageMaker JumpStart, model hub, open-source LLM deployment"
   }
 ]

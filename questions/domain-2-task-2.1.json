@@ -5,7 +5,7 @@
     "task_statement": "2.1",
     "topic": "Agentic AI with Strands and multi-agent",
     "difficulty": "hard",
-    "question_text": "A company wants to build a multi-agent GenAI system where specialised agents collaborate — one researches, one reasons, one writes. Which AWS-native frameworks are designed for this pattern? (Choose TWO)",
+    "question_text": "A company wants to build a multi-agent GenAI system where specialised agents collaborate \u2014 one researches, one reasons, one writes. Which AWS-native frameworks are designed for this pattern? (Choose TWO)",
     "question_type": "multi",
     "options": [
       {
@@ -65,7 +65,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 2.1.2 cites Step Functions to implement ReAct patterns and chain-of-thought reasoning approaches. A Step Functions state machine can loop: call Bedrock for a reasoning step → parse the action → execute a Lambda tool → feed results back to Bedrock → repeat until done. EventBridge scheduled rules are for cron-like triggers, not iterative reasoning loops. SQS FIFO is for ordered message queuing, not conditional state machine logic. DynamoDB Streams trigger Lambda on data changes — not orchestration.",
+    "explanation": "Skill 2.1.2 cites Step Functions to implement ReAct patterns and chain-of-thought reasoning approaches. A Step Functions state machine can loop: call Bedrock for a reasoning step \u2192 parse the action \u2192 execute a Lambda tool \u2192 feed results back to Bedrock \u2192 repeat until done. EventBridge scheduled rules are for cron-like triggers, not iterative reasoning loops. SQS FIFO is for ordered message queuing, not conditional state machine logic. DynamoDB Streams trigger Lambda on data changes \u2014 not orchestration.",
     "source_topic": "ReAct pattern, Step Functions, agentic AI"
   },
   {
@@ -120,7 +120,7 @@
       },
       {
         "key": "B",
-        "text": "Use Step Functions with a task token — pause the workflow and send a review notification; the reviewer approves via a callback, then execution resumes"
+        "text": "Use Step Functions with a task token \u2014 pause the workflow and send a review notification; the reviewer approves via a callback, then execution resumes"
       },
       {
         "key": "C",
@@ -152,7 +152,7 @@
       },
       {
         "key": "B",
-        "text": "AWS Lambda function implementing a stateless MCP server — invoked on demand"
+        "text": "AWS Lambda function implementing a stateless MCP server \u2014 invoked on demand"
       },
       {
         "key": "C",
@@ -166,7 +166,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 2.1.7 states: 'Lambda functions to implement stateless MCP servers that provide lightweight tool access.' For stateless, lightweight tools, Lambda is ideal — zero idle cost, instant scaling, no server management. ECS (D for complex tools) is cited for MCP servers with complex, stateful, or resource-intensive tools. EC2 with a long-running process is over-engineered and has idle costs. Fargate is for containerised workloads that need more control than Lambda.",
+    "explanation": "Skill 2.1.7 states: 'Lambda functions to implement stateless MCP servers that provide lightweight tool access.' For stateless, lightweight tools, Lambda is ideal \u2014 zero idle cost, instant scaling, no server management. ECS (D for complex tools) is cited for MCP servers with complex, stateful, or resource-intensive tools. EC2 with a long-running process is over-engineered and has idle costs. Fargate is for containerised workloads that need more control than Lambda.",
     "source_topic": "MCP server, Lambda, agentic AI"
   },
   {
@@ -198,7 +198,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 2.1.6 describes Lambda functions for error handling and parameter validation in intelligent tool integrations. Lambda wraps the external API call, validates inputs before invocation, catches errors, implements retries with back-off, and returns structured error results to the agent. Propagating raw errors to the FM is unreliable — FMs may hallucinate fix attempts. Restarting from scratch wastes all prior work. Increasing timeout doesn't fix parameter validation or structural API errors.",
+    "explanation": "Skill 2.1.6 describes Lambda functions for error handling and parameter validation in intelligent tool integrations. Lambda wraps the external API call, validates inputs before invocation, catches errors, implements retries with back-off, and returns structured error results to the agent. Propagating raw errors to the FM is unreliable \u2014 FMs may hallucinate fix attempts. Restarting from scratch wastes all prior work. Increasing timeout doesn't fix parameter validation or structural API errors.",
     "source_topic": "Tool integration, Lambda, error handling, agents"
   },
   {
@@ -216,7 +216,7 @@
       },
       {
         "key": "B",
-        "text": "Build a model selection framework — a routing FM or rule-based classifier inspects the query type and delegates to the appropriate specialist FM"
+        "text": "Build a model selection framework \u2014 a routing FM or rule-based classifier inspects the query type and delegates to the appropriate specialist FM"
       },
       {
         "key": "C",
@@ -230,7 +230,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 2.1.4 describes model selection frameworks and specialised FM coordination for complex tasks. A routing layer — either a small FM that classifies task type or a rule-based dispatcher — selects the optimal specialist per query. Sending to all three wastes cost and combining outputs is complex. Fine-tuning a single model trades specialist quality for generality. User-side FM selection degrades UX and requires technical knowledge.",
+    "explanation": "Skill 2.1.4 describes model selection frameworks and specialised FM coordination for complex tasks. A routing layer \u2014 either a small FM that classifies task type or a rule-based dispatcher \u2014 selects the optimal specialist per query. Sending to all three wastes cost and combining outputs is complex. Fine-tuning a single model trades specialist quality for generality. User-side FM selection degrades UX and requires technical knowledge.",
     "source_topic": "Model ensemble, routing, specialised FMs"
   },
   {
@@ -239,7 +239,7 @@
     "task_statement": "2.1",
     "topic": "Amazon Bedrock Agents",
     "difficulty": "medium",
-    "question_text": "A developer wants to build an AI agent that can call Lambda tools, query a Bedrock Knowledge Base, and maintain multi-step task state — all with minimal orchestration code. Which managed service provides this capability?",
+    "question_text": "A developer wants to build an AI agent that can call Lambda tools, query a Bedrock Knowledge Base, and maintain multi-step task state \u2014 all with minimal orchestration code. Which managed service provides this capability?",
     "question_type": "single",
     "options": [
       {
@@ -262,7 +262,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Amazon Bedrock Agents is a fully managed agentic AI service — it orchestrates multi-step task completion, maintains conversational state, calls Lambda-backed tools (action groups), and optionally queries a Bedrock Knowledge Base. No custom orchestration loop code is required. SageMaker Pipelines is for ML training. AWS Batch is for high-throughput batch jobs, not interactive agents. Lex is a conversational interface builder, not a general-purpose agentic orchestrator.",
+    "explanation": "Amazon Bedrock Agents is a fully managed agentic AI service \u2014 it orchestrates multi-step task completion, maintains conversational state, calls Lambda-backed tools (action groups), and optionally queries a Bedrock Knowledge Base. No custom orchestration loop code is required. SageMaker Pipelines is for ML training. AWS Batch is for high-throughput batch jobs, not interactive agents. Lex is a conversational interface builder, not a general-purpose agentic orchestrator.",
     "source_topic": "Amazon Bedrock Agents, agentic AI"
   },
   {
@@ -280,7 +280,7 @@
       },
       {
         "key": "B",
-        "text": "Amazon Bedrock AgentCore Runtime — purpose-built infrastructure for production-grade custom agents"
+        "text": "Amazon Bedrock AgentCore Runtime \u2014 purpose-built infrastructure for production-grade custom agents"
       },
       {
         "key": "C",
@@ -294,7 +294,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Amazon Bedrock AgentCore Runtime (Skill 2.1.1) is the production infrastructure designed to run custom agent frameworks (like Strands SDK) at scale. It supports sessions up to 8 hours, provides built-in observability, and is fully managed. Bedrock Agents is a console-configured quick-build option for simpler, predefined agents — not for custom SDK-based code. Lambda has a hard 15-minute timeout, making it unsuitable for 4-hour sessions. ECS Fargate requires managing container lifecycle, scaling, and load balancing — higher operational overhead than AgentCore Runtime.",
+    "explanation": "Amazon Bedrock AgentCore Runtime (Skill 2.1.1) is the production infrastructure designed to run custom agent frameworks (like Strands SDK) at scale. It supports sessions up to 8 hours, provides built-in observability, and is fully managed. Bedrock Agents is a console-configured quick-build option for simpler, predefined agents \u2014 not for custom SDK-based code. Lambda has a hard 15-minute timeout, making it unsuitable for 4-hour sessions. ECS Fargate requires managing container lifecycle, scaling, and load balancing \u2014 higher operational overhead than AgentCore Runtime.",
     "source_topic": "Amazon Bedrock AgentCore Runtime, Strands Agents"
   },
   {
@@ -312,7 +312,7 @@
       },
       {
         "key": "B",
-        "text": "Amazon Bedrock AgentCore Policy (Cedar) — defines action-level rules controlling which tools the agent may call and under what conditions"
+        "text": "Amazon Bedrock AgentCore Policy (Cedar) \u2014 defines action-level rules controlling which tools the agent may call and under what conditions"
       },
       {
         "key": "C",
@@ -326,7 +326,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "AgentCore Policy uses the Cedar policy language to enforce action-level controls — defining which tools the agent may invoke and under what conditions (e.g. 'transfers > $50,000 require human approval'). This is the canonical distinction: Guardrails controls CONTENT (filters toxic text, masks PII in FM inputs/outputs), while AgentCore Policy controls ACTIONS (stops the agent from calling specific tools or executing certain operations). System prompt instructions are advisory — an LLM may reason around them. WAF blocks HTTP requests by IP/pattern — not semantic financial logic.",
+    "explanation": "AgentCore Policy uses the Cedar policy language to enforce action-level controls \u2014 defining which tools the agent may invoke and under what conditions (e.g. 'transfers > $50,000 require human approval'). This is the canonical distinction: Guardrails controls CONTENT (filters toxic text, masks PII in FM inputs/outputs), while AgentCore Policy controls ACTIONS (stops the agent from calling specific tools or executing certain operations). System prompt instructions are advisory \u2014 an LLM may reason around them. WAF blocks HTTP requests by IP/pattern \u2014 not semantic financial logic.",
     "source_topic": "AgentCore Policy, Cedar, Bedrock Guardrails distinction"
   },
   {
@@ -340,11 +340,11 @@
     "options": [
       {
         "key": "A",
-        "text": "AgentCore Runtime — session state is stored for the duration of each session"
+        "text": "AgentCore Runtime \u2014 session state is stored for the duration of each session"
       },
       {
         "key": "B",
-        "text": "AgentCore Memory (long-term) — summarises and stores facts into a vector store, retrievable across future sessions"
+        "text": "AgentCore Memory (long-term) \u2014 summarises and stores facts into a vector store, retrievable across future sessions"
       },
       {
         "key": "C",
@@ -358,7 +358,39 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "AgentCore Memory long-term storage (Skill 2.1.1 — memory and state management) extracts and summarises key facts from conversations into a vector database, making them semantically retrievable in future sessions. Short-term (Runtime session) state is discarded when the session ends. DynamoDB + Lambda is a valid custom approach but it is higher effort than AgentCore's built-in memory; and key-value storage lacks semantic retrieval. FM weights do not adapt to individual users at runtime — fine-tuning individual user preferences at scale is impractical.",
+    "explanation": "AgentCore Memory long-term storage (Skill 2.1.1 \u2014 memory and state management) extracts and summarises key facts from conversations into a vector database, making them semantically retrievable in future sessions. Short-term (Runtime session) state is discarded when the session ends. DynamoDB + Lambda is a valid custom approach but it is higher effort than AgentCore's built-in memory; and key-value storage lacks semantic retrieval. FM weights do not adapt to individual users at runtime \u2014 fine-tuning individual user preferences at scale is impractical.",
     "source_topic": "AgentCore Memory, multi-session state management"
+  },
+  {
+    "id": "d2-q0512",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Circuit breaker pattern with Step Functions",
+    "difficulty": "hard",
+    "question_text": "A production GenAI application calls an FM on Amazon Bedrock. During regional incidents, the FM endpoint becomes temporarily unavailable, causing cascading errors. Which AWS-native pattern prevents requests from reaching the unavailable endpoint and automatically routes to a fallback?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Implement a circuit breaker using AWS Step Functions, Lambda, and DynamoDB \u2014 track endpoint health state in DynamoDB and route to a fallback FM when the circuit is open"
+      },
+      {
+        "key": "B",
+        "text": "Add a longer timeout on the Bedrock API call"
+      },
+      {
+        "key": "C",
+        "text": "Increase the Lambda memory allocation"
+      },
+      {
+        "key": "D",
+        "text": "Enable Bedrock Guardrails on the failing endpoint"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "The circuit breaker pattern uses Step Functions to orchestrate health-checking workflows, Lambda functions to poll endpoint availability, and DynamoDB to persist the circuit state (open/closed). When the circuit is open, requests are routed to a fallback FM or a degraded-mode model instead of repeatedly hitting the unavailable endpoint. Longer timeouts, more Lambda memory, and Guardrails do not prevent requests from reaching a downed endpoint.",
+    "source_topic": "Circuit breaker pattern, Step Functions, resilient FM routing"
   }
 ]
