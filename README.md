@@ -1,6 +1,6 @@
 # AWS Certified Generative AI Developer – Professional (AIP-C01) Practice Quiz
 
-A TypeScript CLI quiz app with **157 original questions** covering all five exam domains.
+A TypeScript CLI quiz app with **530+ original questions** covering all five exam domains, plus an **adaptive Focus Mode** that targets your weak spots.
 
 ---
 
@@ -30,12 +30,17 @@ aws-genai-quiz/
 │   ├── domain-5-task-5.1.json        # Task 5.1: Evaluation systems for GenAI
 │   └── domain-5-task-5.2.json        # Task 5.2: Troubleshoot GenAI applications
 ├── src/
-│   ├── app.ts                        # Entry point — mode selection
+│   ├── app.ts                        # Entry point — mode selection (practice/exam/focus/stats)
 │   ├── config.ts                     # Domain weights, exam parameters
 │   ├── loader.ts                     # Question loading and proportional sampling
 │   ├── display.ts                    # ANSI terminal rendering
 │   ├── practice.ts                   # Practice mode engine
 │   ├── exam.ts                       # Exam simulation engine
+│   ├── focus.ts                      # Focus mode — adaptive review of weak spots
+│   ├── stats.ts                      # Stats command — progress dashboard
+│   ├── history.ts                    # Pure mastery-score computation (no I/O)
+│   ├── store.ts                      # Attempt-history persistence (.quiz-history.json)
+│   ├── sampler.ts                    # Weighted-random sampler for Focus Mode
 │   ├── validate.ts                   # CLI entry — question bank validator
 │   ├── validator.ts                  # Pure validation library (no I/O)
 │   └── utils/
@@ -44,7 +49,9 @@ aws-genai-quiz/
 ├── tests/
 │   ├── loader.test.ts                # Tests for loader.ts
 │   ├── answers.test.ts               # Tests for utils/answers.ts
-│   └── validator.test.ts             # Tests for validator.ts
+│   ├── validator.test.ts             # Tests for validator.ts
+│   ├── history.test.ts               # Tests for mastery scoring and rollups
+│   └── sampler.test.ts               # Tests for weighted sampling
 ├── tsconfig.json
 ├── package.json
 └── README.md
@@ -134,6 +141,47 @@ npx tsx src/app.ts --mode exam
 
 **Real exam structure:** 85 total questions (65 scored + 20 unscored/unlabeled), 205 minutes, passing score 750/1000 (≈ 75%).
 
+After an exam ends, a **Missed Questions** summary lists your wrong answers with an option to **launch a Focus session** seeded from those questions.
+
+---
+
+## Focus Mode (Adaptive Review)
+
+Focus Mode biases question selection toward your weak spots using your accumulated attempt history. It targets:
+- Never-attempted questions in your weakest topics
+- Previously-wrong questions (prioritised by recency + miss frequency)
+- ~10-15% previously-correct questions for spaced reinforcement
+
+```bash
+npm run focus
+
+# Equivalent direct invocation
+npx tsx src/app.ts --mode focus
+```
+
+**Focus mode workflow:**
+1. Pre-session summary: your 5 weakest topics, count of never-attempted questions, count of questions missed 2+ times
+2. Enter how many questions (default: 20)
+3. Same reveal-after-each UX as Practice Mode
+4. Mastery scores update after the session — weak topics will resurface next time
+
+Your attempt history is stored locally in `.quiz-history.json` (gitignored). No data leaves your machine.
+
+---
+
+## Stats (Progress Dashboard)
+
+View your overall progress, per-domain accuracy, weakest topics, and accuracy trend.
+
+```bash
+npm run stats
+
+# Equivalent direct invocation
+npx tsx src/app.ts --mode stats
+```
+
+Shows: total attempts, overall accuracy with progress bar, accuracy trend (early vs recent half), per-domain breakdown with PASS/FAIL indicators, top 5 weakest topics, and never-attempted count.
+
 ---
 
 ## Validating the Question Bank
@@ -166,12 +214,14 @@ Exit code **0** = all valid. Exit code **1** = errors found (safe to commit only
 npm test
 ```
 
-This runs the full test suite (54 tests) using Node.js's built-in `node:test` runner with `tsx` for TypeScript transpilation:
+This runs the full test suite (76 tests) using Node.js's built-in `node:test` runner with `tsx` for TypeScript transpilation:
 
 ```
 tests/loader.test.ts     — loadQuestions, sampleProportional, shuffle
 tests/answers.test.ts    — parseAnswer, answersCorrect
 tests/validator.test.ts  — validateQuestion (unit), validateAll (integration against real question bank)
+tests/history.test.ts    — masteryFromAttempts, computeQuestionStats, rollUp, weakestGroups, priorityCoverageGaps
+tests/sampler.test.ts    — weightForQuestion, sampleFocus, seededRng determinism, reinforcement cap
 ```
 
 To type-check without running (no output = no errors):
