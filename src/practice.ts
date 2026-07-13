@@ -3,6 +3,8 @@ import { loadQuestions, shuffle } from './loader';
 import { DOMAINS } from './config';
 import * as display from './display';
 import { parseAnswer, answersCorrect } from './utils/answers';
+import { recordAttempts, newSessionId } from './store';
+import { AttemptRecord } from './history';
 
 export async function runPractice(rl: readline.Interface): Promise<void> {
   display.clearScreen();
@@ -35,6 +37,8 @@ export async function runPractice(rl: readline.Interface): Promise<void> {
 
   const selected = shuffle(allQuestions.slice()).slice(0, count);
 
+  const sessionId = newSessionId();
+  const attempts: AttemptRecord[] = [];
   let correct  = 0;
   let answered = 0;
 
@@ -52,6 +56,14 @@ export async function runPractice(rl: readline.Interface): Promise<void> {
     } else {
       answered++;
       const isCorrect = answersCorrect(parsed, q.correct_answers);
+      attempts.push({
+        question_id: q.id,
+        timestamp:   new Date().toISOString(),
+        was_correct: isCorrect,
+        selected:    parsed,
+        mode:        'practice',
+        session_id:  sessionId,
+      });
       if (isCorrect) {
         correct++;
         console.log(display.color('\n  ✓ Correct!\n', 'green', 'bold'));
@@ -65,6 +77,8 @@ export async function runPractice(rl: readline.Interface): Promise<void> {
     const next = await ask(rl, '  Press Enter to continue (or "q" to quit): ');
     if (next.trim().toLowerCase() === 'q') break;
   }
+
+  recordAttempts(attempts);
 
   display.printScore(correct, answered || 1, 'practice');
   console.log(`  ${display.color('Session complete.', 'bold')} ${answered} answered, ${correct} correct.\n`);

@@ -2,6 +2,8 @@
 import * as readline from 'readline';
 import { runPractice } from './practice';
 import { runExam }     from './exam';
+import { runFocus }    from './focus';
+import { runStats }    from './stats';
 import * as display    from './display';
 
 const rl = readline.createInterface({
@@ -28,12 +30,17 @@ async function main(): Promise<void> {
     console.log('  Select a mode:');
     console.log('  ' + display.color('1', 'cyan') + ' = Practice Mode  (study with immediate feedback)');
     console.log('  ' + display.color('2', 'cyan') + ' = Exam Mode      (simulate the real exam, timed)');
+    console.log('  ' + display.color('3', 'cyan') + ' = Focus Mode     (adaptive review of your weak spots)');
+    console.log('  ' + display.color('4', 'cyan') + ' = Stats          (view your progress and weak topics)');
     console.log('');
 
     await new Promise<void>(resolve => {
-      rl.question('  Enter 1 or 2: ', answer => {
-        if (answer.trim() === '1')      mode = 'practice';
-        else if (answer.trim() === '2') mode = 'exam';
+      rl.question('  Enter 1-4: ', answer => {
+        const choice = answer.trim();
+        if (choice === '1')      mode = 'practice';
+        else if (choice === '2') mode = 'exam';
+        else if (choice === '3') mode = 'focus';
+        else if (choice === '4') mode = 'stats';
         else {
           console.log(display.color('  Invalid choice. Defaulting to practice mode.\n', 'yellow'));
           mode = 'practice';
@@ -47,8 +54,12 @@ async function main(): Promise<void> {
     await runPractice(rl);
   } else if (mode === 'exam') {
     await runExam(rl);
+  } else if (mode === 'focus') {
+    await runFocus(rl);
+  } else if (mode === 'stats') {
+    await runStats(rl);
   } else {
-    console.error(display.color(`\nUnknown mode: "${mode}". Use --mode practice or --mode exam\n`, 'red'));
+    console.error(display.color(`\nUnknown mode: "${mode}". Use --mode practice | exam | focus | stats\n`, 'red'));
     process.exit(1);
   }
 

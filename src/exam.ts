@@ -4,6 +4,9 @@ import { DOMAINS, EXAM_CONFIG } from './config';
 import * as display from './display';
 import { DomainStat } from './display';
 import { parseAnswer, answersCorrect } from './utils/answers';
+import { recordAttempts, newSessionId } from './store';
+import { AttemptRecord } from './history';
+import { runFocus } from './focus';
 
 export async function runExam(rl: readline.Interface): Promise<void> {
   display.clearScreen();
@@ -103,6 +106,8 @@ export async function runExam(rl: readline.Interface): Promise<void> {
 
   let totalCorrect = 0;
   const reviewItems: Array<{ q: Question; userAnswer: string[] | null; correct: boolean }> = [];
+  const examSessionId = newSessionId();
+  const attempts: AttemptRecord[] = [];
 
   for (let i = 0; i < examQuestions.length; i++) {
     const q  = examQuestions[i];
@@ -116,8 +121,22 @@ export async function runExam(rl: readline.Interface): Promise<void> {
       totalCorrect++;
       domainStats[d].correct++;
     }
+    // Only record questions the user actually answered (skips/unanswered are
+    // not "attempts" for mastery purposes).
+    if (ua !== null) {
+      attempts.push({
+        question_id: q.id,
+        timestamp:   new Date().toISOString(),
+        was_correct: isCorrect,
+        selected:    ua,
+        mode:        'exam',
+        session_id:  examSessionId,
+      });
+    }
     reviewItems.push({ q, userAnswer: ua, correct: isCorrect });
   }
+
+  recordAttempts(attempts);
 
   // ── Results ────────────────────────────────────────────────────────────────
 
@@ -145,6 +164,23 @@ export async function runExam(rl: readline.Interface): Promise<void> {
 
       const next = await ask(rl, '  Press Enter to continue (or "q" to exit review): ');
       if (next.trim().toLowerCase() === 'q') break;
+    }
+  }
+
+  const missed = reviewItems.filter(r => !r.correct);
+  console.log(display.color(`\n  Missed Questions: ${missed.length}`, 'bold', missed.length > 0 ? 'red' : 'green'));
+  if (missed.length > 0) {
+    for (const { q } of missed.slice(0, 10)) {
+      console.log(display.color(`    ✗ D${q.domain} ${q.task_statement} · ${q.topic}`, 'dim'));
+    }
+    if (missed.length > 10) {
+      console.log(display.color(`    …and ${missed.length - 10} more`, 'dim'));
+    }
+    console.log('');
+    const launch = await ask(rl, display.color('  Launch a Focus session on these missed questions? (y/n): ', 'yellow'));
+    if (launch.trim().toLowerCase() === 'y') {
+      await runFocus(rl, missed.map(r => r.q.id));
+      return;
     }
   }
 

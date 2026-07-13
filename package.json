@@ -8,8 +8,10 @@
     "start": "tsx src/app.ts",
     "practice": "tsx src/app.ts --mode practice",
     "exam": "tsx src/app.ts --mode exam",
+    "focus": "tsx src/app.ts --mode focus",
+    "stats": "tsx src/app.ts --mode stats",
     "validate": "tsx src/validate.ts",
-    "test":     "node --test --require tsx/cjs tests/loader.test.ts tests/answers.test.ts tests/validator.test.ts"
+    "test":     "node --test --require tsx/cjs tests/loader.test.ts tests/answers.test.ts tests/validator.test.ts tests/history.test.ts tests/sampler.test.ts"
   },
   "dependencies": {
     "readline-sync": "^1.4.10"
