@@ -1,0 +1,77 @@
+[
+  {
+    "id": "d1-q0625", "domain": 1, "task_statement": "1.4", "topic": "ElastiCache for semantic caching backend",
+    "difficulty": "medium",
+    "question_text": "A high-traffic RAG app wants a sub-millisecond in-memory store to cache embeddings and semantically-similar prior answers to cut repeat FM calls. Which AWS service is the best fit for this in-memory caching layer?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Amazon ElastiCache (Redis/Valkey) for in-memory caching"},
+      {"key": "B", "text": "Amazon S3 Glacier"},
+      {"key": "C", "text": "Amazon Redshift"},
+      {"key": "D", "text": "AWS Transfer Family"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Amazon ElastiCache provides sub-millisecond in-memory data access, ideal for caching embeddings and prior responses to reduce redundant FM calls. Glacier is cold archival storage (retrieval in minutes/hours), Redshift is an analytical data warehouse, and Transfer Family is managed SFTP/FTPS — none are low-latency caches.",
+    "source_topic": "Amazon ElastiCache for in-memory GenAI caching"
+  },
+  {
+    "id": "d1-q0626", "domain": 1, "task_statement": "1.4", "topic": "DocumentDB as a vector-capable store",
+    "difficulty": "medium",
+    "question_text": "A team already standardizes on a MongoDB-compatible document database and wants to keep application documents and their vector embeddings together with a familiar MongoDB API. Which AWS managed service fits?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Amazon DocumentDB (MongoDB-compatible) with vector search"},
+      {"key": "B", "text": "Amazon Neptune"},
+      {"key": "C", "text": "Amazon Athena"},
+      {"key": "D", "text": "Amazon QuickSight"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Amazon DocumentDB is a managed MongoDB-compatible document database that supports vector search, letting teams keep documents and embeddings together via the MongoDB API. Neptune is a graph database, Athena is serverless SQL query over S3, and QuickSight is BI dashboards — none are MongoDB-compatible document stores.",
+    "source_topic": "Amazon DocumentDB MongoDB-compatible vector store"
+  },
+  {
+    "id": "d1-q0627", "domain": 1, "task_statement": "1.4", "topic": "Aurora vs Redshift for GenAI data",
+    "difficulty": "medium",
+    "question_text": "Two needs arise: (1) an OLTP relational store that can also hold vector embeddings via an extension for a moderate-scale RAG app, and (2) a petabyte-scale analytical warehouse for text-to-SQL business questions. Which pairing is correct?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Aurora PostgreSQL (pgvector) for the OLTP+vector store; Amazon Redshift for the analytical warehouse"},
+      {"key": "B", "text": "Amazon Redshift for OLTP+vector; Aurora for petabyte analytics"},
+      {"key": "C", "text": "Amazon Glacier for both"},
+      {"key": "D", "text": "Amazon ElastiCache for both"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Aurora PostgreSQL with the pgvector extension serves transactional workloads plus moderate-scale vector search, while Amazon Redshift is the petabyte-scale columnar analytical warehouse suited to text-to-SQL analytics. Option B swaps their roles; Glacier is archival storage; ElastiCache is an in-memory cache — neither is a relational OLTP or analytical warehouse.",
+    "source_topic": "Aurora pgvector vs Redshift roles"
+  },
+  {
+    "id": "d1-q0628", "domain": 1, "task_statement": "1.4", "topic": "S3 storage classes for GenAI data lifecycle",
+    "difficulty": "medium",
+    "question_text": "A large corpus of source documents for a Knowledge Base has unpredictable, changing access patterns, and the team wants automatic cost optimization across tiers WITHOUT retrieval fees or manual lifecycle rules. Which S3 storage class fits best?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "S3 Intelligent-Tiering"},
+      {"key": "B", "text": "S3 Glacier Deep Archive"},
+      {"key": "C", "text": "S3 One Zone-IA for all objects"},
+      {"key": "D", "text": "S3 Standard with no lifecycle management"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "S3 Intelligent-Tiering automatically moves objects between access tiers based on changing usage with no retrieval fees and no manual lifecycle rules — ideal for unpredictable access. Glacier Deep Archive is for rarely-accessed data with long retrieval times; One Zone-IA sacrifices AZ redundancy and suits infrequent access only; S3 Standard alone does no cost optimization.",
+    "source_topic": "S3 Intelligent-Tiering for unpredictable access"
+  },
+  {
+    "id": "d1-q0629", "domain": 1, "task_statement": "1.4", "topic": "S3 Glacier for long-term log retention",
+    "difficulty": "easy",
+    "question_text": "Bedrock model-invocation logs must be retained for seven years for compliance but are almost never accessed, and cost must be minimized. Which S3 storage class is most appropriate for this archival requirement?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "S3 Glacier Deep Archive"},
+      {"key": "B", "text": "S3 Standard"},
+      {"key": "C", "text": "Amazon ElastiCache"},
+      {"key": "D", "text": "Amazon OpenSearch"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "S3 Glacier Deep Archive offers the lowest-cost storage for rarely-accessed data with long-term retention needs (retrieval in hours is acceptable for compliance archives). S3 Standard is far more expensive for cold data; ElastiCache is an in-memory cache; OpenSearch is a search engine — neither is archival storage.",
+    "source_topic": "S3 Glacier Deep Archive for compliance retention"
+  }
+]

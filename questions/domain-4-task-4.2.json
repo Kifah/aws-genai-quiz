@@ -269,5 +269,399 @@
     ],
     "explanation": "Quantization reduces weight precision (FP32\u2192INT8/FP16) dramatically cutting memory and speeding up inference. Knowledge distillation trains a smaller, faster student model using outputs from a larger teacher model. Both are standard compression strategies. Increasing batch size improves throughput but not per-request latency or memory footprint. Adding layers increases model size \u2014 the opposite of compression. Pruning (E) is also a valid compression technique, but the question asks for two answers and quantization + distillation are the most commonly tested on AIP-C01.",
     "source_topic": "Model compression, quantization, distillation, SageMaker Neo"
+  },
+  {
+    "id": "d4-q0321",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Latency optimisation \u2014 streaming and pre-computation",
+    "difficulty": "medium",
+    "question_text": "A chatbot shows a blank screen for 4-5 seconds before displaying a response, making it feel slow even though the total response time is acceptable. What optimisation most directly improves PERCEIVED latency?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Switch to a faster model with lower total latency"
+      },
+      {
+        "key": "B",
+        "text": "Implement response streaming using InvokeModelWithResponseStream \u2014 display tokens as they are generated"
+      },
+      {
+        "key": "C",
+        "text": "Pre-compute all possible responses and cache them"
+      },
+      {
+        "key": "D",
+        "text": "Increase Lambda memory for faster processing"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Streaming (InvokeModelWithResponseStream) delivers tokens to the UI as they are generated, eliminating the blank-screen wait. Users see content almost immediately (time-to-first-token < 500ms), making the interaction feel responsive even if total generation time is the same. Switching models reduces absolute latency but the blank-screen problem persists if streaming isn't used. Pre-computing requires knowing all queries in advance. Lambda memory doesn't affect FM generation speed.",
+    "source_topic": "Response streaming to improve perceived chatbot latency"
+  },
+  {
+    "id": "d4-q0322",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Latency optimisation \u2014 streaming and pre-computation",
+    "difficulty": "medium",
+    "question_text": "A daily reporting application generates the same set of 50 summary reports every morning at 9 AM. Users check these reports between 9 AM and 5 PM. Currently, each report is generated on-demand when a user requests it (3-5 second wait). How can latency be eliminated for users?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Implement response streaming so users see partial reports faster"
+      },
+      {
+        "key": "B",
+        "text": "Pre-compute all 50 reports at 8 AM via a Step Functions scheduled workflow, store results in DynamoDB \u2014 users retrieve instantly"
+      },
+      {
+        "key": "C",
+        "text": "Use Bedrock Provisioned Throughput to make on-demand generation faster"
+      },
+      {
+        "key": "D",
+        "text": "Increase the Lambda timeout to allow 10-second generation time"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "For predictable, recurring reports, pre-computation eliminates user-facing latency entirely: a Step Functions workflow runs at 8 AM, generates all reports via Bedrock, and stores them in DynamoDB. Users read from DynamoDB instantly (<10ms). Streaming still has generation latency. Provisioned Throughput reduces throttling risk but not individual request latency for complex generations. Lambda timeout extension doesn't help users waiting for on-demand generation.",
+    "source_topic": "Pre-computation of predictable reports to eliminate user-facing latency"
+  },
+  {
+    "id": "d4-q0323",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Parallel requests for complex workflows",
+    "difficulty": "medium",
+    "question_text": "A document analysis pipeline processes 5 sections of a long document sequentially \u2014 each Bedrock call takes 3 seconds, totalling 15 seconds end-to-end. The sections are independent and can be processed in any order. What optimisation reduces total processing time?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use a model with a larger context window to process all 5 sections in one call"
+      },
+      {
+        "key": "B",
+        "text": "Use Step Functions Map state or Lambda async invocations to process all 5 sections in parallel \u2014 reducing total time to ~3 seconds"
+      },
+      {
+        "key": "C",
+        "text": "Increase Lambda memory to speed up each individual section"
+      },
+      {
+        "key": "D",
+        "text": "Use Bedrock Batch Inference for real-time parallel processing"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Since sections are independent, parallelisation is optimal. Using Step Functions Map state or async Lambda invocations launches all 5 Bedrock calls simultaneously, reducing wall-clock time from 15 seconds to ~3 seconds (the time of the slowest single call). A larger context window processes all sections in one call but may reduce quality (less focused analysis per section) and increases per-call cost. Lambda memory affects CPU-bound code, not external API call time. Batch Inference is async, not real-time.",
+    "source_topic": "Step Functions Map state for parallel FM calls"
+  },
+  {
+    "id": "d4-q0324",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Inference optimisation techniques",
+    "difficulty": "hard",
+    "question_text": "A team is self-hosting a 70B-parameter open-source LLM on SageMaker. Inference latency is high due to model loading time and large model size. Which TWO model optimisation techniques directly reduce inference latency for self-hosted models?",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Model quantisation \u2014 reduce weight precision from FP32 to FP16/INT8 to decrease model size and memory bandwidth requirements"
+      },
+      {
+        "key": "B",
+        "text": "Model pruning \u2014 remove unimportant weights to reduce model size and inference FLOPs"
+      },
+      {
+        "key": "C",
+        "text": "Fine-tuning the model on domain data"
+      },
+      {
+        "key": "D",
+        "text": "Increasing the Lambda function memory limit"
+      },
+      {
+        "key": "E",
+        "text": "Switching from SageMaker Batch Transform to real-time endpoints"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "Quantisation (A) reduces weight precision from FP32 to FP16 or INT8, halving or quartering memory bandwidth requirements \u2014 significantly reducing load time and inference latency on GPU. Pruning (B) removes weights that contribute little to model output, reducing the effective model size and FLOPs needed per inference. Fine-tuning (C) adapts the model but doesn't reduce its size. Lambda memory (D) is irrelevant for SageMaker-hosted models. Endpoint type (E) affects throughput pattern, not individual call latency.",
+    "source_topic": "Model quantisation and pruning for self-hosted LLM latency reduction"
+  },
+  {
+    "id": "d4-q0325",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Retrieval performance optimisation",
+    "difficulty": "hard",
+    "question_text": "A RAG system using OpenSearch has retrieval latency of 800ms for vector searches on a 100M embedding index. The team needs to reduce this below 200ms. Which OpenSearch-specific optimisations should they apply?",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Apply metadata filters to narrow the candidate vector set BEFORE running ANN search"
+      },
+      {
+        "key": "B",
+        "text": "Tune HNSW parameters: increase ef_construction (better index quality at build time) and tune ef_search (controls recall-latency trade-off at query time)"
+      },
+      {
+        "key": "C",
+        "text": "Increase the embedding vector dimensionality from 1024 to 4096"
+      },
+      {
+        "key": "D",
+        "text": "Switch from HNSW to exact nearest-neighbour search for higher accuracy"
+      },
+      {
+        "key": "E",
+        "text": "Add more shards to distribute the index across nodes for parallel search execution"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "(A) Pre-filtering by metadata reduces the candidate vector space before ANN search, significantly reducing search time. (B) HNSW ef_search directly trades recall for speed \u2014 lowering ef_search reduces the search graph traversal depth, cutting latency at a small recall cost. Higher ef_construction improves index quality during build. Increasing dimensionality (C) increases memory and computation \u2014 opposite of what's needed. Exact NN (D) is dramatically slower than ANN. More shards (E) help throughput, not per-query latency for a single query.",
+    "source_topic": "OpenSearch HNSW tuning + metadata pre-filtering for latency"
+  },
+  {
+    "id": "d4-q0326",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "SageMaker model compression \u2014 quantization, pruning, distillation",
+    "difficulty": "medium",
+    "question_text": "A company wants to deploy a large 65B-parameter model on smaller, cheaper GPU instances to reduce inference costs. They are willing to accept a small quality degradation. Which technique creates a smaller, faster model that approximates the large model's behaviour?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Fine-tuning the large model on domain data"
+      },
+      {
+        "key": "B",
+        "text": "Knowledge distillation \u2014 train a smaller 'student' model to mimic the large 'teacher' model's outputs"
+      },
+      {
+        "key": "C",
+        "text": "Adding more training data to the large model"
+      },
+      {
+        "key": "D",
+        "text": "Enabling prompt caching on the large model"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Knowledge distillation trains a smaller 'student' model by having it learn to match the large 'teacher' model's output distribution \u2014 producing a compact model that approximates the teacher's quality at a fraction of the compute cost. Fine-tuning adapts the existing model but doesn't reduce its size. More training data makes the large model better, not smaller. Prompt caching reduces redundant token costs but doesn't change model size or GPU requirements.",
+    "source_topic": "Knowledge distillation for smaller, deployable FM"
+  },
+  {
+    "id": "d4-q0327",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "A/B testing for FM performance",
+    "difficulty": "medium",
+    "question_text": "A team wants to compare two prompt variants against each other \u2014 measuring which produces higher user satisfaction scores and lower hallucination rates across 1,000 test queries. Which Bedrock tooling supports this systematic comparison?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Bedrock Prompt Flows \u2014 visual orchestration tool"
+      },
+      {
+        "key": "B",
+        "text": "Bedrock Prompt Management (to version both prompts) + Bedrock Model Evaluations (to run automated comparison with LLM-as-judge scoring)"
+      },
+      {
+        "key": "C",
+        "text": "Amazon CloudWatch A/B Metrics dashboard"
+      },
+      {
+        "key": "D",
+        "text": "AWS Step Functions comparing both prompts sequentially"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock Prompt Management versions both prompt variants. Bedrock Model Evaluations then runs both against a 1,000-query test dataset, uses LLM-as-judge to score factual accuracy/hallucination rate, and produces a comparison report. This is the fully managed Bedrock evaluation pipeline. Prompt Flows orchestrates workflows, not evaluations. CloudWatch doesn't have A/B evaluation capabilities for prompt quality. Step Functions can run both prompts but doesn't provide automated quality scoring.",
+    "source_topic": "Bedrock Prompt Management + Model Evaluations for prompt A/B testing"
+  },
+  {
+    "id": "d4-q0328",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Hallucination rate monitoring",
+    "difficulty": "hard",
+    "question_text": "A company wants to continuously monitor their production RAG chatbot for hallucination rate \u2014 detecting when the model starts producing responses not supported by retrieved source documents. How should this be implemented?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Monitor ModelLatency in CloudWatch \u2014 high latency indicates hallucinations"
+      },
+      {
+        "key": "B",
+        "text": "Deploy a Lambda evaluation function that uses Bedrock contextual grounding checks or an LLM-as-judge to score each production response against retrieved chunks; publish hallucination_rate as a CloudWatch custom metric"
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Macie to detect hallucinated content in S3"
+      },
+      {
+        "key": "D",
+        "text": "Use AWS Config to check if Bedrock Guardrails are enabled"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Hallucination rate is an AI-specific metric that requires ML-based evaluation: a Lambda function evaluates each response using Bedrock contextual grounding checks or an LLM-as-judge prompt ('Is this response supported by the provided context? Score 0-1'). The score is published to CloudWatch as a custom metric, enabling alarms when the rate exceeds threshold. Latency has no correlation with hallucination. Macie scans for sensitive data. Config monitors resource configurations.",
+    "source_topic": "Production hallucination rate monitoring with CloudWatch custom metrics"
+  },
+  {
+    "id": "d4-q0329",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Tensor parallelism and GPU replica efficiency",
+    "difficulty": "hard",
+    "question_text": "A team hosting a 7B-parameter LLM on SageMaker finds that with tensor parallelism across 4 GPUs, inter-GPU communication overhead is eating 30% of inference time. The model actually fits on 2 GPUs. What is the BEST configuration change?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase tensor parallelism to 8 GPUs for more parallelism"
+      },
+      {
+        "key": "B",
+        "text": "Reduce tensor parallelism to 2 GPUs per model replica, and use the freed 2 GPUs for a second model replica \u2014 doubling throughput"
+      },
+      {
+        "key": "C",
+        "text": "Enable quantisation to reduce model size further"
+      },
+      {
+        "key": "D",
+        "text": "Move to a different instance type with fewer GPUs"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Per the DJL tuning principle: 'Model fits on fewer GPUs \u2192 reduce tensor parallelism, increase replicas'. Reducing from 4 to 2 GPUs per replica eliminates the inter-GPU communication overhead on 2 extra GPUs, AND allows running 2 replicas on the same 4 GPUs \u2014 doubling throughput. Increasing to 8 GPUs (A) increases communication overhead further. Quantisation (C) helps memory/size but doesn't address the communication overhead. Changing instance type (D) doesn't solve the parallelism configuration.",
+    "source_topic": "Reduce tensor parallelism, increase replicas for throughput"
+  },
+  {
+    "id": "d4-q0330",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "pgvector vs OpenSearch selection",
+    "difficulty": "medium",
+    "question_text": "A team has a RAG application that also needs to join vector search results with structured user data stored in the same PostgreSQL database (e.g., filter results by user subscription tier stored in a relational table). Which vector store backend is BEST for this hybrid relational + vector search requirement?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon OpenSearch Serverless \u2014 best for pure vector workloads"
+      },
+      {
+        "key": "B",
+        "text": "Amazon MemoryDB \u2014 in-memory ultra-low latency"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Aurora PostgreSQL with pgvector \u2014 SQL capabilities alongside vector similarity search in the same database"
+      },
+      {
+        "key": "D",
+        "text": "Amazon S3 Vectors \u2014 lowest cost option"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Aurora PostgreSQL with pgvector enables SQL JOIN operations between vector search results and relational tables in the same query \u2014 exactly what's needed for filtering vectors by user subscription tier stored in a relational column. OpenSearch doesn't natively support SQL JOINs with relational tables. MemoryDB is in-memory with high cost and no relational capabilities. S3 Vectors is for cold, infrequent large-scale search, not real-time relational integration.",
+    "source_topic": "Aurora pgvector for relational + vector hybrid queries"
+  },
+  {
+    "id": "d4-q0331",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Batching and provisioned throughput",
+    "difficulty": "medium",
+    "question_text": "A company needs to process 50,000 product descriptions daily for embedding generation. The workload runs between midnight and 5 AM with no real-time user interaction. Which combination of Bedrock features minimises cost for this use case?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "On-demand InvokeModel with maximum Lambda concurrency"
+      },
+      {
+        "key": "B",
+        "text": "Bedrock Batch Inference (StartBatchInferenceJob) reading from S3 \u2014 optimised for bulk async processing at lower effective cost"
+      },
+      {
+        "key": "C",
+        "text": "Bedrock Provisioned Throughput to guarantee batch throughput"
+      },
+      {
+        "key": "D",
+        "text": "SageMaker real-time endpoints with auto-scaling"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Batch Inference is the cost-optimal choice for large-scale, non-real-time, offline processing: (1) it processes requests from S3 in bulk with lower overhead per item than synchronous calls, (2) there are no users waiting so the async nature is a benefit not a limitation, (3) it avoids the need for concurrent Lambda invocations or provisioned capacity. Provisioned Throughput adds an hourly commitment regardless of utilisation. SageMaker endpoints are for custom models and real-time serving.",
+    "source_topic": "Bedrock Batch Inference for overnight bulk embedding generation"
+  },
+  {
+    "id": "d4-q0332",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Latency optimisation \u2014 streaming and pre-computation",
+    "difficulty": "easy",
+    "question_text": "A latency-sensitive GenAI application needs to select the fastest Bedrock model for a given task. The team wants to regularly benchmark latency and throughput for their primary models. Where should they publish these benchmark results for ongoing analysis?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Store in a local CSV file on the developer's laptop"
+      },
+      {
+        "key": "B",
+        "text": "Publish to Amazon CloudWatch as custom metrics and build a dashboard comparing p50/p95/p99 latency across models"
+      },
+      {
+        "key": "C",
+        "text": "Log to an S3 bucket and review monthly"
+      },
+      {
+        "key": "D",
+        "text": "Use AWS Trusted Advisor latency recommendations"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Publishing benchmark results to CloudWatch as custom metrics (ModelLatency by model_id) enables real-time dashboards, percentile statistics (p50/p95/p99), and alarms for regression detection. This supports data-driven model selection decisions. Local CSV files have no alarming or continuous collection. S3 + monthly review misses intra-month regressions. Trusted Advisor doesn't measure FM latency benchmarks.",
+    "source_topic": "CloudWatch custom metrics for FM latency benchmarking"
   }
 ]

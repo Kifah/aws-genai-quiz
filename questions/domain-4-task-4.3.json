@@ -1,92 +1,520 @@
 [
   {
-    "id": "d4-q0301", "domain": 4, "task_statement": "4.3", "topic": "Bedrock Model Invocation Logs",
+    "id": "d4-q0301",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Bedrock Model Invocation Logs",
     "difficulty": "medium",
-    "question_text": "A team wants detailed visibility into every Bedrock FM request and response — including input prompts, output text, latency, and token counts — for debugging and cost attribution. Which monitoring feature provides this?",
+    "question_text": "A team wants detailed visibility into every Bedrock FM request and response \u2014 including input prompts, output text, latency, and token counts \u2014 for debugging and cost attribution. Which monitoring feature provides this?",
     "question_type": "single",
     "options": [
-      {"key": "A", "text": "Amazon CloudWatch standard metrics only"},
-      {"key": "B", "text": "Amazon Bedrock Model Invocation Logs — log full request/response payloads to CloudWatch Logs and/or S3"},
-      {"key": "C", "text": "AWS CloudTrail data events for Bedrock"},
-      {"key": "D", "text": "VPC Flow Logs"}
+      {
+        "key": "A",
+        "text": "Amazon CloudWatch standard metrics only"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Model Invocation Logs \u2014 log full request/response payloads to CloudWatch Logs and/or S3"
+      },
+      {
+        "key": "C",
+        "text": "AWS CloudTrail data events for Bedrock"
+      },
+      {
+        "key": "D",
+        "text": "VPC Flow Logs"
+      }
     ],
-    "correct_answers": ["B"],
+    "correct_answers": [
+      "B"
+    ],
     "explanation": "Skill 4.3.2 explicitly cites Amazon Bedrock Model Invocation Logs for detailed request and response analysis. When enabled, Bedrock logs the complete prompt, response, token counts, latency, and model ID for every invocation to CloudWatch Logs or S3. Standard CloudWatch metrics provide aggregated statistics (latency, error rate) but not per-invocation content. CloudTrail records control-plane API calls (CreateKnowledgeBase etc.) not inference content. VPC Flow Logs capture network metadata only.",
     "source_topic": "Bedrock Model Invocation Logs, CloudWatch"
   },
   {
-    "id": "d4-q0302", "domain": 4, "task_statement": "4.3", "topic": "Token usage and cost monitoring",
+    "id": "d4-q0302",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Token usage and cost monitoring",
     "difficulty": "medium",
     "question_text": "A finance team wants a dashboard that shows daily Bedrock token costs broken down by application team, with anomaly alerts when spending exceeds expected baselines. Which AWS services provide this?",
     "question_type": "single",
     "options": [
-      {"key": "A", "text": "Amazon CloudWatch custom metrics (token counts per team tag) + Cost Anomaly Detection"},
-      {"key": "B", "text": "Amazon Inspector for cost scanning"},
-      {"key": "C", "text": "AWS Config rules for spend compliance"},
-      {"key": "D", "text": "Amazon VPC Flow Logs with Athena queries"}
+      {
+        "key": "A",
+        "text": "Amazon CloudWatch custom metrics (token counts per team tag) + Cost Anomaly Detection"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Inspector for cost scanning"
+      },
+      {
+        "key": "C",
+        "text": "AWS Config rules for spend compliance"
+      },
+      {
+        "key": "D",
+        "text": "Amazon VPC Flow Logs with Athena queries"
+      }
     ],
-    "correct_answers": ["A"],
-    "explanation": "Skill 4.3.2 describes CloudWatch for tracking token usage and cost anomaly detection. Custom CloudWatch metrics (published from Model Invocation Logs) can track per-team token usage; AWS Cost Anomaly Detection monitors billing anomalies and sends alerts via SNS. Inspector scans for security vulnerabilities. Config enforces resource configuration policies. VPC Flow Logs/Athena can analyse network traffic — not FM token costs.",
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Skill 4.3.2 describes CloudWatch for tracking token usage and cost anomaly detection. Custom CloudWatch metrics (published from Model Invocation Logs) can track per-team token usage; AWS Cost Anomaly Detection monitors billing anomalies and sends alerts via SNS. Inspector scans for security vulnerabilities. Config enforces resource configuration policies. VPC Flow Logs/Athena can analyse network traffic \u2014 not FM token costs.",
     "source_topic": "CloudWatch, Cost Anomaly Detection, token monitoring"
   },
   {
-    "id": "d4-q0303", "domain": 4, "task_statement": "4.3", "topic": "Hallucination rate monitoring",
+    "id": "d4-q0303",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Hallucination rate monitoring",
     "difficulty": "hard",
     "question_text": "An operations team wants to monitor hallucination rates in production FM outputs over time and alert when rates drift above a threshold. Which approach operationalises this?",
     "question_type": "single",
     "options": [
-      {"key": "A", "text": "Manually review a random sample of FM outputs weekly"},
-      {"key": "B", "text": "Use golden dataset evaluations — periodically run a set of known-answer queries through the FM, measure the hallucination rate, publish a custom CloudWatch metric, and trigger a CloudWatch alarm if the rate exceeds the threshold"},
-      {"key": "C", "text": "Monitor FM response latency as a proxy for hallucination rate"},
-      {"key": "D", "text": "Use Amazon Inspector to scan responses for false statements"}
+      {
+        "key": "A",
+        "text": "Manually review a random sample of FM outputs weekly"
+      },
+      {
+        "key": "B",
+        "text": "Use golden dataset evaluations \u2014 periodically run a set of known-answer queries through the FM, measure the hallucination rate, publish a custom CloudWatch metric, and trigger a CloudWatch alarm if the rate exceeds the threshold"
+      },
+      {
+        "key": "C",
+        "text": "Monitor FM response latency as a proxy for hallucination rate"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Inspector to scan responses for false statements"
+      }
     ],
-    "correct_answers": ["B"],
-    "explanation": "Skill 4.3.2 cites golden datasets to detect hallucinations and anomaly detection for response drift in FM monitoring systems. Running golden queries at regular intervals, scoring answers against known correct answers, and publishing the hallucination rate as a CloudWatch custom metric enables threshold-based alerting. Manual weekly review is too slow and too subjective. Latency has no correlation with hallucination rate. Inspector is a security tool — not a semantic fact-checker.",
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 4.3.2 cites golden datasets to detect hallucinations and anomaly detection for response drift in FM monitoring systems. Running golden queries at regular intervals, scoring answers against known correct answers, and publishing the hallucination rate as a CloudWatch custom metric enables threshold-based alerting. Manual weekly review is too slow and too subjective. Latency has no correlation with hallucination rate. Inspector is a security tool \u2014 not a semantic fact-checker.",
     "source_topic": "Golden dataset, hallucination monitoring, CloudWatch"
   },
   {
-    "id": "d4-q0304", "domain": 4, "task_statement": "4.3", "topic": "Vector store performance monitoring",
+    "id": "d4-q0304",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Vector store performance monitoring",
     "difficulty": "medium",
     "question_text": "The retrieval latency of a RAG system's OpenSearch vector store is increasing as the index grows. What operational measures should be taken?",
     "question_type": "single",
     "options": [
-      {"key": "A", "text": "Ignore the latency increase — it is expected as data grows"},
-      {"key": "B", "text": "Monitor OpenSearch performance metrics (search latency, JVM heap, indexing rate) in CloudWatch; trigger index optimisation (segment merges, HNSW parameter tuning) when thresholds are breached"},
-      {"key": "C", "text": "Delete the vector store and rebuild it from scratch monthly"},
-      {"key": "D", "text": "Disable vector search and switch to keyword search to reduce index complexity"}
+      {
+        "key": "A",
+        "text": "Ignore the latency increase \u2014 it is expected as data grows"
+      },
+      {
+        "key": "B",
+        "text": "Monitor OpenSearch performance metrics (search latency, JVM heap, indexing rate) in CloudWatch; trigger index optimisation (segment merges, HNSW parameter tuning) when thresholds are breached"
+      },
+      {
+        "key": "C",
+        "text": "Delete the vector store and rebuild it from scratch monthly"
+      },
+      {
+        "key": "D",
+        "text": "Disable vector search and switch to keyword search to reduce index complexity"
+      }
     ],
-    "correct_answers": ["B"],
+    "correct_answers": [
+      "B"
+    ],
     "explanation": "Skill 4.3.5 describes performance monitoring for vector databases and automated index optimisation routines. Monitoring CloudWatch metrics for OpenSearch (latency percentiles, heap utilisation, merge rate) and triggering HNSW re-indexing or shard rebalancing when thresholds are exceeded keeps latency within SLA. Ignoring latency growth leads to SLA violations. Monthly full rebuilds cause significant downtime. Switching to keyword search loses semantic retrieval capability.",
     "source_topic": "Vector store monitoring, OpenSearch, index optimisation"
   },
   {
-    "id": "d4-q0305", "domain": 4, "task_statement": "4.3", "topic": "Observability for multi-agent systems",
+    "id": "d4-q0305",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Observability for multi-agent systems",
     "difficulty": "hard",
     "question_text": "A multi-agent GenAI system involves three agents that call tools and pass results to each other. Debugging failures is difficult because it is unclear which agent and which tool step failed. Which observability pattern addresses this?",
     "question_type": "single",
     "options": [
-      {"key": "A", "text": "Log only the final output of the last agent in the chain"},
-      {"key": "B", "text": "Instrument each agent step with AWS X-Ray trace segments and CloudWatch structured logs; use tool calling observability and multi-agent coordination tracking"},
-      {"key": "C", "text": "Add print statements to Lambda functions and check CloudWatch Logs manually after each failure"},
-      {"key": "D", "text": "Use Amazon Inspector to scan agent code for bugs"}
+      {
+        "key": "A",
+        "text": "Log only the final output of the last agent in the chain"
+      },
+      {
+        "key": "B",
+        "text": "Instrument each agent step with AWS X-Ray trace segments and CloudWatch structured logs; use tool calling observability and multi-agent coordination tracking"
+      },
+      {
+        "key": "C",
+        "text": "Add print statements to Lambda functions and check CloudWatch Logs manually after each failure"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Inspector to scan agent code for bugs"
+      }
     ],
-    "correct_answers": ["B"],
+    "correct_answers": [
+      "B"
+    ],
     "explanation": "Skill 4.3.4 describes tool calling observability and multi-agent coordination tracking. X-Ray distributed traces capture each agent step as a segment/subsegment with timing and metadata; structured CloudWatch Logs per agent step provide searchable context. Together they enable root-cause analysis across the agent chain. Logging only final output hides intermediate failures. Ad-hoc print statements lack structure and correlation IDs. Inspector is a security scanner, not an observability tool.",
     "source_topic": "AWS X-Ray, multi-agent observability, CloudWatch"
   },
   {
-    "id": "d4-q0306", "domain": 4, "task_statement": "4.3", "topic": "Output diff and regression monitoring",
+    "id": "d4-q0306",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Output diff and regression monitoring",
     "difficulty": "hard",
-    "question_text": "After a model version update, an operations team wants to detect if the FM's responses have drifted semantically — answering correctly before but differently now — without manual review of all outputs. Which technique addresses this?",
+    "question_text": "After a model version update, an operations team wants to detect if the FM's responses have drifted semantically \u2014 answering correctly before but differently now \u2014 without manual review of all outputs. Which technique addresses this?",
     "question_type": "single",
     "options": [
-      {"key": "A", "text": "Monitor token count per response — if it changes, flag the response"},
-      {"key": "B", "text": "Use output diffing with semantic similarity scoring — compare embeddings of new responses against golden reference responses; alert when similarity falls below a threshold"},
-      {"key": "C", "text": "Count spelling errors in FM responses as a quality proxy"},
-      {"key": "D", "text": "Deploy both model versions simultaneously and serve both to users for comparison"}
+      {
+        "key": "A",
+        "text": "Monitor token count per response \u2014 if it changes, flag the response"
+      },
+      {
+        "key": "B",
+        "text": "Use output diffing with semantic similarity scoring \u2014 compare embeddings of new responses against golden reference responses; alert when similarity falls below a threshold"
+      },
+      {
+        "key": "C",
+        "text": "Count spelling errors in FM responses as a quality proxy"
+      },
+      {
+        "key": "D",
+        "text": "Deploy both model versions simultaneously and serve both to users for comparison"
+      }
     ],
-    "correct_answers": ["B"],
+    "correct_answers": [
+      "B"
+    ],
     "explanation": "Skill 4.3.6 explicitly cites output diffing techniques for response consistency analysis. Computing embedding similarity between the new model's response and a golden reference response (from the previous version) detects semantic drift even when the wording changes. Token count changes don't indicate semantic drift. Spelling errors are not a quality metric for FM outputs. Serving both model versions to users exposes production users to potentially degraded responses.",
     "source_topic": "Output diffing, semantic drift, FM monitoring"
+  },
+  {
+    "id": "d4-q0333",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Hallucination rate monitoring",
+    "difficulty": "medium",
+    "question_text": "Which THREE metrics together form the recommended 'three pillars of observability' for a Bedrock GenAI application?",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Metrics (CloudWatch) \u2014 token counts, latency, error rates, cost"
+      },
+      {
+        "key": "B",
+        "text": "Logs (CloudWatch Logs + Bedrock Invocation Logs) \u2014 full prompts, responses, and application logs"
+      },
+      {
+        "key": "C",
+        "text": "Traces (AWS X-Ray) \u2014 distributed tracing across API Gateway, Lambda, and Bedrock"
+      },
+      {
+        "key": "D",
+        "text": "Audit (CloudTrail) \u2014 who called which API and when"
+      },
+      {
+        "key": "E",
+        "text": "Dashboards (QuickSight) \u2014 business intelligence visualisations"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B",
+      "C"
+    ],
+    "explanation": "The three pillars of observability for GenAI are: (1) Metrics via CloudWatch (quantitative health indicators), (2) Logs via CloudWatch Logs + Bedrock Invocation Logs (detailed event records including prompt/response content), and (3) Traces via AWS X-Ray (distributed end-to-end latency breakdowns). CloudTrail (D) is the audit pillar (governance/compliance, not operational observability). QuickSight (E) is a BI tool that visualises data FROM these pillars, not a pillar itself.",
+    "source_topic": "Three pillars of GenAI observability: metrics, logs, traces"
+  },
+  {
+    "id": "d4-q0334",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Bedrock Model Invocation Logs",
+    "difficulty": "easy",
+    "question_text": "A DevOps team wants to enable comprehensive logging of all Amazon Bedrock model invocations (including full prompts and responses) to an S3 bucket for 90-day retention. How should this be configured?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable CloudTrail data events for Bedrock \u2014 it logs prompt/response bodies to S3"
+      },
+      {
+        "key": "B",
+        "text": "Enable Bedrock Model Invocation Logging via PutModelInvocationLoggingConfiguration with an S3 destination; set S3 Lifecycle policy for 90-day retention"
+      },
+      {
+        "key": "C",
+        "text": "Add CloudWatch Logs statements in every Lambda function calling Bedrock"
+      },
+      {
+        "key": "D",
+        "text": "Enable AWS Config recording for Bedrock resources"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock Model Invocation Logging is enabled once via PutModelInvocationLoggingConfiguration \u2014 it automatically captures ALL invocations (prompt, response, model ID, latency, tokens) to S3 (and/or CloudWatch Logs). An S3 Lifecycle policy with 90-day expiry manages retention. CloudTrail data events record API metadata but NOT the full prompt/response body. Per-Lambda logging requires code changes to every function. AWS Config tracks resource configs, not invocation content.",
+    "source_topic": "Enabling Bedrock Model Invocation Logging to S3"
+  },
+  {
+    "id": "d4-q0335",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Observability for multi-agent systems",
+    "difficulty": "hard",
+    "question_text": "A multi-agent system has Agent A (research), Agent B (analysis), and Agent C (writing) collaborating on complex tasks. When a task fails, the team needs to trace exactly which agent's step caused the failure and what inputs/outputs it had. What is the BEST tracing strategy?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Check CloudTrail for which agent's Lambda was invoked last"
+      },
+      {
+        "key": "B",
+        "text": "Use AWS X-Ray distributed tracing with a shared trace ID propagated across all agent invocations, combined with Bedrock Agent tracing (FailureTrace) for agent-specific debugging"
+      },
+      {
+        "key": "C",
+        "text": "Add print() statements to each agent Lambda"
+      },
+      {
+        "key": "D",
+        "text": "Check CloudWatch InvocationIntervened metrics per agent"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "For multi-agent observability: AWS X-Ray propagates a shared trace ID across Agent A\u2192B\u2192C Lambda invocations, producing a complete distributed trace showing the entire execution path and per-segment latency. Bedrock Agent tracing (specifically FailureTrace) shows where and why an individual agent failed \u2014 API errors, tool timeouts, logic breaks. CloudTrail shows API calls but not step-by-step agent reasoning. Print statements produce logs but not correlated traces. InvocationIntervened is a Guardrails metric, not agent failure detection.",
+    "source_topic": "X-Ray + Bedrock Agent FailureTrace for multi-agent debugging"
+  },
+  {
+    "id": "d4-q0336",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Token usage and cost monitoring",
+    "difficulty": "medium",
+    "question_text": "A company wants to detect when a specific AWS department's Bedrock token usage spikes unexpectedly \u2014 possibly due to a prompt engineering bug causing runaway verbose responses. Which monitoring setup detects this automatically?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Review AWS Cost Explorer monthly bills for anomalies"
+      },
+      {
+        "key": "B",
+        "text": "Enable CloudWatch Anomaly Detection on the OutputTokenCount metric (filtered by department tag) \u2014 automatically alerts when the metric deviates from its learned baseline"
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Macie to detect token usage spikes"
+      },
+      {
+        "key": "D",
+        "text": "Set a static CloudWatch Alarm at 10,000 output tokens per day"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "CloudWatch Anomaly Detection uses ML to learn the expected baseline pattern (including daily/weekly seasonality) for a metric and automatically alerts when actual values deviate significantly \u2014 without requiring a manually defined static threshold. This detects unexpected spikes even for metrics with naturally variable baselines. Monthly Cost Explorer review is too slow. Macie scans S3 data content. A static alarm (D) doesn't account for normal variation and generates false positives/negatives.",
+    "source_topic": "CloudWatch Anomaly Detection on token usage metrics"
+  },
+  {
+    "id": "d4-q0337",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Vector store performance monitoring",
+    "difficulty": "medium",
+    "question_text": "A team's OpenSearch cluster serving a RAG knowledge base is degrading in search performance. They suspect the index is fragmented. Which monitoring approach identifies index health issues and the appropriate maintenance action?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Monitor CPUUtilization and SearchLatency in CloudWatch; schedule a Lambda to call the _optimize API periodically to defragment OpenSearch indices"
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Macie to scan the OpenSearch index for data quality issues"
+      },
+      {
+        "key": "C",
+        "text": "Enable Bedrock Model Invocation Logging to capture slow queries"
+      },
+      {
+        "key": "D",
+        "text": "Check AWS Config for OpenSearch cluster configuration compliance"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "OpenSearch provides CPUUtilization and SearchLatency CloudWatch metrics. When SearchLatency degrades with stable CPU, index fragmentation is often the cause. The _optimize API call (merge segments) defragments indices. Scheduling a Lambda to call _optimize periodically maintains index health proactively. Macie discovers sensitive data in S3, not OpenSearch performance issues. Bedrock Invocation Logs capture model calls, not vector search internals. Config tracks configuration, not index health.",
+    "source_topic": "OpenSearch health monitoring + _optimize for index maintenance"
+  },
+  {
+    "id": "d4-q0338",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "CloudWatch Logs Insights for FM debugging",
+    "difficulty": "medium",
+    "question_text": "A team has Bedrock Model Invocation Logs flowing to CloudWatch Logs. They want to query for all invocations where output token count exceeded 2,000 in the last 7 days \u2014 to identify expensive runaway responses. Which tool enables this query?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS CloudTrail Event History \u2014 filter by token count"
+      },
+      {
+        "key": "B",
+        "text": "CloudWatch Logs Insights \u2014 write an interactive query on the invocation log group filtering by outputTokenCount > 2000"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Athena \u2014 query S3 invocation logs with SQL"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Macie \u2014 scan for large response objects"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "CloudWatch Logs Insights provides an interactive query language for real-time analysis of CloudWatch log data. A query like `fields outputTokenCount, modelId, @timestamp | filter outputTokenCount > 2000 | sort outputTokenCount desc` on the Bedrock invocation log group finds all matching records. CloudTrail doesn't contain token count data. Athena queries S3 objects \u2014 viable if logs are exported to S3, but CloudWatch Logs Insights is the direct, lower-friction tool for CloudWatch logs. Macie scans for PII.",
+    "source_topic": "CloudWatch Logs Insights for token usage analysis"
+  },
+  {
+    "id": "d4-q0339",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "AWS X-Ray for FM observability",
+    "difficulty": "medium",
+    "question_text": "A GenAI application has p99 latency of 8 seconds. The team suspects the bottleneck is either the vector search step or the FM inference step but doesn't know which contributes more. Which tool provides a visual breakdown of latency by component?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS CloudTrail \u2014 shows which API calls took longest"
+      },
+      {
+        "key": "B",
+        "text": "AWS X-Ray service map and trace details \u2014 shows per-segment latency across Lambda, OpenSearch, and Bedrock"
+      },
+      {
+        "key": "C",
+        "text": "Amazon CloudWatch Metrics \u2014 shows average latency per service"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Inspector \u2014 identifies slow code paths"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "AWS X-Ray traces individual requests end-to-end and produces a service map and waterfall diagram showing the time spent in each segment (Lambda orchestration, OpenSearch vector search, Bedrock inference). This pinpoints whether the 8-second p99 comes from retrieval or generation. CloudTrail records API call metadata without per-segment timing. CloudWatch Metrics shows aggregate averages per service but not the breakdown for individual correlated requests. Inspector scans for security vulnerabilities.",
+    "source_topic": "X-Ray service map for latency bottleneck identification"
+  },
+  {
+    "id": "d4-q0340",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Bedrock Model Invocation Logs",
+    "difficulty": "hard",
+    "question_text": "A compliance team needs to query all Bedrock invocation logs from the past 2 years to find conversations where a specific topic was discussed. They have 500GB of logs in S3. Which tooling enables efficient SQL-based analysis of this log archive?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "CloudWatch Logs Insights \u2014 queries CloudWatch Logs in real time"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Athena \u2014 serverless SQL queries on Bedrock invocation logs stored in S3 using the Glue Data Catalog schema"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Macie \u2014 scans S3 objects for content matching"
+      },
+      {
+        "key": "D",
+        "text": "AWS Glue DataBrew \u2014 visual profile of the log archive"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "For large-scale log analysis on S3, Amazon Athena is the purpose-built serverless SQL query service \u2014 query 500GB of Bedrock invocation logs (stored as JSON in S3) with standard SQL, paying only for data scanned. With partitioning (year/month), queries are fast and cost-effective. CloudWatch Logs Insights only queries data still in CloudWatch Logs (typically 90 days max). Macie discovers sensitive data patterns. DataBrew is for visual data preparation, not compliance querying.",
+    "source_topic": "Athena for SQL queries on archived Bedrock invocation logs in S3"
+  },
+  {
+    "id": "d4-q0341",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "SageMaker Model Monitor for drift detection",
+    "difficulty": "medium",
+    "question_text": "A production SageMaker classification model starts generating increasingly inaccurate predictions 3 months after deployment. The team suspects the input data distribution has drifted from the training data. Which SageMaker feature automatically detects this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "SageMaker Clarify \u2014 detects bias in training data"
+      },
+      {
+        "key": "B",
+        "text": "SageMaker Model Monitor \u2014 continuously monitors deployed endpoints for data drift and performance degradation"
+      },
+      {
+        "key": "C",
+        "text": "SageMaker Ground Truth \u2014 creates new labelled data for retraining"
+      },
+      {
+        "key": "D",
+        "text": "SageMaker Pipelines \u2014 re-runs the training workflow"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "SageMaker Model Monitor continuously monitors deployed SageMaker endpoints for data drift (input distribution changes vs. training baseline), model quality degradation (accuracy, F1 score), and bias drift. It generates violation reports and can trigger CloudWatch alarms for automated retraining pipelines. Clarify analyses training data, not live production inputs. Ground Truth labels new data. Pipelines automates retraining workflows \u2014 Model Monitor would trigger the pipeline, not detect the drift.",
+    "source_topic": "SageMaker Model Monitor for post-deployment drift detection"
+  },
+  {
+    "id": "d4-q0342",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Hallucination rate monitoring",
+    "difficulty": "medium",
+    "question_text": "A team maintains a 'golden dataset' of 100 standard questions with known correct answers. They run this weekly against their production RAG chatbot to detect if output quality has regressed since the last deployment. Which pattern describes this quality monitoring approach?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Blue/green deployment comparison"
+      },
+      {
+        "key": "B",
+        "text": "Golden dataset regression monitoring \u2014 comparing current outputs against known-good baseline answers using semantic similarity or LLM-as-judge scoring"
+      },
+      {
+        "key": "C",
+        "text": "Canary testing with live user traffic"
+      },
+      {
+        "key": "D",
+        "text": "CloudWatch anomaly detection on latency metrics"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Golden dataset regression monitoring uses a curated set of standardised questions with known correct answers. Weekly automated runs score current model responses against the baseline (via semantic similarity or LLM-as-judge) and alert if scores drop \u2014 detecting regression from prompt changes, knowledge base updates, or model updates. Blue/green compares two deployment versions simultaneously. Canary testing exposes a percentage of real users to a new version. CloudWatch latency metrics detect operational issues, not output quality regression.",
+    "source_topic": "Golden dataset weekly regression monitoring for output quality"
   }
 ]

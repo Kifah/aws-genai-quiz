@@ -515,5 +515,453 @@
     ],
     "explanation": "Amazon EMR (Elastic MapReduce) provides managed Apache Spark (and Hadoop) clusters that scale to hundreds of nodes for large-scale distributed data processing. It auto-terminates after the job, making it cost-efficient for one-time large corpus preparation. Lambda's 15-minute timeout and 10 GB memory limit make it unsuitable for 50 TB. RDS is a transactional database. Comprehend is an NLP inference service.",
     "source_topic": "Amazon EMR, Apache Spark, large-scale GenAI data preparation"
+  },
+  {
+    "id": "d1-q0550",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Bedrock Data Automation blueprints",
+    "difficulty": "medium",
+    "question_text": "A company needs to extract structured data from thousands of scanned invoices stored in S3 before ingesting them into a Bedrock Knowledge Base. They want to avoid building and maintaining a custom OCR pipeline. Which AWS service is MOST appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Textract with custom Lambda post-processing"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Data Automation (BDA) with blueprints"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Rekognition document analysis"
+      },
+      {
+        "key": "D",
+        "text": "AWS Glue ETL with a custom Python script"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock Data Automation (BDA) with blueprints is specifically designed to extract structured data from unstructured sources (scanned documents, images) without custom OCR code. It integrates natively with Bedrock Knowledge Bases for downstream RAG ingestion. Textract can do OCR but requires custom Lambda post-processing to structure the output. Rekognition is for image/video analysis, not document data extraction. Glue ETL requires building custom parsing logic.",
+    "source_topic": "Bedrock Data Automation for document ingestion"
+  },
+  {
+    "id": "d1-q0551",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Bedrock Data Automation blueprints",
+    "difficulty": "medium",
+    "question_text": "A team is designing a pipeline to ingest multimodal content (PDFs with embedded images and text) into a Bedrock Knowledge Base. What is the recommended AWS-native sequence?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Textract \u2192 Lambda (format) \u2192 Bedrock Knowledge Base"
+      },
+      {
+        "key": "B",
+        "text": "Bedrock Data Automation (BDA) \u2192 Bedrock Knowledge Base"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Rekognition \u2192 Amazon Comprehend \u2192 Bedrock Knowledge Base"
+      },
+      {
+        "key": "D",
+        "text": "AWS Glue \u2192 Amazon OpenSearch \u2192 Bedrock Knowledge Base"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "BDA is the recommended AWS-native approach for multimodal ingestion before RAG. It handles both text and image extraction, produces structured output, and integrates directly with Bedrock Knowledge Bases. The Textract \u2192 Lambda path works but adds operational overhead. Rekognition + Comprehend is not designed for document-to-KB ingestion. Glue + OpenSearch bypasses the managed KB entirely.",
+    "source_topic": "Multimodal ingestion: BDA \u2192 Knowledge Base"
+  },
+  {
+    "id": "d1-q0552",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Glue Data Quality for FM pipelines",
+    "difficulty": "medium",
+    "question_text": "Before generating embeddings for a RAG system, a data engineer wants to automatically validate that all document chunks meet quality rules: minimum 50 characters, no null text, correct encoding. Which AWS service BEST provides rule-based data quality validation at scale?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Lambda with custom validation code"
+      },
+      {
+        "key": "B",
+        "text": "Amazon SageMaker Data Wrangler"
+      },
+      {
+        "key": "C",
+        "text": "AWS Glue Data Quality"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Macie"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "AWS Glue Data Quality provides a managed, declarative rule engine for defining and enforcing data quality rules (completeness, format, nulls, schema compliance) across large datasets in S3 or other sources. It produces quality scores and integrates with Glue ETL pipelines. Lambda requires writing all logic manually. SageMaker Data Wrangler is for visual, exploratory data preparation. Macie discovers sensitive data but does not perform structural quality checks.",
+    "source_topic": "AWS Glue Data Quality for FM data validation"
+  },
+  {
+    "id": "d1-q0553",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "AppFlow for SaaS data ingestion",
+    "difficulty": "medium",
+    "question_text": "A company wants to ingest customer data from Salesforce into Amazon S3 for use in a RAG knowledge base, without writing custom integration code. Which AWS service provides managed, no-code data transfer from SaaS applications?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS DataSync"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Kinesis Data Firehose"
+      },
+      {
+        "key": "C",
+        "text": "Amazon AppFlow"
+      },
+      {
+        "key": "D",
+        "text": "AWS Database Migration Service (DMS)"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Amazon AppFlow is a fully managed integration service for transferring data between SaaS applications (Salesforce, Slack, Google Analytics, etc.) and AWS services like S3, Redshift, or EventBridge \u2014 with no custom code required. DataSync is for file system and storage transfers, not SaaS APIs. Kinesis Firehose handles streaming data, not SaaS connector integration. DMS is for database-to-database migrations.",
+    "source_topic": "AppFlow for SaaS-to-AWS data ingestion"
+  },
+  {
+    "id": "d1-q0554",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Data quality for FM ingestion",
+    "difficulty": "hard",
+    "question_text": "A developer notices that a Bedrock Knowledge Base is returning poorly grounded responses. Investigation reveals that some document chunks contain only whitespace or HTML tags. Which pipeline change MOST directly fixes this issue?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the context window size for the generative model"
+      },
+      {
+        "key": "B",
+        "text": "Switch to a more powerful embedding model"
+      },
+      {
+        "key": "C",
+        "text": "Add data quality rules in AWS Glue to filter out empty or non-textual chunks before embedding"
+      },
+      {
+        "key": "D",
+        "text": "Enable Bedrock Guardrails contextual grounding checks"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "The root cause is garbage data (empty/HTML-only chunks) entering the knowledge base. The fix is upstream: add Glue Data Quality rules to filter such chunks before embedding. Larger context windows don't help if the retrieved chunks are meaningless. A better embedding model won't improve vectors of whitespace. Guardrails grounding checks operate at inference time, not at ingestion \u2014 they can reduce hallucinations but don't fix corrupt knowledge base data.",
+    "source_topic": "Upstream data quality for RAG pipelines"
+  },
+  {
+    "id": "d1-q0555",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Glue vs Lake Formation",
+    "difficulty": "medium",
+    "question_text": "A platform team needs to: (1) catalogue all S3 datasets used in GenAI training and track their lineage, AND (2) restrict which data scientists can query specific columns in those datasets. Which combination of services addresses BOTH requirements with the least operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Glue Data Catalog (for both cataloguing and access control)"
+      },
+      {
+        "key": "B",
+        "text": "AWS Glue Data Catalog (lineage + metadata) + AWS Lake Formation (column-level access control)"
+      },
+      {
+        "key": "C",
+        "text": "Amazon S3 bucket policies (for access) + AWS Glue Crawlers (for cataloguing)"
+      },
+      {
+        "key": "D",
+        "text": "AWS IAM policies on all S3 objects (for access) + AWS Glue ETL (for lineage)"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Glue Data Catalog handles metadata discovery, table registration, and lineage tracking (what data exists and where it came from). Lake Formation provides fine-grained access control at the column and row level on top of Glue Catalog tables \u2014 answering 'who can access what'. S3 bucket policies provide object-level access but not column-level. IAM policies on S3 objects are too coarse for column-level control. Glue ETL is for transformation, not lineage metadata.",
+    "source_topic": "Glue Data Catalog + Lake Formation combination"
+  },
+  {
+    "id": "d1-q0556",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Amazon Comprehend for entity enrichment",
+    "difficulty": "medium",
+    "question_text": "A developer wants to enrich user queries before sending them to a Bedrock model. The enrichment should automatically extract named entities (organizations, dates, locations) from the query to add context to the prompt. Which AWS service provides this capability as a managed API?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Rekognition"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Comprehend"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Textract"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Transcribe"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Amazon Comprehend provides managed NLP APIs for entity extraction, key phrase detection, sentiment analysis, and topic modelling \u2014 all without training a custom model. It can extract organizations, dates, locations, and other named entities from text in real time. Rekognition processes images/video, not text NLP. Textract extracts text from documents (OCR), not entities from arbitrary text. Transcribe converts speech to text.",
+    "source_topic": "Amazon Comprehend entity extraction for prompt enrichment"
+  },
+  {
+    "id": "d1-q0557",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Kinesis Firehose for streaming data ingestion",
+    "difficulty": "medium",
+    "question_text": "A team needs to continuously ingest real-time product review data from a web application into S3 for periodic Knowledge Base reindexing. The data arrives in a high-volume stream. Which AWS service is MOST appropriate for the ingestion layer?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon SQS FIFO queue"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Kinesis Data Firehose"
+      },
+      {
+        "key": "C",
+        "text": "AWS DataSync"
+      },
+      {
+        "key": "D",
+        "text": "Amazon EventBridge Pipes"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Kinesis Data Firehose is designed for near-real-time, high-volume streaming data delivery to S3, Redshift, or OpenSearch \u2014 with built-in batching, compression, and transformation. It is the standard choice for streaming data ingestion into S3 for downstream processing. SQS is a message queue, not a streaming delivery service to S3. DataSync is for batch file transfers between storage systems. EventBridge Pipes connects event sources to targets but is not optimised for high-volume streaming to S3.",
+    "source_topic": "Kinesis Firehose for streaming data to S3"
+  },
+  {
+    "id": "d1-q0558",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Input quality enhancement",
+    "difficulty": "easy",
+    "question_text": "A GenAI application receives raw text from users that often contains typos, inconsistent date formats, and abbreviations. A developer wants to standardize this input before sending it to Bedrock. What is the SIMPLEST approach?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Kendra to clean and index the text"
+      },
+      {
+        "key": "B",
+        "text": "Use an AWS Lambda function to apply normalization (spell check, date parsing, abbreviation expansion) before invoking Bedrock"
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon SageMaker Processing jobs for each user request"
+      },
+      {
+        "key": "D",
+        "text": "Increase the Bedrock model's temperature to handle noisy inputs"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A Lambda function is the simplest serverless approach for lightweight text normalization (spell-check libraries, date formatting, abbreviation expansion) before passing clean input to Bedrock. It adds minimal latency and no infrastructure overhead. Kendra is a search service, not a text normalizer. SageMaker Processing jobs are batch workloads, not per-request real-time processing. Increasing temperature makes outputs more random, not more robust to noisy inputs.",
+    "source_topic": "Lambda-based input normalization"
+  },
+  {
+    "id": "d1-q0559",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Multimodal data processing",
+    "difficulty": "medium",
+    "question_text": "A company wants to build a GenAI pipeline that processes audio recordings of customer calls, summarises each call, and stores summaries in a knowledge base. Which sequence of AWS services is MOST appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Polly \u2192 Amazon Bedrock \u2192 Amazon S3"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Transcribe \u2192 AWS Lambda (format) \u2192 Amazon Bedrock (summarise) \u2192 Amazon S3"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Rekognition \u2192 Amazon Comprehend \u2192 Amazon Bedrock"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Lex \u2192 Amazon Bedrock \u2192 Amazon DynamoDB"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Transcribe converts the audio recording to text. Lambda formats and prepares the transcript. Bedrock generates a summary. S3 stores it for later knowledge base ingestion. Polly is text-to-speech (opposite direction). Rekognition processes images/video, not audio. Lex is for building conversational interfaces, not batch audio summarisation pipelines.",
+    "source_topic": "Audio-to-summary pipeline with Transcribe and Bedrock"
+  },
+  {
+    "id": "d1-q0560",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Bedrock API request format",
+    "difficulty": "easy",
+    "question_text": "A developer calls the Amazon Bedrock InvokeModel API but receives a ValidationException. The error states the request body is malformed. What is the MOST likely cause?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "The IAM role does not have bedrock:InvokeModel permission"
+      },
+      {
+        "key": "B",
+        "text": "The request body is not valid JSON or does not match the model's expected schema"
+      },
+      {
+        "key": "C",
+        "text": "The model is not available in the current region"
+      },
+      {
+        "key": "D",
+        "text": "The Lambda function timeout is too short"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A ValidationException on InvokeModel almost always indicates the request body is malformed \u2014 either invalid JSON or missing/incorrect required fields for that specific model's schema (e.g., missing 'prompt', wrong field names, incorrect data types). An IAM issue would produce an AccessDeniedException, not a ValidationException. Regional availability produces a ResourceNotFoundException. Lambda timeout produces a TaskTimedOut error, not a ValidationException.",
+    "source_topic": "Bedrock API request validation"
+  },
+  {
+    "id": "d1-q0561",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Bedrock Batch Inference for large-scale processing",
+    "difficulty": "medium",
+    "question_text": "A data team needs to generate embeddings for 10 million product descriptions stored in S3. Processing them one-by-one via InvokeModel is too slow and hitting throttling limits. Which Bedrock capability is MOST appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Bedrock InvokeModel with increased Lambda concurrency"
+      },
+      {
+        "key": "B",
+        "text": "Bedrock Batch Inference (StartBatchInferenceJob) reading from S3"
+      },
+      {
+        "key": "C",
+        "text": "Bedrock Provisioned Throughput with synchronous invocations"
+      },
+      {
+        "key": "D",
+        "text": "Amazon SageMaker real-time endpoints with auto-scaling"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock Batch Inference (StartBatchInferenceJob) is purpose-built for large-scale, asynchronous processing of prompts from S3. It optimises cost and throughput by batching requests without per-request API overhead \u2014 the right choice for millions of records. Increasing Lambda concurrency still hits per-request throttle limits. Provisioned Throughput reduces throttling for steady traffic but doesn't batch requests. SageMaker endpoints require hosting and managing custom containers.",
+    "source_topic": "Bedrock Batch Inference for millions of records"
+  },
+  {
+    "id": "d1-q0562",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Bedrock Knowledge Base ingestion connector",
+    "difficulty": "medium",
+    "question_text": "An organisation stores its internal documentation in Confluence and wants to use it as a knowledge source for a Bedrock-powered assistant. They want automatic re-sync when documents are updated in Confluence. What is the SIMPLEST approach?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Export Confluence pages to S3 manually each week and trigger a Glue ETL job"
+      },
+      {
+        "key": "B",
+        "text": "Use a Bedrock Knowledge Base managed connector for Confluence with scheduled ingestion jobs"
+      },
+      {
+        "key": "C",
+        "text": "Build a custom Lambda scraper that polls the Confluence API and writes to OpenSearch"
+      },
+      {
+        "key": "D",
+        "text": "Use AWS AppFlow to sync Confluence to DynamoDB, then write a custom RAG layer"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock Knowledge Bases provide managed connectors for SaaS sources including Confluence, SharePoint, and S3. The connector handles authentication, data extraction, chunking, embedding, and indexing \u2014 with configurable ingestion schedules for automatic re-sync. Manual exports are error-prone and not automatic. A custom Lambda scraper requires significant build and maintenance effort. AppFlow \u2192 DynamoDB \u2192 custom RAG adds unnecessary complexity.",
+    "source_topic": "Bedrock KB managed connector for Confluence"
+  },
+  {
+    "id": "d1-q0563",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "SageMaker Data Wrangler for FM prep",
+    "difficulty": "easy",
+    "question_text": "A data scientist wants to visually profile, detect anomalies, and create data quality reports for a dataset before using it for fine-tuning a foundation model. Which AWS tool provides a UI-driven interface for this workflow?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Glue Data Quality"
+      },
+      {
+        "key": "B",
+        "text": "Amazon SageMaker Data Wrangler"
+      },
+      {
+        "key": "C",
+        "text": "Amazon QuickSight"
+      },
+      {
+        "key": "D",
+        "text": "AWS Config"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "SageMaker Data Wrangler provides a visual, UI-driven interface for data profiling, anomaly detection, and quality reporting \u2014 purpose-built for ML/AI dataset preparation. Glue Data Quality uses rule-based checks in an ETL pipeline (code/config-driven). QuickSight is a BI dashboard tool, not a data preparation service. AWS Config monitors resource compliance, not dataset quality.",
+    "source_topic": "SageMaker Data Wrangler visual data prep"
   }
 ]

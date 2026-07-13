@@ -286,5 +286,389 @@
     ],
     "explanation": "Providing an explicit JSON schema in the prompt and constraining output with instructions and stop sequences (e.g., stopping after the closing brace) produces structured, parseable output. Downstream validation catches any edge cases. A temperature of 1.0 increases randomness and makes structured output less reliable. Text-to-image models cannot extract text fields. Streaming token-level filtering cannot guarantee schema validity.",
     "source_topic": "Structured output, JSON schema enforcement, stop sequences"
+  },
+  {
+    "id": "d2-q0561",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Streaming API responses",
+    "difficulty": "medium",
+    "question_text": "A chatbot application needs to display FM-generated text to users as it is being produced, token-by-token, to improve perceived responsiveness. Which Bedrock API and delivery mechanism enable this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "InvokeModel + REST API (wait for complete response)"
+      },
+      {
+        "key": "B",
+        "text": "InvokeModelWithResponseStream + API Gateway WebSocket API to push tokens to the client in real time"
+      },
+      {
+        "key": "C",
+        "text": "StartBatchInferenceJob + S3 polling for result"
+      },
+      {
+        "key": "D",
+        "text": "RetrieveAndGenerate + CloudFront streaming"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "InvokeModelWithResponseStream is the Bedrock streaming API that delivers tokens as they are generated. API Gateway WebSocket APIs enable real-time, bidirectional push of tokens from Lambda to the client browser. Together they implement the canonical real-time streaming chat architecture. InvokeModel waits for the full response. StartBatchInferenceJob is asynchronous. CloudFront caches static content, not streaming LLM output.",
+    "source_topic": "Bedrock streaming + WebSocket API for real-time chat"
+  },
+  {
+    "id": "d2-q0562",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Asynchronous FM processing",
+    "difficulty": "medium",
+    "question_text": "An application submits customer feedback messages to Bedrock for sentiment analysis. Messages arrive in bursts. Processing doesn't need to be real-time; results should be available within minutes. Which architecture is MOST appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Synchronous Lambda \u2192 Bedrock call for each message as it arrives"
+      },
+      {
+        "key": "B",
+        "text": "SQS queue \u2192 Lambda (triggered by queue) \u2192 Bedrock \u2192 results to S3"
+      },
+      {
+        "key": "C",
+        "text": "API Gateway + Lambda streaming endpoint"
+      },
+      {
+        "key": "D",
+        "text": "DynamoDB Streams \u2192 Bedrock direct integration"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "SQS decouples message intake from processing, absorbs burst traffic without dropping messages, and triggers Lambda for each batch. Lambda calls Bedrock and stores results in S3. This is the standard async, decoupled GenAI processing pattern for bursty, non-real-time workloads. Synchronous per-message processing would exhaust Lambda concurrency during bursts. API Gateway streaming is for real-time user-facing chat. DynamoDB Streams don't natively integrate with Bedrock.",
+    "source_topic": "SQS-decoupled async Bedrock processing"
+  },
+  {
+    "id": "d2-q0563",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Exponential backoff and retry",
+    "difficulty": "easy",
+    "question_text": "A Lambda function calling Bedrock InvokeModel occasionally receives ThrottlingException errors. The function currently has no retry logic and fails immediately on these errors. What is the RECOMMENDED fix?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Catch the exception and return an error to the user immediately"
+      },
+      {
+        "key": "B",
+        "text": "Implement exponential backoff with jitter in the retry logic \u2014 wait longer between each retry attempt"
+      },
+      {
+        "key": "C",
+        "text": "Switch to a different Bedrock model that doesn't get throttled"
+      },
+      {
+        "key": "D",
+        "text": "Increase the Lambda timeout to wait for the model to become available"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "ThrottlingException is a transient error caused by exceeding API rate limits. The standard fix is exponential backoff with jitter \u2014 each retry waits an exponentially increasing time, with random jitter to prevent thundering herd. AWS SDKs have built-in retry with backoff that can be tuned. Returning an error immediately gives a poor user experience. Switching models doesn't solve the throughput limit. Increasing Lambda timeout doesn't actively retry the request.",
+    "source_topic": "Exponential backoff for Bedrock ThrottlingException"
+  },
+  {
+    "id": "d2-q0564",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Rate limiting via API Gateway",
+    "difficulty": "medium",
+    "question_text": "A company exposes its Bedrock-powered API to external partners. To prevent any single partner from consuming all API capacity and to enable fair usage billing, which API Gateway feature should be used?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "API Gateway canary deployments"
+      },
+      {
+        "key": "B",
+        "text": "API Gateway usage plans with API keys and throttle/quota limits per partner"
+      },
+      {
+        "key": "C",
+        "text": "Lambda reserved concurrency limits"
+      },
+      {
+        "key": "D",
+        "text": "Amazon CloudFront rate limiting at the edge"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "API Gateway usage plans allow you to assign API keys to partners and define throttle (requests/second) and quota (requests/day or month) limits per key. This prevents any single partner from monopolising capacity and enables usage-based billing. Canary deployments are for staged traffic shifting during deploys. Lambda reserved concurrency limits overall Lambda capacity but doesn't control per-caller rates. CloudFront rate limiting operates at the CDN level, not per-partner API key.",
+    "source_topic": "API Gateway usage plans for per-partner rate limiting"
+  },
+  {
+    "id": "d2-q0565",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "AWS X-Ray for FM observability",
+    "difficulty": "medium",
+    "question_text": "A GenAI application's response latency is higher than expected. The team needs to identify whether the bottleneck is in the API Gateway, Lambda, Bedrock inference, or DynamoDB read. Which AWS service provides end-to-end distributed tracing across all these components?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon CloudWatch Metrics"
+      },
+      {
+        "key": "B",
+        "text": "AWS CloudTrail"
+      },
+      {
+        "key": "C",
+        "text": "AWS X-Ray"
+      },
+      {
+        "key": "D",
+        "text": "Amazon CloudWatch Logs"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "AWS X-Ray provides distributed tracing that traces a request as it passes through API Gateway \u2192 Lambda \u2192 Bedrock \u2192 DynamoDB, showing the latency contribution of each segment. This identifies the bottleneck component precisely. CloudWatch Metrics shows aggregate numbers per service but not the latency breakdown for a single request trace. CloudTrail records API management calls. CloudWatch Logs stores log lines but doesn't correlate latency across services.",
+    "source_topic": "X-Ray distributed tracing for GenAI latency debugging"
+  },
+  {
+    "id": "d2-q0566",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "FM API Gateway abstraction",
+    "difficulty": "medium",
+    "question_text": "A platform team wants all Bedrock API calls from applications to go through a central Lambda 'router' that can dynamically switch between model providers (Bedrock, future SageMaker endpoints) based on configuration \u2014 without application code changes. Which pattern enables this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Direct boto3 calls to Bedrock in each application"
+      },
+      {
+        "key": "B",
+        "text": "A shared abstraction layer (Lambda + AppConfig) that reads the active provider at runtime and routes accordingly"
+      },
+      {
+        "key": "C",
+        "text": "Amazon EventBridge rules that route to different backends"
+      },
+      {
+        "key": "D",
+        "text": "AWS Step Functions with a hard-coded Choice state for each model"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A shared Lambda layer that reads the active model provider from AppConfig at runtime and routes to the appropriate backend creates a clean abstraction. Applications call the Lambda layer (via an internal API), not Bedrock directly. AppConfig changes trigger immediate re-routing without code redeployment. Direct boto3 per-app requires all apps to change when providers switch. EventBridge is event routing, not synchronous model routing. Step Functions with hard-coded Choice states require code changes to add providers.",
+    "source_topic": "Lambda + AppConfig abstraction layer for model routing"
+  },
+  {
+    "id": "d2-q0567",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "API Gateway request validation",
+    "difficulty": "medium",
+    "question_text": "A Bedrock API receives malformed requests (missing required fields, oversized payloads) that propagate to Lambda and waste compute. What is the MOST appropriate first line of defence to reject these invalid requests before they reach Lambda?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Add input validation logic in the Lambda function"
+      },
+      {
+        "key": "B",
+        "text": "Configure Amazon API Gateway request validation with JSON schema models and size limits"
+      },
+      {
+        "key": "C",
+        "text": "Use Bedrock Guardrails to reject malformed inputs"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Comprehend to classify bad requests"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "API Gateway request validation (with JSON schema models) rejects structurally invalid requests at the edge \u2014 before they reach Lambda. This saves Lambda invocation cost and protects the backend. The API validates required fields, data types, and size limits. Lambda validation (A) works but still incurs invocation cost. Guardrails enforce content safety (semantic), not structural request validation. Comprehend does NLP, not schema validation.",
+    "source_topic": "API Gateway request validation as first line of defence"
+  },
+  {
+    "id": "d2-q0568",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Converse API with tool use",
+    "difficulty": "medium",
+    "question_text": "A developer wants to build a chatbot that can call external functions (e.g., a weather API, a calculator) based on user requests, using a standardised multi-turn conversation format across different Bedrock models. Which Bedrock API is MOST appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "InvokeModel with raw model-specific JSON bodies"
+      },
+      {
+        "key": "B",
+        "text": "The Bedrock Converse API with tool configuration"
+      },
+      {
+        "key": "C",
+        "text": "RetrieveAndGenerate with knowledge base tools"
+      },
+      {
+        "key": "D",
+        "text": "StartBatchInferenceJob with tool definitions"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "The Bedrock Converse API provides a standardised, model-agnostic interface for multi-turn conversations with tool use (function calling). You define tools in a consistent schema, and the API handles the model-specific formatting internally \u2014 the same code works across Claude, Titan, and other supported models. InvokeModel requires model-specific JSON formats. RetrieveAndGenerate is for knowledge base RAG, not arbitrary tool calling. Batch inference is for large async jobs, not interactive tool use.",
+    "source_topic": "Bedrock Converse API for model-agnostic tool use"
+  },
+  {
+    "id": "d2-q0569",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Structured output formatting",
+    "difficulty": "medium",
+    "question_text": "A developer needs an FM to return responses as valid JSON with a specific schema so downstream Lambda functions can parse them reliably. Despite system prompt instructions, the model sometimes returns free text instead. Which additional technique improves JSON output reliability?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase temperature to improve output variation"
+      },
+      {
+        "key": "B",
+        "text": "Use the Bedrock Converse API with a tool definition that forces the model to return structured parameters"
+      },
+      {
+        "key": "C",
+        "text": "Switch to a smaller, cheaper model"
+      },
+      {
+        "key": "D",
+        "text": "Use Bedrock Guardrails word filters to block non-JSON content"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Defining the expected response as a tool call schema in the Converse API forces the model to populate defined parameters in a structured JSON format \u2014 this is the most reliable mechanism for structured output as the model is 'using a tool' rather than generating free text. Increasing temperature makes output less structured. Smaller models are less reliable at following format instructions. Guardrails word filters block content patterns, not output format enforcement.",
+    "source_topic": "Converse API tool use for structured JSON output enforcement"
+  },
+  {
+    "id": "d2-q0570",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "FM API integration errors",
+    "difficulty": "medium",
+    "question_text": "A Lambda function receives a Bedrock API response where the output text is truncated mid-sentence. What is the MOST likely cause?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "The model reached its max_tokens limit and stopped generating"
+      },
+      {
+        "key": "B",
+        "text": "The Lambda function timed out during the streaming response"
+      },
+      {
+        "key": "C",
+        "text": "The IAM role lacks permission to read the full response"
+      },
+      {
+        "key": "D",
+        "text": "Bedrock Guardrails filtered part of the response"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "When a Bedrock response is truncated mid-sentence, the most common cause is that the model reached the max_tokens (or maxTokensToSample) limit configured in the API call. The model stops generating when this limit is hit, regardless of sentence completion. Lambda timeouts would produce no response or an error. IAM controls access to make calls, not truncate responses. Guardrails that block content typically return an empty or replacement message, not a partial truncation.",
+    "source_topic": "Truncated Bedrock response due to max_tokens limit"
+  },
+  {
+    "id": "d2-q0571",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Stop sequences inference parameter",
+    "difficulty": "medium",
+    "question_text": "A developer wants an FM to stop generating text immediately after it produces the string '---END---', even if it hasn't reached the max_tokens limit. Which inference parameter controls this behaviour?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "temperature"
+      },
+      {
+        "key": "B",
+        "text": "top_p"
+      },
+      {
+        "key": "C",
+        "text": "stop_sequences"
+      },
+      {
+        "key": "D",
+        "text": "max_tokens"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "stop_sequences is an inference parameter that defines one or more strings that, when produced by the model, immediately terminate generation. This allows precise control of output boundaries without relying on max_tokens. temperature controls randomness. top_p controls nucleus sampling diversity. max_tokens sets an absolute length limit but doesn't trigger on content.",
+    "source_topic": "stop_sequences inference parameter for output boundary control"
+  },
+  {
+    "id": "d2-q0572",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Bedrock Model Invocation Logs",
+    "difficulty": "medium",
+    "question_text": "A security team needs to audit all Bedrock model invocations in production \u2014 including the full prompts sent and responses received \u2014 for compliance purposes. How should this be configured?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable AWS CloudTrail data events for Bedrock \u2014 it logs full prompt and response bodies"
+      },
+      {
+        "key": "B",
+        "text": "Add manual CloudWatch log statements in every Lambda function"
+      },
+      {
+        "key": "C",
+        "text": "Enable Bedrock Model Invocation Logging via PutModelInvocationLoggingConfiguration, directing logs to an S3 bucket"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Macie to scan Bedrock API calls"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Bedrock Model Invocation Logging is the purpose-built feature for capturing full prompt and response bodies from all Bedrock invocations. You enable it via PutModelInvocationLoggingConfiguration and specify an S3 bucket (and optionally CloudWatch Logs) as the destination. CloudTrail records API management calls (metadata) but NOT the full prompt/response bodies. Manual Lambda logging requires modification of every function. Macie scans S3 for sensitive data, not Bedrock invocations.",
+    "source_topic": "Bedrock Model Invocation Logging for compliance auditing"
   }
 ]

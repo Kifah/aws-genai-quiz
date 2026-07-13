@@ -1,0 +1,62 @@
+[
+  {
+    "id": "d1-q0630", "domain": 1, "task_statement": "1.4", "topic": "HNSW vs IVFFlat pgvector index selection",
+    "difficulty": "medium",
+    "question_text": "A team uses Aurora PostgreSQL with pgvector to index about 500,000 document embeddings and wants the best balance of recall accuracy and query speed. Which pgvector index type should they choose?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Flat (no index) — exact but O(n) scan" },
+      { "key": "B", "text": "IVFFlat" },
+      { "key": "C", "text": "HNSW" },
+      { "key": "D", "text": "B-Tree" }
+    ],
+    "correct_answers": ["C"],
+    "explanation": "HNSW (Hierarchical Navigable Small World) gives the best recall-to-speed tradeoff for corpora in the ~10K–1M range, building a navigable graph with sub-linear query complexity. A flat scan is exact but O(n) and impractical at 500K; IVFFlat suits very large datasets but needs a training/list-tuning phase and typically yields lower recall than HNSW at equal speed; B-Tree indexes scalar values, not vector similarity.",
+    "source_topic": "pgvector HNSW vs IVFFlat index tradeoff"
+  },
+  {
+    "id": "d1-q0631", "domain": 1, "task_statement": "1.4", "topic": "Titan Text Embeddings V2 configurable dimensions",
+    "difficulty": "medium",
+    "question_text": "Which Amazon Bedrock embedding model lets you choose the output vector dimension (256, 512, or 1024) to trade retrieval accuracy against storage cost?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Amazon Titan Text Embeddings V2" },
+      { "key": "B", "text": "Amazon Titan Text G1 (generation)" },
+      { "key": "C", "text": "Amazon Titan Multimodal Embeddings G1" },
+      { "key": "D", "text": "Cohere Embed English" }
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Titan Text Embeddings V2 supports configurable output dimensions of 256, 512, or 1024, letting you balance accuracy vs storage/latency. Titan Text G1 is a text-generation model (not embeddings); Titan Multimodal Embeddings uses fixed dimensions; Cohere Embed English is not a variable-dimension model on Bedrock.",
+    "source_topic": "Titan Text Embeddings V2 configurable output dimensions"
+  },
+  {
+    "id": "d1-q0632", "domain": 1, "task_statement": "1.4", "topic": "Asymmetric embedding input types",
+    "difficulty": "medium",
+    "question_text": "Using Titan Text Embeddings V2 for RAG, which input type should be set when embedding the USER'S SEARCH QUERY (as opposed to the documents being indexed)?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "search_query" },
+      { "key": "B", "text": "search_document" },
+      { "key": "C", "text": "clustering" },
+      { "key": "D", "text": "classification" }
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Titan Text Embeddings V2 supports distinct input types: use search_query for the user's question and search_document for content during ingestion. This asymmetric embedding improves retrieval quality. clustering is for grouping similar documents and classification is for labelling tasks — neither is used for the query side of retrieval.",
+    "source_topic": "Titan V2 search_query vs search_document input type"
+  },
+  {
+    "id": "d1-q0633", "domain": 1, "task_statement": "1.4", "topic": "Embedding normalization and similarity metric",
+    "difficulty": "medium",
+    "question_text": "A developer embeds text with Titan Text Embeddings V2 using normalize:true (unit-length vectors). What is the mathematical consequence, and which similarity metric is appropriate?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Vectors are scaled to unit length, so cosine similarity equals the dot product — use cosine similarity" },
+      { "key": "B", "text": "Vector dimensions are halved — use Euclidean distance" },
+      { "key": "C", "text": "All components become positive — use Manhattan distance" },
+      { "key": "D", "text": "Near-zero dimensions are dropped — use negative inner product" }
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Normalizing to unit length (magnitude 1) makes cosine similarity equivalent to the dot product between vectors, and cosine similarity is the correct metric (pgvector's <=> operator). Normalization is a scaling operation only — it does not change the number of dimensions, force positivity, or drop dimensions.",
+    "source_topic": "normalize:true makes cosine similarity equal the dot product"
+  }
+]

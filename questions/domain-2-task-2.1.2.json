@@ -1,0 +1,77 @@
+[
+  {
+    "id": "d2-q0587", "domain": 2, "task_statement": "2.1", "topic": "Plan-and-Execute agent pattern",
+    "difficulty": "hard",
+    "question_text": "An agent must complete multi-step tasks (gather data, analyse, produce a report) where the full sequence of steps can be determined up front, and the team wants explicit orchestration with per-step retries and visibility rather than the model deciding each next action ad hoc. Which reasoning/orchestration pattern fits best?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Plan-and-Execute — create an explicit plan, then execute each step, orchestrated by AWS Step Functions invoking Bedrock"},
+      {"key": "B", "text": "A single InvokeModel call with a very large prompt"},
+      {"key": "C", "text": "Pure ReAct with no orchestration layer"},
+      {"key": "D", "text": "Batch inference over a static dataset"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Plan-and-Execute first produces a plan and then executes each step; on AWS this maps cleanly to Step Functions orchestrating Bedrock invocations, giving per-step retries, error handling, and visibility. A single large prompt has no step-level control; pure ReAct decides actions ad hoc without an explicit orchestrated plan; batch inference is for bulk non-interactive processing.",
+    "source_topic": "Plan-and-Execute with Step Functions"
+  },
+  {
+    "id": "d2-q0588", "domain": 2, "task_statement": "2.1", "topic": "Reflexion agent pattern",
+    "difficulty": "hard",
+    "question_text": "To improve answer quality, a team wants their agent to generate a draft, critique it against quality criteria, and then refine the output in a loop until it passes — without a human in the loop. Which agent pattern describes this generate-evaluate-refine cycle, and how is it commonly implemented on AWS?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Reflexion — a Step Functions loop with an evaluation Lambda that feeds critique back for regeneration"},
+      {"key": "B", "text": "Provisioned Throughput scaling"},
+      {"key": "C", "text": "Cross-region inference failover"},
+      {"key": "D", "text": "Semantic caching of prior answers"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Reflexion generates output, evaluates it, and refines based on the self-critique — implemented on AWS as a Step Functions loop with an evaluation Lambda scoring each attempt and looping back until criteria are met. Provisioned throughput and cross-region inference are capacity/resilience features; semantic caching reuses answers rather than iteratively refining them.",
+    "source_topic": "Reflexion generate-evaluate-refine loop"
+  },
+  {
+    "id": "d2-q0589", "domain": 2, "task_statement": "2.1", "topic": "Agent memory taxonomy",
+    "difficulty": "medium",
+    "question_text": "An agent design must retain a record of past interactions and their outcomes (what the user asked, what the agent did, whether it succeeded) so future decisions can reference prior episodes. Which type of agent memory is this, and which AWS store commonly backs it?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Episodic memory — timestamped interaction/outcome logs in DynamoDB"},
+      {"key": "B", "text": "Procedural memory — Lambda tool definitions"},
+      {"key": "C", "text": "Short-term memory — the current Converse turn only"},
+      {"key": "D", "text": "Semantic memory — a Neptune knowledge graph of facts"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Episodic memory stores records of past interactions and their outcomes (episodes), commonly persisted as timestamped logs in DynamoDB. Procedural memory is how-to knowledge (tool definitions/instructions); short-term memory is the current conversation context; semantic memory holds factual knowledge/relationships (e.g. in a knowledge graph).",
+    "source_topic": "Episodic agent memory in DynamoDB"
+  },
+  {
+    "id": "d2-q0590", "domain": 2, "task_statement": "2.1", "topic": "Agent memory taxonomy",
+    "difficulty": "medium",
+    "question_text": "Match the memory need to the correct type: an agent must recall factual relationships between entities (e.g. which product belongs to which category) to reason over connected knowledge. Which memory type and backing store are most appropriate?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Semantic memory — Knowledge Bases or an Amazon Neptune knowledge graph"},
+      {"key": "B", "text": "Episodic memory — CloudWatch Logs"},
+      {"key": "C", "text": "Short-term memory — API Gateway request cache"},
+      {"key": "D", "text": "Procedural memory — S3 Glacier"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Semantic memory holds factual knowledge and relationships, well served by Knowledge Bases or a Neptune knowledge graph that captures entity relationships. Episodic memory is interaction history; short-term memory is the live conversation; procedural memory is task know-how — none of which model factual entity relationships.",
+    "source_topic": "Semantic memory via Knowledge Bases / Neptune"
+  },
+  {
+    "id": "d2-q0591", "domain": 2, "task_statement": "2.1", "topic": "Confidence-based escalation",
+    "difficulty": "medium",
+    "question_text": "A customer-service agent should answer autonomously when confident, add a disclaimer when moderately confident, and route to a human expert when confidence is low. Which human-in-the-loop pattern is this, and how is the low-confidence path typically implemented?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Confidence-based escalation — low-confidence responses trigger an SNS notification routing to a human expert"},
+      {"key": "B", "text": "Circuit breaker — open the circuit after repeated failures"},
+      {"key": "C", "text": "Provisioned throughput — reserve capacity for peak load"},
+      {"key": "D", "text": "Prompt caching — reuse system prompt tokens"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Confidence-based escalation gates the agent's action on a confidence score: high → return directly, medium → return with a disclaimer/flag, low → escalate to a human (commonly via an SNS notification to an expert queue). A circuit breaker responds to failure rates, not confidence; provisioned throughput and prompt caching are cost/performance features.",
+    "source_topic": "Confidence-based escalation to human experts"
+  }
+]

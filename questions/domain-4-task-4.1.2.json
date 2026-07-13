@@ -1,0 +1,17 @@
+[
+  {
+    "id": "d4-q0345", "domain": 4, "task_statement": "4.1", "topic": "Aurora Serverless v2 min_capacity=0 cold start",
+    "difficulty": "medium",
+    "question_text": "An Aurora Serverless v2 cluster with min_capacity=0 ACUs has been idle for 45 minutes. A user submits a query. What should the developer expect, and how can they eliminate this problem?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "The cluster must scale from 0 → active ACUs before serving the query, causing a multi-second cold start. Fix: set min_capacity to a small non-zero value (e.g. 0.5 ACU)." },
+      { "key": "B", "text": "The query is rejected immediately with an error" },
+      { "key": "C", "text": "The query is served instantly with no delay" },
+      { "key": "D", "text": "Aurora automatically maintains a warm standby at no cost" }
+    ],
+    "correct_answers": ["A"],
+    "explanation": "When min_capacity=0 and the cluster has been idle, it scales to zero and must provision ACUs on the next request, introducing a noticeable cold-start delay (seconds). Setting min_capacity to a small non-zero value (e.g. 0.5) keeps the cluster warm at minimal cost, eliminating cold starts. The query is not rejected nor served instantly; Aurora does not maintain a free warm standby at 0 ACU.",
+    "source_topic": "Aurora Serverless v2 min_capacity=0 cold-start tradeoff"
+  }
+]

@@ -1,0 +1,77 @@
+[
+  {
+    "id": "d2-q0597", "domain": 2, "task_statement": "2.2", "topic": "SageMaker multi-model endpoints",
+    "difficulty": "medium",
+    "question_text": "A team hosts hundreds of small, infrequently-invoked fine-tuned models on SageMaker AI and wants to avoid paying for a dedicated endpoint per model while still serving any of them on demand. Which SageMaker deployment option best fits?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "SageMaker multi-model endpoint — many models share one endpoint and are loaded on demand"},
+      {"key": "B", "text": "One single-model real-time endpoint per model"},
+      {"key": "C", "text": "Bedrock on-demand InvokeModel"},
+      {"key": "D", "text": "A separate Lambda function packaging each model"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "A SageMaker multi-model endpoint hosts many models behind one endpoint, dynamically loading a model into memory when invoked — cost-efficient for large numbers of small, infrequently-used models. One endpoint per model multiplies cost; Bedrock serves managed FMs, not your many custom fine-tuned models; packaging large models in Lambda hits size/latency limits.",
+    "source_topic": "SageMaker multi-model endpoints for many small models"
+  },
+  {
+    "id": "d2-q0598", "domain": 2, "task_statement": "2.2", "topic": "SageMaker Inference Components",
+    "difficulty": "hard",
+    "question_text": "Several models must share the same SageMaker endpoint's GPU fleet, but each model needs its OWN independent auto-scaling policy and resource allocation. Which SageMaker capability provides per-model scaling on a shared endpoint?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "SageMaker Inference Components — each model gets its own scaling policy and resource share on a shared endpoint"},
+      {"key": "B", "text": "A multi-model endpoint with a single shared scaling policy"},
+      {"key": "C", "text": "Bedrock Provisioned Throughput"},
+      {"key": "D", "text": "Amazon EC2 Spot Instances"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "SageMaker Inference Components let you deploy multiple models to one endpoint where each component has its own scaling policy and allocated compute, maximizing GPU utilization with independent scaling. A plain multi-model endpoint shares one scaling policy; Bedrock Provisioned Throughput reserves capacity for managed FMs; Spot Instances are a pricing model, not a per-model scaling mechanism.",
+    "source_topic": "SageMaker Inference Components per-model scaling"
+  },
+  {
+    "id": "d2-q0599", "domain": 2, "task_statement": "2.2", "topic": "SageMaker model servers",
+    "difficulty": "medium",
+    "question_text": "When deploying a large language model on SageMaker AI for high-throughput inference, which model server was created by Amazon specifically for serving deep learning models (and is commonly highlighted for this platform)?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "DJL Serving (Deep Java Library)"},
+      {"key": "B", "text": "Apache Kafka"},
+      {"key": "C", "text": "nginx"},
+      {"key": "D", "text": "Redis"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "DJL Serving (Deep Java Library) is an Amazon-created model server used with SageMaker AI for high-performance deep-learning inference; other supported servers include TorchServe and Triton Inference Server. Kafka is a streaming platform, nginx is a web server/proxy, and Redis is an in-memory data store — none are DL model servers.",
+    "source_topic": "SageMaker model servers — DJL Serving"
+  },
+  {
+    "id": "d2-q0600", "domain": 2, "task_statement": "2.2", "topic": "SageMaker shadow testing",
+    "difficulty": "medium",
+    "question_text": "Before promoting a new model version to production, a team wants to send it a copy of real live production traffic to compare its behaviour against the current model — WITHOUT returning the new model's responses to users. Which SageMaker capability does this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "SageMaker shadow testing — mirror live traffic to the new (shadow) variant while only the production variant serves users"},
+      {"key": "B", "text": "A/B testing that splits real user responses 50/50"},
+      {"key": "C", "text": "Blue/green deployment with an immediate full cutover"},
+      {"key": "D", "text": "Batch transform on a static dataset"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Shadow testing mirrors a copy of production traffic to a shadow variant and records its behaviour for comparison, while users continue to receive only the production model's responses — a zero-user-impact validation. A/B testing actually serves the new variant to some users; blue/green cutover switches live traffic; batch transform uses a static dataset, not mirrored live traffic.",
+    "source_topic": "SageMaker shadow testing with mirrored traffic"
+  },
+  {
+    "id": "d2-q0601", "domain": 2, "task_statement": "2.2", "topic": "Scaling SageMaker endpoints",
+    "difficulty": "medium",
+    "question_text": "A self-hosted model on SageMaker AI real-time endpoints experiences highly variable traffic, and the team wants the endpoint to add and remove instance capacity automatically based on load. Which mechanism provides this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Auto scaling policies on the SageMaker endpoint (target-tracking on invocation metrics)"},
+      {"key": "B", "text": "Manually resizing the endpoint each morning"},
+      {"key": "C", "text": "Bedrock cross-region inference"},
+      {"key": "D", "text": "Increasing the model's temperature parameter"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "SageMaker AI endpoints support auto scaling with target-tracking policies (e.g. on invocations-per-instance), adding/removing instances automatically as load varies. Manual resizing is not automatic and misses spikes; Bedrock cross-region inference applies to managed Bedrock FMs, not your SageMaker endpoint capacity; temperature is an inference parameter unrelated to scaling.",
+    "source_topic": "SageMaker endpoint auto scaling"
+  }
+]

@@ -296,5 +296,389 @@
     ],
     "explanation": "SageMaker JumpStart is a model hub offering pre-trained FMs (including Llama, Mistral, and others), algorithms, and ML solutions that can be deployed to a SageMaker endpoint with minimal configuration. Ground Truth labels data, Clarify explains predictions, and Pipelines orchestrates ML workflows \u2014 none provide a model catalog for one-click deployment.",
     "source_topic": "SageMaker JumpStart, model hub, open-source LLM deployment"
+  },
+  {
+    "id": "d2-q0537",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Lambda vs provisioned throughput deployment",
+    "difficulty": "medium",
+    "question_text": "A company experiences highly variable Bedrock API traffic \u2014 quiet overnight, with large spikes at 9 AM and 2 PM. They receive ThrottlingException errors during peak periods. What is the MOST cost-effective fix?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Switch to on-demand pricing with no changes"
+      },
+      {
+        "key": "B",
+        "text": "Purchase Bedrock Provisioned Throughput to guarantee capacity during peak hours"
+      },
+      {
+        "key": "C",
+        "text": "Deploy a dedicated SageMaker endpoint with auto-scaling"
+      },
+      {
+        "key": "D",
+        "text": "Implement exponential backoff retries and accept the throttling"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "When ThrottlingExceptions occur during predictable peaks, Bedrock Provisioned Throughput is the right solution \u2014 it reserves dedicated model units that guarantee throughput during the known peak windows. Per the vicsz study notes: 'Throttling exceptions \u2192 Provisioned Capacity'. On-demand pricing alone doesn't prevent throttling. SageMaker adds unnecessary infrastructure complexity. Exponential backoff handles transient errors but doesn't solve sustained capacity shortfalls.",
+    "source_topic": "Provisioned Throughput to resolve ThrottlingException"
+  },
+  {
+    "id": "d2-q0538",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "DJL for high-throughput LLM inference on SageMaker",
+    "difficulty": "hard",
+    "question_text": "A team is hosting a 70B-parameter LLM on Amazon SageMaker using DJL (Deep Java Library) serving. GPU utilisation is low (< 40%) because prompts are much shorter than the configured max sequence length. What is the MOST targeted optimisation?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Add more GPU instances to the endpoint"
+      },
+      {
+        "key": "B",
+        "text": "Enable tensor parallelism across more GPUs"
+      },
+      {
+        "key": "C",
+        "text": "Lower the max sequence length to better match actual prompt lengths"
+      },
+      {
+        "key": "D",
+        "text": "Switch to a different embedding model"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "DJL's memory allocation is based on max sequence length. If prompts are much shorter than configured, GPU memory is over-provisioned per slot, leaving fewer concurrent slots (low utilisation). Reducing max sequence length to match actual usage frees memory, allows more concurrent requests per GPU, and improves utilisation \u2014 the targeted fix per the DJL tuning rule: 'Prompts much shorter than max \u2192 lower max sequence length'. Adding instances increases cost. More tensor parallelism increases inter-GPU communication overhead. Embedding models are irrelevant here.",
+    "source_topic": "DJL max sequence length tuning for GPU utilisation"
+  },
+  {
+    "id": "d2-q0539",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "DJL for high-throughput LLM inference on SageMaker",
+    "difficulty": "hard",
+    "question_text": "A team runs a 13B-parameter model on 4 GPUs via DJL tensor parallelism. GPU utilisation is low and the model fits comfortably on 2 GPUs. What is the MOST effective optimisation to improve throughput without adding instances?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase tensor parallelism from 4 GPUs to 8 GPUs"
+      },
+      {
+        "key": "B",
+        "text": "Reduce tensor parallelism to 2 GPUs and increase the number of model replicas on the freed GPUs"
+      },
+      {
+        "key": "C",
+        "text": "Enable prompt caching to reduce inference calls"
+      },
+      {
+        "key": "D",
+        "text": "Switch to a quantised INT4 version of the model"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Per the DJL tuning rule: 'Model fits on fewer GPUs \u2192 reduce tensor parallelism, increase replicas'. Using fewer GPUs per replica (2 instead of 4) means you can run 2 replicas on the same 4 GPUs, doubling throughput. Tensor parallelism adds inter-GPU communication overhead \u2014 using the minimum needed is optimal. Increasing tensor parallelism further would worsen the overhead. Prompt caching reduces calls but doesn't improve throughput capacity. Quantisation helps latency/memory but is a separate concern.",
+    "source_topic": "DJL tensor parallelism vs replicas for throughput"
+  },
+  {
+    "id": "d2-q0540",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "On-Demand vs Provisioned Throughput decision",
+    "difficulty": "medium",
+    "question_text": "A company is choosing between on-demand and Provisioned Throughput for Amazon Bedrock. Their workload is unpredictable \u2014 some days very low, some days very high, with no consistent pattern. Which pricing model is MOST appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Provisioned Throughput \u2014 guarantees capacity regardless of traffic"
+      },
+      {
+        "key": "B",
+        "text": "On-demand \u2014 pay only for tokens used, no committed capacity"
+      },
+      {
+        "key": "C",
+        "text": "SageMaker Batch Transform \u2014 lowest unit cost"
+      },
+      {
+        "key": "D",
+        "text": "SageMaker Serverless Inference \u2014 scales to zero automatically"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "For unpredictable, spiky, or inconsistent workloads, on-demand pricing is more cost-effective because you pay only for actual usage with no hourly commitment. Provisioned Throughput bills by the hour regardless of utilisation \u2014 cost-effective only for steady, predictable workloads. Batch Transform is for large async jobs. SageMaker Serverless is for custom model inference, not Bedrock.",
+    "source_topic": "On-demand Bedrock for unpredictable traffic patterns"
+  },
+  {
+    "id": "d2-q0541",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Staged fine-tuned model deployment with Provisioned Throughput",
+    "difficulty": "hard",
+    "question_text": "A company fine-tuned a Claude model via Amazon Bedrock. During testing, they try to invoke the fine-tuned model using on-demand pricing and receive a 'ModelNotReadyException'. What is the MOST likely cause?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "The fine-tuning job is still running"
+      },
+      {
+        "key": "B",
+        "text": "Custom (fine-tuned) models on Bedrock require Provisioned Throughput to be purchased before they can be invoked"
+      },
+      {
+        "key": "C",
+        "text": "Claude models cannot be fine-tuned on Bedrock"
+      },
+      {
+        "key": "D",
+        "text": "The IAM role lacks bedrock:InvokeModel permission"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "On Amazon Bedrock, custom (fine-tuned) models CANNOT be invoked using on-demand pricing. You must purchase Provisioned Throughput for the custom model before it can be invoked. This is a critical distinction: base/foundation models support on-demand, but customised models require provisioned capacity. A still-running job would show 'InProgress' status. IAM issues produce AccessDeniedException, not ModelNotReadyException.",
+    "source_topic": "Custom models require Provisioned Throughput on Bedrock"
+  },
+  {
+    "id": "d2-q0542",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "SageMaker JumpStart model hub",
+    "difficulty": "easy",
+    "question_text": "A team wants to quickly deploy a pre-built open-source model (e.g., Llama 3) on Amazon SageMaker with a one-click deployment, without building a custom container or writing training code. Which SageMaker feature enables this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "SageMaker Data Wrangler"
+      },
+      {
+        "key": "B",
+        "text": "SageMaker JumpStart"
+      },
+      {
+        "key": "C",
+        "text": "SageMaker Pipelines"
+      },
+      {
+        "key": "D",
+        "text": "SageMaker Model Monitor"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "SageMaker JumpStart is a model hub providing one-click deployment of pre-built foundation and open-source models (including Llama, Mistral, Falcon, etc.) to SageMaker endpoints without custom containers or code. Data Wrangler is for data preparation. Pipelines orchestrates ML workflows. Model Monitor detects drift in deployed models.",
+    "source_topic": "SageMaker JumpStart for one-click model deployment"
+  },
+  {
+    "id": "d2-q0543",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Model cascading for cost efficiency",
+    "difficulty": "medium",
+    "question_text": "To reduce inference costs, a team wants to try a small, cheap model first for each request, and only escalate to a large, expensive model if the small model's response confidence is below a threshold. What is this pattern called?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Circuit breaker pattern"
+      },
+      {
+        "key": "B",
+        "text": "Model cascading (tiered FM usage)"
+      },
+      {
+        "key": "C",
+        "text": "Semantic caching"
+      },
+      {
+        "key": "D",
+        "text": "Hybrid search"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Model cascading (also called tiered FM usage) routes requests first to a cheap, smaller model. If the response meets quality/confidence requirements, the pipeline stops \u2014 saving cost. If not, it escalates to a more capable, expensive model. This optimises the cost-quality trade-off. Circuit breaker handles service failures. Semantic caching returns cached responses for similar queries. Hybrid search combines keyword and vector retrieval.",
+    "source_topic": "Model cascading for cost-quality trade-off"
+  },
+  {
+    "id": "d2-q0544",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Container deployment for LLMs",
+    "difficulty": "medium",
+    "question_text": "A team needs to deploy a large open-source LLM on Amazon SageMaker with optimised GPU serving, continuous batching, and support for multiple concurrent requests. Which SageMaker container type is purpose-built for this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "SageMaker built-in XGBoost container"
+      },
+      {
+        "key": "B",
+        "text": "SageMaker Large Model Inference (LMI) container with DJL"
+      },
+      {
+        "key": "C",
+        "text": "SageMaker Sklearn container"
+      },
+      {
+        "key": "D",
+        "text": "AWS Deep Learning Container (DLC) for PyTorch training"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "SageMaker Large Model Inference (LMI) containers with DJL (Deep Java Library) are purpose-built for hosting large language models with GPU-optimised serving features: continuous batching, tensor parallelism, and efficient memory management for multi-GPU inference. XGBoost and Sklearn containers are for traditional ML models. PyTorch training DLCs are for training, not inference serving.",
+    "source_topic": "SageMaker LMI containers for LLM inference"
+  },
+  {
+    "id": "d2-q0545",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Semantic caching",
+    "difficulty": "hard",
+    "question_text": "A high-traffic GenAI application frequently receives semantically similar (but not identical) questions like 'What is the refund policy?' and 'How do I get a refund?'. The team wants to serve cached responses for semantically similar queries to reduce inference costs. Which caching technique achieves this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deterministic hash-based caching in ElastiCache (Redis)"
+      },
+      {
+        "key": "B",
+        "text": "HTTP response caching at the CloudFront edge"
+      },
+      {
+        "key": "C",
+        "text": "Semantic caching using vector embeddings to find near-identical cached responses"
+      },
+      {
+        "key": "D",
+        "text": "Lambda local memory caching of recent responses"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Semantic caching embeds the incoming query, searches a vector store (MemoryDB or OpenSearch) for cached queries with high embedding similarity, and returns the cached response if the semantic distance is below a threshold. This handles paraphrases and variations. Hash-based caching only hits exact matches. CloudFront caching is for static content, not dynamic LLM responses. Lambda memory cache is per-instance and ephemeral.",
+    "source_topic": "Semantic caching with vector similarity for GenAI cost reduction"
+  },
+  {
+    "id": "d2-q0546",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "SageMaker Async Inference for large payloads",
+    "difficulty": "medium",
+    "question_text": "A document processing application submits very large documents (up to 500 pages) for summarisation. The processing takes 2-5 minutes per document and synchronous API calls time out. Which SageMaker inference mode is MOST appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "SageMaker Real-Time Inference"
+      },
+      {
+        "key": "B",
+        "text": "SageMaker Serverless Inference"
+      },
+      {
+        "key": "C",
+        "text": "SageMaker Asynchronous Inference"
+      },
+      {
+        "key": "D",
+        "text": "SageMaker Batch Transform"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "SageMaker Asynchronous Inference is designed for large payloads and long-running processing (up to 15 minutes). It accepts the request, queues it, and returns the result to an S3 bucket asynchronously \u2014 no timeout issues. Real-Time Inference has a 60-second response timeout. Serverless Inference also times out for long requests. Batch Transform is for very large batch jobs with minimal latency requirements, not on-demand per-document requests.",
+    "source_topic": "SageMaker Async Inference for large, long-running payloads"
+  },
+  {
+    "id": "d2-q0547",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Provisioned throughput",
+    "difficulty": "medium",
+    "question_text": "A team has purchased Bedrock Provisioned Throughput and monitors ModelInvocationUtilization in CloudWatch. The utilisation is consistently at 15%. What does this indicate and what should they do?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "The model is healthy; no action needed"
+      },
+      {
+        "key": "B",
+        "text": "They are over-provisioned and wasting money; they should reduce provisioned model units or switch to on-demand"
+      },
+      {
+        "key": "C",
+        "text": "They need more provisioned units to increase capacity"
+      },
+      {
+        "key": "D",
+        "text": "Utilisation below 20% triggers automatic scaling of provisioned units"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock Provisioned Throughput bills by the hour regardless of utilisation. 15% utilisation means 85% of purchased capacity is idle and being paid for unnecessarily. The team should reduce model units to better match actual demand, or switch to on-demand pricing. Optimal utilisation for cost-efficiency is typically 70-90%. There is no automatic scaling of provisioned units.",
+    "source_topic": "Provisioned Throughput utilisation monitoring and right-sizing"
+  },
+  {
+    "id": "d2-q0548",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Bedrock Cross-Region Inference for performance routing",
+    "difficulty": "medium",
+    "question_text": "A global application serves users in North America, Europe, and Asia. The team wants to route each inference request to the geographically nearest AWS region to minimise latency, while keeping the same model. Which Bedrock feature achieves this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Bedrock Cross-Region Inference for failover"
+      },
+      {
+        "key": "B",
+        "text": "Bedrock Inference Profiles for multi-region performance routing"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Route 53 latency-based routing"
+      },
+      {
+        "key": "D",
+        "text": "Amazon CloudFront with Lambda@Edge"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock Inference Profiles enable multi-region performance routing \u2014 routing requests to the optimal region for lowest latency, not just failover. Cross-Region Inference is for availability/failover when one region is unavailable. Route 53 and CloudFront/Lambda@Edge are general-purpose networking tools that don't manage Bedrock model routing natively.",
+    "source_topic": "Bedrock Inference Profiles for multi-region latency routing"
   }
 ]

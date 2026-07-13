@@ -1,0 +1,32 @@
+[
+  {
+    "id": "d1-q0634", "domain": 1, "task_statement": "1.5", "topic": "Bedrock Knowledge Bases default chunking",
+    "difficulty": "medium",
+    "question_text": "When you create an Amazon Bedrock Knowledge Bases data source without specifying a custom chunking strategy, what is the default chunking configuration applied?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "300 tokens with 20% overlap" },
+      { "key": "B", "text": "200 tokens with 10% overlap" },
+      { "key": "C", "text": "512 tokens with 10% overlap" },
+      { "key": "D", "text": "800 tokens with 15% overlap" }
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Bedrock Knowledge Bases applies a default of 300 tokens per chunk with 20% overlap when no custom strategy is configured. The other values do not match the AWS-documented defaults. (Related exam fact: the chunking strategy cannot be changed after the data source is created.)",
+    "source_topic": "Bedrock Knowledge Bases default chunking 300 tokens / 20% overlap"
+  },
+  {
+    "id": "d1-q0635", "domain": 1, "task_statement": "1.5", "topic": "Chunking strategy immutability",
+    "difficulty": "medium",
+    "question_text": "After creating a Bedrock Knowledge Bases data source with a specific chunking strategy, a developer needs to change the chunk size. What must they do?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Delete and recreate the data source with the new chunking strategy, then resync" },
+      { "key": "B", "text": "Edit the chunking configuration on the existing data source and resync" },
+      { "key": "C", "text": "Change the embedding model to trigger rechunking" },
+      { "key": "D", "text": "Adjust the chunk size in the console with no other action" }
+    ],
+    "correct_answers": ["A"],
+    "explanation": "The chunking strategy is immutable once a data source is created — there is no edit option. To change it you must delete the data source, recreate it with the desired chunking configuration, and resync the documents. The embedding model does not control chunking, and the console does not permit editing chunk size on an existing data source.",
+    "source_topic": "Bedrock KB chunking strategy is immutable after creation"
+  }
+]

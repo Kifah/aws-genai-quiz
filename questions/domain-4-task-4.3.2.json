@@ -1,0 +1,17 @@
+[
+  {
+    "id": "d4-q0344", "domain": 4, "task_statement": "4.3", "topic": "CloudWatch anomaly detection for token and latency",
+    "difficulty": "medium",
+    "question_text": "An operations team wants automatic alerts when token consumption or p99 latency deviates from normal patterns, without manually setting static thresholds that change with traffic seasonality. Which capability provides this adaptive alerting on GenAI metrics?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "CloudWatch anomaly detection, which learns metric baselines and alarms on deviations"},
+      {"key": "B", "text": "A single static CloudWatch threshold alarm set once at launch"},
+      {"key": "C", "text": "Amazon Macie findings"},
+      {"key": "D", "text": "AWS Trusted Advisor cost checks"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "CloudWatch anomaly detection builds a model of a metric's expected range (accounting for seasonality) and raises alarms when values deviate — ideal for token-usage and latency metrics whose 'normal' shifts with traffic. A single static threshold cannot adapt to seasonality; Macie is for sensitive-data discovery; Trusted Advisor gives best-practice checks, not adaptive metric anomaly alarms.",
+    "source_topic": "CloudWatch anomaly detection on token/latency metrics"
+  }
+]

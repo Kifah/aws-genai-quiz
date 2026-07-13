@@ -392,5 +392,522 @@
     ],
     "explanation": "The circuit breaker pattern uses Step Functions to orchestrate health-checking workflows, Lambda functions to poll endpoint availability, and DynamoDB to persist the circuit state (open/closed). When the circuit is open, requests are routed to a fallback FM or a degraded-mode model instead of repeatedly hitting the unavailable endpoint. Longer timeouts, more Lambda memory, and Guardrails do not prevent requests from reaching a downed endpoint.",
     "source_topic": "Circuit breaker pattern, Step Functions, resilient FM routing"
+  },
+  {
+    "id": "d2-q0521",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Bedrock AgentCore Gateway",
+    "difficulty": "medium",
+    "question_text": "A team is deploying Strands Agents to production and needs a managed runtime that handles scaling, security, and provides a gateway for agents to access external APIs and tools at scale. Which AWS service provides this capability?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Step Functions with Lambda integrations"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock AgentCore with AgentCore Gateway"
+      },
+      {
+        "key": "C",
+        "text": "Amazon ECS with an API Gateway in front"
+      },
+      {
+        "key": "D",
+        "text": "AWS App Runner with custom agent containers"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock AgentCore is the managed runtime for deploying agents at production scale, compatible with any agent framework including Strands Agents. AgentCore Gateway provides scalable, managed access to external APIs and tools. Step Functions orchestrates workflows but is not an agent runtime. ECS and App Runner require you to manage containers and APIs manually without agent-specific features.",
+    "source_topic": "Bedrock AgentCore for production agent deployment"
+  },
+  {
+    "id": "d2-q0522",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Strands Agents vs AWS Agent Squad",
+    "difficulty": "medium",
+    "question_text": "A developer is building a prototype multi-agent GenAI application to explore ideas quickly with custom orchestration logic. They want a lightweight framework with full code control and do not need production governance features yet. Which framework is MOST appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Agent Squad"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Agents with action groups"
+      },
+      {
+        "key": "C",
+        "text": "Strands Agents"
+      },
+      {
+        "key": "D",
+        "text": "AWS Step Functions with Choice states"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Strands Agents is a lightweight framework ideal for prototyping and experimentation \u2014 you control orchestration and scaling yourself. It's well-suited for local workflows and custom agent logic. AWS Agent Squad is production-grade with governance, auditing, and Bedrock integration \u2014 more overhead for prototyping. Bedrock Agents provide managed tool invocation but less code flexibility. Step Functions is a workflow orchestrator, not an agent framework.",
+    "source_topic": "Strands Agents for lightweight agent prototyping"
+  },
+  {
+    "id": "d2-q0523",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Strands Agents vs AWS Agent Squad",
+    "difficulty": "medium",
+    "question_text": "An enterprise needs a production-ready multi-agent system with governance, auditability, scaling, and tight integration with Amazon Bedrock and AgentCore. Which framework is MOST appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Strands Agents"
+      },
+      {
+        "key": "B",
+        "text": "AWS Agent Squad"
+      },
+      {
+        "key": "C",
+        "text": "LangChain self-hosted on EC2"
+      },
+      {
+        "key": "D",
+        "text": "OpenAI Assistants API"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "AWS Agent Squad is designed for production-scale multi-agent workloads with built-in governance, auditing, and deep integration with Bedrock and AgentCore. Strands Agents is lightweight and suitable for prototypes or local workflows but lacks the production governance features. LangChain on EC2 requires significant operational overhead and doesn't integrate natively with Bedrock governance. OpenAI Assistants API is not an AWS service.",
+    "source_topic": "AWS Agent Squad for production-scale multi-agent governance"
+  },
+  {
+    "id": "d2-q0524",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "MCP server implementation for agents",
+    "difficulty": "hard",
+    "question_text": "An agent needs to call a unit-conversion tool (stateless, lightweight) and a genomics analysis API (stateful, computationally intensive, long-running). What is the CORRECT MCP server deployment approach for each tool?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy both as AWS Lambda functions for simplicity"
+      },
+      {
+        "key": "B",
+        "text": "Deploy the unit-conversion tool as a Lambda MCP server; deploy the genomics analysis API as an ECS/Fargate MCP server"
+      },
+      {
+        "key": "C",
+        "text": "Deploy both as ECS/Fargate containers for consistency"
+      },
+      {
+        "key": "D",
+        "text": "Deploy both as EC2 instances with persistent storage"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "MCP server deployment should match the tool's compute requirements. Stateless, lightweight tools (unit conversion) are perfectly suited for Lambda (event-driven, no cold-state needed). Stateful or computationally intensive tools requiring persistent connections, heavy computation, or long-running processes should use ECS/Fargate containers. Deploying everything on Lambda would cause timeout and state issues for genomics analysis. Deploying everything on ECS/Fargate wastes cost for simple stateless tools.",
+    "source_topic": "MCP server deployment: Lambda vs ECS/Fargate"
+  },
+  {
+    "id": "d2-q0525",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "MCP server implementation for agents",
+    "difficulty": "medium",
+    "question_text": "What is the PRIMARY purpose of the Model Context Protocol (MCP) in GenAI agent architectures?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "To provide a standardised protocol for agents to discover and invoke external tools with consistent schemas and interface contracts"
+      },
+      {
+        "key": "B",
+        "text": "To orchestrate multi-step agent workflows with retry and error handling"
+      },
+      {
+        "key": "C",
+        "text": "To manage the context window size of the underlying FM"
+      },
+      {
+        "key": "D",
+        "text": "To encrypt agent communications between Lambda and Bedrock"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "MCP (Model Context Protocol) standardises how agents discover and call external tools \u2014 defining consistent tool schemas, input/output contracts, and invocation semantics. This decouples agent reasoning from tool implementation details and enables safe argument validation. MCP is about interface consistency, not orchestration (that's Step Functions/Agents), not context window management (that's prompt engineering), and not encryption (that's TLS/KMS).",
+    "source_topic": "MCP purpose: interface standardisation for agents"
+  },
+  {
+    "id": "d2-q0526",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "ReAct vs Agents vs Flows",
+    "difficulty": "hard",
+    "question_text": "A financial services company needs to build a GenAI system for loan approval decisions. The system must have deterministic branching logic, full auditability of every decision step, and be compliant with financial regulations. Which orchestration approach BEST meets these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Bedrock Agents \u2014 model-driven tool invocation"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Prompt Flows \u2014 visual low-code orchestration"
+      },
+      {
+        "key": "C",
+        "text": "ReAct pattern implemented with AWS Step Functions \u2014 explicit state-machine reasoning"
+      },
+      {
+        "key": "D",
+        "text": "AWS Lambda with if-else conditional logic"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "For regulated, high-risk decisions requiring deterministic branching and full auditability, the ReAct pattern with Step Functions is the best choice. Step Functions provides: explicit per-step state outputs (high reasoning visibility), deterministic branching (Choice states), immutable execution history (CloudWatch/CloudTrail), and guaranteed execution order \u2014 all critical for compliance. Bedrock Agents are model-driven (less deterministic). Prompt Flows are good for simple pipelines, not complex regulated decisions. Raw Lambda if-else lacks the audit trail and reliability of Step Functions.",
+    "source_topic": "ReAct with Step Functions for regulated, auditable decisions"
+  },
+  {
+    "id": "d2-q0527",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "ReAct vs Agents vs Flows",
+    "difficulty": "medium",
+    "question_text": "A company wants to build a customer-facing chatbot assistant that answers questions, looks up orders, and creates support tickets. The assistant should autonomously decide which tools to call based on user intent. Which orchestration approach BEST supports this use case?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "ReAct with Step Functions \u2014 deterministic state-machine reasoning"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Agents \u2014 model-driven tool invocation with action groups"
+      },
+      {
+        "key": "C",
+        "text": "AWS Glue Workflows \u2014 ETL pipeline orchestration"
+      },
+      {
+        "key": "D",
+        "text": "Amazon EventBridge Pipes \u2014 event-driven data transformation"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock Agents is purpose-built for conversational assistants that autonomously decide which tools (action groups) to call based on user intent. The model dynamically selects and invokes tools, maintaining conversation context. This flexibility and natural language understanding is ideal for chatbots. ReAct/Step Functions is better for deterministic, regulated workflows. Glue Workflows and EventBridge Pipes are not agent frameworks.",
+    "source_topic": "Bedrock Agents for autonomous conversational assistants"
+  },
+  {
+    "id": "d2-q0528",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Multi-agent orchestrator/router/synthesiser patterns",
+    "difficulty": "hard",
+    "question_text": "A multi-agent system has a 'planner' agent, a 'researcher' agent, and a 'writer' agent. After the researcher and writer complete their tasks independently, their outputs must be merged into a single coherent report. Which multi-agent role is responsible for this merging step?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Orchestrator agent"
+      },
+      {
+        "key": "B",
+        "text": "Router agent"
+      },
+      {
+        "key": "C",
+        "text": "Synthesiser agent"
+      },
+      {
+        "key": "D",
+        "text": "Evaluator/optimizer agent"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "A Synthesiser agent merges outputs from multiple specialised agents into a coherent combined result. An Orchestrator breaks down tasks and delegates to specialised agents. A Router directs work to the appropriate agent. An Evaluator/optimizer grades or improves another agent's output. For combining researcher + writer outputs into a report, the Synthesiser is the correct role.",
+    "source_topic": "Multi-agent synthesiser pattern"
+  },
+  {
+    "id": "d2-q0529",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Bedrock Agent Tracing types",
+    "difficulty": "hard",
+    "question_text": "A developer is debugging a Bedrock Agent that takes unexpected tool invocation paths. They need to understand WHY the agent chose a particular tool and the order of its reasoning steps. Which trace type provides this information?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "PreProcessingTrace"
+      },
+      {
+        "key": "B",
+        "text": "GuardrailTrace"
+      },
+      {
+        "key": "C",
+        "text": "OrchestrationTrace"
+      },
+      {
+        "key": "D",
+        "text": "PostProcessingTrace"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "OrchestrationTrace reveals the agent's reasoning process: why it chose a particular plan, which tool it decided to invoke, the order of steps, and the logic behind branching decisions. This is the trace for debugging reasoning paths and unexpected tool choices. PreProcessingTrace shows how input was interpreted. GuardrailTrace shows what safety rule fired. PostProcessingTrace shows how the final answer was shaped.",
+    "source_topic": "Bedrock Agent OrchestrationTrace for reasoning debugging"
+  },
+  {
+    "id": "d2-q0530",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Bedrock Agent Tracing types",
+    "difficulty": "medium",
+    "question_text": "A Bedrock Agent's response was blocked for a user but the developer doesn't know which Guardrail policy triggered the block. Which trace type reveals this information?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "OrchestrationTrace"
+      },
+      {
+        "key": "B",
+        "text": "FailureTrace"
+      },
+      {
+        "key": "C",
+        "text": "GuardrailTrace"
+      },
+      {
+        "key": "D",
+        "text": "PreProcessingTrace"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "GuardrailTrace shows which specific Guardrail policy was triggered (PII, toxic content, denied topic, word filter, etc.) and the exact content that caused the block. This is essential for tuning Guardrails and explaining customer-facing blocks. FailureTrace covers API errors and tool timeouts. OrchestrationTrace covers reasoning/planning. PreProcessingTrace covers input interpretation.",
+    "source_topic": "Bedrock Agent GuardrailTrace for policy debugging"
+  },
+  {
+    "id": "d2-q0531",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Safeguarded agent workflows",
+    "difficulty": "medium",
+    "question_text": "A Bedrock Agent is calling an external API tool in a loop and has been running for 30 minutes without completing. How should the team prevent this from happening in production?",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Set a Step Functions state machine timeout to terminate long-running agent executions"
+      },
+      {
+        "key": "B",
+        "text": "Configure a Lambda function timeout for the agent's tool-invocation Lambda"
+      },
+      {
+        "key": "C",
+        "text": "Enable Bedrock Guardrails content filtering to detect loops"
+      },
+      {
+        "key": "D",
+        "text": "Set maximum iteration limits on the Bedrock Agent to cap the number of reasoning steps"
+      },
+      {
+        "key": "E",
+        "text": "Use IAM resource boundaries to prevent the agent from calling APIs more than once"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "D"
+    ],
+    "explanation": "Two complementary safeguards prevent infinite agent loops: (A) Step Functions state machine timeouts terminate the entire workflow if it exceeds a time limit; (D) Bedrock Agents support a maximum number of orchestration steps/iterations \u2014 if the agent hasn't completed within that limit, it terminates gracefully. Lambda timeouts (B) only affect individual tool invocations, not the overall loop. Guardrails (C) filter content, not execution loops. IAM boundaries (E) restrict access scope but don't limit call frequency.",
+    "source_topic": "Agent safeguards: timeouts and max iterations"
+  },
+  {
+    "id": "d2-q0532",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Human-in-the-loop agent",
+    "difficulty": "medium",
+    "question_text": "A legal review workflow uses a Bedrock Agent to draft contract clauses. Before any clause is finalised, a human lawyer must approve it. Which pattern BEST implements this human-in-the-loop requirement?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Bedrock Guardrails to pause the agent until approval"
+      },
+      {
+        "key": "B",
+        "text": "Use AWS Step Functions with a .waitForTaskToken callback step that pauses until a human approves via an API Gateway endpoint"
+      },
+      {
+        "key": "C",
+        "text": "Send an SNS notification and continue execution automatically"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Lex to ask the human a yes/no question inline"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Step Functions waitForTaskToken is the standard AWS pattern for human-in-the-loop workflows. The workflow pauses at a specific state, sends a task token (e.g., via SNS email or a custom UI), and only resumes when a human submits the token via an API Gateway endpoint. This is deterministic, auditable, and integrates natively with Step Functions. Guardrails don't pause for approvals. SNS notification without waiting continues execution. Amazon Lex is a chatbot service, not an approval mechanism.",
+    "source_topic": "Step Functions waitForTaskToken for human approval"
+  },
+  {
+    "id": "d2-q0533",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Model ensemble coordination",
+    "difficulty": "hard",
+    "question_text": "A complex document analysis pipeline routes different sub-tasks to specialised models: Claude for reasoning, Titan Text for summarisation, and a CodeLlama model for code extraction. A Lambda function aggregates all three outputs. What is this pattern called?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Circuit breaker pattern"
+      },
+      {
+        "key": "B",
+        "text": "Model ensemble / model cascading pattern"
+      },
+      {
+        "key": "C",
+        "text": "ReAct reasoning pattern"
+      },
+      {
+        "key": "D",
+        "text": "Retrieval-Augmented Generation pattern"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Using multiple specialised models for different sub-tasks and aggregating their outputs is the model ensemble pattern. Each model is selected based on its strength for a specific task (reasoning, summarisation, code). The aggregation logic combines outputs using voting, weighted averaging, or confidence-based selection. Circuit breaker is for resilience. ReAct is for agent reasoning. RAG is for grounding with retrieved context.",
+    "source_topic": "Model ensemble for specialised multi-model pipelines"
+  },
+  {
+    "id": "d2-q0534",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Intelligent model routing",
+    "difficulty": "medium",
+    "question_text": "An organisation wants to automatically route simple FAQ questions to a cheap model and complex multi-step analytical queries to a premium model \u2014 without writing custom routing logic. Which Bedrock feature supports this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Bedrock Cross-Region Inference"
+      },
+      {
+        "key": "B",
+        "text": "Bedrock Intelligent Prompt Routing"
+      },
+      {
+        "key": "C",
+        "text": "Bedrock Provisioned Throughput"
+      },
+      {
+        "key": "D",
+        "text": "Bedrock Batch Inference"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock Intelligent Prompt Routing automatically analyses the complexity of each incoming request and routes it to the most appropriate (cost- or performance-optimised) model without custom code. It's the native Bedrock feature for dynamic model selection by request complexity. Cross-Region Inference distributes by geography. Provisioned Throughput guarantees capacity. Batch Inference is for large-scale async processing.",
+    "source_topic": "Bedrock Intelligent Prompt Routing for complexity-based routing"
+  },
+  {
+    "id": "d2-q0535",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Prompt chaining with gates",
+    "difficulty": "medium",
+    "question_text": "A content pipeline runs three sequential FM calls: (1) classify the input, (2) enrich based on classification, (3) generate final output. At step 2, if classification confidence is below 0.8, the pipeline should ask the user for clarification instead of proceeding. What pattern describes this conditional branching in a prompt chain?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Prompt compression"
+      },
+      {
+        "key": "B",
+        "text": "Query expansion"
+      },
+      {
+        "key": "C",
+        "text": "Prompt chaining with a conditional gate"
+      },
+      {
+        "key": "D",
+        "text": "Retrieval-augmented generation"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Prompt chaining with gates refers to a sequence of LLM calls where conditional logic (gates) can redirect the flow \u2014 in this case, routing to a clarification step when confidence is too low. Gates make the chain adaptive rather than linear. Prompt compression reduces token count. Query expansion broadens search terms. RAG retrieves context from external documents.",
+    "source_topic": "Prompt chaining with conditional gates"
+  },
+  {
+    "id": "d2-q0536",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Evaluator/optimizer agent pattern",
+    "difficulty": "medium",
+    "question_text": "In a multi-agent content creation pipeline, one agent generates marketing copy and a second agent reviews the copy and suggests improvements, feeding back to the first agent for revision. What is the role of the second agent?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Orchestrator agent"
+      },
+      {
+        "key": "B",
+        "text": "Router agent"
+      },
+      {
+        "key": "C",
+        "text": "Synthesiser agent"
+      },
+      {
+        "key": "D",
+        "text": "Evaluator/optimizer agent"
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "An evaluator/optimizer agent grades or improves another agent's output and provides feedback for revision. This creates an iterative improvement loop where quality increases through evaluation-revision cycles. An orchestrator delegates tasks. A router directs work. A synthesiser merges outputs.",
+    "source_topic": "Evaluator/optimizer agent pattern for iterative improvement"
   }
 ]

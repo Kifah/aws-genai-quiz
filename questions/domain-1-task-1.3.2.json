@@ -1,0 +1,32 @@
+[
+  {
+    "id": "d1-q0623", "domain": 1, "task_statement": "1.3", "topic": "Kinesis Data Streams for real-time ingestion",
+    "difficulty": "medium",
+    "question_text": "A GenAI application must ingest a high-throughput stream of clickstream events in real time, allowing MULTIPLE independent consumers to replay and read the same records within a retention window before they are processed into FM features. Which service best fits this requirement?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Amazon Kinesis Data Streams — real-time streaming with a retention window and multiple independent consumers/replay"},
+      {"key": "B", "text": "Amazon SQS standard queue"},
+      {"key": "C", "text": "Amazon S3 static upload"},
+      {"key": "D", "text": "AWS Snowball"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Kinesis Data Streams provides real-time, high-throughput streaming with a retention period and supports multiple independent consumers that can each read and replay the same records — ideal for fan-out real-time ingestion. An SQS standard queue deletes a message once consumed (no shared replay across independent consumers); S3 is object storage, not a real-time stream; Snowball is offline bulk transfer.",
+    "source_topic": "Kinesis Data Streams for real-time multi-consumer ingestion"
+  },
+  {
+    "id": "d1-q0624", "domain": 1, "task_statement": "1.3", "topic": "Kinesis Data Streams vs Firehose",
+    "difficulty": "medium",
+    "question_text": "A team needs the SIMPLEST fully-managed way to load streaming data directly into Amazon S3 and OpenSearch with automatic buffering and no consumer code to manage. Which Kinesis option should they choose over Kinesis Data Streams?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Amazon Data Firehose — managed delivery stream that auto-loads to S3/OpenSearch with no consumer code"},
+      {"key": "B", "text": "Kinesis Data Streams with custom consumer applications"},
+      {"key": "C", "text": "Amazon MSK with self-managed connectors"},
+      {"key": "D", "text": "Amazon EMR Spark streaming jobs"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Amazon Data Firehose (formerly Kinesis Data Firehose) is a fully-managed delivery stream that buffers and loads data directly into destinations like S3 and OpenSearch with no consumer code — the simplest managed load path. Kinesis Data Streams requires you to build/operate consumers; MSK and EMR add significant self-management. This distinction (Streams = custom real-time consumers; Firehose = managed delivery) is commonly tested.",
+    "source_topic": "Kinesis Data Streams vs Data Firehose"
+  }
+]

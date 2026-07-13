@@ -323,5 +323,389 @@
     ],
     "explanation": "Bedrock Custom Model Import lets teams bring custom models trained in SageMaker (or elsewhere) into Bedrock, unlocking serverless inference, IAM-based access, Guardrails, and the standard Bedrock APIs. Calling a SageMaker endpoint via the Bedrock SDK does not work \u2014 they are separate APIs. Calling raw weights via Lambda bypasses all Bedrock management features. Re-training from scratch discards the existing work.",
     "source_topic": "Bedrock Custom Model Import, SageMaker to Bedrock workflow"
+  },
+  {
+    "id": "d2-q0549",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "GenAI gateway pattern",
+    "difficulty": "hard",
+    "question_text": "An enterprise wants a central control point for all Amazon Bedrock invocations across 30 internal applications. Requirements include: rate limiting per team, logging all prompts/responses to CloudWatch, enforcing cost allocation tags, and hiding model IDs from application teams. What architecture BEST achieves this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Have each application team independently configure their own IAM roles and CloudWatch logging"
+      },
+      {
+        "key": "B",
+        "text": "Build a GenAI Gateway using Amazon API Gateway as a centralised proxy in front of Bedrock with usage plans, logging, and cost tagging"
+      },
+      {
+        "key": "C",
+        "text": "Use AWS Service Control Policies to restrict Bedrock access at the OU level"
+      },
+      {
+        "key": "D",
+        "text": "Deploy a Bedrock Guardrail that applies to all invocations"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A GenAI Gateway using API Gateway as a centralised proxy provides all required capabilities: usage plans for per-team rate limiting, request/response logging to CloudWatch, tagging for cost allocation, and abstraction of backend model IDs from callers. Per-team independent IAM roles don't centralise control. SCPs restrict access broadly but don't provide per-team rate limits or observability. Guardrails enforce content safety, not operational governance.",
+    "source_topic": "GenAI Gateway with API Gateway for centralised governance"
+  },
+  {
+    "id": "d2-q0550",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "CI/CD for GenAI components",
+    "difficulty": "medium",
+    "question_text": "A team wants to automatically deploy updates to their GenAI application's Lambda functions and Bedrock Guardrails configuration when code is merged to the main branch, with automated rollback if CloudWatch alarms trigger within 5 minutes of deployment. Which AWS services enable this pipeline?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS CodeCommit + AWS CodePipeline + AWS CodeDeploy with CloudWatch alarm rollback"
+      },
+      {
+        "key": "B",
+        "text": "AWS Glue + Amazon EMR + CloudWatch"
+      },
+      {
+        "key": "C",
+        "text": "Amazon SageMaker Pipelines + Amazon EventBridge"
+      },
+      {
+        "key": "D",
+        "text": "AWS Step Functions + AWS Lambda + Amazon SNS"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "CodePipeline orchestrates the CI/CD workflow. CodeDeploy deploys Lambda functions with traffic shifting (canary/linear) and natively supports CloudWatch alarm-based automatic rollback. CloudWatch alarms trigger the rollback if error rates spike within the monitoring window. Glue + EMR is for data pipelines. SageMaker Pipelines is for ML training. Step Functions + Lambda can implement custom CI/CD but lacks CodeDeploy's native traffic shifting and alarm rollback.",
+    "source_topic": "CI/CD for GenAI with CodePipeline + CodeDeploy alarm rollback"
+  },
+  {
+    "id": "d2-q0551",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Legacy system integration",
+    "difficulty": "medium",
+    "question_text": "A company has a legacy SAP system that generates new purchase orders as events. They want each new order to automatically trigger a Bedrock-powered analysis and store the result in DynamoDB. Which integration pattern minimises custom code?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Poll SAP via Lambda every minute and check for new orders"
+      },
+      {
+        "key": "B",
+        "text": "Configure SAP to publish events to Amazon EventBridge, trigger Lambda for Bedrock analysis, store result in DynamoDB"
+      },
+      {
+        "key": "C",
+        "text": "Dump SAP data to S3 daily and run a Glue ETL job"
+      },
+      {
+        "key": "D",
+        "text": "Replicate the SAP database to RDS and query it from Lambda"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "EventBridge is the preferred event-driven integration pattern for connecting enterprise/SaaS systems (including SAP) to AWS services. SAP publishes events, EventBridge routes them to a Lambda function that calls Bedrock and writes to DynamoDB \u2014 all event-driven with minimal code. Polling every minute wastes compute and adds latency. Daily S3 dumps are near-batch, not real-time. Database replication is complex and doesn't react to individual events.",
+    "source_topic": "EventBridge for enterprise system event-driven integration"
+  },
+  {
+    "id": "d2-q0552",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "AWS Amplify for AI interfaces",
+    "difficulty": "easy",
+    "question_text": "A front-end developer needs to quickly add a Bedrock-powered chat interface to a React web application without building backend infrastructure from scratch. Which AWS service provides pre-built UI components and backend integration for GenAI chat experiences?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS AppSync"
+      },
+      {
+        "key": "B",
+        "text": "Amazon API Gateway + Lambda (custom build)"
+      },
+      {
+        "key": "C",
+        "text": "AWS Amplify with AI/GenAI UI components"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Lex"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "AWS Amplify provides pre-built UI components for AI/chat experiences and integrates directly with Amazon Bedrock \u2014 enabling developers to add GenAI chat interfaces to React, Vue, or Angular apps with minimal backend work. AppSync is a managed GraphQL API service. API Gateway + Lambda requires building the entire backend manually. Amazon Lex is a conversational interface service, not a front-end UI component library.",
+    "source_topic": "AWS Amplify AI components for rapid GenAI UI development"
+  },
+  {
+    "id": "d2-q0553",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Microservice integration with GenAI",
+    "difficulty": "medium",
+    "question_text": "An existing e-commerce platform built on microservices wants to add AI-powered product descriptions without modifying existing services. How should the GenAI capability be added with the LEAST disruption to existing architecture?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Refactor all product services to embed Bedrock calls directly"
+      },
+      {
+        "key": "B",
+        "text": "Add a new GenAI microservice exposed via API Gateway that existing services call when they need AI-enhanced descriptions"
+      },
+      {
+        "key": "C",
+        "text": "Replace the product catalogue service with a Bedrock-native implementation"
+      },
+      {
+        "key": "D",
+        "text": "Deploy the new AI feature directly on the existing product service's EC2 instances"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Adding GenAI as a new microservice exposed via API Gateway follows the strangler fig pattern \u2014 adding capability without modifying existing services. Existing services call the new endpoint when AI-enhanced content is needed, and the new service handles all Bedrock interactions. Refactoring existing services is disruptive. Replacing services entirely is risky. Co-deploying on existing EC2 instances creates coupling and limits scalability.",
+    "source_topic": "GenAI as a new microservice for additive integration"
+  },
+  {
+    "id": "d2-q0554",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Cross-region inference",
+    "difficulty": "medium",
+    "question_text": "A Bedrock-based application in eu-west-1 needs to call a model only available in us-east-1 while keeping all application infrastructure in Europe. The invocation must stay on the AWS private network. What is the CORRECT setup?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Route the call via the public internet using a VPN"
+      },
+      {
+        "key": "B",
+        "text": "Configure the Lambda in eu-west-1 to call the Bedrock endpoint in us-east-1 using AWS SDK cross-region call over the AWS backbone network"
+      },
+      {
+        "key": "C",
+        "text": "Deploy an EC2 proxy in us-east-1 to relay Bedrock calls from eu-west-1"
+      },
+      {
+        "key": "D",
+        "text": "Use CloudFront to cache model responses globally"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "AWS SDK calls between regions travel over the AWS private backbone network, not the public internet. The Lambda function in eu-west-1 simply specifies the us-east-1 Bedrock endpoint in the SDK client configuration with appropriate IAM permissions. No proxy is needed. VPN adds unnecessary complexity. A relay EC2 adds cost and management overhead. CloudFront caches static content, not dynamic LLM inference.",
+    "source_topic": "Cross-region Bedrock call via AWS SDK"
+  },
+  {
+    "id": "d2-q0555",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Identity federation for FM access",
+    "difficulty": "medium",
+    "question_text": "An enterprise with thousands of employees in Active Directory wants to allow employees to access an internal Amazon Q Business application using their existing corporate credentials. Which AWS service enables federated identity for this scenario?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Cognito User Pools with a custom user database"
+      },
+      {
+        "key": "B",
+        "text": "IAM Identity Center (SSO) with SAML or OIDC integration to Active Directory"
+      },
+      {
+        "key": "C",
+        "text": "Individual IAM users for each employee"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Lex with authentication challenge flows"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "IAM Identity Center (formerly AWS SSO) is the recommended solution for enterprise identity federation \u2014 it integrates with Active Directory (or any SAML/OIDC identity provider) and provides single-sign-on access to AWS applications like Amazon Q Business. Creating individual IAM users for thousands of employees is operationally impossible. Cognito is for customer-facing apps, not internal corporate users. Lex is a chatbot service, not an identity provider.",
+    "source_topic": "IAM Identity Center for corporate Active Directory federation"
+  },
+  {
+    "id": "d2-q0556",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "SCP for org-wide model restriction",
+    "difficulty": "hard",
+    "question_text": "A CISO wants to ensure that across ALL AWS accounts in the organisation, only approved Amazon Bedrock models (specified by model ID) can be invoked \u2014 even if an account's IAM policies are misconfigured. Which control enforces this ORG-WIDE restriction that CANNOT be overridden by individual account IAM?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "IAM permission boundaries on every IAM role"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Guardrails applied to all invocations"
+      },
+      {
+        "key": "C",
+        "text": "AWS Service Control Policy (SCP) with a bedrock:ModelId condition key"
+      },
+      {
+        "key": "D",
+        "text": "AWS Config rules that alert on unapproved model invocations"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "AWS Service Control Policies (SCPs) are applied at the AWS Organizations level and create maximum permission boundaries that CANNOT be overridden by IAM policies in member accounts. An SCP with a `aws:RequestedRegion` or `bedrock:ModelId` condition can deny invocations of unapproved models across all accounts. IAM permission boundaries apply per-role and can be misconfigured at account level. Guardrails enforce content safety, not model ID restrictions. AWS Config detects violations but doesn't prevent them.",
+    "source_topic": "SCP with bedrock:ModelId for org-wide model governance"
+  },
+  {
+    "id": "d2-q0557",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "VPC isolation for FM workloads",
+    "difficulty": "medium",
+    "question_text": "A healthcare company's Lambda function must call Amazon Bedrock without any traffic leaving the AWS network or traversing the public internet. What is the CORRECT networking configuration?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure the Lambda function in a VPC with a NAT Gateway for Bedrock access"
+      },
+      {
+        "key": "B",
+        "text": "Configure a VPC Interface Endpoint (PrivateLink) for Amazon Bedrock in the VPC where Lambda runs"
+      },
+      {
+        "key": "C",
+        "text": "Use an ALB in front of Bedrock to route traffic privately"
+      },
+      {
+        "key": "D",
+        "text": "Deploy Lambda outside a VPC \u2014 Bedrock calls are private by default"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A VPC Interface Endpoint (AWS PrivateLink) for Amazon Bedrock keeps all traffic between the VPC and Bedrock on the AWS private network \u2014 no internet gateway, NAT gateway, or public IP required. This is the required configuration for strict 'no public internet' compliance. A NAT Gateway routes to the public internet. An ALB is a load balancer, not a private network endpoint. Lambda outside a VPC uses the public endpoint by default.",
+    "source_topic": "VPC Endpoint (PrivateLink) for private Bedrock access"
+  },
+  {
+    "id": "d2-q0558",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "AWS Outposts for data-residency GenAI",
+    "difficulty": "medium",
+    "question_text": "A government agency requires that all AI inference for a sensitive application must be physically performed on-premises due to strict data sovereignty requirements. Which AWS solution supports running Bedrock-compatible services on-premises?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Local Zones"
+      },
+      {
+        "key": "B",
+        "text": "AWS Wavelength"
+      },
+      {
+        "key": "C",
+        "text": "AWS Outposts"
+      },
+      {
+        "key": "D",
+        "text": "AWS Direct Connect"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "AWS Outposts brings AWS infrastructure and services physically on-premises, enabling applications to run in the customer's data center under their physical control \u2014 meeting strict data sovereignty requirements. Local Zones are AWS-managed edge facilities, not customer premises. Wavelength is for 5G/edge latency, not data residency on-prem. Direct Connect is a private network link from on-prem to AWS cloud, not on-prem compute.",
+    "source_topic": "AWS Outposts for on-premises data sovereignty"
+  },
+  {
+    "id": "d2-q0559",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "On-premises data integration",
+    "difficulty": "medium",
+    "question_text": "A company needs to transfer 50 TB of on-premises documents to Amazon S3 for use in a Bedrock Knowledge Base. The transfer must happen reliably over a Direct Connect link. Which AWS service is BEST suited for this large-scale, reliable file transfer?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Kinesis Data Firehose"
+      },
+      {
+        "key": "B",
+        "text": "AWS DataSync"
+      },
+      {
+        "key": "C",
+        "text": "Amazon AppFlow"
+      },
+      {
+        "key": "D",
+        "text": "AWS Snowball"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "AWS DataSync is purpose-built for large-scale, reliable data transfers between on-premises storage and AWS (S3, EFS, FSx) over Direct Connect or internet connections. It handles scheduling, monitoring, verification, and delta transfers. Kinesis Firehose is for streaming data pipelines. AppFlow is for SaaS application data transfers. Snowball is for offline, physical device transfers (petabyte scale or where network is unavailable).",
+    "source_topic": "AWS DataSync for on-premises to S3 large file transfer"
+  },
+  {
+    "id": "d2-q0560",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Q Business vs Bedrock Knowledge Bases",
+    "difficulty": "medium",
+    "question_text": "A company wants to deploy an enterprise search and Q&A assistant that connects to SharePoint, Confluence, S3, and Salesforce \u2014 with built-in access control so users only see documents they have permission to access. They want minimal custom development. Which AWS service BEST meets this requirement?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Bedrock Knowledge Bases with custom Lambda connectors"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Q Business with built-in data connectors and ACL-aware retrieval"
+      },
+      {
+        "key": "C",
+        "text": "Amazon OpenSearch Service with custom ingestion pipelines"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Kendra with custom connectors"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Amazon Q Business provides a fully managed enterprise GenAI assistant with built-in connectors for SharePoint, Confluence, S3, Salesforce, and many others. Critically, it respects source document access control lists (ACLs) so users only see results they are permitted to access \u2014 without custom code. Bedrock Knowledge Bases requires custom Lambda connectors for most SaaS sources. OpenSearch requires building all ingestion and ACL logic. Kendra is a search service being closed to new customers (July 2026).",
+    "source_topic": "Amazon Q Business for ACL-aware enterprise search"
   }
 ]

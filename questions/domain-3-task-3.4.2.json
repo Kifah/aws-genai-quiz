@@ -1,0 +1,17 @@
+[
+  {
+    "id": "d3-q0469", "domain": 3, "task_statement": "3.4", "topic": "SageMaker Clarify for bias drift",
+    "difficulty": "medium",
+    "question_text": "A responsible-AI program must continuously evaluate a model for bias across demographic groups both before deployment and as production data drifts over time, integrating alerts when fairness metrics degrade. Which AWS service is purpose-built for this bias and explainability analysis?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Amazon SageMaker Clarify, with metrics emitted to CloudWatch for alerting on fairness degradation"},
+      {"key": "B", "text": "Amazon Macie"},
+      {"key": "C", "text": "AWS Config"},
+      {"key": "D", "text": "Amazon Bedrock Provisioned Throughput"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "SageMaker Clarify measures pre-training and post-training bias and provides explainability, and its metrics can flow to CloudWatch to alert when fairness degrades (bias drift). Macie discovers sensitive data in S3; AWS Config tracks resource configuration compliance; Provisioned Throughput is a capacity mode — none perform demographic bias analysis.",
+    "source_topic": "SageMaker Clarify for bias and fairness monitoring"
+  }
+]

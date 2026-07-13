@@ -1,0 +1,77 @@
+[
+  {
+    "id": "d2-q0592", "domain": 2, "task_statement": "2.3", "topic": "Edge AI with AWS Wavelength",
+    "difficulty": "medium",
+    "question_text": "A GenAI feature embedded in a mobile AR app requires ultra-low-latency inference for users on 5G networks, keeping traffic close to the mobile edge rather than routing to a central Region. Which AWS capability is designed for this low-latency edge scenario?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "AWS Wavelength — deploy compute at the 5G network edge for low-latency AI"},
+      {"key": "B", "text": "Amazon S3 Transfer Acceleration"},
+      {"key": "C", "text": "Amazon CloudFront static caching only"},
+      {"key": "D", "text": "AWS Backup"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "AWS Wavelength places compute and storage inside telecom providers' 5G networks, minimising round-trip latency for edge AI workloads. S3 Transfer Acceleration speeds large uploads to S3; CloudFront caches content but is not a 5G-edge compute platform for inference; AWS Backup is a data-protection service.",
+    "source_topic": "AWS Wavelength for 5G edge AI"
+  },
+  {
+    "id": "d2-q0593", "domain": 2, "task_statement": "2.3", "topic": "On-premises data-residency GenAI",
+    "difficulty": "medium",
+    "question_text": "A regulated customer must run GenAI-adjacent workloads inside their own data centre for data-residency reasons while still using AWS APIs and management. Which service extends AWS infrastructure on-premises for this requirement?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "AWS Outposts — run AWS infrastructure in your own data centre"},
+      {"key": "B", "text": "Amazon Bedrock Provisioned Throughput"},
+      {"key": "C", "text": "Amazon Route 53"},
+      {"key": "D", "text": "AWS Global Accelerator"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "AWS Outposts extends AWS infrastructure and services into an on-premises data centre, supporting data-residency and low-latency local processing while retaining AWS APIs. Provisioned Throughput is a Bedrock capacity mode; Route 53 is DNS; Global Accelerator improves network path performance — none place AWS compute on-premises.",
+    "source_topic": "AWS Outposts for on-premises data residency"
+  },
+  {
+    "id": "d2-q0594", "domain": 2, "task_statement": "2.3", "topic": "CRM integration via AppFlow",
+    "difficulty": "medium",
+    "question_text": "A company wants to pull Salesforce records into AWS, generate customer-insight summaries and email drafts with Bedrock, and then write results back to Salesforce — using a managed, no-code data transfer for the CRM connectivity. Which service handles the bidirectional CRM data movement?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Amazon AppFlow — managed bidirectional data transfer with SaaS apps like Salesforce"},
+      {"key": "B", "text": "AWS DataSync"},
+      {"key": "C", "text": "Amazon Kinesis Video Streams"},
+      {"key": "D", "text": "AWS Snowball"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Amazon AppFlow provides managed, no-code, bidirectional integration with SaaS applications such as Salesforce and HubSpot, ideal for ingesting CRM records to S3 for Bedrock processing and writing results back. DataSync moves file/object data between storage systems; Kinesis Video Streams handles video; Snowball is offline bulk transfer.",
+    "source_topic": "Amazon AppFlow for CRM integration"
+  },
+  {
+    "id": "d2-q0595", "domain": 2, "task_statement": "2.3", "topic": "Text-to-SQL data warehouse integration",
+    "difficulty": "medium",
+    "question_text": "Business users want to ask natural-language questions and get answers from data stored in Amazon Redshift/queried via Athena. The system should translate the question to SQL, run it, and summarise results. Which integration pattern implements this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Text-to-SQL: Lambda uses Bedrock to convert the NL question to SQL, executes it against Redshift/Athena, then Bedrock summarises the rows"},
+      {"key": "B", "text": "Embed the entire warehouse into a vector store and never run SQL"},
+      {"key": "C", "text": "Return the raw NL question directly to Redshift"},
+      {"key": "D", "text": "Use Guardrails to generate the SQL"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "The text-to-SQL pattern has an FM translate the natural-language question into SQL, a Lambda executes it against Redshift or Athena, and the FM then formats/summarises the results for the user. Vectorising an entire warehouse discards precise aggregations SQL provides; a raw NL string is not valid SQL; Guardrails is a safety control, not a query generator.",
+    "source_topic": "Text-to-SQL over Redshift/Athena"
+  },
+  {
+    "id": "d2-q0596", "domain": 2, "task_statement": "2.3", "topic": "GenAI gateway with CloudFront and WAF",
+    "difficulty": "medium",
+    "question_text": "A public GenAI API must be protected against DDoS and abusive traffic, cache repeated responses close to global users, and enforce rate limits before requests reach Bedrock. Which combination of edge services best fronts this gateway?",
+    "question_type": "multi",
+    "options": [
+      {"key": "A", "text": "Amazon CloudFront for edge caching of repeated responses"},
+      {"key": "B", "text": "AWS WAF for abuse/DDoS protection and request filtering"},
+      {"key": "C", "text": "Amazon Bedrock Guardrails as the network firewall"},
+      {"key": "D", "text": "Amazon Neptune for rate limiting"}
+    ],
+    "correct_answers": ["A", "B"],
+    "explanation": "A hardened GenAI gateway fronts API Gateway/Bedrock with CloudFront (edge caching for repeated responses and global latency) and AWS WAF (rate-based rules, DDoS mitigation, request filtering). Bedrock Guardrails is a content-safety layer on model I/O, not a network firewall; Neptune is a graph database and does not perform rate limiting.",
+    "source_topic": "CloudFront + WAF GenAI gateway"
+  }
+]

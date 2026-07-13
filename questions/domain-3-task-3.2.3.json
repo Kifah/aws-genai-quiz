@@ -1,0 +1,32 @@
+[
+  {
+    "id": "d3-q0480", "domain": 3, "task_statement": "3.2", "topic": "Cognito SECRET_HASH confidential client error",
+    "difficulty": "hard",
+    "question_text": "A developer runs initiate-auth with USER_PASSWORD_AUTH and receives: NotAuthorizedException: Client configured with secret but SECRET_HASH was not received. What is the root cause and fix?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "The Cognito app client was created as a confidential client with a client secret — fix by creating a public app client without a client secret" },
+      { "key": "B", "text": "The user's password is incorrect" },
+      { "key": "C", "text": "USER_PASSWORD_AUTH flow is disabled" },
+      { "key": "D", "text": "The user has not confirmed their email" }
+    ],
+    "correct_answers": ["A"],
+    "explanation": "When a Cognito app client has a client secret (confidential client), every auth request must include a SECRET_HASH (HMAC-SHA256). Standard CLI and frontend SDKs do not compute this. The fix: create a new app client with the client secret toggle disabled (public client). Incorrect passwords produce 'Incorrect username or password'; disabled auth flow and unconfirmed users produce different errors.",
+    "source_topic": "Cognito SECRET_HASH NotAuthorizedException on confidential client"
+  },
+  {
+    "id": "d3-q0481", "domain": 3, "task_statement": "3.2", "topic": "KMS CMK PendingDeletion blocks snapshot restore",
+    "difficulty": "hard",
+    "question_text": "A developer deletes the customer-managed KMS key that encrypted an Aurora Serverless v2 cluster. The cluster's automated snapshots still exist. What happens when they try to restore from a snapshot?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Restoration fails — the KMS key enters PendingDeletion (7-30 days) and encrypted snapshots cannot be decrypted" },
+      { "key": "B", "text": "Snapshots are automatically re-encrypted with an AWS-managed key" },
+      { "key": "C", "text": "Snapshots are deleted when the key is deleted" },
+      { "key": "D", "text": "Restoration proceeds normally using the default aws/rds key" }
+    ],
+    "correct_answers": ["A"],
+    "explanation": "When you schedule deletion of a customer-managed KMS key, it enters PendingDeletion for 7-30 days. During and after this period, encrypted snapshots cannot be restored because the decryption key is unavailable. AWS does not re-encrypt snapshots with a different key, nor are they automatically deleted with the key. This is why development/test clusters should prefer the AWS-managed key (alias/aws/rds).",
+    "source_topic": "KMS CMK PendingDeletion prevents snapshot restoration"
+  }
+]

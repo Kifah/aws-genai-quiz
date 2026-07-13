@@ -1,0 +1,32 @@
+[
+  {
+    "id": "d5-q0246", "domain": 5, "task_statement": "5.2", "topic": "Embedding quality diagnostics",
+    "difficulty": "medium",
+    "question_text": "A RAG pipeline returns irrelevant chunks and you suspect the embedding model is the culprit. Which diagnostic most directly tests whether the embeddings capture semantic similarity correctly?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Embed known similar and dissimilar sentence pairs and verify cosine similarity is high for similar pairs and low for dissimilar ones"},
+      {"key": "B", "text": "Increase the generation model's maxTokens"},
+      {"key": "C", "text": "Raise the temperature of the generation model"},
+      {"key": "D", "text": "Add more denied topics to the guardrail"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "A direct embedding-quality diagnostic runs known similar/dissimilar text pairs through the embedding model and checks that cosine similarity is high for semantically similar pairs and low for unrelated ones; failures indicate a poor or misconfigured embedding model. maxTokens and temperature affect generation, not retrieval embeddings; guardrail topics are a safety control.",
+    "source_topic": "Embedding-quality diagnostic with similar/dissimilar pairs"
+  },
+  {
+    "id": "d5-q0247", "domain": 5, "task_statement": "5.2", "topic": "Cold-start latency troubleshooting",
+    "difficulty": "medium",
+    "question_text": "Users intermittently experience multi-second delays on the first request after a period of inactivity, while warm requests are fast. X-Ray traces show the delay is in Lambda initialisation, not in Bedrock. Which remedy most directly resolves the intermittent slow-start latency?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Enable Lambda provisioned concurrency to keep execution environments warm"},
+      {"key": "B", "text": "Increase the Bedrock model's temperature"},
+      {"key": "C", "text": "Switch the vector index from HNSW to IVF"},
+      {"key": "D", "text": "Add a second guardrail"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Intermittent slow first-requests after idle periods, with the delay in Lambda init per X-Ray, are classic cold starts; provisioned concurrency keeps environments initialised so the critical path avoids cold-start penalty. Temperature affects output randomness; the ANN index choice affects retrieval, not Lambda init; adding a guardrail does not address initialisation latency.",
+    "source_topic": "Cold-start latency resolved with provisioned concurrency"
+  }
+]

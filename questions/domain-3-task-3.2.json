@@ -259,5 +259,517 @@
     ],
     "explanation": "Amazon Macie is the purpose-built service for sensitive data discovery in S3. It uses ML to identify PII (names, SSNs, credit card numbers, etc.) and generates findings with bucket-level and object-level detail. AWS Config tracks configuration changes (not data content). Inspector scans for software vulnerabilities. GuardDuty detects threats like credential compromise \u2014 not data classification.",
     "source_topic": "Amazon Macie, PII discovery, S3 sensitive data classification"
+  },
+  {
+    "id": "d3-q0425",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "PII detection and redaction",
+    "difficulty": "medium",
+    "question_text": "A company collects customer feedback transcripts and stores them in S3. They want to discover which S3 buckets contain PII (names, credit card numbers, SSNs) across their entire AWS account \u2014 without inspecting individual files manually. Which service is purpose-built for this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Comprehend \u2014 scan individual documents via API"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Macie \u2014 automatically discovers and classifies sensitive data at rest in S3"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Bedrock Guardrails \u2014 scan S3 objects for PII"
+      },
+      {
+        "key": "D",
+        "text": "AWS Config \u2014 detect non-compliant S3 buckets"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Amazon Macie is the dedicated AWS service for discovering, classifying, and protecting sensitive data stored in S3. It uses ML to automatically scan S3 objects across your account, identify 150+ sensitive data types (PII, credentials, financial data), and generate findings. Comprehend can detect PII in individual documents via API but requires custom pipelines to scan entire S3 accounts. Guardrails operate at model invocation time, not on stored S3 data. AWS Config tracks resource configurations, not data content.",
+    "source_topic": "Amazon Macie for S3 PII discovery at account scale"
+  },
+  {
+    "id": "d3-q0426",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "PII detection and redaction",
+    "difficulty": "medium",
+    "question_text": "A company wants to redact PII from customer support chat transcripts BEFORE they are sent to Amazon Bedrock for summarisation. The transcripts are processed in real time via a Lambda function. Which service should the Lambda use for PII detection and redaction?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Macie \u2014 runs in real time against Lambda-processed text"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Comprehend \u2014 provides PII detection and redaction API for real-time text processing"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Bedrock Guardrails \u2014 redact PII at S3 storage layer"
+      },
+      {
+        "key": "D",
+        "text": "AWS Glue DataBrew \u2014 visual PII masking tool"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Amazon Comprehend provides real-time PII detection and redaction APIs callable from Lambda \u2014 detecting entities like names, addresses, phone numbers, and credit card numbers in text, then redacting or masking them. Macie scans data at rest in S3, not real-time Lambda-processed text. Guardrails can redact PII at invocation time (a good second layer) but should not be the pre-model layer when processing is already in Lambda. Glue DataBrew is a visual batch tool, not a real-time Lambda integration.",
+    "source_topic": "Comprehend for real-time PII detection in Lambda before Bedrock"
+  },
+  {
+    "id": "d3-q0427",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "VPC isolation for FM workloads",
+    "difficulty": "medium",
+    "question_text": "A team wants to ensure that when their Lambda function calls Amazon Bedrock, the network traffic stays within the AWS private network and never traverses the public internet. Additionally, they want Bedrock API calls to resolve using standard endpoint DNS names. Which configuration achieves both goals?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy Lambda in a VPC with a NAT Gateway for outbound internet access to Bedrock"
+      },
+      {
+        "key": "B",
+        "text": "Create a VPC Interface Endpoint for Amazon Bedrock and enable Private DNS \u2014 traffic stays on AWS network and uses standard endpoint DNS"
+      },
+      {
+        "key": "C",
+        "text": "Use AWS Direct Connect between the VPC and Bedrock"
+      },
+      {
+        "key": "D",
+        "text": "Configure an S3 VPC Gateway Endpoint and route Bedrock traffic through it"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A VPC Interface Endpoint (PrivateLink) for Bedrock keeps all traffic on the AWS private backbone. Enabling Private DNS on the endpoint means the standard Bedrock endpoint hostname (e.g., bedrock-runtime.us-east-1.amazonaws.com) resolves to the private endpoint \u2014 no code changes needed. NAT Gateway still routes to the public internet. Direct Connect is for on-premises to AWS, not VPC-to-Bedrock. S3 Gateway Endpoints only serve S3 and DynamoDB.",
+    "source_topic": "VPC Interface Endpoint with Private DNS for Bedrock"
+  },
+  {
+    "id": "d3-q0428",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "KMS CMK for compliance and audit",
+    "difficulty": "medium",
+    "question_text": "A regulated financial institution needs to encrypt all data in their Bedrock Knowledge Base with encryption keys that THEY control and can audit independently. Which KMS key type satisfies this requirement?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Managed Key (aws/bedrock) \u2014 AWS rotates and manages the key automatically"
+      },
+      {
+        "key": "B",
+        "text": "Customer Managed Key (CMK) \u2014 the customer creates, manages, and audits via CloudTrail"
+      },
+      {
+        "key": "C",
+        "text": "AWS Owned Key \u2014 AWS uses internally without customer visibility"
+      },
+      {
+        "key": "D",
+        "text": "S3 SSE-S3 encryption \u2014 no KMS key required"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A Customer Managed Key (CMK) is created and controlled by the customer, with full visibility into key policy, usage, and a complete CloudTrail audit log of every encrypt/decrypt operation. This satisfies financial regulatory requirements for key ownership and auditability. AWS Managed Keys are managed by AWS and have limited customer audit capability. AWS Owned Keys are completely invisible to customers. SSE-S3 uses AWS-managed keys with no customer audit trail.",
+    "source_topic": "KMS Customer Managed Key for regulated industry compliance"
+  },
+  {
+    "id": "d3-q0429",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Data masking for FM interactions",
+    "difficulty": "hard",
+    "question_text": "A company processes invoices containing customer names and account numbers via Bedrock. Legal requires that raw PII never leave the Lambda processing layer. The FM should work with tokenised values, and the final output to the customer can use real values. What pattern implements this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Store raw invoices in S3 and let Bedrock access them directly"
+      },
+      {
+        "key": "B",
+        "text": "Lambda pre-processor replaces PII with tokens (NAME_1, ACCT_1) before sending to Bedrock; Lambda post-processor de-tokenises the response before returning to the user"
+      },
+      {
+        "key": "C",
+        "text": "Enable Bedrock Guardrails PII redaction on all outputs"
+      },
+      {
+        "key": "D",
+        "text": "Use SageMaker Processing to anonymise all invoices before Lambda processes them"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "The tokenisation pattern: a Lambda pre-processor replaces PII with deterministic placeholder tokens before the text reaches Bedrock. The FM operates on tokenised text without ever seeing real PII. A Lambda post-processor then de-tokenises the Bedrock output using a token-to-value mapping stored in memory or Secrets Manager. Guardrails PII redaction (C) redacts from outputs but doesn't prevent PII from reaching the model in inputs. SageMaker Processing (D) is a batch tool, not per-request.",
+    "source_topic": "PII tokenisation pattern: pre/post Lambda processing"
+  },
+  {
+    "id": "d3-q0430",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Data retention policies",
+    "difficulty": "medium",
+    "question_text": "A company logs all Bedrock prompt/response pairs to S3 for audit purposes. Regulatory requirements state logs must be retained for 7 years and then deleted. What is the MOST operationally efficient way to enforce this retention lifecycle?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Write a Lambda function that runs monthly to delete logs older than 7 years"
+      },
+      {
+        "key": "B",
+        "text": "Configure S3 Lifecycle policy on the log bucket: transition to Glacier Deep Archive after 90 days, expire (delete) after 7 years (2555 days)"
+      },
+      {
+        "key": "C",
+        "text": "Manually review and delete logs annually via the AWS console"
+      },
+      {
+        "key": "D",
+        "text": "Set CloudWatch Logs retention to 7 years for Bedrock invocation logs"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "S3 Lifecycle policies are the purpose-built, zero-maintenance mechanism for automated storage class transitions and expiry. Transitioning to Glacier Deep Archive reduces storage cost for cold compliance data, and automatic expiration after 7 years ensures deletion without any operational overhead. Lambda-based cleanup (A) requires maintenance and risks timing errors. Manual deletion (C) is not operationally efficient. CloudWatch Logs retention applies to CW logs, not S3 objects.",
+    "source_topic": "S3 Lifecycle policies for 7-year log retention and deletion"
+  },
+  {
+    "id": "d3-q0431",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "IAM condition key bedrock:GuardrailIdentifier",
+    "difficulty": "hard",
+    "question_text": "A security team wants to enforce that all Bedrock InvokeModel calls from application Lambda functions MUST include a specific approved Guardrail ID, otherwise the call should be denied. Which mechanism enforces this at the IAM policy level?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Add the Guardrail ID to the system prompt"
+      },
+      {
+        "key": "B",
+        "text": "Use an IAM policy condition with bedrock:GuardrailIdentifier to require the approved Guardrail ARN on all InvokeModel calls"
+      },
+      {
+        "key": "C",
+        "text": "Use a Bedrock Guardrail to enforce that other Guardrails are used"
+      },
+      {
+        "key": "D",
+        "text": "Use SCP to restrict Bedrock API calls without Guardrails"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "IAM policy conditions can require specific condition keys on API calls. The `bedrock:GuardrailIdentifier` condition key allows an IAM policy to deny any InvokeModel call that doesn't specify the approved Guardrail ARN \u2014 enforcing Guardrail usage at the IAM layer, which cannot be bypassed by application code. System prompt (A) has no IAM enforcement. A Guardrail can't enforce other Guardrails. SCPs enforce broadly at organisation level but bedrock:GuardrailIdentifier on an IAM policy is the precise per-role control.",
+    "source_topic": "IAM bedrock:GuardrailIdentifier condition for mandatory Guardrail"
+  },
+  {
+    "id": "d3-q0432",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Macie vs Comprehend vs Guardrails PII decision",
+    "difficulty": "hard",
+    "question_text": "A company has three PII-related requirements: (1) prevent PII from appearing in model inputs or outputs at inference time, (2) detect PII in raw transcripts before they are added to a RAG knowledge base, (3) audit S3 buckets to find where customer PII is stored at rest. Match each requirement to the CORRECT service.",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "(1) Comprehend, (2) Macie, (3) Guardrails"
+      },
+      {
+        "key": "B",
+        "text": "(1) Guardrails, (2) Comprehend, (3) Macie"
+      },
+      {
+        "key": "C",
+        "text": "(1) Macie, (2) Guardrails, (3) Comprehend"
+      },
+      {
+        "key": "D",
+        "text": "(1) Guardrails, (2) Macie, (3) Comprehend"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "(1) Bedrock Guardrails is purpose-built for preventing PII from reaching or leaving the model at invocation time. (2) Amazon Comprehend detects and redacts PII in raw text before it enters the pipeline (data preprocessing). (3) Amazon Macie discovers and classifies PII in S3 buckets for compliance auditing of data at rest. This is the canonical service-to-layer mapping for PII across the GenAI pipeline.",
+    "source_topic": "PII service selection: Guardrails vs Comprehend vs Macie by pipeline stage"
+  },
+  {
+    "id": "d3-q0433",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "S3 Object Lock for 7-year immutable compliance logging",
+    "difficulty": "medium",
+    "question_text": "A company must demonstrate to auditors that their Bedrock model invocation logs have NOT been tampered with or deleted during the 7-year retention period. Which S3 feature prevents modifications and deletions for a defined retention period?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "S3 Versioning"
+      },
+      {
+        "key": "B",
+        "text": "S3 Object Lock in Compliance mode with a 7-year retention period"
+      },
+      {
+        "key": "C",
+        "text": "S3 Cross-Region Replication"
+      },
+      {
+        "key": "D",
+        "text": "S3 Lifecycle Intelligent-Tiering"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "S3 Object Lock in Compliance mode implements WORM (Write Once Read Many) storage \u2014 objects cannot be overwritten or deleted by ANY user (including the root account) until the retention period expires. This provides tamper-proof, immutable audit logs required by financial regulations (SEC Rule 17a-4, FINRA). Versioning keeps multiple versions but allows deletion. CRR replicates but doesn't prevent tampering. Intelligent-Tiering is a cost optimisation tier, not an immutability feature.",
+    "source_topic": "S3 Object Lock Compliance mode for tamper-proof audit logs"
+  },
+  {
+    "id": "d3-q0434",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "GDPR right to erasure in vector stores",
+    "difficulty": "hard",
+    "question_text": "A European company has a RAG system with customer data embedded in an OpenSearch vector store. A customer exercises their GDPR 'right to be forgotten'. How should the company implement this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Delete the customer's account from the application database \u2014 vectors in OpenSearch are automatically removed"
+      },
+      {
+        "key": "B",
+        "text": "Identify all document chunks containing the customer's data, delete the source documents from S3, and delete the corresponding vectors and metadata from the OpenSearch index by document ID"
+      },
+      {
+        "key": "C",
+        "text": "Rebuild the entire vector store from scratch without the customer's data"
+      },
+      {
+        "key": "D",
+        "text": "Apply Bedrock Guardrails PII redaction to prevent the customer's data from appearing in outputs"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "GDPR right to erasure requires deleting the customer's data from ALL storage systems, including the vector store. The process: (1) identify all chunks from documents containing that customer's data, (2) delete source documents from S3, (3) delete corresponding vectors from OpenSearch by document ID. Deleting from the application DB doesn't touch the vector store. Rebuilding from scratch is extremely expensive and disruptive. Guardrails prevent PII in outputs but the data still exists in the vector store.",
+    "source_topic": "GDPR right to erasure: deleting vectors from knowledge base"
+  },
+  {
+    "id": "d3-q0435",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Identity federation for FM access",
+    "difficulty": "medium",
+    "question_text": "A hospital wants their doctors to access a Bedrock-powered clinical decision support tool using their existing hospital Active Directory credentials. They should NOT need separate AWS IAM users. Which AWS service provides this federated access?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create IAM users for each doctor in the AWS account"
+      },
+      {
+        "key": "B",
+        "text": "Use IAM Identity Center (AWS SSO) with SAML federation to the hospital's Active Directory"
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Cognito User Pools with a custom user database"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Lex to authenticate users via voice biometrics"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "IAM Identity Center with SAML federation allows the hospital's existing Active Directory to serve as the identity provider. Doctors authenticate with their hospital credentials and get temporary AWS credentials scoped to their role \u2014 no separate IAM users needed. Creating IAM users per doctor doesn't scale and adds management overhead. Cognito is better suited for customer-facing applications, not internal corporate directory federation. Lex is a chatbot service.",
+    "source_topic": "IAM Identity Center SAML federation to Active Directory"
+  },
+  {
+    "id": "d3-q0436",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Lake Formation for granular data access",
+    "difficulty": "hard",
+    "question_text": "A company uses AWS Glue Data Catalog to manage their AI training datasets. They need to enforce column-level access control so that data scientists can query patient ID and diagnosis columns but NOT the name, SSN, or address columns. Which AWS service enforces this fine-grained access?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Glue Data Catalog \u2014 define column-level IAM policies on each table"
+      },
+      {
+        "key": "B",
+        "text": "S3 bucket policies \u2014 grant access to specific columns"
+      },
+      {
+        "key": "C",
+        "text": "AWS Lake Formation \u2014 configure column-level access control on Glue Data Catalog tables"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Macie \u2014 detect and redact columns containing PII"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "AWS Lake Formation provides fine-grained table-, column-, and row-level access control on top of AWS Glue Data Catalog tables. Data engineers grant/revoke access to specific columns per user/role without modifying the underlying S3 data. Glue Data Catalog stores metadata but doesn't enforce column-level access itself. S3 bucket policies work at the object level, not column level. Macie discovers PII but doesn't enforce access restrictions.",
+    "source_topic": "Lake Formation column-level access control on Glue Data Catalog"
+  },
+  {
+    "id": "d3-q0437",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Data masking for FM interactions",
+    "difficulty": "medium",
+    "question_text": "A company uses Bedrock for analytics on customer data. Before sending data to Bedrock, they want to replace exact ages with age ranges (e.g., '33' \u2192 '30-40') and replace full names with 'CUSTOMER'. This reduces re-identification risk. What type of privacy technique is this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Encryption"
+      },
+      {
+        "key": "B",
+        "text": "Tokenisation"
+      },
+      {
+        "key": "C",
+        "text": "Data anonymisation / generalisation"
+      },
+      {
+        "key": "D",
+        "text": "Differential privacy"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Replacing specific values with generalised or aggregated equivalents (exact age \u2192 age range, name \u2192 generic label) is data anonymisation through generalisation \u2014 reducing re-identification risk while preserving analytical utility. Encryption is reversible with a key. Tokenisation replaces values with random tokens (not generalised ranges). Differential privacy adds statistical noise to query outputs, not to individual records before processing.",
+    "source_topic": "Data anonymisation vs tokenisation vs encryption"
+  },
+  {
+    "id": "d3-q0438",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "VPC isolation for FM workloads",
+    "difficulty": "medium",
+    "question_text": "An exam question states: 'A company must ensure Bedrock traffic NEVER traverses the public internet and a security team EXPLICITLY says do NOT use NAT Gateway, ALB, or proxy.' Which is the CORRECT solution?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy Lambda outside the VPC \u2014 Bedrock calls default to private"
+      },
+      {
+        "key": "B",
+        "text": "Configure a VPC Interface Endpoint (PrivateLink) for Amazon Bedrock"
+      },
+      {
+        "key": "C",
+        "text": "Use an Internet Gateway with restrictive security groups"
+      },
+      {
+        "key": "D",
+        "text": "Deploy a NAT Gateway in a private subnet"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "This is a classic AIP-C01 exam trap. Per the vicsz study notes: 'Exam trap \u2192 never NAT, ALB, or proxy Bedrock for private-only access.' The ONLY correct answer for private Bedrock access without internet is a VPC Interface Endpoint (PrivateLink). Lambda outside a VPC uses the public Bedrock endpoint. Internet Gateway + security groups still routes through the internet. NAT Gateway explicitly routes to the internet and was prohibited in the question.",
+    "source_topic": "VPC PrivateLink for Bedrock \u2014 exam trap: never NAT/ALB/proxy"
+  },
+  {
+    "id": "d3-q0439",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Bedrock data privacy guarantee",
+    "difficulty": "easy",
+    "question_text": "A customer asks: 'If we use Amazon Bedrock, will our prompts and data be used to train AWS base foundation models?' What is the correct answer based on AWS's data privacy guarantee?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Yes, data is used to improve AWS models but is anonymised first"
+      },
+      {
+        "key": "B",
+        "text": "Yes, but only for Anthropic Claude models"
+      },
+      {
+        "key": "C",
+        "text": "No \u2014 Amazon Bedrock does not use customer data to train or improve AWS base models; customer data is encrypted and not shared with third-party model providers"
+      },
+      {
+        "key": "D",
+        "text": "It depends on the pricing tier \u2014 Provisioned Throughput data is not shared but on-demand data may be"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Amazon Bedrock's core data privacy commitment is that customer data (prompts, responses, fine-tuning data) is NEVER used to train or improve AWS's base foundation models. Customer data is encrypted and isolated, and is not shared with third-party model providers (Anthropic, Meta, etc.). This applies to all pricing tiers and all models on Bedrock.",
+    "source_topic": "Bedrock data privacy: customer data not used for model training"
+  },
+  {
+    "id": "d3-q0440",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Secrets Manager for API key management",
+    "difficulty": "easy",
+    "question_text": "A Lambda function needs to call a third-party AI API (e.g., an external vector search service) and requires an API key. The security team prohibits hardcoding credentials in environment variables or code. What is the AWS-recommended approach?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Store the API key in an S3 bucket and read it at runtime"
+      },
+      {
+        "key": "B",
+        "text": "Store the API key in AWS Secrets Manager and retrieve it at Lambda startup using the SDK"
+      },
+      {
+        "key": "C",
+        "text": "Pass the API key as a query parameter in each API request"
+      },
+      {
+        "key": "D",
+        "text": "Embed the API key in the Lambda deployment package ZIP file"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "AWS Secrets Manager is the recommended service for storing sensitive credentials (API keys, passwords, tokens). Lambda retrieves the secret at runtime via the AWS SDK, with the secret encrypted at rest with KMS. Access is controlled by IAM policies. Secrets Manager also supports automatic rotation. S3-based storage lacks fine-grained access control and rotation. Query parameters expose credentials in URLs and logs. Embedding in ZIP files is a security anti-pattern.",
+    "source_topic": "Secrets Manager for Lambda API key management"
   }
 ]

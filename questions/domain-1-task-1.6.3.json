@@ -1,0 +1,47 @@
+[
+  {
+    "id": "d1-q0617", "domain": 1, "task_statement": "1.6", "topic": "Amazon Bedrock Flows orchestration",
+    "difficulty": "medium",
+    "question_text": "A team wants a managed, visual way to chain multiple Bedrock steps — prompts, a Knowledge Base retrieval, a Lambda transform, and conditional branching — into a single deployable workflow, without writing custom orchestration code. Which Amazon Bedrock capability provides this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Amazon Bedrock Flows — a visual builder that links prompt, Knowledge Base, condition, and Lambda nodes into a workflow"},
+      {"key": "B", "text": "Amazon Bedrock Provisioned Throughput"},
+      {"key": "C", "text": "Amazon Bedrock Guardrails"},
+      {"key": "D", "text": "Amazon Bedrock Model Evaluation"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Amazon Bedrock Flows provides a visual, low-code builder to connect prompt nodes, Knowledge Base nodes, condition (branching) nodes, and Lambda nodes into a single managed workflow. Provisioned Throughput reserves inference capacity, Guardrails enforce safety, and Model Evaluation compares model quality — none orchestrate multi-step flows.",
+    "source_topic": "Amazon Bedrock Flows visual orchestration"
+  },
+  {
+    "id": "d1-q0618", "domain": 1, "task_statement": "1.6", "topic": "Amazon Bedrock Flows components",
+    "difficulty": "medium",
+    "question_text": "In an Amazon Bedrock Flow, a workflow must send factual questions down a retrieval-and-generate path and creative requests down a direct-generation path based on a classification result. Which flow component implements this routing?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "A condition node that branches on the classifier's output"},
+      {"key": "B", "text": "A provisioned throughput node"},
+      {"key": "C", "text": "A KMS encryption node"},
+      {"key": "D", "text": "A guardrail node that blocks all branching"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Bedrock Flows use a condition node to branch execution based on prior node output (e.g. an intent classification), routing factual vs creative requests down different paths. There is no 'provisioned throughput' or 'KMS encryption' flow node for routing, and a guardrail enforces content safety rather than performing conditional branching.",
+    "source_topic": "Bedrock Flows condition node for branching"
+  },
+  {
+    "id": "d1-q0619", "domain": 1, "task_statement": "1.6", "topic": "Bedrock Flows vs Prompt Management",
+    "difficulty": "medium",
+    "question_text": "A developer already stores versioned, parameterised prompt templates in Bedrock Prompt Management and now needs to CHAIN several of those prompts with a retrieval step and branching into one runnable pipeline. Which Bedrock feature should they add to compose the pipeline?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Amazon Bedrock Flows, referencing the managed prompts as nodes in the flow"},
+      {"key": "B", "text": "Nothing — Prompt Management already executes multi-step pipelines"},
+      {"key": "C", "text": "Amazon Bedrock Guardrails"},
+      {"key": "D", "text": "Amazon Bedrock Batch Inference"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Bedrock Prompt Management stores/versions individual prompt templates; to chain them with retrieval and branching into one executable pipeline you use Bedrock Flows, which can reference managed prompts as nodes. Prompt Management alone does not orchestrate multi-step flows; Guardrails enforce safety; Batch Inference runs bulk single-prompt jobs, not branching pipelines.",
+    "source_topic": "Bedrock Flows composing managed prompts"
+  }
+]

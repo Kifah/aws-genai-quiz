@@ -227,5 +227,389 @@
     ],
     "explanation": "AWS Outposts brings AWS compute, storage, and services physically to the customer's on-premises facility, keeping all data within the premises and under the customer's physical control. This satisfies strict data-residency or data-sovereignty laws. Local Zones reduce latency but are AWS-operated infrastructure outside the customer's building. CloudFront is a CDN, not compute for ML. Encryption alone does not address data-residency requirements when the hardware is in a foreign region.",
     "source_topic": "AWS Outposts, data residency, on-premises GenAI"
+  },
+  {
+    "id": "d4-q0309",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Token efficiency and cost reduction",
+    "difficulty": "medium",
+    "question_text": "A company spends $5,000/month on Amazon Bedrock inference. Analysis shows that 40% of the cost comes from long conversation histories being re-sent with every message. What is the MOST direct cost optimisation?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Switch to a more expensive but faster model"
+      },
+      {
+        "key": "B",
+        "text": "Prune or summarise old conversation history in DynamoDB before adding to the prompt \u2014 reduce input tokens per request"
+      },
+      {
+        "key": "C",
+        "text": "Enable Bedrock Cross-Region Inference to distribute cost"
+      },
+      {
+        "key": "D",
+        "text": "Add more Lambda concurrency to process requests faster"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Total cost = (input tokens + output tokens) \u00d7 price per token. Pruning or summarising old conversation history before including it in each prompt directly reduces input tokens per request \u2014 the largest cost driver identified. Switching to a more expensive model increases cost. Cross-Region Inference spreads load but doesn't reduce token count. More Lambda concurrency doesn't reduce per-request token usage.",
+    "source_topic": "Context window pruning to reduce input token costs"
+  },
+  {
+    "id": "d4-q0310",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Semantic caching",
+    "difficulty": "hard",
+    "question_text": "An e-commerce GenAI assistant frequently receives questions like 'How do I return a product?', 'What is your return policy?', and 'How can I send back an item?' \u2014 semantically equivalent but textually different. The team wants to cache and reuse responses for these similar queries. What caching technique handles paraphrases?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Exact-match hash caching in ElastiCache (Redis)"
+      },
+      {
+        "key": "B",
+        "text": "CloudFront edge caching of the GET response"
+      },
+      {
+        "key": "C",
+        "text": "Semantic caching: embed the incoming query, search a vector store (MemoryDB/OpenSearch) for similar cached queries, return cached response if similarity exceeds threshold"
+      },
+      {
+        "key": "D",
+        "text": "DynamoDB TTL-based response cache"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Semantic caching embeds each incoming query and searches a vector store for previously cached queries with high embedding similarity. If similarity exceeds the threshold, the cached response is returned \u2014 handling paraphrases, synonyms, and rewordings. Exact-match hash caching (A) only matches identical strings. CloudFront caches URL-based GET requests, not semantic content. DynamoDB TTL caching requires exact key matches.",
+    "source_topic": "Semantic caching with MemoryDB/OpenSearch for paraphrase handling"
+  },
+  {
+    "id": "d4-q0311",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Token usage and cost monitoring",
+    "difficulty": "medium",
+    "question_text": "A GenAI platform serves multiple internal departments and needs to track Bedrock inference costs by department for monthly chargeback. Department IDs must appear in cost allocation reports. What is the MOST operationally simple approach?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a separate AWS account per department and use AWS Organizations for cost aggregation"
+      },
+      {
+        "key": "B",
+        "text": "Tag each Lambda function with department cost allocation tags and use AWS Cost Explorer to filter by tag"
+      },
+      {
+        "key": "C",
+        "text": "Log department_id and token counts to CloudWatch; use a Lambda to aggregate and report monthly costs"
+      },
+      {
+        "key": "D",
+        "text": "Track invocation counts manually in a spreadsheet"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Cost allocation tags on AWS resources (Lambda functions, API Gateway stages) flow through to Cost Explorer, enabling filtering and grouping by department for chargeback reports. This is the most operationally simple approach \u2014 no custom aggregation code needed. Separate accounts per department adds significant overhead. Custom Lambda aggregation requires code maintenance. Manual spreadsheets don't scale.",
+    "source_topic": "Cost allocation tags + Cost Explorer for department chargeback"
+  },
+  {
+    "id": "d4-q0312",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Bedrock Batch Inference for large-scale processing",
+    "difficulty": "medium",
+    "question_text": "A team needs to generate summaries for 2 million archived support tickets. Processing them in real time via synchronous InvokeModel calls is too expensive (overhead per call) and takes days. What is the MOST cost-efficient approach?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Lambda with 1000 concurrent functions, each calling InvokeModel"
+      },
+      {
+        "key": "B",
+        "text": "Use Bedrock Batch Inference (StartBatchInferenceJob) to process all tickets from S3 asynchronously at bulk pricing"
+      },
+      {
+        "key": "C",
+        "text": "Purchase Bedrock Provisioned Throughput for high-volume processing"
+      },
+      {
+        "key": "D",
+        "text": "Run inference on a SageMaker real-time endpoint"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock Batch Inference is purpose-built for large-scale async processing \u2014 submit all 2M tickets to S3 in JSONL format, trigger StartBatchInferenceJob, and results are written back to S3. Batch pricing is lower than per-request pricing. Lambda concurrency (A) still incurs per-request pricing and concurrency overhead. Provisioned Throughput reserves capacity for steady traffic, not batch processing. SageMaker endpoints require custom container management.",
+    "source_topic": "Bedrock Batch Inference for cost-efficient large-scale processing"
+  },
+  {
+    "id": "d4-q0313",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Model cascading for cost efficiency",
+    "difficulty": "hard",
+    "question_text": "A company spends $8,000/month on Claude Sonnet for all requests. Analysis shows 60% of requests are simple FAQ lookups that a smaller model handles equally well. Which architectural change reduces costs MOST significantly while maintaining quality?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Switch all traffic to Claude Haiku regardless of complexity"
+      },
+      {
+        "key": "B",
+        "text": "Implement model cascading: route to Claude Haiku first; only escalate to Claude Sonnet if Haiku's confidence is below threshold"
+      },
+      {
+        "key": "C",
+        "text": "Reduce max_tokens by 50% for all requests"
+      },
+      {
+        "key": "D",
+        "text": "Enable prompt caching for all Claude Sonnet calls"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Model cascading routes 60% of simple requests to the cheaper Haiku and only uses expensive Sonnet for the complex 40%. This preserves quality for hard cases while dramatically reducing average cost per request. Switching everything to Haiku (A) risks quality degradation on complex requests. Reducing max_tokens across the board may truncate valid responses. Prompt caching helps for repeated system prompts but doesn't address the per-request model selection problem.",
+    "source_topic": "Model cascading to route simple requests to cheaper models"
+  },
+  {
+    "id": "d4-q0314",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Tiered FM selection for cost",
+    "difficulty": "medium",
+    "question_text": "A company processes three request types: (1) simple yes/no classification, (2) 500-word document summarisation, (3) complex multi-document legal analysis. They want to minimise total monthly cost while maintaining acceptable quality for each type. What is the BEST model assignment?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "All three: Claude Sonnet for consistency"
+      },
+      {
+        "key": "B",
+        "text": "(1) Amazon Titan Text Lite, (2) Claude Haiku, (3) Claude Sonnet \u2014 tiered by complexity and cost"
+      },
+      {
+        "key": "C",
+        "text": "All three: Amazon Titan Text Lite for minimum cost"
+      },
+      {
+        "key": "D",
+        "text": "(1) Claude Sonnet, (2) Claude Haiku, (3) Titan Text Lite"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "The correct tiered assignment matches model capability to task complexity: (1) Yes/no classification is a simple factual task \u2192 Titan Text Lite (lowest cost). (2) Document summarisation requires moderate reasoning \u2192 Claude Haiku (balanced cost/capability). (3) Complex multi-document legal analysis demands advanced reasoning \u2192 Claude Sonnet. Using Claude Sonnet for everything (A) maximises cost. Using Titan Lite for everything (C) degrades quality on tasks 2 and 3. Option D reverses the cost-complexity mapping.",
+    "source_topic": "Tiered FM selection: matching model capability to task complexity"
+  },
+  {
+    "id": "d4-q0315",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Token efficiency and cost reduction",
+    "difficulty": "medium",
+    "question_text": "A developer notices that their Bedrock API calls include very long system prompts (2,000 tokens) that are identical across all requests. These tokens are charged on every call. What optimisation reduces this repetitive cost?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Remove the system prompt entirely"
+      },
+      {
+        "key": "B",
+        "text": "Implement Bedrock prompt caching \u2014 cache the system prompt prefix to avoid re-charging those tokens on each call"
+      },
+      {
+        "key": "C",
+        "text": "Store the system prompt in DynamoDB and append it dynamically"
+      },
+      {
+        "key": "D",
+        "text": "Compress the system prompt using gzip before sending"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock prompt caching allows a common prefix (like a long system prompt) to be cached so that repeated calls with the same prefix don't re-charge those input tokens. This can reduce input token costs by up to 90% for applications with long, static system prompts. Removing the system prompt loses important FM behaviour guidance. DynamoDB doesn't help \u2014 tokens are still charged when the prompt is sent. gzip is not a valid Bedrock API option.",
+    "source_topic": "Bedrock prompt caching for repeated system prompt cost reduction"
+  },
+  {
+    "id": "d4-q0316",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Auto-scaling for GenAI traffic",
+    "difficulty": "medium",
+    "question_text": "A SageMaker real-time inference endpoint needs to scale out automatically when the queue of pending inference requests grows (indicating processing backlog). Which auto-scaling metric is MOST appropriate for this use case?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "CPUUtilization \u2014 scale when CPU exceeds 70%"
+      },
+      {
+        "key": "B",
+        "text": "InvocationCount \u2014 scale when total invocations exceed a threshold"
+      },
+      {
+        "key": "C",
+        "text": "ApproximateNumberOfMessagesVisible on the input SQS queue \u2014 scale when queue depth grows"
+      },
+      {
+        "key": "D",
+        "text": "ModelLatency \u2014 scale when response time exceeds 2 seconds"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "When using SQS as a buffer in front of SageMaker inference (a common async pattern), the ApproximateNumberOfMessagesVisible metric reflects the actual backlog. Scaling the endpoint based on queue depth ensures capacity keeps pace with incoming work regardless of CPU or latency patterns. CPUUtilization indicates compute pressure but lags behind the actual queue. InvocationCount measures throughput, not backlog. ModelLatency reacts after users are already affected.",
+    "source_topic": "SQS queue depth for SageMaker auto-scaling in async patterns"
+  },
+  {
+    "id": "d4-q0317",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Provisioned throughput",
+    "difficulty": "medium",
+    "question_text": "A company uses Bedrock on-demand pricing and consistently hits ThrottlingException errors during business hours (8 AM\u20136 PM weekdays), while overnight usage is near zero. They want to eliminate throttling during business hours without paying for capacity overnight. What is the MOST cost-effective solution?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Purchase 24/7 Provisioned Throughput for the required business-hours capacity"
+      },
+      {
+        "key": "B",
+        "text": "Implement exponential backoff \u2014 the throttling will self-resolve"
+      },
+      {
+        "key": "C",
+        "text": "Purchase Provisioned Throughput scheduled for business hours only, combined with on-demand for overflow or off-hours"
+      },
+      {
+        "key": "D",
+        "text": "Switch to a different, less popular model to avoid throttling queues"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Bedrock Provisioned Throughput can be purchased for specific time windows (business hours), reducing the cost vs. 24/7 commitment. Combining with on-demand for overnight/overflow handles the rare cases without wasted provisioned capacity. 24/7 provisioning is wasteful given zero overnight usage. Exponential backoff helps transient throttling but doesn't solve sustained capacity shortfall. Switching models may degrade quality.",
+    "source_topic": "Scheduled Provisioned Throughput for business-hours peak capacity"
+  },
+  {
+    "id": "d4-q0318",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Token efficiency and cost reduction",
+    "difficulty": "easy",
+    "question_text": "A developer's Bedrock application often receives verbose responses with unnecessary padding ('Certainly! I would be happy to help you with that. Here is the information you requested:...'). What is the SIMPLEST way to reduce output token count and cost?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Post-process all responses to remove preamble text with regex"
+      },
+      {
+        "key": "B",
+        "text": "Set a lower max_tokens value and instruct the model in the system prompt: 'Be concise. Answer directly without preamble.'"
+      },
+      {
+        "key": "C",
+        "text": "Fine-tune the model to produce shorter responses"
+      },
+      {
+        "key": "D",
+        "text": "Switch to a different model that is naturally more concise"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "The simplest fix is a system prompt instruction for conciseness combined with a lower max_tokens limit to cap response length. System prompts like 'Answer directly without preamble' significantly reduce verbose padding. max_tokens prevents runaway verbose responses. Regex post-processing (A) is brittle and doesn't reduce charged tokens (you pay for generated tokens even if you discard them). Fine-tuning (C) is expensive for this minor issue.",
+    "source_topic": "System prompt + max_tokens for output token cost reduction"
+  },
+  {
+    "id": "d4-q0319",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Provisioned throughput",
+    "difficulty": "easy",
+    "question_text": "A team has purchased Bedrock Provisioned Throughput and is monitoring ModelInvocationUtilization. The metric shows 85% utilisation consistently. What does this indicate and what should they do?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "85% is too high \u2014 add more model units immediately"
+      },
+      {
+        "key": "B",
+        "text": "85% is in the optimal range (70-90%) for cost-efficiency \u2014 no action needed"
+      },
+      {
+        "key": "C",
+        "text": "85% means the model is degraded \u2014 switch to on-demand"
+      },
+      {
+        "key": "D",
+        "text": "85% utilisation triggers automatic scaling of provisioned units"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "For Bedrock Provisioned Throughput, the target utilisation for cost-efficiency is 70-90%. At 85%, the team is getting good value from their provisioned capacity without wasting it (< 70% would mean over-provisioning) and without being in danger of throttling (> 90% indicates under-provisioning). No action is needed. Provisioned Throughput doesn't auto-scale.",
+    "source_topic": "Provisioned Throughput optimal utilisation 70-90%"
+  },
+  {
+    "id": "d4-q0320",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Token efficiency and cost reduction",
+    "difficulty": "hard",
+    "question_text": "A RAG application sends 10 retrieved chunks (each 500 tokens) as context to Bedrock on every request. Analysis shows that on average only 3 chunks are actually relevant to the query. What optimisation reduces cost while maintaining answer quality?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Always send all 10 chunks to ensure completeness"
+      },
+      {
+        "key": "B",
+        "text": "Apply a reranker to score and select only the top 3 most relevant chunks before sending to the FM, reducing input tokens by ~70%"
+      },
+      {
+        "key": "C",
+        "text": "Use a shorter embedding model to generate smaller vectors"
+      },
+      {
+        "key": "D",
+        "text": "Switch to a model with a larger context window"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A reranker scores all 10 retrieved chunks for relevance to the specific query and selects the top N (e.g., 3) before passing to the FM. This reduces input tokens by ~70% (7 chunks \u00d7 500 tokens = 3,500 fewer tokens per request) while improving answer quality (less noise in context). Always sending all 10 wastes 70% of context tokens. Shorter embedding vectors are about retrieval index size, not prompt token count. A larger context window enables more tokens but doesn't reduce cost.",
+    "source_topic": "Reranker to reduce RAG context tokens sent to FM"
   }
 ]

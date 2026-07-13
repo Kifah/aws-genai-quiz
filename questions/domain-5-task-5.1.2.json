@@ -1,0 +1,32 @@
+[
+  {
+    "id": "d5-q0244", "domain": 5, "task_statement": "5.1", "topic": "Context precision vs context recall",
+    "difficulty": "hard",
+    "question_text": "During RAG evaluation, the retriever returns many chunks, but a large fraction are irrelevant to the question, diluting the context sent to the model. Which RAG evaluation metric specifically quantifies the proportion of retrieved context that is actually relevant?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Context precision — the ratio of relevant retrieved chunks to total retrieved chunks"},
+      {"key": "B", "text": "Context recall — whether all relevant context was retrieved"},
+      {"key": "C", "text": "Faithfulness — whether the answer is grounded in the context"},
+      {"key": "D", "text": "Answer relevance — whether the answer addresses the question"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Context precision measures how much of the retrieved context is relevant (relevant chunks ÷ total retrieved), directly capturing the 'too much irrelevant context' problem. Context recall measures whether all needed context was retrieved (a different failure — missing information). Faithfulness checks answer grounding; answer relevance checks question-answer alignment.",
+    "source_topic": "Context precision in RAG evaluation"
+  },
+  {
+    "id": "d5-q0245", "domain": 5, "task_statement": "5.1", "topic": "Context precision vs context recall",
+    "difficulty": "medium",
+    "question_text": "A RAG system frequently answers \"I don't have enough information\" even though the correct facts exist in the source corpus, because the retriever fails to surface the relevant passages. Which evaluation metric most directly measures this failure?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Context recall — whether all relevant context was actually retrieved (measured against a golden dataset)"},
+      {"key": "B", "text": "Context precision — the fraction of retrieved context that is relevant"},
+      {"key": "C", "text": "Retrieval latency — how fast the retrieval step is"},
+      {"key": "D", "text": "Clarity — how well-organised the answer text is"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Context recall measures whether the retriever surfaced all the relevant context that exists (typically compared against golden-dataset answers) — the exact failure when correct facts exist but are not retrieved. Context precision measures relevance of what WAS retrieved; retrieval latency is a speed metric; clarity concerns answer presentation.",
+    "source_topic": "Context recall in RAG evaluation"
+  }
+]

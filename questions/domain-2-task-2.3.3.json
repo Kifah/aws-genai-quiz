@@ -1,0 +1,77 @@
+[
+  {
+    "id": "d2-q0602", "domain": 2, "task_statement": "2.3", "topic": "Container compute selection for GenAI",
+    "difficulty": "medium",
+    "question_text": "A GenAI microservice must run in containers with NO server or cluster management, scaling to zero between sporadic requests, while still allowing a custom container image. Which compute option best matches these requirements?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Amazon ECS on AWS Fargate — serverless containers with no cluster/EC2 management"},
+      {"key": "B", "text": "Amazon EKS on self-managed EC2 nodes"},
+      {"key": "C", "text": "A single large EC2 instance running Docker manually"},
+      {"key": "D", "text": "AWS Batch array jobs"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "ECS on Fargate runs containers serverlessly — no EC2/cluster to manage, pay per running task, supports custom images — ideal for sporadic microservices. EKS on self-managed nodes adds Kubernetes and node management overhead; a manual EC2+Docker box requires you to manage the host and scaling; AWS Batch targets batch/HPC job queues, not always-available microservices.",
+    "source_topic": "ECS on Fargate for serverless GenAI containers"
+  },
+  {
+    "id": "d2-q0603", "domain": 2, "task_statement": "2.3", "topic": "Batch compute for GenAI jobs",
+    "difficulty": "medium",
+    "question_text": "A pipeline must run thousands of independent, long-running document-processing jobs that each call an FM, with automatic queueing and provisioning of compute as jobs complete. Which AWS service is purpose-built to orchestrate this batch workload?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "AWS Batch — managed batch job queueing and compute provisioning"},
+      {"key": "B", "text": "AWS App Runner"},
+      {"key": "C", "text": "Amazon API Gateway"},
+      {"key": "D", "text": "Amazon Cognito"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "AWS Batch manages job queues and dynamically provisions/scales compute (EC2 or Fargate) to run large numbers of independent batch jobs — a natural fit for bulk FM-processing pipelines. App Runner is for always-on web apps/APIs; API Gateway fronts request/response APIs; Cognito handles user authentication.",
+    "source_topic": "AWS Batch for large-scale GenAI batch jobs"
+  },
+  {
+    "id": "d2-q0604", "domain": 2, "task_statement": "2.3", "topic": "App Runner for GenAI web apps",
+    "difficulty": "easy",
+    "question_text": "A team wants to deploy a containerised GenAI web API directly from a source image with automatic load balancing, TLS, and scaling — without configuring ECS clusters, load balancers, or Kubernetes. Which service offers this simplest fully-managed container web deployment?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "AWS App Runner"},
+      {"key": "B", "text": "Amazon EKS"},
+      {"key": "C", "text": "AWS Batch"},
+      {"key": "D", "text": "Amazon EC2 Auto Scaling groups"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "AWS App Runner deploys a container or source repo as a scalable web service with built-in load balancing, TLS, and autoscaling and the least operational setup. EKS requires Kubernetes management; AWS Batch is for batch jobs, not web serving; EC2 Auto Scaling groups require you to manage instances and load balancers yourself.",
+    "source_topic": "AWS App Runner for managed container web apps"
+  },
+  {
+    "id": "d2-q0605", "domain": 2, "task_statement": "2.3", "topic": "Decoupling inference with SQS",
+    "difficulty": "medium",
+    "question_text": "During traffic spikes, an FM-processing service is overwhelmed and drops requests. The team wants to buffer incoming work so workers can process it at a sustainable rate without losing requests. Which service provides this durable buffering/decoupling?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Amazon SQS — a durable queue that buffers requests for asynchronous worker processing"},
+      {"key": "B", "text": "Amazon Route 53"},
+      {"key": "C", "text": "Amazon CloudFront"},
+      {"key": "D", "text": "AWS KMS"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Amazon SQS durably buffers requests so downstream FM workers consume them at a controlled rate, absorbing spikes and preventing loss — the classic decoupling pattern (often with a dead-letter queue for failures). Route 53 is DNS, CloudFront is a CDN, and KMS is key management — none provide request buffering.",
+    "source_topic": "Amazon SQS buffering for FM inference spikes"
+  },
+  {
+    "id": "d2-q0606", "domain": 2, "task_statement": "2.3", "topic": "Fan-out notifications with SNS",
+    "difficulty": "easy",
+    "question_text": "When an asynchronous FM document-processing job finishes, the system must notify multiple independent subscribers (an email alert, a Lambda post-processor, and an SQS queue) at once. Which service implements this pub/sub fan-out?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Amazon SNS — publish once, fan out to multiple subscribers (email, Lambda, SQS)"},
+      {"key": "B", "text": "Amazon Aurora"},
+      {"key": "C", "text": "AWS Secrets Manager"},
+      {"key": "D", "text": "Amazon OpenSearch"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Amazon SNS is a pub/sub service: a single published message fans out to many subscribers such as email, Lambda functions, and SQS queues — ideal for broadcasting job-completion events. Aurora is a database, Secrets Manager stores secrets, and OpenSearch is a search/analytics engine — none provide pub/sub fan-out.",
+    "source_topic": "Amazon SNS fan-out for job completion events"
+  }
+]

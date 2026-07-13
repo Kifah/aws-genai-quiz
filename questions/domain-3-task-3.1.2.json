@@ -1,0 +1,32 @@
+[
+  {
+    "id": "d3-q0467", "domain": 3, "task_statement": "3.1", "topic": "Encoding attacks defence",
+    "difficulty": "hard",
+    "question_text": "An attacker bypasses content filters by hiding malicious instructions inside Base64 and ROT13 encoded strings that the model decodes and then acts on. Guardrails content filters miss the encoded payload. Which defence most directly addresses this class of attack?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "A Lambda pre-processing step that decodes/normalises encoded input before it reaches the model and guardrails"},
+      {"key": "B", "text": "Raising the maxTokens limit on the model"},
+      {"key": "C", "text": "Switching from Converse to InvokeModel"},
+      {"key": "D", "text": "Enabling provisioned throughput"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Encoding attacks (Base64, ROT13, unicode tricks) smuggle instructions past filters that inspect only the surface text. A Lambda pre-processing layer that decodes and normalises input before guardrail and model evaluation exposes the hidden payload so it can be filtered. maxTokens, the API choice, and provisioned throughput are unrelated to detecting encoded malicious content.",
+    "source_topic": "Encoding-attack defence via input normalisation"
+  },
+  {
+    "id": "d3-q0468", "domain": 3, "task_statement": "3.1", "topic": "Multi-turn manipulation defence",
+    "difficulty": "hard",
+    "question_text": "Rather than a single malicious prompt, an attacker gradually steers a chatbot across many turns until it violates policy — each individual turn looking benign to per-request filters. Which defence best mitigates this multi-turn manipulation?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Session-level monitoring that analyses conversation context across turns, not just each request in isolation"},
+      {"key": "B", "text": "Only inspecting the first message of each session"},
+      {"key": "C", "text": "Increasing temperature to make responses less predictable"},
+      {"key": "D", "text": "Disabling conversation history entirely for all use cases"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Multi-turn (gradual) manipulation evades per-request filters because each turn is individually benign. Session-level monitoring analyses the accumulated conversation context and trajectory to detect steering toward policy violations. Inspecting only the first message misses the gradual attack; temperature is irrelevant to safety detection; blanket-disabling history breaks legitimate multi-turn use and still does not analyse intent.",
+    "source_topic": "Multi-turn manipulation defence via session monitoring"
+  }
+]

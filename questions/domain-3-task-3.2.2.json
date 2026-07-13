@@ -1,0 +1,77 @@
+[
+  {
+    "id": "d3-q0470", "domain": 3, "task_statement": "3.2", "topic": "Cognito user pools vs identity pools",
+    "difficulty": "medium",
+    "question_text": "A customer-facing GenAI web app needs to (1) sign users up and authenticate them, and (2) exchange the resulting tokens for temporary AWS credentials so the browser can call an API-Gateway-fronted Bedrock backend. Which Cognito components map to these two needs?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "User Pools for sign-up/authentication; Identity Pools for exchanging tokens for temporary AWS credentials"},
+      {"key": "B", "text": "Identity Pools for authentication; User Pools for AWS credentials"},
+      {"key": "C", "text": "User Pools for both authentication and AWS credential vending"},
+      {"key": "D", "text": "Neither — Cognito cannot issue AWS credentials"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Cognito User Pools handle user directory, sign-up, and authentication (issuing JWT tokens); Cognito Identity Pools (federated identities) exchange those tokens for temporary, scoped AWS credentials via STS so the client can access AWS resources. The roles are distinct — User Pools authenticate, Identity Pools authorize AWS access — making the other options incorrect.",
+    "source_topic": "Cognito User Pools vs Identity Pools"
+  },
+  {
+    "id": "d3-q0471", "domain": 3, "task_statement": "3.2", "topic": "Private Bedrock access with PrivateLink",
+    "difficulty": "medium",
+    "question_text": "A regulated workload in a private VPC must call Amazon Bedrock without any traffic traversing the public internet. Which AWS capability provides this private connectivity?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "An interface VPC endpoint (AWS PrivateLink) for Bedrock"},
+      {"key": "B", "text": "An internet gateway with a public route"},
+      {"key": "C", "text": "A NAT gateway to the public Bedrock endpoint"},
+      {"key": "D", "text": "Amazon CloudFront in front of Bedrock"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "An interface VPC endpoint powered by AWS PrivateLink gives private, in-VPC connectivity to Bedrock so traffic never leaves the AWS network. An internet gateway and a NAT gateway both route to the public internet; CloudFront is a CDN and does not create private VPC connectivity to Bedrock.",
+    "source_topic": "PrivateLink interface VPC endpoint for Bedrock"
+  },
+  {
+    "id": "d3-q0472", "domain": 3, "task_statement": "3.2", "topic": "Security Groups vs Network ACLs",
+    "difficulty": "medium",
+    "question_text": "For the subnet and instances hosting a self-managed GenAI inference service, a team must apply STATEFUL instance-level filtering and separately a STATELESS subnet-level control. Which pairing is correct?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Security Groups = stateful, instance-level; Network ACLs = stateless, subnet-level"},
+      {"key": "B", "text": "Security Groups = stateless, subnet-level; Network ACLs = stateful, instance-level"},
+      {"key": "C", "text": "Both are stateful and operate at the subnet level"},
+      {"key": "D", "text": "Both are stateless and operate at the instance level"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Security Groups are stateful (return traffic is automatically allowed) and act at the instance/ENI level; Network ACLs are stateless (you must allow both directions explicitly) and act at the subnet level. The other options invert or conflate these properties.",
+    "source_topic": "Security Groups vs Network ACLs"
+  },
+  {
+    "id": "d3-q0473", "domain": 3, "task_statement": "3.2", "topic": "Protecting public GenAI endpoints with WAF and Shield",
+    "difficulty": "medium",
+    "question_text": "A public-facing GenAI API endpoint must be protected from common web exploits and application-layer abuse (e.g. injection patterns, rate-based flooding) at the edge. Which AWS service provides these configurable Layer-7 protections?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "AWS WAF with managed and rate-based rules"},
+      {"key": "B", "text": "AWS KMS"},
+      {"key": "C", "text": "Amazon Macie"},
+      {"key": "D", "text": "AWS Secrets Manager"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "AWS WAF inspects HTTP(S) requests at Layer 7 and enforces managed rule groups and rate-based rules to block common exploits and abusive traffic on API Gateway/CloudFront/ALB-fronted endpoints. KMS manages encryption keys, Macie discovers sensitive data in S3, and Secrets Manager stores secrets — none provide Layer-7 request filtering.",
+    "source_topic": "AWS WAF for public GenAI endpoint protection"
+  },
+  {
+    "id": "d3-q0474", "domain": 3, "task_statement": "3.2", "topic": "DDoS protection with AWS Shield",
+    "difficulty": "easy",
+    "question_text": "Which AWS service is specifically designed to protect internet-facing GenAI endpoints against distributed denial-of-service (DDoS) attacks, with an Advanced tier offering enhanced mitigations and cost protection?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "AWS Shield (Standard and Advanced)"},
+      {"key": "B", "text": "Amazon GuardDuty"},
+      {"key": "C", "text": "AWS Config"},
+      {"key": "D", "text": "Amazon Inspector"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "AWS Shield provides managed DDoS protection; Shield Standard is automatic, and Shield Advanced adds enhanced mitigations, 24/7 response, and cost protection. GuardDuty is threat detection, AWS Config tracks resource configuration/compliance, and Inspector scans for software vulnerabilities — none are dedicated DDoS mitigation services.",
+    "source_topic": "AWS Shield for DDoS protection"
+  }
+]

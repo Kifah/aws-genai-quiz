@@ -1,0 +1,212 @@
+[
+  {
+    "id": "d1-q0603", "domain": 1, "task_statement": "1.6", "topic": "Temperature and sampling parameters",
+    "difficulty": "medium",
+    "question_text": "A legal-document summarisation feature must produce highly deterministic, repeatable outputs for the same input so that reviewers see consistent results. Which inference parameter setting best supports this requirement?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Set temperature near 0 (e.g. 0.0-0.2) to minimise randomness"},
+      {"key": "B", "text": "Set temperature to 1.0 for balanced creativity"},
+      {"key": "C", "text": "Increase top-K to the maximum allowed value"},
+      {"key": "D", "text": "Remove the maxTokens limit entirely"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Low temperature makes token selection near-greedy, producing deterministic, repeatable output ideal for factual/legal summarisation. Temperature 1.0 increases variability; a high top-K widens the candidate token pool and adds diversity; removing maxTokens affects length, not determinism.",
+    "source_topic": "Temperature and sampling parameters for deterministic output"
+  },
+  {
+    "id": "d1-q0604", "domain": 1, "task_statement": "1.6", "topic": "Temperature and sampling parameters",
+    "difficulty": "easy",
+    "question_text": "Which pair of inference parameters both influence the randomness/diversity of an FM's token selection (as opposed to output length)?",
+    "question_type": "multi",
+    "options": [
+      {"key": "A", "text": "Temperature"},
+      {"key": "B", "text": "Top-P (nucleus sampling)"},
+      {"key": "C", "text": "maxTokens"},
+      {"key": "D", "text": "Stop sequences"}
+    ],
+    "correct_answers": ["A", "B"],
+    "explanation": "Temperature and Top-P both control the randomness/diversity of token sampling. maxTokens caps output length, and stop sequences halt generation at specific strings — neither changes the sampling distribution's diversity.",
+    "source_topic": "Temperature and Top-P sampling diversity"
+  },
+  {
+    "id": "d1-q0605", "domain": 1, "task_statement": "1.6", "topic": "Structured output with JSON schema",
+    "difficulty": "medium",
+    "question_text": "A downstream service must parse the FM's response programmatically. The model occasionally wraps its JSON in prose (\"Here is your answer: {...}\"), breaking the parser. Which approach most reliably forces clean, schema-conformant structured output?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Define the required JSON schema in the prompt and use the Converse API tool-use / structured output to constrain the response"},
+      {"key": "B", "text": "Raise temperature so the model is more creative with formatting"},
+      {"key": "C", "text": "Ask the model politely to 'try to return JSON'"},
+      {"key": "D", "text": "Increase maxTokens so the JSON is never truncated"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Providing an explicit JSON schema and using the Converse API's tool-use/structured-output mechanism constrains the model to emit only schema-conformant JSON, eliminating wrapper prose. Higher temperature worsens formatting consistency; a vague polite request is unreliable; more tokens prevents truncation but not prose wrapping.",
+    "source_topic": "Structured output with JSON schema via Converse API"
+  },
+  {
+    "id": "d1-q0606", "domain": 1, "task_statement": "1.6", "topic": "Bedrock Prompt Management for governance",
+    "difficulty": "medium",
+    "question_text": "An enterprise needs an audit trail of who changed each production prompt and the ability to roll back to a previously approved version. Which Amazon Bedrock capability directly provides this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Bedrock Prompt Management versioning combined with CloudTrail logging of prompt changes"},
+      {"key": "B", "text": "Storing prompts as plain strings in Lambda environment variables"},
+      {"key": "C", "text": "Hard-coding prompts in application source only"},
+      {"key": "D", "text": "Setting a higher guardrail content-filter threshold"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Bedrock Prompt Management versions every prompt edit and integrates with CloudTrail so changes are auditable and rollback to an approved version is possible. Lambda env vars and hard-coded prompts provide no FM-native versioning or approval audit; guardrail thresholds are a safety control, not prompt governance.",
+    "source_topic": "Bedrock Prompt Management versioning and audit"
+  },
+  {
+    "id": "d1-q0607", "domain": 1, "task_statement": "1.6", "topic": "System prompt best practices",
+    "difficulty": "medium",
+    "question_text": "A support assistant keeps drifting off-role after several conversation turns, occasionally answering questions outside its domain. Which practice most improves adherence to its defined role across a long conversation?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Place clear, specific role and boundary instructions in the system prompt and keep them present for every turn"},
+      {"key": "B", "text": "Only include the role instruction in the very first user message"},
+      {"key": "C", "text": "Lower maxTokens so the model cannot elaborate"},
+      {"key": "D", "text": "Increase temperature to make responses more varied"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "The system prompt carries persistent behavioural instructions applied on every turn; making role and boundaries explicit there sustains adherence across long conversations. A first-user-turn instruction can be overridden by later turns; reducing maxTokens only truncates output; higher temperature increases drift.",
+    "source_topic": "System prompt persistence for role adherence"
+  },
+  {
+    "id": "d1-q0608", "domain": 1, "task_statement": "1.6", "topic": "Prompt template parameterisation",
+    "difficulty": "easy",
+    "question_text": "A single support-response template must be reused across three product lines by substituting the product name and tone at runtime. Which Bedrock Prompt Management feature enables this without duplicating the template?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Prompt variables (named placeholders filled at invocation time)"},
+      {"key": "B", "text": "Provisioned throughput"},
+      {"key": "C", "text": "Cross-region inference"},
+      {"key": "D", "text": "Guardrail denied topics"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Prompt variables let one template accept named placeholders (e.g. {{product}}, {{tone}}) substituted at invocation time, so a single template serves many contexts. Provisioned throughput and cross-region inference are capacity/routing features; denied topics are a safety control.",
+    "source_topic": "Prompt variables for template reuse"
+  },
+  {
+    "id": "d1-q0609", "domain": 1, "task_statement": "1.6", "topic": "Prompt regression testing",
+    "difficulty": "medium",
+    "question_text": "Before promoting a modified prompt to production, a team wants to confirm it has not degraded answer quality on a fixed set of representative questions. Which practice achieves this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Run the new prompt against a golden dataset and compare scores to the current baseline before deploying"},
+      {"key": "B", "text": "Deploy directly to 100% of traffic and watch for complaints"},
+      {"key": "C", "text": "Only test the new prompt with a single hand-picked easy question"},
+      {"key": "D", "text": "Rely on temperature 0 to guarantee quality"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Prompt regression testing runs a fixed golden dataset through the new prompt and compares quality scores against the established baseline, catching regressions before deployment. Full-traffic deployment risks user-facing degradation; a single easy question is not representative; temperature 0 controls determinism, not quality.",
+    "source_topic": "Prompt regression testing with golden datasets"
+  },
+  {
+    "id": "d1-q0610", "domain": 1, "task_statement": "1.6", "topic": "Prompt Flows for orchestration",
+    "difficulty": "medium",
+    "question_text": "A workflow must classify an incoming request, then branch: factual queries go to a Knowledge Base retrieval step, creative queries go straight to generation, and off-topic queries get a refusal template. The team wants a low-code, visual way to build this on Bedrock. Which capability fits best?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Amazon Bedrock Prompt Flows with a condition node for branching"},
+      {"key": "B", "text": "A single monolithic prompt with all logic inline"},
+      {"key": "C", "text": "Amazon SQS fan-out"},
+      {"key": "D", "text": "Amazon Bedrock Provisioned Throughput"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Bedrock Prompt Flows provides a visual, low-code builder with input, prompt, Knowledge Base, condition (branching), and Lambda nodes — exactly matching classify-then-branch orchestration. A monolithic prompt is brittle and hard to maintain; SQS is a queue, not an FM orchestration builder; provisioned throughput is a capacity feature.",
+    "source_topic": "Bedrock Prompt Flows conditional branching"
+  },
+  {
+    "id": "d1-q0611", "domain": 1, "task_statement": "1.6", "topic": "Few-shot prompting for structured extraction",
+    "difficulty": "medium",
+    "question_text": "An extraction task must return entities in a precise, consistent format, but zero-shot prompting yields inconsistent field names and ordering. Which prompting technique most directly stabilises the output format?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Few-shot prompting — include 2-5 example input/output pairs showing the exact desired format"},
+      {"key": "B", "text": "Raise temperature to encourage variety"},
+      {"key": "C", "text": "Remove all instructions and let the model infer the format"},
+      {"key": "D", "text": "Switch to a smaller, faster model"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Few-shot prompting supplies concrete input/output examples that demonstrate the exact field names, ordering, and structure, strongly anchoring the model's output format. Higher temperature increases variability; removing instructions worsens consistency; model size does not by itself fix format drift.",
+    "source_topic": "Few-shot prompting for consistent extraction format"
+  },
+  {
+    "id": "d1-q0612", "domain": 1, "task_statement": "1.6", "topic": "Chain-of-thought prompting",
+    "difficulty": "easy",
+    "question_text": "Which instruction is the canonical way to elicit chain-of-thought reasoning from a foundation model on a multi-step problem?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "\"Let's think step by step\" — instruct the model to show intermediate reasoning before the final answer"},
+      {"key": "B", "text": "\"Answer in one word only\""},
+      {"key": "C", "text": "\"Ignore all prior context\""},
+      {"key": "D", "text": "\"Respond with the highest temperature\""}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Chain-of-thought is elicited by asking the model to reason step by step, exposing intermediate steps that improve accuracy on multi-step tasks. A one-word instruction suppresses reasoning; ignoring context harms grounding; temperature is a numeric parameter, not a prompt instruction that produces reasoning.",
+    "source_topic": "Chain-of-thought elicitation"
+  },
+  {
+    "id": "d1-q0613", "domain": 1, "task_statement": "1.6", "topic": "Conversation history storage",
+    "difficulty": "medium",
+    "question_text": "A multi-turn chatbot must persist conversation history across sessions so a returning user's context is available, with low-latency reads keyed by session ID. Which AWS service is the most appropriate store for this session state?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Amazon DynamoDB keyed by session ID"},
+      {"key": "B", "text": "Amazon S3 Glacier Deep Archive"},
+      {"key": "C", "text": "An OpenSearch vector index of raw turns"},
+      {"key": "D", "text": "CloudWatch Logs"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "DynamoDB provides low-latency, key-value access ideal for storing and retrieving conversation state by session ID. Glacier Deep Archive has retrieval latencies of hours; a vector index is for semantic search, not session state; CloudWatch Logs is for observability, not application state reads.",
+    "source_topic": "Conversation history storage in DynamoDB"
+  },
+  {
+    "id": "d1-q0614", "domain": 1, "task_statement": "1.6", "topic": "Clarification workflows",
+    "difficulty": "medium",
+    "question_text": "A user query is ambiguous (\"book it for tomorrow\" — book what?). Instead of guessing, the assistant should ask a follow-up question. Which prompt-engineering practice implements this behaviour?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Instruct the model in the system prompt to ask a clarifying question when the request is ambiguous or missing required parameters"},
+      {"key": "B", "text": "Always assume the most likely intent and proceed without asking"},
+      {"key": "C", "text": "Return an empty response for ambiguous input"},
+      {"key": "D", "text": "Lower maxTokens so the model cannot ask questions"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "A clarification workflow is enforced via system-prompt instructions directing the model to request missing details before acting, reducing wrong actions on ambiguous input. Guessing risks incorrect outcomes; empty responses are poor UX; reducing maxTokens does not create clarification behaviour.",
+    "source_topic": "Clarification workflows via system prompt"
+  },
+  {
+    "id": "d1-q0615", "domain": 1, "task_statement": "1.6", "topic": "Tree-of-Thought prompting",
+    "difficulty": "hard",
+    "question_text": "A GenAI feature must solve complex planning problems (e.g. multi-constraint scheduling) where a single linear chain-of-thought often commits early to a bad path and cannot recover. Which prompting technique explicitly explores multiple reasoning branches and evaluates them before selecting a final answer?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Tree-of-Thought — generate and evaluate multiple reasoning paths, then choose the most promising branch"},
+      {"key": "B", "text": "Zero-shot prompting with a higher maxTokens limit"},
+      {"key": "C", "text": "Few-shot prompting with two examples"},
+      {"key": "D", "text": "Increasing temperature to 1.0 for more creative single answers"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Tree-of-Thought (ToT) extends chain-of-thought by branching into several candidate reasoning paths, scoring/evaluating them, and pursuing the best — ideal for complex problems with multiple viable approaches where a single linear chain can commit to a dead end. Zero-shot with more tokens is still one linear path; few-shot supplies format examples but not multi-path exploration; raising temperature just adds randomness to one path.",
+    "source_topic": "Tree-of-Thought multi-path reasoning"
+  },
+  {
+    "id": "d1-q0616", "domain": 1, "task_statement": "1.6", "topic": "Self-consistency prompting",
+    "difficulty": "medium",
+    "question_text": "A math/logic assistant using chain-of-thought sometimes produces a wrong final answer because a single reasoning trace makes an arithmetic slip. Without changing the model, which prompting strategy improves reliability by reducing the impact of any one faulty trace?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Self-consistency — sample multiple independent chain-of-thought responses and take the majority-vote answer"},
+      {"key": "B", "text": "Set temperature to 0 and generate exactly one response"},
+      {"key": "C", "text": "Remove the chain-of-thought instruction to shorten output"},
+      {"key": "D", "text": "Add more denied topics to the guardrail"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Self-consistency generates several independent reasoning paths (with some sampling temperature) and selects the most frequent final answer, so a single slip is outvoted by the correct majority — measurably improving accuracy on reasoning tasks. Temperature 0 with one response gives no diversity to vote over; removing CoT hurts reasoning quality; guardrail denied topics are a safety control, unrelated to arithmetic reliability.",
+    "source_topic": "Self-consistency majority-vote over reasoning paths"
+  }
+]

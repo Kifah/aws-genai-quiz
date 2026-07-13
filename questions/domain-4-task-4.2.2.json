@@ -1,0 +1,17 @@
+[
+  {
+    "id": "d4-q0343", "domain": 4, "task_statement": "4.2", "topic": "Latency optimisation via connection reuse and warm capacity",
+    "difficulty": "medium",
+    "question_text": "A Lambda-based Bedrock service suffers intermittent high latency: some invocations pay a cold-start penalty, and per-request TLS handshakes to Bedrock add overhead under load. Which two techniques most directly reduce these latency sources?",
+    "question_type": "multi",
+    "options": [
+      {"key": "A", "text": "Enable Lambda provisioned concurrency to eliminate cold starts on the critical path"},
+      {"key": "B", "text": "Reuse a pooled Bedrock client/HTTP connection across invocations instead of creating one per request"},
+      {"key": "C", "text": "Increase the model temperature"},
+      {"key": "D", "text": "Add more denied topics to the guardrail"}
+    ],
+    "correct_answers": ["A", "B"],
+    "explanation": "Provisioned concurrency keeps Lambda execution environments warm, removing cold-start latency for latency-sensitive endpoints, and reusing a pooled client/connection (initialised outside the handler) avoids repeated TLS/connection setup to Bedrock. Temperature affects output randomness, not latency; guardrail denied topics are a safety control.",
+    "source_topic": "Connection pooling and provisioned concurrency for latency"
+  }
+]

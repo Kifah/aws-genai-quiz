@@ -1,0 +1,47 @@
+[
+  {
+    "id": "d1-q0620", "domain": 1, "task_statement": "1.2", "topic": "Image generation FM selection",
+    "difficulty": "medium",
+    "question_text": "A marketing application must generate original images from text prompts using foundation models available on Amazon Bedrock. Which two model families are appropriate choices for text-to-image generation on Bedrock?",
+    "question_type": "multi",
+    "options": [
+      {"key": "A", "text": "Amazon Titan Image Generator"},
+      {"key": "B", "text": "Stable Diffusion (Stability AI)"},
+      {"key": "C", "text": "Amazon Titan Text Embeddings"},
+      {"key": "D", "text": "Cohere Command (text generation)"}
+    ],
+    "correct_answers": ["A", "B"],
+    "explanation": "Amazon Titan Image Generator and Stability AI's Stable Diffusion models on Bedrock both perform text-to-image generation. Titan Text Embeddings produces vectors for retrieval (not images), and Cohere Command is a text-generation model — neither generates images.",
+    "source_topic": "Text-to-image FMs on Bedrock (Titan Image, Stable Diffusion)"
+  },
+  {
+    "id": "d1-q0621", "domain": 1, "task_statement": "1.2", "topic": "Video generation FM selection",
+    "difficulty": "medium",
+    "question_text": "A team needs to generate short video clips from text/image prompts using an Amazon foundation model on Bedrock. Which model is designed for video generation?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Amazon Nova Reel"},
+      {"key": "B", "text": "Amazon Titan Text Express"},
+      {"key": "C", "text": "Amazon Titan Multimodal Embeddings"},
+      {"key": "D", "text": "Cohere Embed"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Amazon Nova Reel is a video-generation model in the Amazon Nova family, producing short video clips from text/image prompts. Titan Text Express generates text, Titan Multimodal Embeddings produces vectors for search, and Cohere Embed is an embedding model — none generate video.",
+    "source_topic": "Amazon Nova Reel for video generation"
+  },
+  {
+    "id": "d1-q0622", "domain": 1, "task_statement": "1.2", "topic": "Multimodal generation model matching",
+    "difficulty": "easy",
+    "question_text": "Match the modality to the correct Amazon model: a solution must (1) generate marketing images and (2) transcribe spoken audio to text. Which pairing is correct?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Images → Amazon Titan Image Generator; Audio-to-text → Amazon Transcribe"},
+      {"key": "B", "text": "Images → Amazon Transcribe; Audio-to-text → Titan Image Generator"},
+      {"key": "C", "text": "Images → Amazon Polly; Audio-to-text → Amazon Rekognition"},
+      {"key": "D", "text": "Images → Amazon Comprehend; Audio-to-text → Amazon Translate"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Titan Image Generator produces images from text, and Amazon Transcribe converts speech audio to text. Polly is text-to-speech (the reverse), Rekognition analyzes images/video, Comprehend does NLP on text, and Translate converts between languages — none match the stated image-generation and speech-to-text needs except option A.",
+    "source_topic": "Modality-to-service matching (Titan Image, Transcribe)"
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "id": "d1-q0636", "domain": 1, "task_statement": "1.2", "topic": "Cross-region inference profile first-use permission",
+    "difficulty": "hard",
+    "question_text": "A developer in eu-west-2 tries to invoke a Claude cross-region inference profile (eu.anthropic.claude-*) for the first time in their account and receives an access error despite having bedrock:InvokeModel permission. What additional IAM permission is required?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "aws-marketplace:Subscribe" },
+      { "key": "B", "text": "iam:PassRole" },
+      { "key": "C", "text": "bedrock:CreateModelInvocationJob" },
+      { "key": "D", "text": "sts:AssumeRole" }
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Cross-region inference profiles (eu.* or us.* prefix) require aws-marketplace:Subscribe for the first invocation in an account. bedrock:InvokeModel alone is insufficient. iam:PassRole is for service role delegation, CreateModelInvocationJob is for batch inference, and sts:AssumeRole is for role switching — none resolve this first-use cross-region profile access issue.",
+    "source_topic": "Cross-region inference profile requires aws-marketplace:Subscribe"
+  },
+  {
+    "id": "d1-q0637", "domain": 1, "task_statement": "1.2", "topic": "RetrieveAndGenerate rejects cross-region inference profile",
+    "difficulty": "hard",
+    "question_text": "A developer uses a cross-region inference profile ARN (eu.anthropic.claude-*) as the modelId in a RetrieveAndGenerate API call and receives a ValidationException. What is the cause?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "RetrieveAndGenerate only accepts direct foundation model ARNs, not cross-region inference profile IDs" },
+      { "key": "B", "text": "The model is not available in the Region" },
+      { "key": "C", "text": "The Knowledge Base has not synced" },
+      { "key": "D", "text": "The IAM role lacks bedrock:InvokeModel" }
+    ],
+    "correct_answers": ["A"],
+    "explanation": "RetrieveAndGenerate validates the model ARN format and rejects cross-region inference profile IDs (eu.* or us.* prefix). You must provide a direct foundation model ARN (arn:aws:bedrock:REGION::foundation-model/MODEL_ID). Model availability issues would be a different error; sync problems affect retrieval not model validation; IAM issues return AccessDeniedException, not ValidationException.",
+    "source_topic": "RetrieveAndGenerate rejects cross-region inference profile ARN"
+  },
+  {
+    "id": "d1-q0638", "domain": 1, "task_statement": "1.2", "topic": "Catastrophic forgetting",
+    "difficulty": "medium",
+    "question_text": "A company fine-tunes a foundation model on domain-specific data and notices it now performs significantly worse on general tasks it previously handled well. What is this phenomenon called?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Catastrophic forgetting" },
+      { "key": "B", "text": "Data poisoning" },
+      { "key": "C", "text": "Model collapse" },
+      { "key": "D", "text": "Overfitting" }
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Catastrophic forgetting occurs when fine-tuning on new data causes the model to lose performance on previously learned tasks — a key reason RAG is preferred over fine-tuning for dynamic knowledge. Data poisoning involves malicious training data; model collapse is losing diversity from synthetic data training; overfitting is poor generalisation within the same domain.",
+    "source_topic": "Catastrophic forgetting in fine-tuned models"
+  }
+]

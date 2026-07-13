@@ -392,5 +392,389 @@
     ],
     "explanation": "Amazon Neptune Analytics adds vector search to Neptune's graph engine, enabling queries that traverse relationships (graph) and simultaneously find semantically similar nodes (vector). This is uniquely suited to knowledge graph RAG use cases. DynamoDB is a key-value store. Redshift is a columnar warehouse. Kinesis is a streaming ingest service.",
     "source_topic": "Neptune Analytics, graph vector search, knowledge graph RAG"
+  },
+  {
+    "id": "d1-q0564",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "S3 Vectors for infrequent large-scale search",
+    "difficulty": "medium",
+    "question_text": "A company has 500 million document embeddings that are queried infrequently (monthly batch jobs). They need the lowest possible storage cost for these vectors. Which vector store is MOST appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon MemoryDB for Redis"
+      },
+      {
+        "key": "B",
+        "text": "Amazon OpenSearch Service (provisioned)"
+      },
+      {
+        "key": "C",
+        "text": "Amazon S3 Vectors"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Aurora PostgreSQL with pgvector"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Amazon S3 Vectors is the lowest-cost vector storage option on AWS, designed for large, cold datasets where queries are infrequent. It leverages S3's economics for bulk storage. MemoryDB is in-memory and optimised for ultra-low latency (and is most expensive at scale). OpenSearch provisioned clusters have ongoing compute costs regardless of query frequency. Aurora pgvector is suited for small/medium relational datasets, not 500M vectors at minimal cost.",
+    "source_topic": "S3 Vectors for cold, large-scale vector storage"
+  },
+  {
+    "id": "d1-q0565",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "OpenSearch HNSW vs IVF algorithm selection",
+    "difficulty": "hard",
+    "question_text": "A search team is configuring OpenSearch for a RAG system with 50 million embeddings. They prioritise low query latency and high recall over memory efficiency. Which approximate nearest-neighbour (ANN) algorithm should they choose?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "IVF (Inverted File Index) \u2014 optimised for minimal memory use"
+      },
+      {
+        "key": "B",
+        "text": "HNSW (Hierarchical Navigable Small World) \u2014 optimised for low latency and high recall"
+      },
+      {
+        "key": "C",
+        "text": "BM25 \u2014 keyword-based sparse retrieval"
+      },
+      {
+        "key": "D",
+        "text": "k-Means clustering with centroid lookup"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "HNSW is the recommended ANN algorithm when low latency and high recall are the primary goals. It uses a multi-layer graph structure that enables fast, accurate approximate search at the cost of higher memory usage. IVF uses an inverted file structure that is more memory-efficient but trades some recall and latency. BM25 is a keyword/sparse retrieval algorithm, not an ANN algorithm. k-Means centroid lookup is not a standard OpenSearch algorithm.",
+    "source_topic": "OpenSearch HNSW vs IVF for vector search"
+  },
+  {
+    "id": "d1-q0566",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "OpenSearch HNSW vs IVF algorithm selection",
+    "difficulty": "hard",
+    "question_text": "A platform engineer is configuring OpenSearch vector search for a dataset of 2 billion embeddings. Memory is constrained and they can tolerate slightly lower recall in exchange for significant memory savings. Which ANN algorithm is BEST suited?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "HNSW \u2014 high recall but memory-intensive"
+      },
+      {
+        "key": "B",
+        "text": "IVF (Inverted File) \u2014 lower memory with tunable recall-speed trade-off"
+      },
+      {
+        "key": "C",
+        "text": "Exact nearest-neighbour \u2014 highest accuracy but slowest"
+      },
+      {
+        "key": "D",
+        "text": "Random projection \u2014 fast but lowest recall"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "IVF is designed for very large datasets where memory savings are important. It partitions the vector space into clusters (inverted file lists) and only searches within the nearest clusters at query time. This reduces memory compared to HNSW and allows the recall/speed trade-off to be tuned via the nprobe parameter. HNSW would require significantly more RAM for 2B vectors. Exact NN becomes impractically slow at this scale.",
+    "source_topic": "IVF for memory-constrained large vector datasets"
+  },
+  {
+    "id": "d1-q0567",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "OpenSearch Neural Plugin",
+    "difficulty": "medium",
+    "question_text": "A team wants OpenSearch to accept raw text queries and automatically generate embeddings internally using Amazon Bedrock embedding models \u2014 without writing any client-side embedding code. Which OpenSearch feature enables this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "OpenSearch k-NN plugin with manual vector submission"
+      },
+      {
+        "key": "B",
+        "text": "OpenSearch Neural Plugin with a Bedrock ML connector"
+      },
+      {
+        "key": "C",
+        "text": "Bedrock Knowledge Base with OpenSearch Serverless backing store"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Comprehend topic modelling integrated with OpenSearch"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "The OpenSearch Neural Plugin allows OpenSearch to call external embedding models (via ML connectors, including Bedrock) as part of ingest and search pipelines. This means raw text goes in, OpenSearch generates the embedding internally, and returns results \u2014 no client-side embedding code needed. The k-NN plugin requires the client to pre-compute and submit vectors. Bedrock Knowledge Bases manage the full pipeline but the client doesn't control OpenSearch internals. Comprehend does NLP, not embedding generation.",
+    "source_topic": "OpenSearch Neural Plugin for text-in/vector-out"
+  },
+  {
+    "id": "d1-q0568",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "Metadata for search precision",
+    "difficulty": "medium",
+    "question_text": "A multi-tenant SaaS company stores all customer documents in a single Bedrock Knowledge Base. They need to ensure that when a user from Company A queries the knowledge base, only Company A's documents are retrieved. What is the CORRECT mechanism for this in Bedrock Knowledge Bases?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a separate Knowledge Base per tenant"
+      },
+      {
+        "key": "B",
+        "text": "Use IAM conditions to restrict Bedrock invocations by tenant"
+      },
+      {
+        "key": "C",
+        "text": "Attach a metadata.json file to each document with a tenant_id attribute, then apply metadata filters at query time"
+      },
+      {
+        "key": "D",
+        "text": "Use Bedrock Guardrails denied topics to restrict cross-tenant content"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Bedrock Knowledge Bases support metadata.json files that attach key-value attributes (like tenant_id) to document chunks. At query time, you apply a metadata filter (e.g., tenant_id = 'company-a') to restrict retrieval to only the matching chunks. This enables multi-tenant isolation within a single knowledge base. Separate KBs per tenant (A) works but is operationally expensive at scale. IAM conditions control API access, not which documents are retrieved. Guardrails denied topics filter generated content, not retrieval.",
+    "source_topic": "metadata.json for multi-tenant Knowledge Base filtering"
+  },
+  {
+    "id": "d1-q0569",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "MemoryDB for ultra-fast vector search",
+    "difficulty": "medium",
+    "question_text": "A real-time recommender system needs to perform vector similarity search with sub-millisecond latency on a dataset of 10 million embeddings. Cost is secondary to latency. Which AWS vector store is MOST appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon S3 Vectors"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Aurora PostgreSQL with pgvector"
+      },
+      {
+        "key": "C",
+        "text": "Amazon MemoryDB"
+      },
+      {
+        "key": "D",
+        "text": "Amazon OpenSearch Serverless"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Amazon MemoryDB is a durable, in-memory database with native vector search capabilities, optimised for ultra-low latency (sub-millisecond) queries at high throughput. All data resides in memory, which is what enables sub-millisecond performance. S3 Vectors is lowest cost but has disk-based latency. Aurora pgvector is disk-based relational storage with moderate vector search latency. OpenSearch Serverless offers good latency but not sub-millisecond for in-memory access patterns.",
+    "source_topic": "MemoryDB for ultra-low-latency vector search"
+  },
+  {
+    "id": "d1-q0570",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "DynamoDB for session state vs vector search",
+    "difficulty": "easy",
+    "question_text": "A developer is designing a conversational AI application and needs to store conversation history (session state) that is tied to a user session ID and can be automatically deleted after 24 hours of inactivity. Which AWS service is MOST appropriate for this requirement?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon OpenSearch Serverless"
+      },
+      {
+        "key": "B",
+        "text": "Amazon S3 with lifecycle rules"
+      },
+      {
+        "key": "C",
+        "text": "Amazon DynamoDB with TTL (Time-to-Live) attribute"
+      },
+      {
+        "key": "D",
+        "text": "Amazon MemoryDB"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "DynamoDB with TTL is the standard pattern for storing session state (conversation history) keyed by session/conversation ID. TTL automatically deletes items after a configurable expiry time \u2014 no cron job or Lambda cleanup needed. OpenSearch is a search engine optimised for querying, not key-value session storage. S3 lifecycle rules work for objects but add complexity for per-session expiry. MemoryDB is in-memory and expensive for this use case; TTL management requires more configuration than DynamoDB TTL.",
+    "source_topic": "DynamoDB TTL for session state and chat history"
+  },
+  {
+    "id": "d1-q0571",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "Vector store backends for Bedrock KB",
+    "difficulty": "medium",
+    "question_text": "A team is selecting a vector store backend for a new Bedrock Knowledge Base. They already run an Aurora PostgreSQL cluster and want to add vector search capability with minimal new infrastructure. Which backing store is MOST appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon OpenSearch Serverless"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Neptune Analytics"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Aurora PostgreSQL with pgvector extension"
+      },
+      {
+        "key": "D",
+        "text": "Amazon S3 Vectors"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "If the team already runs Aurora PostgreSQL, enabling the pgvector extension adds vector similarity search to the existing database with minimal new infrastructure \u2014 no new service to provision. OpenSearch Serverless would require a new cluster. Neptune Analytics is for graph + vector workloads. S3 Vectors is cheapest for cold/infrequent workloads, not active transactional databases.",
+    "source_topic": "Aurora pgvector for existing PostgreSQL deployments"
+  },
+  {
+    "id": "d1-q0572",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "OpenSearch sharding for scale",
+    "difficulty": "hard",
+    "question_text": "An OpenSearch cluster serving a RAG system is experiencing high query latency as the vector index grows to 200 million embeddings. The cluster currently has 1 primary shard. What is the BEST remediation?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the ef_search parameter to improve recall"
+      },
+      {
+        "key": "B",
+        "text": "Switch from HNSW to exact nearest-neighbour search"
+      },
+      {
+        "key": "C",
+        "text": "Redistribute the index across multiple shards to parallelise search"
+      },
+      {
+        "key": "D",
+        "text": "Add more replica shards without changing the number of primary shards"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "A single primary shard is the bottleneck for a 200M-vector index because all queries hit that single shard sequentially. Distributing the index across multiple primary shards allows the query to fan out and execute in parallel across nodes, reducing latency. Increasing ef_search improves recall accuracy but increases latency. Exact NN would be even slower. Adding replica shards improves read throughput and availability but doesn't help if a single primary shard is the bottleneck.",
+    "source_topic": "OpenSearch sharding strategy for large vector indices"
+  },
+  {
+    "id": "d1-q0573",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "Vector store synchronisation",
+    "difficulty": "medium",
+    "question_text": "A company uses DynamoDB as its primary data store for product catalogue items. When a product is updated, the corresponding vector embedding in an OpenSearch index must be updated within seconds. Which pattern achieves this with the LEAST operational complexity?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run a nightly Glue ETL job to re-embed and re-index all products"
+      },
+      {
+        "key": "B",
+        "text": "Use DynamoDB Streams to trigger a Lambda function that re-embeds and updates the OpenSearch index"
+      },
+      {
+        "key": "C",
+        "text": "Manually update OpenSearch whenever a product is changed via the admin console"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon EventBridge scheduled rules to poll DynamoDB for changes every 5 minutes"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "DynamoDB Streams captures item-level changes in real time and can trigger a Lambda function for each change. The Lambda re-embeds the updated product description and updates the OpenSearch index, achieving near-real-time sync. Nightly Glue jobs introduce up to 24 hours of staleness. Manual console updates are not scalable. EventBridge scheduled polling every 5 minutes introduces unnecessary delay and complexity.",
+    "source_topic": "DynamoDB Streams \u2192 Lambda \u2192 OpenSearch real-time sync"
+  },
+  {
+    "id": "d1-q0574",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "Neptune Analytics for graph-based RAG",
+    "difficulty": "hard",
+    "question_text": "A legal tech company wants to build a RAG system that not only retrieves documents by semantic similarity but also traverses relationships between legal entities, cases, and citations (graph relationships). Which vector store backing for Bedrock Knowledge Bases BEST supports this hybrid graph + vector search requirement?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon OpenSearch Serverless"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Aurora PostgreSQL with pgvector"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Neptune Analytics"
+      },
+      {
+        "key": "D",
+        "text": "Amazon S3 Vectors"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Amazon Neptune Analytics supports both graph traversal (relationships between entities) and vector similarity search \u2014 making it the only AWS-native backing store that can handle the hybrid graph + vector requirement. OpenSearch and Aurora pgvector support vector search but not native graph traversal. S3 Vectors is purely a bulk vector store with no graph capabilities.",
+    "source_topic": "Neptune Analytics for graph + vector hybrid RAG"
+  },
+  {
+    "id": "d1-q0575",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "Avoid cluster management with OpenSearch Serverless",
+    "difficulty": "medium",
+    "question_text": "A startup team wants to add vector search to their RAG pipeline using Amazon OpenSearch but does not want to manage shard counts, replica configuration, or cluster sizing. Which OpenSearch option minimises operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon OpenSearch Service (provisioned) with auto-scaling enabled"
+      },
+      {
+        "key": "B",
+        "text": "Amazon OpenSearch Serverless"
+      },
+      {
+        "key": "C",
+        "text": "OpenSearch on Amazon EC2 (self-managed)"
+      },
+      {
+        "key": "D",
+        "text": "Elasticsearch on Amazon EKS"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Amazon OpenSearch Serverless automatically handles capacity, sharding, and scaling without requiring the team to manage cluster configurations. You pay per OCU (OpenSearch Compute Unit) consumed, not for idle cluster capacity. Provisioned OpenSearch still requires configuring shards, instance types, and replica counts. Self-managed options on EC2 or EKS have the highest operational overhead.",
+    "source_topic": "OpenSearch Serverless for no-ops vector search"
   }
 ]

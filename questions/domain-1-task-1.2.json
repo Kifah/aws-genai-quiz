@@ -451,5 +451,458 @@
     ],
     "explanation": "Amazon Titan Multimodal Embeddings G1 requires image data to be base64-encoded and included inside a structured JSON request body alongside the text inputs. Raw file uploads, plain presigned URLs, and multipart form-data are not the accepted input format for this API.",
     "source_topic": "Amazon Titan Multimodal Embeddings, API input format"
+  },
+  {
+    "id": "d1-q0536",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "FM selection criteria",
+    "difficulty": "medium",
+    "question_text": "A company needs a foundation model for a high-volume, cost-sensitive FAQ chatbot that answers simple factual questions. Which Amazon Bedrock model is MOST appropriate based on cost efficiency?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Anthropic Claude Sonnet"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Titan Text Lite"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Nova Pro"
+      },
+      {
+        "key": "D",
+        "text": "Anthropic Claude Opus"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Amazon Titan Text Lite is the lowest-cost model on Bedrock, suitable for simple Q&A tasks where advanced reasoning is not required. Claude Sonnet, Nova Pro, and Claude Opus are more capable and significantly more expensive \u2014 appropriate for complex reasoning or creative tasks, not cost-optimised simple FAQ.",
+    "source_topic": "FM cost-based selection"
+  },
+  {
+    "id": "d1-q0537",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "FM selection criteria",
+    "difficulty": "medium",
+    "question_text": "A legal team needs a GenAI assistant to perform multi-step legal reasoning, synthesise long case documents, and follow detailed instructions precisely. Which criterion should drive the foundation model selection?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Lowest price per token"
+      },
+      {
+        "key": "B",
+        "text": "Advanced reasoning capability and large context window"
+      },
+      {
+        "key": "C",
+        "text": "Native image generation support"
+      },
+      {
+        "key": "D",
+        "text": "Fastest time-to-first-token"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Complex legal reasoning and long document synthesis require a model with strong instruction-following, multi-step reasoning, and a large context window (to handle long case files). Cost and speed are secondary for this high-stakes use case. Image generation is irrelevant for text-only legal work.",
+    "source_topic": "Reasoning-focused FM selection"
+  },
+  {
+    "id": "d1-q0538",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Dynamic model configuration",
+    "difficulty": "medium",
+    "question_text": "An application is in production using Anthropic Claude. The team wants to be able to switch to a different foundation model in response to cost changes without modifying or redeploying any Lambda function code. Which approach achieves this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Hard-code the model ID inside the Lambda function and use blue/green deployment to switch"
+      },
+      {
+        "key": "B",
+        "text": "Store the active model ID in AWS AppConfig and have the Lambda read it at runtime"
+      },
+      {
+        "key": "C",
+        "text": "Create a new Lambda function for each model and switch DNS records"
+      },
+      {
+        "key": "D",
+        "text": "Use an Amazon SQS queue attribute to indicate the target model per message"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "AWS AppConfig enables dynamic runtime configuration changes without redeployment. The Lambda function reads the model ID from AppConfig on each invocation (or via the extension cache), allowing instant model switching. Hard-coding requires redeployment. Multiple Lambda functions per model creates operational overhead. SQS attributes still require each caller to embed the model ID.",
+    "source_topic": "AppConfig FM abstraction"
+  },
+  {
+    "id": "d1-q0539",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Resilient FM architecture",
+    "difficulty": "hard",
+    "question_text": "A production GenAI application uses Amazon Bedrock in us-east-1. During a regional degradation event, the primary model becomes unavailable. The application must continue serving users with minimal interruption. Which resilience pattern BEST addresses this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the Lambda timeout to wait for the primary model to recover"
+      },
+      {
+        "key": "B",
+        "text": "Implement a circuit breaker using AWS Step Functions that routes to a fallback model or region when the primary fails"
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon CloudFront to cache all Bedrock responses indefinitely"
+      },
+      {
+        "key": "D",
+        "text": "Deploy a second identical Lambda function in another region and manually switch DNS"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A circuit breaker pattern implemented in Step Functions uses Retry states with exponential backoff and Catch states to detect repeated failures and route traffic to a fallback model or cross-region endpoint. This provides automatic failover. Simply increasing the Lambda timeout only delays failure. CloudFront caching is not suitable for dynamic generative responses. Manual DNS switching is too slow and error-prone.",
+    "source_topic": "Circuit breaker pattern for FM resilience"
+  },
+  {
+    "id": "d1-q0540",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Graceful degradation",
+    "difficulty": "medium",
+    "question_text": "When both the primary and fallback foundation models in a GenAI application are unavailable, what is the MOST appropriate graceful degradation strategy?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Return an HTTP 500 error to the user with the raw exception message"
+      },
+      {
+        "key": "B",
+        "text": "Retry indefinitely until a model becomes available"
+      },
+      {
+        "key": "C",
+        "text": "Serve a cached keyword-based response or a friendly static message to the user"
+      },
+      {
+        "key": "D",
+        "text": "Disable the application until all models are restored"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Graceful degradation means the system continues to provide some value even when the primary capability is unavailable. Returning a cached or simplified response (keyword search result or a user-friendly message) maintains a positive user experience. Raw error messages are poor UX and a security risk. Infinite retries waste resources and block the user. Disabling the application is the worst degradation level.",
+    "source_topic": "Graceful degradation strategy"
+  },
+  {
+    "id": "d1-q0541",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Fine-tuning vs RAG",
+    "difficulty": "hard",
+    "question_text": "A financial services company wants its GenAI assistant to answer questions using up-to-date proprietary financial reports that change weekly. The assistant must NOT require model retraining when new reports are added. Which approach is MOST appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Fine-tune a base model on the financial reports weekly"
+      },
+      {
+        "key": "B",
+        "text": "Use Retrieval-Augmented Generation (RAG) with Amazon Bedrock Knowledge Bases, updating the knowledge base as reports are published"
+      },
+      {
+        "key": "C",
+        "text": "Pre-train a new model from scratch each week on the full document corpus"
+      },
+      {
+        "key": "D",
+        "text": "Embed all documents in the system prompt on every invocation"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "RAG with Bedrock Knowledge Bases allows new documents to be ingested and indexed without any model retraining \u2014 the knowledge base is updated and the FM retrieves from it at query time. Weekly fine-tuning is slow, expensive, and operationally complex. Pre-training from scratch is even more extreme. Embedding all documents in the system prompt would quickly overflow the context window.",
+    "source_topic": "RAG vs fine-tuning for dynamic data"
+  },
+  {
+    "id": "d1-q0542",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "PEFT / LoRA fine-tuning",
+    "difficulty": "medium",
+    "question_text": "A team wants to adapt a large language model to a specialised medical domain with limited compute budget. They do NOT want to retrain all model parameters. Which fine-tuning technique is MOST cost-efficient for this scenario?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Full fine-tuning on all model parameters using Amazon SageMaker"
+      },
+      {
+        "key": "B",
+        "text": "Pre-training a new model from scratch on medical literature"
+      },
+      {
+        "key": "C",
+        "text": "Parameter-Efficient Fine-Tuning (PEFT) using LoRA on Amazon SageMaker"
+      },
+      {
+        "key": "D",
+        "text": "Prompt engineering alone without any model weight changes"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "LoRA (Low-Rank Adaptation) is a PEFT method that trains only small adapter layers added to the frozen base model, dramatically reducing GPU memory and compute requirements compared to full fine-tuning \u2014 often by 10\u2013100x. Full fine-tuning is the most expensive option. Pre-training from scratch is even more expensive and impractical. Prompt engineering alone cannot shift the model's domain knowledge.",
+    "source_topic": "LoRA PEFT fine-tuning"
+  },
+  {
+    "id": "d1-q0543",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Model lifecycle management",
+    "difficulty": "medium",
+    "question_text": "A team has trained a custom fine-tuned model on Amazon SageMaker and wants to manage versions, promote the model from staging to production, and roll back if a new version fails quality checks. Which SageMaker feature provides this capability?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon SageMaker Data Wrangler"
+      },
+      {
+        "key": "B",
+        "text": "Amazon SageMaker Feature Store"
+      },
+      {
+        "key": "C",
+        "text": "Amazon SageMaker Model Registry"
+      },
+      {
+        "key": "D",
+        "text": "Amazon SageMaker Ground Truth"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "SageMaker Model Registry is purpose-built for cataloging, versioning, and managing the deployment lifecycle of ML models. It supports approval workflows to promote models from staging to production and maintains a history for rollback. Data Wrangler is for data preparation. Feature Store manages ML features. Ground Truth handles data labelling.",
+    "source_topic": "SageMaker Model Registry lifecycle"
+  },
+  {
+    "id": "d1-q0544",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Cross-region FM availability",
+    "difficulty": "medium",
+    "question_text": "A company wants to use a specific Amazon Bedrock foundation model that is only available in us-west-2, but their application runs in eu-west-1. What is the recommended approach to invoke this model?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Submit a support ticket to AWS to enable the model in eu-west-1"
+      },
+      {
+        "key": "B",
+        "text": "Deploy a proxy EC2 instance in us-west-2 to relay requests"
+      },
+      {
+        "key": "C",
+        "text": "Configure the Lambda function to invoke the model using the Bedrock endpoint in us-west-2 via cross-region IAM permissions"
+      },
+      {
+        "key": "D",
+        "text": "Download the model weights and host them on SageMaker in eu-west-1"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Amazon Bedrock supports cross-region invocations. You configure your application (e.g., Lambda) to call the Bedrock endpoint in us-west-2 using an IAM role with the appropriate cross-region bedrock:InvokeModel permissions. This is the recommended AWS pattern for accessing models not yet available in your home region. A proxy EC2 instance is unnecessary complexity. Model weight downloads are not available for Bedrock-hosted models.",
+    "source_topic": "Cross-region Bedrock inference"
+  },
+  {
+    "id": "d1-q0545",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Model selection for code generation",
+    "difficulty": "easy",
+    "question_text": "A developer needs a foundation model specifically strong at code generation tasks including Python, Java, and SQL. Which model family on Amazon Bedrock is noted for extensive code dataset training?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Titan Embeddings"
+      },
+      {
+        "key": "B",
+        "text": "Anthropic Claude for creative writing"
+      },
+      {
+        "key": "C",
+        "text": "Meta Llama or AI21 Labs models trained on code datasets"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Titan Text Lite"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Meta Llama models (including CodeLlama) and AI21 Labs models have been trained on extensive code datasets, making them strong performers for code generation tasks. Titan Embeddings produces vectors, not code. Claude is excellent for reasoning and instruction-following but the scenario specifically asks about code-specialised training. Titan Text Lite is cost-optimised for simple text tasks.",
+    "source_topic": "Code generation model selection"
+  },
+  {
+    "id": "d1-q0546",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Automated model deployment pipelines",
+    "difficulty": "hard",
+    "question_text": "A team uses SageMaker to train new custom model versions weekly. They need an automated process that tests each new version, and if health checks pass, promotes it to production. If checks fail, the previous stable version must be automatically restored. Which combination of AWS services achieves this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon S3 versioning + manual SageMaker endpoint updates"
+      },
+      {
+        "key": "B",
+        "text": "AWS CodePipeline + SageMaker Pipelines + SageMaker Model Registry + CloudWatch alarms for rollback"
+      },
+      {
+        "key": "C",
+        "text": "AWS Glue + Amazon Athena + Amazon QuickSight"
+      },
+      {
+        "key": "D",
+        "text": "AWS Step Functions + Amazon DynamoDB + Amazon SNS"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "CodePipeline orchestrates the CI/CD workflow. SageMaker Pipelines automates the training and evaluation steps. Model Registry manages approvals and versioning. CloudWatch alarms detect post-deployment failures and trigger rollback actions. This is the full MLOps pipeline for automated model lifecycle management. The other options lack the model-specific automation components.",
+    "source_topic": "Automated SageMaker deployment pipeline"
+  },
+  {
+    "id": "d1-q0547",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Multi-modal FM selection",
+    "difficulty": "medium",
+    "question_text": "A retail company wants its product assistant to accept both text questions AND product images from customers and generate a combined response. Which Amazon Bedrock model characteristic is REQUIRED for this use case?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Support for streaming responses"
+      },
+      {
+        "key": "B",
+        "text": "Native multimodal input capability (text + image)"
+      },
+      {
+        "key": "C",
+        "text": "Large token context window only"
+      },
+      {
+        "key": "D",
+        "text": "Support for function calling / tool use"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Accepting both text and images as input requires a multimodal foundation model \u2014 one that natively processes multiple input modalities. Models like Anthropic Claude 3 or Amazon Nova accept image inputs alongside text. Streaming support, large context windows, and tool use are valuable features but do not address the multimodal input requirement.",
+    "source_topic": "Multimodal FM selection"
+  },
+  {
+    "id": "d1-q0548",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Model evaluation for selection",
+    "difficulty": "medium",
+    "question_text": "A team is evaluating three Amazon Bedrock models for a customer support chatbot. They want a structured, data-driven comparison across accuracy, coherence, and cost on their own test dataset. Which AWS service is MOST appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon SageMaker Experiments"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Model Evaluations"
+      },
+      {
+        "key": "C",
+        "text": "AWS Cost Explorer"
+      },
+      {
+        "key": "D",
+        "text": "Amazon CloudWatch Dashboards"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Amazon Bedrock Model Evaluations is designed for automated side-by-side comparison of foundation models using your own datasets, with built-in evaluation pillars (accuracy, robustness, toxicity) and the ability to define custom criteria. SageMaker Experiments tracks training runs, not FM comparisons. Cost Explorer only shows billing data. CloudWatch Dashboards visualise metrics but don't run structured FM evaluations.",
+    "source_topic": "Bedrock Model Evaluations for selection"
+  },
+  {
+    "id": "d1-q0549",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Step Functions retry/catch for FM resilience",
+    "difficulty": "medium",
+    "question_text": "A developer is implementing FM failover using AWS Step Functions. The primary Bedrock model call should be retried up to 3 times on throttling errors, and if all retries fail, the workflow should switch to a backup model. Which Step Functions features enable this behavior?",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Retry with maxAttempts=3 and exponential backoff on the primary FM call state"
+      },
+      {
+        "key": "B",
+        "text": "Catch state that routes to a fallback FM call state on error"
+      },
+      {
+        "key": "C",
+        "text": "A Choice state that evaluates the HTTP status code before invoking the FM"
+      },
+      {
+        "key": "D",
+        "text": "A Wait state with a fixed 60-second delay between each retry"
+      },
+      {
+        "key": "E",
+        "text": "A Parallel state that invokes both models simultaneously"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "Retry with maxAttempts and backoffRate handles transient throttling by retrying automatically. The Catch block routes execution to an alternative state (the fallback model) when all retries are exhausted. A Choice state evaluates conditions before a call, not after a failure. A fixed Wait state is less efficient than exponential backoff. Parallel invocation wastes cost by calling both models every time.",
+    "source_topic": "Step Functions Retry and Catch for FM failover"
   }
 ]

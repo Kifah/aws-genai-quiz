@@ -259,5 +259,459 @@
     ],
     "explanation": "Amazon Bedrock Model Invocation Logging can capture full request payloads (including images) and responses when enabled, and logs can be directed to S3 with an appropriate retention lifecycle policy. Invocation logging does support multimodal content \u2014 it is not limited to text only. CloudWatch Logs has a maximum configurable retention that may not cover 7 years, and default retention is 90 days. CloudTrail records API control-plane events but does not capture inference payload bodies.",
     "source_topic": "Bedrock Model Invocation Logging, multimodal audit, compliance retention"
+  },
+  {
+    "id": "d3-q0441",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "CloudTrail for FM audit logging",
+    "difficulty": "medium",
+    "question_text": "A compliance officer asks: 'How can we prove which IAM user or role invoked a specific Amazon Bedrock model, on what date, and from which IP address?' Which AWS service provides this immutable audit trail?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon CloudWatch Metrics \u2014 tracks invocation counts per model"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Model Invocation Logs \u2014 captures full prompt and response content"
+      },
+      {
+        "key": "C",
+        "text": "AWS CloudTrail \u2014 records who called which API, when, and from where"
+      },
+      {
+        "key": "D",
+        "text": "AWS Config \u2014 tracks configuration changes to Bedrock resources"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "AWS CloudTrail is the definitive audit service recording all AWS API calls: identity (who \u2014 IAM user/role/service), timestamp (when), source IP (where), service (what API \u2014 bedrock:InvokeModel), and target resource. This is the immutable compliance audit trail. CloudWatch Metrics shows aggregate counts, not individual identities. Bedrock Invocation Logs capture prompt/response CONTENT \u2014 useful for content audit but not the primary identity/access audit tool. Config tracks resource configurations, not runtime API calls.",
+    "source_topic": "CloudTrail for identity-based Bedrock API audit trail"
+  },
+  {
+    "id": "d3-q0442",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Data lineage tracking",
+    "difficulty": "medium",
+    "question_text": "A data governance team asks: 'Which S3 bucket did our RAG knowledge base training data originate from, which Glue ETL job processed it, and which Bedrock Knowledge Base ingested it?' Which AWS service provides this data provenance trail?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS CloudTrail \u2014 API call audit trail"
+      },
+      {
+        "key": "B",
+        "text": "Amazon CloudWatch \u2014 metrics and logs monitoring"
+      },
+      {
+        "key": "C",
+        "text": "AWS Glue Data Catalog \u2014 stores metadata, schema, and lineage for data assets"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Macie \u2014 sensitive data discovery"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "AWS Glue Data Catalog is the metadata repository that tracks data lineage \u2014 recording where data came from (source S3 buckets), what transformations were applied (Glue ETL jobs), and where it went (downstream consumers like Bedrock Knowledge Bases). This answers 'what data exists and where did it come from?' CloudTrail answers 'who called which API?' CloudWatch is monitoring. Macie discovers PII.",
+    "source_topic": "AWS Glue Data Catalog for data lineage in GenAI pipelines"
+  },
+  {
+    "id": "d3-q0443",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Model cards and documentation",
+    "difficulty": "medium",
+    "question_text": "A company deploys a custom fine-tuned SageMaker model to production. The legal team requires documentation of the model's purpose, training data used, known limitations, bias assessment results, and intended use cases \u2014 stored as a formal artifact alongside the model. Which SageMaker feature provides this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "SageMaker Experiments \u2014 tracks training run parameters and metrics"
+      },
+      {
+        "key": "B",
+        "text": "SageMaker ML Lineage Tracking \u2014 records artifact relationships"
+      },
+      {
+        "key": "C",
+        "text": "SageMaker Model Cards \u2014 structured documentation of model purpose, limitations, and responsible AI metadata"
+      },
+      {
+        "key": "D",
+        "text": "SageMaker Pipelines \u2014 defines the training workflow"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "SageMaker Model Cards are purpose-built for documenting ML models in a standardised format: intended use, training data, performance metrics, known limitations, ethical considerations, and bias assessment results. This formal artefact can be stored in Model Registry and shared with stakeholders. Experiments tracks training metrics. ML Lineage Tracking records artifact relationships. Pipelines defines the workflow \u2014 none of these produce the human-readable governance documentation that Model Cards provide.",
+    "source_topic": "SageMaker Model Cards for responsible AI documentation"
+  },
+  {
+    "id": "d3-q0444",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "AWS Artifact for compliance documentation",
+    "difficulty": "medium",
+    "question_text": "A healthcare company using Amazon Bedrock needs to obtain AWS's SOC 2 Type II report and HIPAA Business Associate Agreement (BAA) to satisfy their compliance auditor. Where should they access these documents?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Security Hub \u2014 provides security posture findings"
+      },
+      {
+        "key": "B",
+        "text": "AWS Artifact \u2014 self-service portal for AWS compliance reports and agreements"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Macie \u2014 data privacy and compliance service"
+      },
+      {
+        "key": "D",
+        "text": "AWS Config \u2014 resource configuration compliance tool"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "AWS Artifact is the self-service portal providing on-demand access to AWS compliance documentation: SOC 1/2/3 reports, PCI DSS, ISO 27001, HIPAA BAA, GDPR DPA, FedRAMP, and 100+ other compliance artefacts. Security Hub monitors security posture. Macie discovers sensitive data. Config checks resource configurations. None of these provide the downloadable compliance certification documents that AWS Artifact provides.",
+    "source_topic": "AWS Artifact for SOC/HIPAA/PCI compliance documentation"
+  },
+  {
+    "id": "d3-q0445",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Continuous compliance monitoring",
+    "difficulty": "hard",
+    "question_text": "A platform team wants automatic detection and alerting when any Bedrock Guardrail configuration is modified (e.g., a safety threshold is lowered). Which combination of services provides this continuous governance monitoring?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Macie scheduled scans of the Guardrail S3 artefact"
+      },
+      {
+        "key": "B",
+        "text": "AWS CloudTrail (record CreateGuardrail/UpdateGuardrail API events) + Amazon EventBridge rule (pattern match on Bedrock Guardrail events) + SNS notification"
+      },
+      {
+        "key": "C",
+        "text": "SageMaker Model Monitor watching Guardrail drift"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Bedrock Guardrails with self-monitoring capability"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "CloudTrail records all management API events including UpdateGuardrail \u2014 capturing who changed what and when. EventBridge can match CloudTrail events matching bedrock:UpdateGuardrail and trigger an SNS notification to alert the security team. This provides real-time automated governance alerting on configuration changes. Macie scans data, not API events. Model Monitor watches ML endpoint behaviour, not Guardrail configs. Guardrails don't self-monitor.",
+    "source_topic": "CloudTrail + EventBridge + SNS for Guardrail change alerting"
+  },
+  {
+    "id": "d3-q0446",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Resource tagging for compliance",
+    "difficulty": "easy",
+    "question_text": "A company wants to tag all AWS resources used in their GenAI application with metadata including Project, Owner, DataClassification, and ComplianceScheme (GDPR/HIPAA). What is the PRIMARY benefit of this tagging strategy?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Tags encrypt the resource data automatically"
+      },
+      {
+        "key": "B",
+        "text": "Tags enable cost allocation, compliance tracking, access control via ABAC, and automated remediation based on metadata"
+      },
+      {
+        "key": "C",
+        "text": "Tags replace IAM policies for access control"
+      },
+      {
+        "key": "D",
+        "text": "Tags increase the performance of Bedrock models"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Resource tagging enables: (1) cost allocation and chargeback by project/owner in Cost Explorer, (2) compliance reporting by filtering resources by ComplianceScheme, (3) attribute-based access control (ABAC) via IAM tag conditions, and (4) automated remediation (AWS Config rules can detect untagged resources and trigger auto-remediation). Tags don't provide encryption, don't replace IAM, and don't affect model performance.",
+    "source_topic": "Resource tagging for GenAI governance and cost allocation"
+  },
+  {
+    "id": "d3-q0447",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "NIST AI RMF as governance framework",
+    "difficulty": "medium",
+    "question_text": "A US federal agency deploying a Bedrock-based document classification system needs to follow official AI risk management standards for US government information systems. Which framework should guide their AI governance approach?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "PCI-DSS \u2014 Payment Card Industry Data Security Standard"
+      },
+      {
+        "key": "B",
+        "text": "HIPAA \u2014 Health Insurance Portability and Accountability Act"
+      },
+      {
+        "key": "C",
+        "text": "NIST AI Risk Management Framework (AI RMF)"
+      },
+      {
+        "key": "D",
+        "text": "FedRAMP \u2014 for cloud service authorisation only"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "NIST AI RMF is the US federal standard for managing AI risks in government information systems. It provides a structured framework for AI trustworthiness across the dimensions of governance, mapping, measurement, and management. PCI-DSS covers payment card security. HIPAA governs health data privacy. FedRAMP authorises cloud services for federal use but doesn't provide comprehensive AI risk guidance. NIST AI RMF (combined with NIST SP 800-series) is the correct answer.",
+    "source_topic": "NIST AI RMF for US federal AI governance"
+  },
+  {
+    "id": "d3-q0448",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Automated compliance checks",
+    "difficulty": "hard",
+    "question_text": "A DevOps team wants to automatically reject deployment pipeline runs where Bedrock prompt templates in the source repository contain phrases that violate the company's AI policy (e.g., they instruct the model to bypass safety controls). Where in the CI/CD pipeline should this check be added?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "After production deployment \u2014 scan logs for policy violations post-deployment"
+      },
+      {
+        "key": "B",
+        "text": "As a CodeBuild step in the CodePipeline before deployment \u2014 scan prompt template files for policy violations and fail the pipeline on violations"
+      },
+      {
+        "key": "C",
+        "text": "Use Bedrock Guardrails to block the violating prompts at runtime"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Macie to scan the prompt repository"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Compliance checks should be integrated as early as possible (shift-left). Adding a CodeBuild step to scan prompt templates for policy violations before deployment fails the pipeline if violations are detected \u2014 preventing non-compliant prompts from ever reaching production. Post-deployment scanning (A) is too late. Guardrails (C) is a runtime control, not a design-time policy gate. Macie discovers PII in S3, not policy violations in code/prompt files.",
+    "source_topic": "Shift-left: CodePipeline + CodeBuild for prompt compliance scanning"
+  },
+  {
+    "id": "d3-q0449",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Multimodal invocation logging for audit",
+    "difficulty": "medium",
+    "question_text": "A company processes both text and image inputs through Amazon Bedrock multimodal models. Their compliance team requires that ALL model invocations (including image inputs and text responses) be logged for a 3-year audit period. How should they configure this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable AWS CloudTrail data events for Bedrock \u2014 it logs all modalities including images"
+      },
+      {
+        "key": "B",
+        "text": "Enable Bedrock Model Invocation Logging via PutModelInvocationLoggingConfiguration to an S3 bucket, which captures all input modalities and responses"
+      },
+      {
+        "key": "C",
+        "text": "Add logging code in every Lambda function that calls Bedrock"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Transcribe to log audio inputs and Amazon Textract to log image inputs separately"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock Model Invocation Logging (enabled via PutModelInvocationLoggingConfiguration) is the purpose-built feature that captures complete invocation records \u2014 including text and image inputs across all modalities, responses, model IDs, timestamps, and metadata \u2014 to S3 or CloudWatch Logs. CloudTrail records API management events (metadata) but NOT the full request/response body including image data. Per-Lambda manual logging is error-prone and incomplete. Transcribe/Textract are separate processing services.",
+    "source_topic": "Bedrock Model Invocation Logging for multimodal audit"
+  },
+  {
+    "id": "d3-q0450",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Three Bedrock log types distinguished",
+    "difficulty": "hard",
+    "question_text": "A security operations team wants to: (1) find ALL API management calls made to Bedrock (CreateKnowledgeBase, UpdateGuardrail, etc.) \u2014 who did it and when, (2) retrieve the actual prompts and responses from production model calls for content review, (3) trace request latency from API Gateway through Lambda to Bedrock. Which THREE services map to these requirements?",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "(1) AWS CloudTrail \u2014 records all management API calls with identity and timestamp"
+      },
+      {
+        "key": "B",
+        "text": "(2) Bedrock Model Invocation Logs \u2014 captures full prompt and response content"
+      },
+      {
+        "key": "C",
+        "text": "(3) AWS X-Ray \u2014 distributed tracing across API Gateway, Lambda, and Bedrock"
+      },
+      {
+        "key": "D",
+        "text": "(1) Amazon CloudWatch Metrics \u2014 tracks API call counts per operation"
+      },
+      {
+        "key": "E",
+        "text": "(3) AWS CloudTrail \u2014 traces request latency per service"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B",
+      "C"
+    ],
+    "explanation": "(1) CloudTrail is the definitive tool for management API audit: who called CreateKnowledgeBase/UpdateGuardrail and when. (2) Bedrock Model Invocation Logs (via S3/CloudWatch Logs) capture the actual prompt and response content of every model call. (3) AWS X-Ray provides distributed tracing showing per-segment latency across the entire request path (API Gateway \u2192 Lambda \u2192 Bedrock). CloudWatch Metrics (D) shows aggregate counts, not per-call identities. CloudTrail (E) doesn't measure latency.",
+    "source_topic": "CloudTrail vs Invocation Logs vs X-Ray \u2014 three Bedrock log types"
+  },
+  {
+    "id": "d3-q0451",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Comprehensive decision logs",
+    "difficulty": "medium",
+    "question_text": "A GenAI application must log every model interaction with the following fields: user_id, session_id, prompt_version, model_id, tokens_used, response_time_ms, and a truncated response summary. This is needed for both cost attribution and compliance. What is the BEST storage design for these structured logs?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Write structured JSON logs to CloudWatch Logs; use Logs Insights for queries and export to S3 for long-term retention"
+      },
+      {
+        "key": "B",
+        "text": "Write to DynamoDB \u2014 NoSQL is ideal for log storage"
+      },
+      {
+        "key": "C",
+        "text": "Write to Amazon RDS \u2014 relational structure is required for compliance"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Kinesis to stream logs and discard after processing"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "CloudWatch Logs stores structured JSON logs from Lambda, supports Logs Insights for real-time queries (cost attribution, compliance checks), and can be exported to S3 for long-term Glacier archival. This provides the full cost attribution + compliance retention pipeline. DynamoDB is expensive for high-volume write-heavy log storage. RDS adds schema management overhead for a log store. Kinesis + discard loses data needed for compliance.",
+    "source_topic": "Structured FM interaction logging to CloudWatch + S3 export"
+  },
+  {
+    "id": "d3-q0452",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Continuous compliance monitoring",
+    "difficulty": "medium",
+    "question_text": "A company monitors their Bedrock Guardrails and wants to be automatically alerted when the number of blocked requests in a 5-minute window exceeds 100 \u2014 which may indicate a coordinated attack. Which AWS services implement this alert?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Config rules checking Guardrail configurations every 5 minutes"
+      },
+      {
+        "key": "B",
+        "text": "CloudWatch Alarm on the InvocationIntervened metric (from Bedrock Guardrails) with a threshold of 100 in 5 minutes, sending an SNS notification"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Macie scanning S3 logs every 5 minutes"
+      },
+      {
+        "key": "D",
+        "text": "AWS Trusted Advisor checking Guardrail utilisation"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock Guardrails emits the InvocationIntervened CloudWatch metric for every intervention. A CloudWatch Alarm with a Sum threshold of 100 over a 5-minute period will trigger an SNS notification when the threshold is exceeded \u2014 providing real-time attack detection. Config monitors resource configurations. Macie scans S3 data content. Trusted Advisor provides best-practice recommendations, not real-time operational alarms.",
+    "source_topic": "CloudWatch Alarm on InvocationIntervened for attack detection"
+  },
+  {
+    "id": "d3-q0453",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Policy alignment and governance",
+    "difficulty": "medium",
+    "question_text": "An organisation has a written AI policy stating 'no financial advice, no competitor comparisons, no political content'. A governance engineer must translate these written policies into enforceable technical controls in Bedrock. What is the DIRECT translation mechanism?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Include the policies in the model's system prompt as instructions"
+      },
+      {
+        "key": "B",
+        "text": "Map each policy statement to a Bedrock Guardrails denied topic configuration with a natural language description"
+      },
+      {
+        "key": "C",
+        "text": "Add the policies to the company wiki and train developers to follow them"
+      },
+      {
+        "key": "D",
+        "text": "Apply SageMaker Model Cards to document the policy restrictions"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock Guardrails Denied Topics is the direct, programmatic translation of written AI policies into enforceable technical controls. Each policy statement ('no financial advice') becomes a denied topic with a natural language description \u2014 the Guardrail then blocks any FM response on that topic, regardless of how the user phrases the request. System prompt instructions can be bypassed. Wiki + training relies on human compliance. Model Cards document restrictions but don't enforce them.",
+    "source_topic": "Translating AI policy to Bedrock Guardrails denied topics"
+  },
+  {
+    "id": "d3-q0454",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Data lineage tracking",
+    "difficulty": "hard",
+    "question_text": "A company uses SageMaker to train models on datasets sourced from multiple S3 buckets and data sources. After a model quality incident, they need to trace back to the exact training dataset version, preprocessing job, and data source that produced the affected model. Which SageMaker feature enables this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "SageMaker Experiments \u2014 tracks training run metrics"
+      },
+      {
+        "key": "B",
+        "text": "SageMaker ML Lineage Tracking \u2014 automatically records artifact provenance across training jobs"
+      },
+      {
+        "key": "C",
+        "text": "AWS CloudTrail \u2014 records SageMaker API calls"
+      },
+      {
+        "key": "D",
+        "text": "Amazon S3 versioning \u2014 tracks changes to training data files"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "SageMaker ML Lineage Tracking automatically creates and maintains a provenance graph linking models back to their training jobs, processing jobs, datasets, and source data \u2014 enabling complete root-cause tracing for model quality incidents. SageMaker Experiments tracks metrics per run but not cross-artifact relationships. CloudTrail records API calls but not the ML artifact dependency graph. S3 versioning tracks file changes but not the downstream model dependencies.",
+    "source_topic": "SageMaker ML Lineage Tracking for training incident root-cause analysis"
   }
 ]

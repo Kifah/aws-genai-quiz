@@ -1,0 +1,32 @@
+[
+  {
+    "id": "d5-q0248", "domain": 5, "task_statement": "5.1", "topic": "Eval dataset in KB S3 prefix poisons retrieval",
+    "difficulty": "hard",
+    "question_text": "A developer stores their Bedrock Evaluations dataset (eval-dataset.jsonl with question/answer pairs) in the docs/ prefix of their RAG S3 bucket. After uploading, the chatbot starts returning strange answers quoting expected answers verbatim. What happened?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "The Knowledge Base ingested the evaluation file as source content — its question/answer pairs are now retrieved as context, poisoning real responses" },
+      { "key": "B", "text": "The evaluation file corrupted the embedding model" },
+      { "key": "C", "text": "The file exceeded the context window" },
+      { "key": "D", "text": "The JSONL format is not supported by S3" }
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Bedrock Knowledge Bases ingests all supported files in the configured S3 prefix. Placing the eval JSONL (full of Q&A pairs) in the same prefix used for the KB data source causes it to be chunked, embedded, and retrievable — contaminating real responses with verbatim expected answers. Fix: store eval datasets in a separate S3 prefix or bucket NOT linked to any data source.",
+    "source_topic": "Eval dataset stored in KB prefix poisons retrieval"
+  },
+  {
+    "id": "d5-q0249", "domain": 5, "task_statement": "5.1", "topic": "LLM-as-a-judge requires a stronger judge model",
+    "difficulty": "medium",
+    "question_text": "In Amazon Bedrock Evaluations, a team configures Claude Sonnet as the judge and Claude Haiku as the evaluated model. Why must the judge model be stronger (larger/more capable) than the model being evaluated?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "A weaker judge cannot reliably assess quality beyond its own capability ceiling — its evaluations would be unreliable for the harder tasks the evaluated model handles" },
+      { "key": "B", "text": "The judge model must be from a different provider than the evaluated model" },
+      { "key": "C", "text": "AWS requires the judge to have a higher per-token cost" },
+      { "key": "D", "text": "The judge needs more GPU memory to store both outputs simultaneously" }
+    ],
+    "correct_answers": ["A"],
+    "explanation": "A judge model must be more capable than the evaluated model to reliably score quality on complex tasks — a weaker model cannot recognize correctness beyond its own ability. There is no cross-provider requirement; cost is a consequence not a rule; and GPU memory is not a concern since evaluation runs as separate inference calls, not simultaneous in-memory comparison.",
+    "source_topic": "LLM-as-a-judge stronger judge model requirement"
+  }
+]

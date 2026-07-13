@@ -1,0 +1,77 @@
+[
+  {
+    "id": "d2-q0607", "domain": 2, "task_statement": "2.3", "topic": "CloudFront for global GenAI delivery",
+    "difficulty": "medium",
+    "question_text": "A global GenAI web app serves many users the SAME cacheable responses (e.g. generated FAQ answers and static assets) and wants to reduce latency and origin/Bedrock load worldwide. Which service caches content at edge locations near users?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Amazon CloudFront (CDN with edge caching)"},
+      {"key": "B", "text": "AWS Direct Connect"},
+      {"key": "C", "text": "Amazon Route 53"},
+      {"key": "D", "text": "AWS Transit Gateway"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Amazon CloudFront is a CDN that caches content at global edge locations, cutting latency for users and offloading repeated requests from the origin/Bedrock. Direct Connect is a dedicated on-prem link, Route 53 is DNS, and Transit Gateway interconnects VPCs/networks — none provide edge content caching.",
+    "source_topic": "Amazon CloudFront edge caching for GenAI"
+  },
+  {
+    "id": "d2-q0608", "domain": 2, "task_statement": "2.3", "topic": "Global Accelerator for non-cacheable low latency",
+    "difficulty": "hard",
+    "question_text": "A real-time, streaming GenAI API has DYNAMIC, non-cacheable responses but needs improved global latency and fast regional failover by routing users over the AWS backbone to the nearest healthy endpoint. Which service fits better than a CDN here?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "AWS Global Accelerator — anycast entry into the AWS backbone with fast failover for dynamic traffic"},
+      {"key": "B", "text": "Amazon CloudFront caching with a long TTL"},
+      {"key": "C", "text": "Amazon S3 Transfer Acceleration"},
+      {"key": "D", "text": "AWS Snowball"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "AWS Global Accelerator provides static anycast IPs that route users over the AWS global network to the nearest healthy regional endpoint with fast failover — ideal for dynamic, non-cacheable, latency-sensitive traffic. CloudFront caching does not help non-cacheable responses; S3 Transfer Acceleration only speeds S3 uploads; Snowball is offline transfer.",
+    "source_topic": "AWS Global Accelerator for dynamic low-latency routing"
+  },
+  {
+    "id": "d2-q0609", "domain": 2, "task_statement": "2.3", "topic": "Route 53 routing for GenAI endpoints",
+    "difficulty": "medium",
+    "question_text": "A GenAI service is deployed in two Regions. The team wants DNS-level routing that automatically directs users to the lowest-latency healthy Region and fails over if one Region becomes unhealthy. Which service provides this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Amazon Route 53 with latency-based routing and health checks/failover"},
+      {"key": "B", "text": "AWS WAF"},
+      {"key": "C", "text": "Amazon ElastiCache"},
+      {"key": "D", "text": "AWS Secrets Manager"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Amazon Route 53 offers latency-based routing plus health checks and DNS failover to send users to the best healthy Region. WAF filters Layer-7 requests, ElastiCache is an in-memory cache, and Secrets Manager stores secrets — none provide DNS routing/failover.",
+    "source_topic": "Route 53 latency routing and failover"
+  },
+  {
+    "id": "d2-q0610", "domain": 2, "task_statement": "2.3", "topic": "Direct Connect for hybrid GenAI",
+    "difficulty": "medium",
+    "question_text": "An enterprise must move large volumes of on-premises documents into AWS for a Bedrock Knowledge Base over a private, consistent-bandwidth connection that avoids the public internet. Which service provides this dedicated physical connectivity?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "AWS Direct Connect"},
+      {"key": "B", "text": "Amazon CloudFront"},
+      {"key": "C", "text": "A site-to-site connection over an internet gateway only"},
+      {"key": "D", "text": "Amazon Route 53"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "AWS Direct Connect establishes a dedicated, private physical link between on-premises and AWS with consistent bandwidth, bypassing the public internet — suited to steady, high-volume hybrid data transfer. CloudFront is a CDN; an internet-gateway-only path traverses the public internet; Route 53 is DNS.",
+    "source_topic": "AWS Direct Connect for private hybrid connectivity"
+  },
+  {
+    "id": "d2-q0611", "domain": 2, "task_statement": "2.3", "topic": "Transit Gateway for multi-VPC GenAI",
+    "difficulty": "medium",
+    "question_text": "A GenAI platform spans many VPCs and on-premises networks that all need to reach shared Bedrock-access and data VPCs without building a mesh of individual VPC peering connections. Which service centralizes this connectivity?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "AWS Transit Gateway — a hub connecting many VPCs and on-prem networks"},
+      {"key": "B", "text": "Individual VPC peering between every pair of VPCs"},
+      {"key": "C", "text": "Amazon CloudFront"},
+      {"key": "D", "text": "AWS Shield"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "AWS Transit Gateway acts as a central hub interconnecting many VPCs and on-premises networks, replacing a complex full mesh of peering connections. Pairwise VPC peering does not scale (N-squared connections, no transitive routing); CloudFront is a CDN; Shield is DDoS protection.",
+    "source_topic": "AWS Transit Gateway for multi-VPC connectivity"
+  }
+]

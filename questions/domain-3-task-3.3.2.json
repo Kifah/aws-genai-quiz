@@ -1,0 +1,77 @@
+[
+  {
+    "id": "d3-q0475", "domain": 3, "task_statement": "3.3", "topic": "Org-wide model restriction with SCPs",
+    "difficulty": "medium",
+    "question_text": "A security team must guarantee that NO account in specific organizational units can invoke Bedrock models outside approved Regions — a guardrail that even account administrators cannot override. Which AWS Organizations feature enforces this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Service Control Policies (SCPs) applied to the target OUs"},
+      {"key": "B", "text": "An IAM role in each account"},
+      {"key": "C", "text": "A Cognito identity pool policy"},
+      {"key": "D", "text": "A Security Group rule"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "SCPs in AWS Organizations set the maximum permissions boundary for accounts/OUs; a deny SCP on out-of-Region Bedrock calls cannot be overridden by account admins. An IAM role only grants within one account and can be changed locally; a Cognito policy governs app users, not account-wide service use; Security Groups filter network traffic, not API authorization.",
+    "source_topic": "Service Control Policies for org-wide Bedrock restriction"
+  },
+  {
+    "id": "d3-q0476", "domain": 3, "task_statement": "3.3", "topic": "AWS Control Tower for governed multi-account",
+    "difficulty": "medium",
+    "question_text": "An enterprise standing up many AWS accounts for different GenAI teams wants a managed landing zone that applies baseline guardrails, account provisioning, and centralized governance out of the box. Which service provides this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "AWS Control Tower"},
+      {"key": "B", "text": "AWS Config alone"},
+      {"key": "C", "text": "Amazon Bedrock Guardrails"},
+      {"key": "D", "text": "AWS X-Ray"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "AWS Control Tower sets up and governs a secure multi-account landing zone with automated account provisioning and preventive/detective guardrails built on Organizations, Config, and other services. AWS Config alone tracks resource compliance but is not a full landing-zone framework; Bedrock Guardrails is model-level content safety; X-Ray is distributed tracing.",
+    "source_topic": "AWS Control Tower landing zone governance"
+  },
+  {
+    "id": "d3-q0477", "domain": 3, "task_statement": "3.3", "topic": "Continuous config compliance with AWS Config",
+    "difficulty": "medium",
+    "question_text": "A governance team needs to continuously detect when GenAI-related resources drift out of compliance — e.g. a Bedrock invocation-logging setting disabled or an S3 bucket made public — and record a history of configuration changes. Which service provides this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "AWS Config with config rules and configuration history"},
+      {"key": "B", "text": "Amazon CloudFront"},
+      {"key": "C", "text": "AWS Secrets Manager"},
+      {"key": "D", "text": "Amazon Polly"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "AWS Config records resource configurations over time and evaluates them against config rules, flagging drift/non-compliance (e.g. disabled logging, public buckets). CloudFront is a CDN, Secrets Manager stores secrets, and Polly is text-to-speech — none perform configuration compliance evaluation.",
+    "source_topic": "AWS Config for continuous compliance"
+  },
+  {
+    "id": "d3-q0478", "domain": 3, "task_statement": "3.3", "topic": "Audit evidence collection with Audit Manager",
+    "difficulty": "medium",
+    "question_text": "To prepare for an external audit of a GenAI platform, a compliance team wants to automatically collect evidence and map it to a framework's controls on an ongoing basis. Which AWS service is purpose-built for this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "AWS Audit Manager"},
+      {"key": "B", "text": "AWS Trusted Advisor"},
+      {"key": "C", "text": "Amazon Inspector"},
+      {"key": "D", "text": "AWS Budgets"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "AWS Audit Manager continuously collects evidence and maps it to controls in frameworks (e.g. SOC 2, HIPAA), streamlining audit preparation. Trusted Advisor gives best-practice checks, Inspector scans for vulnerabilities, and Budgets tracks cost/usage thresholds — none automate audit evidence-to-control mapping.",
+    "source_topic": "AWS Audit Manager for audit evidence"
+  },
+  {
+    "id": "d3-q0479", "domain": 3, "task_statement": "3.2", "topic": "Secrets Manager for external API keys",
+    "difficulty": "easy",
+    "question_text": "A GenAI integration calls a third-party API and must store that API key securely with automatic rotation and audited, IAM-controlled retrieval — not hard-coded in code or environment variables. Which service should hold the key?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "AWS Secrets Manager"},
+      {"key": "B", "text": "A plaintext value in a Lambda environment variable"},
+      {"key": "C", "text": "An unencrypted S3 object"},
+      {"key": "D", "text": "A comment in the application source code"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "AWS Secrets Manager stores secrets encrypted, supports automatic rotation, and gates retrieval via IAM with CloudTrail auditing — the correct home for third-party API keys. Lambda env vars, unencrypted S3 objects, and source-code comments all expose the secret and lack rotation and fine-grained auditing.",
+    "source_topic": "AWS Secrets Manager for third-party API keys"
+  }
+]

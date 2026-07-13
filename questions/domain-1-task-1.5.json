@@ -292,5 +292,485 @@
     ],
     "explanation": "A multilingual embeddings model places semantically similar text from different languages close together in the shared vector space, enabling a French query to match German or English documents correctly. Translating and discarding originals loses fidelity and legal retention obligations. Separate per-language bases require the user to know which language the answer is in. Keyword search is not language-agnostic \u2014 it only matches exact tokens, missing cross-lingual synonyms.",
     "source_topic": "Multilingual embeddings, cross-lingual semantic search"
+  },
+  {
+    "id": "d1-q0576",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Hierarchical chunking",
+    "difficulty": "medium",
+    "question_text": "A RAG system retrieves very specific sentence fragments that lack surrounding context, causing the FM to generate incomplete answers. Which chunking strategy BEST resolves this issue?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase fixed chunk size to 5,000 tokens"
+      },
+      {
+        "key": "B",
+        "text": "Use hierarchical chunking: embed small child chunks for precise search, return larger parent chunks at retrieval time"
+      },
+      {
+        "key": "C",
+        "text": "Reduce chunk overlap to zero to avoid redundancy"
+      },
+      {
+        "key": "D",
+        "text": "Use only keyword-based BM25 search instead of vector search"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Hierarchical chunking solves the precision vs. context trade-off: small child chunks enable precise vector matching, but the retrieved context returned to the FM is the larger parent chunk, providing the surrounding context needed for complete answers. Simply increasing chunk size reduces precision. Eliminating overlap worsens boundary issues. Switching to pure keyword search doesn't address the context problem.",
+    "source_topic": "Hierarchical chunking for context-rich retrieval"
+  },
+  {
+    "id": "d1-q0577",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Chunking strategies",
+    "difficulty": "medium",
+    "question_text": "A developer is chunking legal contracts for a RAG system. The contracts have well-defined sections and subsections with headings. Which chunking strategy will BEST preserve the meaning of each section?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Fixed-size chunking at 300 characters with no overlap"
+      },
+      {
+        "key": "B",
+        "text": "Semantic/recursive chunking that splits at natural section boundaries (headings and paragraphs)"
+      },
+      {
+        "key": "C",
+        "text": "Random splitting of the document into equal-length segments"
+      },
+      {
+        "key": "D",
+        "text": "Character-level tokenisation and storage of individual sentences"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Legal contracts have clear structural boundaries (sections, clauses, articles). Semantic/recursive chunking that respects these natural boundaries ensures each chunk represents a complete, meaningful unit (e.g., a full clause). Fixed-size chunking at 300 characters would frequently cut mid-sentence or mid-clause. Random splitting is semantically meaningless. Individual sentence storage loses clause-level context.",
+    "source_topic": "Semantic chunking for structured documents"
+  },
+  {
+    "id": "d1-q0578",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Reranking",
+    "difficulty": "medium",
+    "question_text": "A RAG system retrieves the top 20 chunks from OpenSearch using vector similarity. However, the most relevant chunks are often ranked 10-15 in the results, and only the top 5 are sent to the FM. What is the BEST way to improve the quality of the final top-5 context?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the number of chunks sent to the FM from 5 to 20"
+      },
+      {
+        "key": "B",
+        "text": "Apply a Bedrock reranker model to re-score and reorder the 20 retrieved chunks before selecting the top 5"
+      },
+      {
+        "key": "C",
+        "text": "Use a smaller embedding model with lower dimensionality"
+      },
+      {
+        "key": "D",
+        "text": "Reduce the chunk size to improve initial vector similarity scores"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Reranking uses a more powerful cross-encoder model to re-score all retrieved candidates in the context of the actual query, significantly improving the relevance ordering compared to embedding-based similarity alone. Sending all 20 chunks to the FM inflates token cost and may reduce answer quality due to noise. A smaller embedding model would likely worsen retrieval. Smaller chunks don't directly address the reranking problem.",
+    "source_topic": "Bedrock reranker for RAG relevance improvement"
+  },
+  {
+    "id": "d1-q0579",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Hybrid search",
+    "difficulty": "medium",
+    "question_text": "A RAG system performs well on broad, conceptual queries but misses exact product codes like 'SKU-99214-B'. Users complain that searching for specific codes returns irrelevant results. What retrieval enhancement BEST addresses this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Switch to a larger, more capable embedding model"
+      },
+      {
+        "key": "B",
+        "text": "Enable hybrid search combining keyword (BM25) search with vector similarity search"
+      },
+      {
+        "key": "C",
+        "text": "Increase chunk overlap to 50%"
+      },
+      {
+        "key": "D",
+        "text": "Add more training examples to the fine-tuned model"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Exact identifiers (SKU codes, model numbers, specific terms) are best matched by keyword/lexical search (BM25), which performs exact and near-exact matching. Pure vector search captures semantics but may not match specific identifiers precisely. Hybrid search combines both approaches \u2014 keyword for exact matches, vectors for semantic matches \u2014 and merges/re-ranks the results. A larger embedding model still may not match arbitrary codes exactly. Chunk overlap and fine-tuning don't address the retrieval methodology.",
+    "source_topic": "Hybrid search for exact + semantic retrieval"
+  },
+  {
+    "id": "d1-q0580",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Query expansion",
+    "difficulty": "medium",
+    "question_text": "Users search for 'ML platform' but the knowledge base contains documents using 'machine learning infrastructure'. The search returns poor results because the terms don't overlap semantically in the embedding space. What query processing technique addresses this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Query compression \u2014 shorten the query before searching"
+      },
+      {
+        "key": "B",
+        "text": "Query expansion \u2014 use a Bedrock call to generate synonyms and related terms, then search for all of them"
+      },
+      {
+        "key": "C",
+        "text": "Query decomposition \u2014 split the query into sub-queries"
+      },
+      {
+        "key": "D",
+        "text": "Increase the vector store's k (number of results) from 5 to 50"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Query expansion augments the original query with synonyms and related terms (generated by an FM) to improve recall. Searching for 'ML platform OR machine learning infrastructure OR MLOps platform' captures documents that the original query would miss. Query compression reduces token count but doesn't improve retrieval. Query decomposition handles multi-part questions. Increasing k returns more results but many may be irrelevant, increasing noise sent to the FM.",
+    "source_topic": "Query expansion for improved RAG recall"
+  },
+  {
+    "id": "d1-q0581",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Query decomposition",
+    "difficulty": "hard",
+    "question_text": "A user asks a RAG assistant: 'Compare the return policies and warranty terms of Product A and Product B.' The knowledge base stores these as separate documents. A single vector search returns mixed results. What query processing strategy BEST handles this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the number of retrieved chunks (k) to include both topics"
+      },
+      {
+        "key": "B",
+        "text": "Decompose the query into two sub-queries ('return policy for Product A' and 'warranty terms for Product B'), retrieve separately, then synthesise"
+      },
+      {
+        "key": "C",
+        "text": "Use semantic chunking to combine Product A and B information into single chunks"
+      },
+      {
+        "key": "D",
+        "text": "Switch to a multimodal embedding model"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Query decomposition breaks a complex comparative question into focused sub-queries, each targeting a specific retrieval task. This yields precise, relevant chunks for each sub-topic, which are then synthesised by the FM into a coherent comparison. Simply increasing k mixes both topics chaotically. Combining products in the same chunks would destroy retrieval precision. A multimodal model doesn't address multi-topic retrieval.",
+    "source_topic": "Query decomposition for complex multi-topic queries"
+  },
+  {
+    "id": "d1-q0582",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Bedrock Knowledge Base RetrieveAndGenerate vs Retrieve API",
+    "difficulty": "medium",
+    "question_text": "A developer wants to evaluate the retrieval quality of a Bedrock Knowledge Base independently of the generation quality. They want to see exactly which chunks are retrieved for a given query before the FM generates a response. Which Bedrock API should they use?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "RetrieveAndGenerate"
+      },
+      {
+        "key": "B",
+        "text": "InvokeModel"
+      },
+      {
+        "key": "C",
+        "text": "Retrieve"
+      },
+      {
+        "key": "D",
+        "text": "StartBatchInferenceJob"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "The Bedrock Retrieve API performs retrieval-only from a Knowledge Base, returning the chunks and their relevance scores without invoking a generative model. This enables independent evaluation of retrieval quality (are the right documents being found?). RetrieveAndGenerate combines retrieval + generation in one call, making it impossible to isolate the retrieval step. InvokeModel calls a model directly without a knowledge base. StartBatchInferenceJob is for large-scale async inference.",
+    "source_topic": "Bedrock Retrieve API for retrieval-only evaluation"
+  },
+  {
+    "id": "d1-q0583",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Embedding model version drift \u2014 RAG silent failure",
+    "difficulty": "hard",
+    "question_text": "A RAG system that was working well suddenly starts returning poor-quality answers after a pipeline update. The vector index was not re-built. Investigation shows the embedding model version was updated in the ingestion pipeline but not in the query pipeline. What type of failure is this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Context window overflow"
+      },
+      {
+        "key": "B",
+        "text": "Embedding model version mismatch causing semantic drift between index vectors and query vectors"
+      },
+      {
+        "key": "C",
+        "text": "Guardrail false positive blocking valid retrievals"
+      },
+      {
+        "key": "D",
+        "text": "FM hallucination due to poor prompt engineering"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Embedding vectors are only comparable if generated by the same model version. If the ingestion pipeline uses model v1 (stored in the index) but the query pipeline now uses model v2, the query vectors exist in a different semantic space than the index vectors \u2014 similarity scores become meaningless and retrieval quality collapses silently. This is a common production failure that requires rebuilding the index with the new model. The other options describe different failure modes.",
+    "source_topic": "Embedding model version mismatch in RAG"
+  },
+  {
+    "id": "d1-q0584",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Bedrock Knowledge Base RetrieveAndGenerate vs Retrieve API",
+    "difficulty": "easy",
+    "question_text": "A developer wants to build a chatbot that automatically retrieves relevant context from a knowledge base and generates a grounded response in a single API call, without writing custom retrieval-generation orchestration code. Which Bedrock API is MOST appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Retrieve"
+      },
+      {
+        "key": "B",
+        "text": "RetrieveAndGenerate"
+      },
+      {
+        "key": "C",
+        "text": "InvokeModel with a knowledge base ARN parameter"
+      },
+      {
+        "key": "D",
+        "text": "StartBatchInferenceJob"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "RetrieveAndGenerate is the managed, single-call Bedrock API that performs both retrieval from a Knowledge Base and generation using an FM \u2014 grounding responses in documents to reduce hallucinations, with no custom orchestration required. The Retrieve API is retrieval-only. InvokeModel has no built-in knowledge base retrieval parameter. StartBatchInferenceJob is for async large-scale processing, not real-time chat.",
+    "source_topic": "RetrieveAndGenerate for managed RAG in single call"
+  },
+  {
+    "id": "d1-q0585",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Chunking strategies",
+    "difficulty": "easy",
+    "question_text": "A developer is configuring Bedrock Knowledge Base chunking for a collection of technical FAQs. Each FAQ has a clear question-and-answer pair that fits in about 200 tokens. They want to avoid FAQ answers being split across chunks. Which chunking strategy is BEST?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Fixed-size chunking at 100 tokens with no overlap"
+      },
+      {
+        "key": "B",
+        "text": "Semantic chunking that splits at natural section boundaries (each Q&A pair as one chunk)"
+      },
+      {
+        "key": "C",
+        "text": "Fixed-size chunking at 5,000 tokens to ensure everything fits"
+      },
+      {
+        "key": "D",
+        "text": "Random chunking optimised for embedding model performance"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "For structured FAQ content where each Q&A is a natural semantic unit, semantic chunking that respects section boundaries ensures each chunk is a complete, self-contained FAQ entry. This maximises retrieval relevance (a full Q&A is retrieved, not half a question or half an answer). 100-token fixed chunking would split answers. 5,000-token chunks would merge many FAQs together. There is no 'random chunking' optimisation.",
+    "source_topic": "Semantic chunking for structured FAQ content"
+  },
+  {
+    "id": "d1-q0586",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Batch embedding generation",
+    "difficulty": "medium",
+    "question_text": "A team needs to generate embeddings for 500,000 document chunks stored in S3. They want to optimise for cost and throughput rather than real-time latency. Which approach is MOST cost-efficient?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Call InvokeModel in a Lambda for each chunk individually in parallel"
+      },
+      {
+        "key": "B",
+        "text": "Use Bedrock Batch Inference (StartBatchInferenceJob) to process all chunks asynchronously from S3"
+      },
+      {
+        "key": "C",
+        "text": "Use Bedrock Provisioned Throughput with synchronous InvokeModel calls"
+      },
+      {
+        "key": "D",
+        "text": "Host the embedding model on SageMaker real-time endpoints with auto-scaling"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock Batch Inference is optimised for large-scale asynchronous processing: you submit all 500K chunks via S3, and Bedrock processes them in bulk at lower effective cost per token. Individual Lambda-per-chunk invocations incur per-request overhead and concurrency management complexity. Provisioned Throughput is for steady real-time traffic, not batch. SageMaker endpoints require custom containers and infrastructure management.",
+    "source_topic": "Bedrock Batch Inference for bulk embedding generation"
+  },
+  {
+    "id": "d1-q0587",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "CountTokens API for cost estimation",
+    "difficulty": "easy",
+    "question_text": "Before submitting a large prompt to Amazon Bedrock, a developer wants to estimate the cost by counting how many tokens the prompt contains \u2014 without actually running inference. Which Bedrock API enables this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "GetFoundationModel"
+      },
+      {
+        "key": "B",
+        "text": "InvokeModel with max_tokens set to 0"
+      },
+      {
+        "key": "C",
+        "text": "CountTokens"
+      },
+      {
+        "key": "D",
+        "text": "ListFoundationModels"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "The Bedrock CountTokens API returns the token count for a given input without running inference \u2014 useful for cost estimation, prompt budget management, and avoiding context window overflows before making actual inference calls. GetFoundationModel and ListFoundationModels return metadata about models. InvokeModel with max_tokens=0 would still trigger an inference attempt and incur input token costs.",
+    "source_topic": "CountTokens API for cost estimation without inference"
+  },
+  {
+    "id": "d1-q0600",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "HyDE retrieval technique",
+    "difficulty": "hard",
+    "question_text": "A RAG application answers complex, abstract questions where the user's short query rarely shares vocabulary with the relevant source passages, so pure semantic search over the raw query returns poor matches. Which retrieval technique is specifically designed to close this query-document vocabulary gap?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "HyDE (Hypothetical Document Embeddings) \u2014 have the LLM generate a hypothetical answer, embed that, and search with its vector"
+      },
+      {
+        "key": "B",
+        "text": "Increase the top-K value so more chunks are returned"
+      },
+      {
+        "key": "C",
+        "text": "Switch the vector index from HNSW to IVF"
+      },
+      {
+        "key": "D",
+        "text": "Lower the embedding model's dimension count to reduce noise"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "HyDE asks the LLM to write a hypothetical document that would answer the question, then embeds THAT richer text instead of the sparse query. The hypothetical answer shares far more vocabulary and semantic structure with real source passages, dramatically improving retrieval for abstract questions. Raising top-K only returns more low-relevance chunks; the HNSW/IVF choice is an ANN algorithm tradeoff unrelated to the vocabulary gap; reducing dimensions degrades embedding quality.",
+    "source_topic": "HyDE hypothetical document embeddings for retrieval"
+  },
+  {
+    "id": "d1-q0601",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Step-back prompting for retrieval",
+    "difficulty": "medium",
+    "question_text": "Users ask highly specific questions (e.g. \"What was the tax treatment of the 2023 R&D credit for a Delaware C-corp with under $5M revenue?\") but the knowledge base stores broad conceptual documents. Retrieval on the narrow query misses the relevant conceptual passages. Which retrieval strategy best addresses this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Step-back prompting \u2014 generate a broader, more general query to retrieve high-level context before answering the specific question"
+      },
+      {
+        "key": "B",
+        "text": "Reduce chunk size so each chunk is more specific"
+      },
+      {
+        "key": "C",
+        "text": "Disable hybrid search and use keyword-only matching"
+      },
+      {
+        "key": "D",
+        "text": "Increase temperature on the generation model"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Step-back prompting has the LLM first derive a broader/more abstract version of the question, retrieves the general conceptual context that specific queries miss, then answers the narrow question grounded in that context. Smaller chunks make the specificity mismatch worse; keyword-only search would still miss conceptual overlap; temperature affects generation randomness, not retrieval.",
+    "source_topic": "Step-back prompting to retrieve broader context"
+  },
+  {
+    "id": "d1-q0602",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Self-querying retrieval with metadata filters",
+    "difficulty": "hard",
+    "question_text": "A knowledge base stores chunks with rich metadata (department, created_date, access_level). Users ask questions like \"Show me engineering docs updated after January 2026.\" Pure vector similarity ignores these structured constraints and returns stale or wrong-department results. Which retrieval approach fixes this most directly?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Self-querying retrieval \u2014 the LLM parses the natural-language query into a semantic search string PLUS structured metadata filters that are applied during retrieval"
+      },
+      {
+        "key": "B",
+        "text": "Re-embed all documents with a larger embedding model"
+      },
+      {
+        "key": "C",
+        "text": "Store every document in a single flat index with no metadata"
+      },
+      {
+        "key": "D",
+        "text": "Always retrieve the top 100 chunks and let the LLM sort them out"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Self-querying uses the LLM to translate the user's question into both a semantic query and explicit metadata filters (e.g. department = engineering AND last_updated > 2026-01-01), so the vector store applies precise structured constraints alongside similarity. A bigger embedding model does not enforce date/department constraints; removing metadata eliminates the very signal needed; dumping 100 chunks on the LLM is costly and still returns wrong-department noise.",
+    "source_topic": "Self-querying retrieval generating metadata filters"
   }
 ]

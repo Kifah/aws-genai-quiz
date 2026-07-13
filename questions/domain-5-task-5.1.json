@@ -323,5 +323,517 @@
     ],
     "explanation": "Amazon Kendra GenAI Index is closing to new customers on July 30, 2026. AWS's recommended new-build path for GenAI RAG is Amazon Bedrock Knowledge Bases, which provides native vector search integration, multiple data source connectors, and tight coupling with Bedrock FMs. Kendra is not always preferable, the two services are not identical, and Lex is a conversational AI service unrelated to document search.",
     "source_topic": "Amazon Kendra deprecation, Bedrock Knowledge Bases, RAG service selection"
+  },
+  {
+    "id": "d5-q0214",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "ROUGE BLEU BERTScore evaluation metric selection",
+    "difficulty": "medium",
+    "question_text": "A team is evaluating a fine-tuned model that translates English legal documents to French. They have reference translations and want an automated metric. Which evaluation metric is MOST appropriate for machine translation quality?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "ROUGE \u2014 recall-oriented text overlap metric"
+      },
+      {
+        "key": "B",
+        "text": "BLEU \u2014 n-gram precision metric designed for machine translation evaluation"
+      },
+      {
+        "key": "C",
+        "text": "Perplexity \u2014 measures model prediction confidence"
+      },
+      {
+        "key": "D",
+        "text": "BERTScore \u2014 semantic similarity metric"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "BLEU (Bilingual Evaluation Understudy) is the standard metric for machine translation \u2014 it measures n-gram precision of generated translations against human reference translations. ROUGE is designed for summarisation (recall-focused). Perplexity measures how well the model predicts the next token \u2014 a training quality metric, not output correctness. BERTScore measures semantic similarity and is better for open-ended text quality assessment.",
+    "source_topic": "BLEU metric for machine translation evaluation"
+  },
+  {
+    "id": "d5-q0215",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "ROUGE BLEU BERTScore evaluation metric selection",
+    "difficulty": "medium",
+    "question_text": "A team is evaluating a GenAI model that summarises long customer support tickets into brief summaries. They have human-written reference summaries. Which metric BEST measures how well the generated summaries capture the key information from reference summaries?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "BLEU \u2014 n-gram precision for translation"
+      },
+      {
+        "key": "B",
+        "text": "Perplexity \u2014 model prediction confidence"
+      },
+      {
+        "key": "C",
+        "text": "ROUGE \u2014 recall-oriented overlap metric designed for summarisation evaluation"
+      },
+      {
+        "key": "D",
+        "text": "BOLD \u2014 bias in language generation"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "ROUGE (Recall-Oriented Understudy for Gisting Evaluation) is specifically designed for summarisation evaluation \u2014 it measures the overlap between generated summaries and reference summaries, with a focus on recall (how much of the reference content is captured). BLEU measures translation precision. Perplexity measures prediction confidence during training. BOLD measures demographic bias in generated text.",
+    "source_topic": "ROUGE metric for text summarisation evaluation"
+  },
+  {
+    "id": "d5-q0216",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "ROUGE BLEU BERTScore evaluation metric selection",
+    "difficulty": "medium",
+    "question_text": "A team evaluates a GenAI model that rewrites formal legal text into plain language. The rewrites are semantically correct but use different words than the reference texts, so ROUGE scores are low despite high human ratings. Which metric BETTER captures semantic equivalence?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "BLEU \u2014 n-gram overlap precision"
+      },
+      {
+        "key": "B",
+        "text": "ROUGE-L \u2014 longest common subsequence"
+      },
+      {
+        "key": "C",
+        "text": "BERTScore \u2014 embedding-based semantic similarity that captures meaning regardless of exact wording"
+      },
+      {
+        "key": "D",
+        "text": "Perplexity \u2014 model fluency score"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "BERTScore uses contextual embeddings (from BERT/similar models) to measure the semantic similarity between generated and reference text \u2014 capturing meaning even when different words are used. This explains why paraphrased plain-language rewrites can score high on BERTScore despite low BLEU/ROUGE (which require word overlap). BLEU and ROUGE are both word-overlap based. Perplexity measures prediction confidence, not output quality.",
+    "source_topic": "BERTScore for semantic similarity in paraphrase evaluation"
+  },
+  {
+    "id": "d5-q0217",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "ROUGE BLEU BERTScore evaluation metric selection",
+    "difficulty": "hard",
+    "question_text": "A team trains a new language model and wants to measure how well it predicts text sequences during training \u2014 specifically to compare whether training on Dataset A or Dataset B produces a better base model. Which metric measures training quality?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "ROUGE \u2014 summarisation quality"
+      },
+      {
+        "key": "B",
+        "text": "BLEU \u2014 translation quality"
+      },
+      {
+        "key": "C",
+        "text": "Perplexity \u2014 measures how well the model predicts the next token; lower perplexity indicates a better-fitting model"
+      },
+      {
+        "key": "D",
+        "text": "BERTScore \u2014 semantic similarity for output evaluation"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Perplexity measures how 'surprised' the model is by test sequences \u2014 lower perplexity indicates the model has better learned the statistical patterns of the language. It is used for comparing language model training quality between different datasets, architectures, or training runs. Important exam note: Perplexity does NOT measure hallucination or output correctness. ROUGE, BLEU, and BERTScore all evaluate generated outputs against reference text.",
+    "source_topic": "Perplexity for language model training quality comparison"
+  },
+  {
+    "id": "d5-q0218",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "LLM-as-a-judge evaluation",
+    "difficulty": "medium",
+    "question_text": "A company wants to automatically evaluate the factual accuracy, relevance, and coherence of 10,000 Bedrock-generated customer service responses. Human review is too expensive and slow. What is the MOST scalable automated approach?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "ROUGE score comparison against a reference corpus"
+      },
+      {
+        "key": "B",
+        "text": "LLM-as-a-Judge: use a separate calibrated FM (via Bedrock evaluation jobs) to score each response against a rubric for accuracy, relevance, and coherence"
+      },
+      {
+        "key": "C",
+        "text": "CloudWatch Metrics for response time \u2014 faster responses indicate higher quality"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Comprehend sentiment analysis on all responses"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "LLM-as-a-Judge uses a secondary FM to score primary model outputs against a detailed rubric \u2014 this scales to 10,000+ evaluations automatically via Bedrock evaluation jobs, producing consistent quality scores. Bedrock Model Evaluations natively supports this approach. ROUGE requires reference text and measures overlap, not nuanced quality. Response time has no correlation with quality. Comprehend sentiment is NLP analysis, not factual accuracy evaluation.",
+    "source_topic": "LLM-as-a-Judge with Bedrock evaluation jobs at scale"
+  },
+  {
+    "id": "d5-q0219",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Bedrock Model Evaluations",
+    "difficulty": "medium",
+    "question_text": "A team needs to systematically compare three Bedrock models (Claude Haiku, Claude Sonnet, Amazon Nova Lite) on their specific use case: customer complaint classification. They want automated scoring across accuracy, robustness, and cost. Which AWS service provides this side-by-side model comparison?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "SageMaker Experiments \u2014 tracks training run comparisons"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Model Evaluations \u2014 automated comparative evaluation of multiple FMs on the same dataset"
+      },
+      {
+        "key": "C",
+        "text": "AWS Cost Explorer \u2014 compares per-token costs across models"
+      },
+      {
+        "key": "D",
+        "text": "Amazon CloudWatch dashboards \u2014 shows per-model latency comparison"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Amazon Bedrock Model Evaluations is purpose-built for systematic, automated side-by-side comparison of multiple FMs against your own datasets. You define evaluation criteria (accuracy, robustness, cost), select the models, provide the dataset, and get a structured comparison report. SageMaker Experiments tracks ML training runs. Cost Explorer shows billing data only. CloudWatch shows operational metrics \u2014 none provide the ML quality evaluation framework that Model Evaluations does.",
+    "source_topic": "Bedrock Model Evaluations for side-by-side FM comparison"
+  },
+  {
+    "id": "d5-q0220",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "RAG evaluation metrics",
+    "difficulty": "hard",
+    "question_text": "A RAG system is producing inaccurate answers. The team needs to determine whether the problem is (A) the retrieval step returning wrong documents, or (B) the FM generating a poor answer despite good retrieved context. What is the CORRECT evaluation approach to isolate the failure?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run end-to-end evaluation with RetrieveAndGenerate and score final answers only"
+      },
+      {
+        "key": "B",
+        "text": "Run retrieval-only evaluation first using the Retrieve API to assess whether correct chunks are returned; if retrieval is good, then evaluate generation quality separately"
+      },
+      {
+        "key": "C",
+        "text": "Check CloudWatch latency metrics to determine which component is slower"
+      },
+      {
+        "key": "D",
+        "text": "Fine-tune the FM to improve overall answer quality"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "The key principle: 'Unsure whether errors come from retrieval or generation \u2192 Run retrieve-only evaluation first.' The Bedrock Retrieve API returns only retrieved chunks without generation \u2014 enabling evaluation of whether the right documents are being found. If retrieval is good but answers are wrong, the problem is in generation (fix: improve prompts, switch models). If retrieval is wrong, fix the chunking/embedding/search. End-to-end evaluation (A) can't isolate which component failed. Latency doesn't diagnose quality. Fine-tuning is premature before identifying the root cause.",
+    "source_topic": "RAG two-part evaluation: retrieve-only then retrieve-and-generate"
+  },
+  {
+    "id": "d5-q0221",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Agent evaluation",
+    "difficulty": "medium",
+    "question_text": "A team wants to evaluate their Bedrock Agent across multiple test scenarios including happy paths, edge cases, and adversarial inputs. They want to compare two agent configurations (different system prompts) and score tool selection accuracy and task completion rate. Which service is purpose-built for this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Bedrock Model Evaluations \u2014 for FM model comparisons"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Agent Evaluations \u2014 specifically designed for evaluating agent tool selection, reasoning, and task completion"
+      },
+      {
+        "key": "C",
+        "text": "SageMaker Clarify \u2014 for bias detection in ML models"
+      },
+      {
+        "key": "D",
+        "text": "AWS Step Functions execution history \u2014 logs agent steps"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Amazon Bedrock Agent Evaluations is purpose-built for evaluating Bedrock Agents: it tests the agent's conversation flows against predefined success criteria, evaluates tool selection accuracy, reasoning quality, and task completion rates across multiple scenarios (happy path and edge cases). It also supports comparing two agent configurations. Model Evaluations compares FMs, not agents. Clarify detects training data bias. Step Functions history logs workflow execution but doesn't provide quality scoring.",
+    "source_topic": "Bedrock Agent Evaluations for agent-specific quality testing"
+  },
+  {
+    "id": "d5-q0222",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Precision@k for retrieval quality",
+    "difficulty": "hard",
+    "question_text": "A team evaluates their RAG retrieval system using Precision@5 (P@5). For 100 test queries, they find P@5 = 0.4. What does this mean and what is the MOST likely cause?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "40% of all documents in the index are relevant \u2014 the index is too large"
+      },
+      {
+        "key": "B",
+        "text": "On average, 2 out of the top 5 retrieved chunks are relevant \u2014 poor retrieval precision, likely caused by suboptimal embeddings, chunking, or index parameters"
+      },
+      {
+        "key": "C",
+        "text": "40% of queries return at least one relevant result \u2014 recall is poor"
+      },
+      {
+        "key": "D",
+        "text": "The FM uses 40% of retrieved context to generate answers \u2014 the rest is ignored"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Precision@k means: for the top k retrieved results, what fraction are relevant? P@5 = 0.4 means on average 2 out of 5 retrieved chunks are relevant \u2014 60% are irrelevant noise sent to the FM. This is likely caused by: poor chunking (chunks that are too large/small), suboptimal embedding model, overly broad search, or missing metadata filters. P@5 doesn't measure total index relevance, all-query coverage, or FM context utilisation.",
+    "source_topic": "Precision@k for measuring RAG retrieval quality"
+  },
+  {
+    "id": "d5-q0223",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "SageMaker Ground Truth \u2014 training data labeling",
+    "difficulty": "medium",
+    "question_text": "A company wants to build a 'golden dataset' for ongoing GenAI evaluation by having domain experts (medical professionals) annotate 5,000 clinical question-answer pairs as correct/incorrect/partially-correct. They need a managed workflow for task assignment, annotation collection, and quality control. Which AWS service provides this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Augmented AI (A2I) \u2014 for reviewing live ML predictions"
+      },
+      {
+        "key": "B",
+        "text": "Amazon SageMaker Ground Truth \u2014 managed data labelling with private workforce, quality control, and active learning"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Bedrock Model Evaluations \u2014 for automated FM comparison"
+      },
+      {
+        "key": "D",
+        "text": "AWS Mechanical Turk \u2014 crowdsourced annotations without managed workflows"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "SageMaker Ground Truth provides the full managed labelling workflow: task assignment to private workforce (medical professionals), annotation collection, consensus-based quality control (multiple raters, gold standard examples), and active learning to reduce labelling cost for easy cases. A2I reviews live ML predictions, not batch dataset creation. Bedrock Model Evaluations uses automated scoring, not human annotation. Mechanical Turk is a crowdsourcing marketplace (accessible through Ground Truth) but without the managed quality control Ground Truth provides.",
+    "source_topic": "SageMaker Ground Truth for managed expert dataset annotation"
+  },
+  {
+    "id": "d5-q0224",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Canary testing for FM models",
+    "difficulty": "medium",
+    "question_text": "A team wants to deploy an updated Bedrock prompt version to production but is cautious about potential regressions. They want to first expose only 5% of production traffic to the new prompt while monitoring error rates and user satisfaction, before gradually increasing to 100%. This describes which deployment strategy?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Blue/green deployment \u2014 switch all traffic at once between two environments"
+      },
+      {
+        "key": "B",
+        "text": "Canary testing \u2014 deploy to a small subset of users first, monitor metrics, then gradually roll out"
+      },
+      {
+        "key": "C",
+        "text": "A/B testing \u2014 split traffic 50/50 between two variants for statistical comparison"
+      },
+      {
+        "key": "D",
+        "text": "Shadow testing \u2014 send all traffic to both but show users only the original"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Canary testing deploys a new version to a small subset of users (5%) while monitoring closely for errors or regressions, then gradually increases the percentage. This limits blast radius if the new prompt causes issues. Blue/green switches all traffic simultaneously. A/B testing splits traffic 50/50 for statistical comparison (not a gradual rollout). Shadow testing runs the new version hidden from users for silent comparison.",
+    "source_topic": "Canary testing for safe gradual GenAI prompt rollout"
+  },
+  {
+    "id": "d5-q0225",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Deployment validation for FM updates",
+    "difficulty": "hard",
+    "question_text": "After deploying a new version of a Bedrock-powered application, the team wants to immediately validate that the new deployment doesn't exhibit semantic drift \u2014 that responses to standard questions haven't meaningfully changed in meaning from the previous version. What validation approach detects semantic drift?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Compare response character lengths between old and new versions"
+      },
+      {
+        "key": "B",
+        "text": "Use BERTScore or cosine embedding similarity to compare new responses against baseline responses for a golden question set \u2014 alert if semantic distance exceeds threshold"
+      },
+      {
+        "key": "C",
+        "text": "Check CloudWatch error rate metrics for the new deployment"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Inspector to scan new Lambda functions for code vulnerabilities"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Semantic drift detection computes the embedding similarity between current responses and baseline (known-good) responses for a standard question set. If the semantic distance exceeds a threshold, it signals that response meaning has shifted \u2014 even if responses are grammatically correct. BERTScore or cosine similarity are the correct tools. Character length comparison (A) misses semantic changes. CloudWatch error rates detect technical failures, not quality drift. Inspector scans for security vulnerabilities.",
+    "source_topic": "BERTScore/cosine similarity for semantic drift detection post-deployment"
+  },
+  {
+    "id": "d5-q0226",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Bedrock Model Evaluations",
+    "difficulty": "hard",
+    "question_text": "A model evaluation pipeline for a regulated industry application requires: automated scoring, human approval gating before model promotion, and an immutable decision record. Which combination of AWS services implements this complete pipeline?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "CloudWatch Dashboard + SNS email notification + manual DynamoDB update"
+      },
+      {
+        "key": "B",
+        "text": "Bedrock Model Evaluations (automated scoring) \u2192 Step Functions (gate on quality threshold; waitForTaskToken for human approval) \u2192 SageMaker Model Registry (record approved model version)"
+      },
+      {
+        "key": "C",
+        "text": "Bedrock Guardrails (content filtering) + Lambda (deployment) + S3 (reports)"
+      },
+      {
+        "key": "D",
+        "text": "Amazon A2I (human review) + Glue ETL (process results) + RDS (store approval)"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "The complete regulated evaluation pipeline: (1) Bedrock Model Evaluations runs automated scoring against quality metrics. (2) Step Functions gates on the score threshold \u2014 if passing, uses waitForTaskToken to pause for human approval via API Gateway. (3) On approval, the model version is promoted in SageMaker Model Registry (immutable, versioned record). CloudWatch/SNS + manual DynamoDB lacks the automated quality gate and structured workflow. Guardrails is a safety tool, not an evaluation pipeline. A2I + Glue + RDS lacks the structured evaluation and model registry.",
+    "source_topic": "Full evaluation pipeline: Model Evaluations + Step Functions + Model Registry"
+  },
+  {
+    "id": "d5-q0227",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Evaluation workflow ordering",
+    "difficulty": "hard",
+    "question_text": "A team is setting up a continuous evaluation workflow that runs nightly. Place the following steps in the correct order: (1) Store eval dataset in S3, (2) Run Bedrock Model Evaluation job with LLM-as-judge, (3) Apply quality gate via Step Functions Choice state, (4) If passing, promote model in Model Registry, (5) Send SNS alert on pass/fail. Which sequence is correct?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "5 \u2192 1 \u2192 2 \u2192 3 \u2192 4"
+      },
+      {
+        "key": "B",
+        "text": "1 \u2192 2 \u2192 3 \u2192 4 \u2192 5"
+      },
+      {
+        "key": "C",
+        "text": "3 \u2192 1 \u2192 2 \u2192 5 \u2192 4"
+      },
+      {
+        "key": "D",
+        "text": "2 \u2192 1 \u2192 3 \u2192 5 \u2192 4"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "The logical sequence is: (1) Store evaluation dataset in S3 (prerequisite). (2) Run Bedrock Model Evaluation job using that dataset. (3) Step Functions Choice state evaluates whether scores meet the quality threshold. (4) If threshold met, promote the model in Model Registry. (5) Send SNS notification of pass/fail result. The alert happens after the decision (not before or during). This is the AWS-recommended continuous evaluation workflow.",
+    "source_topic": "Continuous evaluation workflow step ordering"
+  },
+  {
+    "id": "d5-q0228",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Output diff and regression monitoring",
+    "difficulty": "medium",
+    "question_text": "A team discovers that after updating their system prompt, the FM started including disclaimers in responses where it previously didn't. They want a systematic way to detect such output format/content changes after each future deployment. What approach enables this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Monitor CloudWatch ModelLatency for changes after each deployment"
+      },
+      {
+        "key": "B",
+        "text": "After each deployment, automatically run a golden question set and diff current outputs against previous baseline outputs using string comparison or LLM-as-judge"
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Macie to scan new responses for format changes"
+      },
+      {
+        "key": "D",
+        "text": "Use AWS Config to detect changes in the system prompt configuration"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Output diffing is the practice of comparing current model outputs against baseline outputs for the same standard inputs after each deployment. String diff catches format changes (like added disclaimers); LLM-as-judge captures semantic changes. This is implemented in a Step Functions post-deployment validation workflow. Latency monitoring detects performance regressions, not content changes. Macie discovers sensitive data. Config tracks resource configurations.",
+    "source_topic": "Output diffing for post-deployment response change detection"
+  },
+  {
+    "id": "d5-q0229",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "User feedback collection",
+    "difficulty": "medium",
+    "question_text": "A GenAI product manager asks: 'We collect thumbs up/down feedback. Is this enough as the primary quality evaluation signal for our production model?' What is the CORRECT assessment?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Yes \u2014 user feedback is the ground truth for model quality"
+      },
+      {
+        "key": "B",
+        "text": "No \u2014 user feedback alone is insufficient; it is noisy, subject to bias, and doesn't scale for systematic comparison. It should supplement automated evaluation (Bedrock Model Evaluations + LLM-as-judge) not replace it"
+      },
+      {
+        "key": "C",
+        "text": "Yes \u2014 if the thumbs up rate exceeds 80%, the model is production-ready"
+      },
+      {
+        "key": "D",
+        "text": "No \u2014 user feedback should be completely ignored as it is too subjective"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "User feedback is valuable as a continuous improvement signal but has significant limitations: it is noisy (users give inconsistent ratings), biased (users rate positively for fluent responses even if factually wrong), and not ground truth for model comparison. Automated evaluation (Bedrock Model Evaluations, LLM-as-judge, golden datasets) provides more reliable, scalable, and reproducible quality assessment. The recommended approach combines both: automated evaluation for systematic comparison + user feedback for ongoing production signals.",
+    "source_topic": "User feedback limitations \u2014 not a substitute for automated evaluation"
   }
 ]

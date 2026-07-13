@@ -365,5 +365,458 @@
     ],
     "explanation": "Amazon QuickSight is AWS's managed BI service, enabling rich visual dashboards for business stakeholders with no infrastructure to manage. It connects to Athena, S3, CloudWatch, RDS, and more, making it suitable for GenAI usage analytics. CloudWatch is operational monitoring (not stakeholder-facing BI). Cost Explorer is limited to billing dimensions. SageMaker Studio is a data science IDE.",
     "source_topic": "Amazon QuickSight, BI dashboards, GenAI metrics visualization"
+  },
+  {
+    "id": "d5-q0230",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Context window overflow troubleshooting",
+    "difficulty": "medium",
+    "question_text": "A Bedrock application starts returning errors 'Input is too long' during peak usage. Analysis shows the conversation history is growing indefinitely with each turn. What is the CORRECT fix?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Switch to a model with a larger context window"
+      },
+      {
+        "key": "B",
+        "text": "Implement a Lambda function that counts tokens (using CountTokens API), and if the total prompt exceeds 80% of the context limit, prunes the oldest conversation turns or summarises the history before sending"
+      },
+      {
+        "key": "C",
+        "text": "Increase Lambda memory to handle larger inputs"
+      },
+      {
+        "key": "D",
+        "text": "Enable Bedrock Guardrails to truncate inputs automatically"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "The root cause is unbounded conversation history growing beyond the context window. The fix is proactive context management: use the CountTokens API to estimate total prompt size, and if it approaches the limit, prune oldest turns or summarise the history. Switching to a larger context window model (A) only delays the problem. Lambda memory has no effect on FM context limits. Guardrails filter content for safety \u2014 they don't manage context window sizing.",
+    "source_topic": "Context window management: CountTokens + history pruning"
+  },
+  {
+    "id": "d5-q0231",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Retrieval quality debugging",
+    "difficulty": "hard",
+    "question_text": "A RAG chatbot gives accurate answers to recent questions but increasingly poor answers to questions about older documents. Investigation shows newer documents were added to the knowledge base after a Titan Embeddings model version upgrade. What is the likely root cause?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "The older documents have expired from the vector store via TTL"
+      },
+      {
+        "key": "B",
+        "text": "Embedding model version mismatch: older documents were embedded with the previous model version, newer with the new version \u2014 vectors in different semantic spaces cannot be accurately compared"
+      },
+      {
+        "key": "C",
+        "text": "The context window is too small to handle older, longer documents"
+      },
+      {
+        "key": "D",
+        "text": "The knowledge base needs more shards to accommodate more documents"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Embedding version mismatch is the classic silent failure mode: older documents were embedded with Titan Embeddings v1, newer documents with v2. Since both versions produce vectors in different semantic spaces, similarity comparisons between a v2 query vector and v1 document vectors are inaccurate \u2014 causing poor retrieval for old documents. Fix: re-embed ALL documents with the current model version and rebuild the index. TTL doesn't apply here. Context window size affects generation, not retrieval.",
+    "source_topic": "Embedding model version mismatch causing silent retrieval failure"
+  },
+  {
+    "id": "d5-q0232",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Prompt troubleshooting",
+    "difficulty": "medium",
+    "question_text": "A developer's Bedrock application is generating inconsistent output formats \u2014 sometimes JSON, sometimes plain text, despite a system prompt saying 'Output in JSON'. The developer wants to debug which exact prompt is being sent to the model including all variables substituted. Where is this information accessible?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS CloudTrail \u2014 records the InvokeModel API call metadata"
+      },
+      {
+        "key": "B",
+        "text": "Bedrock Model Invocation Logs (ModelInvocationInput trace) \u2014 captures the exact finalised prompt sent to the model for each invocation"
+      },
+      {
+        "key": "C",
+        "text": "AWS Config \u2014 tracks system prompt configuration changes"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Macie \u2014 scans model inputs for sensitive data"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock Model Invocation Logs, specifically the ModelInvocationInput trace, captures the EXACT prompt that was sent to the model \u2014 including all variable substitutions, conversation history, and system prompts. This allows developers to verify what the model actually received vs. what they intended. CloudTrail records API metadata but not the full prompt body. Config tracks resource configurations. Macie scans S3 for sensitive data.",
+    "source_topic": "Bedrock ModelInvocationInput trace for exact prompt debugging"
+  },
+  {
+    "id": "d5-q0233",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Prompt troubleshooting",
+    "difficulty": "medium",
+    "question_text": "A team uses parameterised Bedrock prompts (with {tone}, {language}, {text} variables). Some combinations of variables cause the model to produce confused or irrelevant outputs. How should the team systematically identify which variable combinations are problematic?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy to production and wait for user complaints"
+      },
+      {
+        "key": "B",
+        "text": "Create a test matrix of all variable combinations and run Bedrock evaluation jobs against all combinations, reviewing outputs for confusion patterns"
+      },
+      {
+        "key": "C",
+        "text": "Remove all variables from the prompt template"
+      },
+      {
+        "key": "D",
+        "text": "Use CloudWatch Logs Insights to query for responses containing the word 'confused'"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Systematic prompt debugging for parameterised templates requires testing all relevant variable combinations \u2014 a test matrix approach. Bedrock evaluation jobs can run all combinations against an evaluation rubric and flag problematic outputs. This identifies the specific combinations that fail before deployment. Waiting for user complaints (A) is reactive. Removing variables defeats the template purpose. CloudWatch queries (D) only catch a specific symptom and only after deployment.",
+    "source_topic": "Template testing: variable combination test matrix for parameterised prompts"
+  },
+  {
+    "id": "d5-q0234",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Retrieval quality debugging",
+    "difficulty": "hard",
+    "question_text": "A RAG system returns technically correct chunks but users still receive incomplete answers. Investigation reveals the retrieved chunks break in the middle of important concepts (e.g., a legal clause split across two chunks). What is the root cause and fix?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "The FM has a hallucination problem \u2014 fine-tune the model"
+      },
+      {
+        "key": "B",
+        "text": "Fixed-size chunking is splitting at character boundaries rather than semantic boundaries \u2014 switch to semantic/hierarchical chunking to preserve concept integrity"
+      },
+      {
+        "key": "C",
+        "text": "The vector store is returning stale embeddings \u2014 rebuild the index"
+      },
+      {
+        "key": "D",
+        "text": "Increase k (number of retrieved chunks) from 5 to 20"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "When chunks break in the middle of concepts (clauses, sentences, logical units), the root cause is chunking strategy \u2014 typically fixed-size chunking at character/token boundaries. The fix is semantic/recursive chunking that splits at natural boundaries (sentences, paragraphs, section headings) preserving concept integrity. Hierarchical chunking (small for retrieval, larger parent for context) is also effective. This is a chunking strategy issue, not a model hallucination or staleness problem. Increasing k just adds more partially-broken chunks.",
+    "source_topic": "Chunking boundary issues \u2014 semantic chunking to fix incomplete answers"
+  },
+  {
+    "id": "d5-q0235",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Troubleshooting ThrottlingException",
+    "difficulty": "medium",
+    "question_text": "A Lambda function calling Bedrock suddenly starts failing with ThrottlingException after a new feature release doubled traffic. The errors are intermittent. What is the CORRECT handling approach (ordered from first to last attempt)?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Immediately purchase Provisioned Throughput and disable retries"
+      },
+      {
+        "key": "B",
+        "text": "(1) Implement exponential backoff with jitter retries in Lambda, (2) add SQS buffer to absorb traffic spikes, (3) if persistent, purchase Provisioned Throughput"
+      },
+      {
+        "key": "C",
+        "text": "Switch to a different model that has more available capacity"
+      },
+      {
+        "key": "D",
+        "text": "Increase Lambda concurrency to 10,000 to process faster"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "The graduated approach: (1) Exponential backoff handles transient throttling from spiky traffic \u2014 most cases resolve without additional infrastructure. (2) SQS buffer decouples request intake from processing, absorbing traffic spikes gracefully. (3) Provisioned Throughput is the solution only if throttling persists despite buffering, indicating sustained capacity need. Immediately purchasing Provisioned Throughput is costly if backoff + buffering resolves it. Switching models may degrade quality. More Lambda concurrency increases the rate of throttled requests.",
+    "source_topic": "ThrottlingException: backoff \u2192 SQS buffer \u2192 Provisioned Throughput"
+  },
+  {
+    "id": "d5-q0236",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Context window overflow troubleshooting",
+    "difficulty": "medium",
+    "question_text": "A developer notices that Bedrock responses seem to 'forget' information from the beginning of very long conversations. The conversation history is 8,000 tokens and the model's context window is 8,192 tokens. What is happening and how should it be fixed?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "The model has a memory bug \u2014 contact AWS Support"
+      },
+      {
+        "key": "B",
+        "text": "The conversation is silently truncated at the token limit \u2014 early context is dropped. Fix: implement sliding window (keep last N turns) or periodic summarisation to compress old history"
+      },
+      {
+        "key": "C",
+        "text": "The FM temperature is too high causing inconsistent recall"
+      },
+      {
+        "key": "D",
+        "text": "DynamoDB TTL is expiring the conversation history prematurely"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "When a prompt approaches the context window limit, the model (or the API client) silently truncates the oldest content to fit. This causes the model to 'forget' early conversation context. Fix: implement a sliding window that retains only the most recent N turns, or use a Lambda to periodically summarise old history into a compressed paragraph \u2014 preserving key information in fewer tokens. This is not a model bug, temperature issue, or TTL problem.",
+    "source_topic": "Silent context truncation \u2014 sliding window or history summarisation"
+  },
+  {
+    "id": "d5-q0237",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "FM API integration errors",
+    "difficulty": "hard",
+    "question_text": "A Bedrock streaming application (using InvokeModelWithResponseStream) intermittently stops streaming mid-response with no error returned \u2014 the connection just closes. What are the MOST likely causes?",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Lambda function timeout reached before streaming completed \u2014 increase Lambda timeout or switch to shorter responses"
+      },
+      {
+        "key": "B",
+        "text": "API Gateway WebSocket connection timeout \u2014 API Gateway WebSocket connections time out after 10 minutes by default"
+      },
+      {
+        "key": "C",
+        "text": "The model has a bias problem causing early termination"
+      },
+      {
+        "key": "D",
+        "text": "Bedrock Guardrails blocked the streaming response mid-generation"
+      },
+      {
+        "key": "E",
+        "text": "The FM reached the max_tokens limit and terminated generation normally"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "(A) Lambda has a 15-minute maximum timeout. If streaming takes longer than the configured timeout (often 30 seconds default), the function terminates mid-stream with no error. (B) API Gateway WebSocket connections have a 10-minute idle and connection timeout \u2014 long streaming responses may exceed this. Both can cause silent mid-stream closure. Model bias (C) doesn't cause connection closure. Guardrails (D) produce a guardrail intervention response, not a silent close. max_tokens termination (E) sends a completion event, not a connection drop.",
+    "source_topic": "Streaming interruption: Lambda timeout + API Gateway WebSocket timeout"
+  },
+  {
+    "id": "d5-q0238",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "KB ingestion logging for document-level failures",
+    "difficulty": "medium",
+    "question_text": "A team runs a Bedrock Knowledge Base ingestion job and notices some documents were not embedded. The job completed without a global error. How should they diagnose which specific documents failed and why?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Check AWS CloudTrail for the CreateIngestionJob API call errors"
+      },
+      {
+        "key": "B",
+        "text": "Query CloudWatch Logs for the ingestion job \u2014 Bedrock logs document-level errors including which files failed and the error reason"
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Macie to scan the S3 source bucket for corrupted files"
+      },
+      {
+        "key": "D",
+        "text": "Re-run the entire ingestion job and check if the count changes"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock Knowledge Base ingestion jobs log document-level processing details (including individual file failures and error reasons) to CloudWatch Logs. This is the primary troubleshooting resource for identifying which specific documents failed during ingestion. CloudTrail records the API call metadata but not per-document processing errors. Macie discovers sensitive data, not ingestion errors. Re-running without diagnosis wastes time and may not change the outcome if the root cause (e.g., malformed PDFs) is not fixed.",
+    "source_topic": "CloudWatch Logs for Bedrock KB document-level ingestion errors"
+  },
+  {
+    "id": "d5-q0239",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Prompt maintenance with CloudWatch and X-Ray",
+    "difficulty": "medium",
+    "question_text": "A team wants to trace exactly which version of a parameterised prompt was used for a specific production request that generated a problematic response. How can they correlate the prompt version to the specific request?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Check the Bedrock console for recent invocations"
+      },
+      {
+        "key": "B",
+        "text": "Use AWS X-Ray with custom annotations logging the prompt_version_id alongside the trace; then query X-Ray for the specific request trace"
+      },
+      {
+        "key": "C",
+        "text": "Check CloudWatch Metrics for the prompt version usage count"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Macie to trace the prompt content"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "AWS X-Ray traces can be annotated with custom key-value metadata (annotations) like prompt_version_id. When investigating a specific problematic request, you query X-Ray for the trace ID of that request and see which prompt version was used. This enables prompt version attribution for debugging. The Bedrock console shows recent invocations but not per-request prompt version metadata. CloudWatch Metrics shows aggregate counts. Macie scans data at rest.",
+    "source_topic": "X-Ray custom annotations for prompt version tracing"
+  },
+  {
+    "id": "d5-q0240",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Retrieval quality debugging",
+    "difficulty": "hard",
+    "question_text": "A RAG knowledge base was working well for 3 months. Then the company updated its document corpus (replaced old versions with new versions). Now the system returns a mix of old and new information, causing conflicting answers. What maintenance task was likely missed?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "The fine-tuned model needs retraining on new documents"
+      },
+      {
+        "key": "B",
+        "text": "Old document vectors were not deleted from the knowledge base when old files were replaced \u2014 stale vectors must be deleted and a re-ingestion run"
+      },
+      {
+        "key": "C",
+        "text": "The Lambda function has a bug returning cached old responses"
+      },
+      {
+        "key": "D",
+        "text": "Bedrock Guardrails are blocking new document content"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "When documents are replaced, the old vectors remain in the knowledge base unless explicitly deleted. The knowledge base now contains both old and new embeddings for the same topics, causing retrieval to return conflicting information. Fix: (1) identify old document IDs in the vector store, (2) delete their vectors, (3) re-trigger ingestion for the new document versions. This is a data maintenance issue, not a model, Lambda, or Guardrails issue.",
+    "source_topic": "Stale vector cleanup when documents are replaced in KB"
+  },
+  {
+    "id": "d5-q0241",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "FM API integration errors",
+    "difficulty": "medium",
+    "question_text": "A team migrates from calling a Bedrock model directly (model ID hardcoded) to using Bedrock cross-region inference. After migration, all requests receive AccessDeniedException. What is the MOST likely cause?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "The model is not available in the destination region"
+      },
+      {
+        "key": "B",
+        "text": "The IAM role lacks bedrock:InvokeModel permission for the cross-region inference profile ARN \u2014 cross-region inference uses a different ARN format than direct model invocations"
+      },
+      {
+        "key": "C",
+        "text": "Bedrock Guardrails are blocking cross-region requests"
+      },
+      {
+        "key": "D",
+        "text": "The Lambda timeout is too short for cross-region calls"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Cross-region inference in Bedrock uses inference profile ARNs (format: arn:aws:bedrock:us-east-1::inference-profile/...) rather than direct model ARNs. When migrating from direct invocation, the IAM policy must be updated to grant bedrock:InvokeModel permission for the inference profile ARN \u2014 not just the model ARN. This is a common migration pitfall. Regional availability issues would produce a different error. Guardrails don't block cross-region calls. Lambda timeout causes TaskTimedOut, not AccessDeniedException.",
+    "source_topic": "Cross-region inference IAM: inference profile ARN vs model ARN"
+  },
+  {
+    "id": "d5-q0242",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Retrieval quality debugging",
+    "difficulty": "medium",
+    "question_text": "A developer wants to test whether their OpenSearch vector index is working correctly after recent changes. They embed a known phrase ('customer return policy') and search for it \u2014 expecting to find the exact document they know contains that phrase. Which diagnostic step confirms the vector index is correctly matching semantically related content?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Check the OpenSearch cluster's FreeStorageSpace metric in CloudWatch"
+      },
+      {
+        "key": "B",
+        "text": "Embed the known phrase and call the Bedrock Retrieve API (or OpenSearch k-NN search directly) \u2014 verify the known document ranks in the top results"
+      },
+      {
+        "key": "C",
+        "text": "Review CloudTrail logs for recent OpenSearch API calls"
+      },
+      {
+        "key": "D",
+        "text": "Run a SQL SELECT query on the OpenSearch index"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "The correct diagnostic is to embed a known phrase and run a vector similarity search \u2014 then verify that the document known to contain that phrase appears in the top results. If it doesn't, the embedding pipeline, chunking, or index has a problem. FreeStorageSpace indicates storage health, not retrieval accuracy. CloudTrail shows API calls, not search quality. OpenSearch uses a query DSL, not SQL SELECT.",
+    "source_topic": "Vector index diagnostic: embed known phrase, verify top-k results"
+  },
+  {
+    "id": "d5-q0243",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Prompt troubleshooting",
+    "difficulty": "medium",
+    "question_text": "A team updates a production system prompt but forgets to update the version tracking in Bedrock Prompt Management. In production, different Lambda instances are using different prompt versions (old cache vs. new). How should this race condition be prevented in future deployments?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Lambda reserved concurrency = 1 so only one instance runs at a time"
+      },
+      {
+        "key": "B",
+        "text": "Store the canonical prompt version ID in AWS AppConfig and update it atomically; Lambda reads from AppConfig on each invocation \u2014 ensuring consistent version usage"
+      },
+      {
+        "key": "C",
+        "text": "Redeploy all Lambda functions simultaneously whenever the prompt changes"
+      },
+      {
+        "key": "D",
+        "text": "Increase Lambda timeout to ensure old cache expires before new requests come in"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "AWS AppConfig provides atomic configuration updates with built-in cache invalidation. Lambda functions read the active prompt version ID from AppConfig on each request (using the AppConfig Lambda extension's cache with a configurable TTL). When the prompt is updated in AppConfig, all Lambda instances pick up the new version within the TTL window \u2014 no redeployment needed, no race condition. Lambda concurrency = 1 eliminates parallelism. Redeploying all Lambda functions simultaneously has a blue/green complexity. Timeout adjustments don't address version consistency.",
+    "source_topic": "AppConfig for atomic prompt version updates across Lambda instances"
   }
 ]

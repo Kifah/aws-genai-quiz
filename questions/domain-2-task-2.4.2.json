@@ -1,0 +1,47 @@
+[
+  {
+    "id": "d2-q0612", "domain": 2, "task_statement": "2.4", "topic": "CHAT vs TEXT prompt template types",
+    "difficulty": "medium",
+    "question_text": "A Lambda function calls GetPrompt from Bedrock Prompt Management and parses templateConfiguration.chat.messages. The prompt was created in the Bedrock console. Why is the template stored under the chat key rather than text?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "The Bedrock console creates CHAT-type prompts by default (with system instructions and message turns), stored under templateConfiguration.chat" },
+      { "key": "B", "text": "All Bedrock prompts use the chat structure regardless of how they were created" },
+      { "key": "C", "text": "The Lambda code has a bug and should use templateConfiguration.text" },
+      { "key": "D", "text": "The API response format is model-dependent, not prompt-type-dependent" }
+    ],
+    "correct_answers": ["A"],
+    "explanation": "When you create a prompt in the Bedrock console, it produces a CHAT-type prompt with system and message turns stored under templateConfiguration.chat. Programmatically created plain-text templates are TEXT-type stored under templateConfiguration.text. Lambda must handle both types depending on how the prompt was authored. The other options mischaracterize how the template type is determined.",
+    "source_topic": "Bedrock Prompt Management CHAT vs TEXT template type"
+  },
+  {
+    "id": "d2-q0613", "domain": 2, "task_statement": "2.4", "topic": "Prompt Management variable syntax",
+    "difficulty": "easy",
+    "question_text": "What syntax does Amazon Bedrock Prompt Management use for variable placeholders in prompt templates?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "{{double_braces}} — e.g. {{context}} and {{question}}" },
+      { "key": "B", "text": "{single_braces}" },
+      { "key": "C", "text": "$variable" },
+      { "key": "D", "text": "<variable>" }
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Bedrock Prompt Management uses {{double curly braces}} for variable substitution — e.g. {{context}} and {{question}} are replaced at runtime with values passed in the API call. Single braces are Python f-string syntax, dollar-sign is Bash/shell, and angle brackets are not used for Bedrock variable substitution.",
+    "source_topic": "Bedrock Prompt Management {{double braces}} variable syntax"
+  },
+  {
+    "id": "d2-q0614", "domain": 2, "task_statement": "2.4", "topic": "Three Bedrock VPC endpoints for private RAG",
+    "difficulty": "hard",
+    "question_text": "A Lambda function in a private VPC (no internet/NAT) must call InvokeModel for embeddings AND RetrieveAndGenerate for Knowledge Bases. Which two VPC interface endpoints are required?",
+    "question_type": "multi",
+    "options": [
+      { "key": "A", "text": "bedrock-runtime (for InvokeModel)" },
+      { "key": "B", "text": "bedrock-agent-runtime (for RetrieveAndGenerate)" },
+      { "key": "C", "text": "bedrock-agent (for Prompt Management GetPrompt)" },
+      { "key": "D", "text": "bedrock (does not exist as a VPC endpoint service)" }
+    ],
+    "correct_answers": ["A", "B"],
+    "explanation": "bedrock-runtime enables InvokeModel (embeddings and generation) and bedrock-agent-runtime enables Knowledge Bases APIs (Retrieve, RetrieveAndGenerate). If you additionally use Prompt Management (GetPrompt), you also need bedrock-agent. There is no VPC endpoint named simply 'bedrock'. Without the correct endpoints, calls silently hang until Lambda timeout.",
+    "source_topic": "Bedrock VPC endpoints: bedrock-runtime + bedrock-agent-runtime"
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "d3-q0482", "domain": 3, "task_statement": "3.1", "topic": "Guardrail hard block vs message substitution",
+    "difficulty": "hard",
+    "question_text": "When a Bedrock Guardrail intervenes, the API response can show either stop_reason: guardrail_intervened (HTTP 200) or stop_reason: end_turn (HTTP 200) with a replacement message. What is the difference between these two intervention modes?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "guardrail_intervened is a hard block (generation stopped, guardrailAction in body); end_turn with a substituted message looks like a normal response to the client" },
+      { "key": "B", "text": "guardrail_intervened means the response was allowed with a warning" },
+      { "key": "C", "text": "Both are identical — Guardrails always use guardrail_intervened" },
+      { "key": "D", "text": "guardrail_intervened triggers an automatic retry with a different model" }
+    ],
+    "correct_answers": ["A"],
+    "explanation": "A hard block sets stop_reason to guardrail_intervened and includes amazon-bedrock-guardrailAction in the response body — the client knows intervention occurred. Message substitution returns HTTP 200 with stop_reason: end_turn and a replacement message that is indistinguishable from a normal model response. Guardrails do not retry with another model or return responses with 'warnings'.",
+    "source_topic": "Guardrail stop_reason: guardrail_intervened vs message substitution"
+  }
+]
