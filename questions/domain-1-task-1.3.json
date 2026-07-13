@@ -28,7 +28,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "AWS Glue Data Quality lets you define DQDL rules for completeness, freshness, uniqueness, and custom logic — directly applicable to pre-ingestion document validation as cited in Skill 1.3.1. Amazon Macie detects PII/sensitive data but does not score general data quality. GuardDuty is a threat-detection service. AWS Config monitors resource configuration compliance, not dataset quality.",
+    "explanation": "AWS Glue Data Quality lets you define DQDL rules for completeness, freshness, uniqueness, and custom logic \u2014 directly applicable to pre-ingestion document validation as cited in Skill 1.3.1. Amazon Macie detects PII/sensitive data but does not score general data quality. GuardDuty is a threat-detection service. AWS Config monitors resource configuration compliance, not dataset quality.",
     "source_topic": "AWS Glue Data Quality, FM data pipeline"
   },
   {
@@ -42,25 +42,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Transcribe for audio → Textract or Glue for PDFs → Bedrock multimodal models for spreadsheet understanding"
+        "text": "Amazon Transcribe for audio \u2192 Textract or Glue for PDFs \u2192 Bedrock multimodal models for spreadsheet understanding"
       },
       {
         "key": "B",
-        "text": "Amazon Rekognition for audio → Amazon QuickSight for PDFs → Amazon Polly for spreadsheets"
+        "text": "Amazon Rekognition for audio \u2192 Amazon QuickSight for PDFs \u2192 Amazon Polly for spreadsheets"
       },
       {
         "key": "C",
-        "text": "Amazon Polly for audio → S3 static hosting for PDFs → Athena for spreadsheets"
+        "text": "Amazon Polly for audio \u2192 S3 static hosting for PDFs \u2192 Athena for spreadsheets"
       },
       {
         "key": "D",
-        "text": "SageMaker Processing for audio → DynamoDB for PDFs → Lambda for spreadsheets"
+        "text": "SageMaker Processing for audio \u2192 DynamoDB for PDFs \u2192 Lambda for spreadsheets"
       }
     ],
     "correct_answers": [
       "A"
     ],
-    "explanation": "Skill 1.3.2 cites Amazon Transcribe for audio and Bedrock multimodal models for complex multimodal pipelines. Transcribe converts speech to text; Textract/Glue extracts text from scanned PDFs; Bedrock multimodal models can interpret tabular/spreadsheet content. Rekognition is for image/video (not audio). Polly converts text to speech — the wrong direction. SageMaker Processing can do audio work but Transcribe is the managed, purpose-built service.",
+    "explanation": "Skill 1.3.2 cites Amazon Transcribe for audio and Bedrock multimodal models for complex multimodal pipelines. Transcribe converts speech to text; Textract/Glue extracts text from scanned PDFs; Bedrock multimodal models can interpret tabular/spreadsheet content. Rekognition is for image/video (not audio). Polly converts text to speech \u2014 the wrong direction. SageMaker Processing can do audio work but Transcribe is the managed, purpose-built service.",
     "source_topic": "Amazon Transcribe, Bedrock multimodal, data processing"
   },
   {
@@ -114,7 +114,7 @@
       },
       {
         "key": "C",
-        "text": "Rely on Bedrock's built-in session memory — the API automatically recalls past turns"
+        "text": "Rely on Bedrock's built-in session memory \u2014 the API automatically recalls past turns"
       },
       {
         "key": "D",
@@ -124,7 +124,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 1.3.3 cites 'conversation formatting for dialog-based applications.' The Bedrock Converse API accepts a messages array with alternating user/assistant role turns and an optional top-level system field. The API is stateless — each request must carry the full conversation history. Concatenating into a single string loses role structure. Session cookies are a browser mechanism, not an FM API construct.",
+    "explanation": "Skill 1.3.3 cites 'conversation formatting for dialog-based applications.' The Bedrock Converse API accepts a messages array with alternating user/assistant role turns and an optional top-level system field. The API is stateless \u2014 each request must carry the full conversation history. Concatenating into a single string loses role structure. Session cookies are a browser mechanism, not an FM API construct.",
     "source_topic": "Amazon Bedrock Converse API, conversation formatting"
   },
   {
@@ -161,7 +161,7 @@
       "A",
       "B"
     ],
-    "explanation": "Skill 1.3.4 lists Amazon Comprehend (entity extraction and text standardisation) and Lambda (normalisation functions) for enhancing input quality. Rekognition is for images/video — not text content. Polly→re-transcription adds latency with no quality benefit for already-text input. Force-translating to English would lose meaning for multilingual use cases and is not listed as a recommended approach.",
+    "explanation": "Skill 1.3.4 lists Amazon Comprehend (entity extraction and text standardisation) and Lambda (normalisation functions) for enhancing input quality. Rekognition is for images/video \u2014 not text content. Polly\u2192re-transcription adds latency with no quality benefit for already-text input. Force-translating to English would lose meaning for multilingual use cases and is not listed as a recommended approach.",
     "source_topic": "Amazon Comprehend, Lambda, input preprocessing"
   },
   {
@@ -193,7 +193,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 1.3.1 cites SageMaker Data Wrangler as a tool for data validation workflows. Data Wrangler provides a visual interface for profiling, transforming, and quality-checking datasets — purpose-built for ML/FM preparation. Athena is a SQL engine with no visual prep UI. Glue Studio is a visual ETL builder for data engineering pipelines. QuickSight is a BI tool for dashboards and analytics, not data preparation.",
+    "explanation": "Skill 1.3.1 cites SageMaker Data Wrangler as a tool for data validation workflows. Data Wrangler provides a visual interface for profiling, transforming, and quality-checking datasets \u2014 purpose-built for ML/FM preparation. Athena is a SQL engine with no visual prep UI. Glue Studio is a visual ETL builder for data engineering pipelines. QuickSight is a BI tool for dashboards and analytics, not data preparation.",
     "source_topic": "SageMaker Data Wrangler, FM fine-tuning data prep"
   },
   {
@@ -225,7 +225,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 1.3.3 cites 'structured data preparation' and 1.3.1 mentions 'JSON Schema to enforce structured outputs'. Providing a JSON Schema and few-shot examples is the most reliable technique for constrained output formatting — the FM learns the exact schema from examples and the schema constrains its output. Vague natural-language instructions produce inconsistent formats. Regex post-processing is brittle for varied FM outputs. Textract is for extracting data from PDFs/images, not parsing FM text.",
+    "explanation": "Skill 1.3.3 cites 'structured data preparation' and 1.3.1 mentions 'JSON Schema to enforce structured outputs'. Providing a JSON Schema and few-shot examples is the most reliable technique for constrained output formatting \u2014 the FM learns the exact schema from examples and the schema constrains its output. Vague natural-language instructions produce inconsistent formats. Regex post-processing is brittle for varied FM outputs. Textract is for extracting data from PDFs/images, not parsing FM text.",
     "source_topic": "JSON Schema, structured FM output, few-shot prompting"
   },
   {
@@ -234,7 +234,7 @@
     "task_statement": "1.3",
     "topic": "CloudWatch metrics for data pipeline",
     "difficulty": "easy",
-    "question_text": "A team wants to monitor the health of their FM data ingestion pipeline — specifically detecting when documents fail validation checks. Which AWS service should they use to set up automated alerts?",
+    "question_text": "A team wants to monitor the health of their FM data ingestion pipeline \u2014 specifically detecting when documents fail validation checks. Which AWS service should they use to set up automated alerts?",
     "question_type": "single",
     "options": [
       {
@@ -257,7 +257,7 @@
     "correct_answers": [
       "A"
     ],
-    "explanation": "Skill 1.3.1 lists Amazon CloudWatch metrics as part of data validation workflows. Publishing custom metrics (e.g., failed_validation_count) to CloudWatch and creating alarms with SNS notifications is the standard operational monitoring pattern on AWS. Trusted Advisor is for best-practice recommendations. Inspector scans for vulnerabilities. Macie detects sensitive data — not pipeline health.",
+    "explanation": "Skill 1.3.1 lists Amazon CloudWatch metrics as part of data validation workflows. Publishing custom metrics (e.g., failed_validation_count) to CloudWatch and creating alarms with SNS notifications is the standard operational monitoring pattern on AWS. Trusted Advisor is for best-practice recommendations. Inspector scans for vulnerabilities. Macie detects sensitive data \u2014 not pipeline health.",
     "source_topic": "Amazon CloudWatch, data pipeline monitoring"
   },
   {
@@ -275,7 +275,7 @@
       },
       {
         "key": "B",
-        "text": "Amazon Bedrock Data Automation — uses GenAI to understand context across irregular multi-format documents"
+        "text": "Amazon Bedrock Data Automation \u2014 uses GenAI to understand context across irregular multi-format documents"
       },
       {
         "key": "C",
@@ -289,7 +289,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Amazon Bedrock Data Automation uses GenAI to understand semantic context across documents with highly variable layouts ('Amount Due' = 'Total' = 'Balance Due'), outputting normalised JSON — directly cited in Skill 1.3.2 for automated data processing workflows. Textract is fast and accurate for fixed-template or well-structured forms but cannot handle extreme layout variability. Glue DataBrew processes structured datasets. Comprehend extracts named entities but does not normalise them into a domain-specific schema.",
+    "explanation": "Amazon Bedrock Data Automation uses GenAI to understand semantic context across documents with highly variable layouts ('Amount Due' = 'Total' = 'Balance Due'), outputting normalised JSON \u2014 directly cited in Skill 1.3.2 for automated data processing workflows. Textract is fast and accurate for fixed-template or well-structured forms but cannot handle extreme layout variability. Glue DataBrew processes structured datasets. Comprehend extracts named entities but does not normalise them into a domain-specific schema.",
     "source_topic": "Amazon Bedrock Data Automation, Amazon Textract"
   },
   {
@@ -307,7 +307,7 @@
       },
       {
         "key": "B",
-        "text": "Amazon Kinesis Data Firehose — auto-buffers, compresses, date-partitions, and delivers to S3 without code"
+        "text": "Amazon Kinesis Data Firehose \u2014 auto-buffers, compresses, date-partitions, and delivers to S3 without code"
       },
       {
         "key": "C",
@@ -321,7 +321,103 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Kinesis Data Firehose is the no-code streaming-to-S3 funnel: it automatically buffers, compresses (GZIP/Snappy), partitions by date, and delivers to S3 (Skill 1.3.2 — data processing workflows for FM consumption). Data Streams requires writing and maintaining a consumer (Lambda). MSK requires managing Kafka brokers and writing consumer code. A Glue streaming job requires PySpark/Scala code — higher operational effort.",
+    "explanation": "Kinesis Data Firehose is the no-code streaming-to-S3 funnel: it automatically buffers, compresses (GZIP/Snappy), partitions by date, and delivers to S3 (Skill 1.3.2 \u2014 data processing workflows for FM consumption). Data Streams requires writing and maintaining a consumer (Lambda). MSK requires managing Kafka brokers and writing consumer code. A Glue streaming job requires PySpark/Scala code \u2014 higher operational effort.",
     "source_topic": "Amazon Kinesis Data Firehose, FM data pipeline"
+  },
+  {
+    "id": "d1-q0511",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Third-party data source connectors",
+    "difficulty": "medium",
+    "question_text": "A company stores internal documentation in Atlassian Confluence and public product pages on a company website. A developer is building a Bedrock Knowledge Base and needs to ingest both sources. Which approach is MOST appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure separate Bedrock Knowledge Base data source connectors \u2014 one for Confluence and one using the web crawler \u2014 to ingest both sources"
+      },
+      {
+        "key": "B",
+        "text": "Manually download all Confluence pages as PDFs weekly and upload them to S3"
+      },
+      {
+        "key": "C",
+        "text": "Embed the website content directly into the system prompt on every invocation"
+      },
+      {
+        "key": "D",
+        "text": "Store all content in DynamoDB and write a custom Lambda to forward it to the model"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Amazon Bedrock Knowledge Bases provides managed data source connectors for Confluence, SharePoint, Salesforce, and a web crawler. Using the dedicated connectors automates ingestion and keeps the index up to date. Manual weekly exports, stuffing the system prompt with a full website, and routing DynamoDB records via Lambda are all unscalable workarounds that bypass the purpose-built connectors.",
+    "source_topic": "Bedrock Knowledge Bases data source connectors"
+  },
+  {
+    "id": "d1-q0512",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "GDPR right to erasure in vector stores",
+    "difficulty": "hard",
+    "question_text": "A European user invokes their GDPR right to erasure. The company's Bedrock Knowledge Base contains chunks from documents that include that user's data. Which sequence of steps FULLY satisfies the erasure requirement?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Delete the source documents containing the user's data from the S3 data source, then re-sync the knowledge base so the corresponding vectors are purged from the index"
+      },
+      {
+        "key": "B",
+        "text": "Lower the retrieval top-k so the user's chunks are less likely to appear"
+      },
+      {
+        "key": "C",
+        "text": "Add a guardrail word filter blocking the user's name"
+      },
+      {
+        "key": "D",
+        "text": "Rotate the KMS key used to encrypt the vector store"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "The only way to fully erase data from a RAG pipeline is to delete the source records and re-sync (re-index) the knowledge base so the derived vectors are also removed. Reducing top-k merely reduces the probability the data appears \u2014 it is still present and retrievable. A word filter blocks the name string but not other personal data in the chunks. Rotating the KMS key re-encrypts existing data but does not delete it.",
+    "source_topic": "GDPR erasure, data deletion in knowledge bases"
+  },
+  {
+    "id": "d1-q0513",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "OCR for scanned document ingestion",
+    "difficulty": "medium",
+    "question_text": "A legal team's archive consists entirely of scanned paper documents saved as image-only PDFs. When the team tries to ingest them into a Bedrock Knowledge Base, no text content is returned in retrieval results. What is the root cause and the correct remediation?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "The PDFs have no extractable text layer; an OCR step must be added in the ingestion pipeline (e.g., via Amazon Textract) to extract text before embedding"
+      },
+      {
+        "key": "B",
+        "text": "The embedding model dimension is too small; increase it"
+      },
+      {
+        "key": "C",
+        "text": "The chunks are too large; reduce chunk size to one word"
+      },
+      {
+        "key": "D",
+        "text": "The knowledge base needs a higher temperature setting"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Image-only PDFs contain no machine-readable text, so a standard text extractor produces nothing. Adding OCR \u2014 for example using Amazon Textract during pre-processing \u2014 converts the scanned images to text, which can then be chunked and embedded. Embedding dimension, chunk size, and temperature are unrelated to the absence of a text layer.",
+    "source_topic": "Amazon Textract, OCR pipeline for knowledge base ingestion"
   }
 ]

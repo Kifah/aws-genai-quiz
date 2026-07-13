@@ -5,7 +5,7 @@
     "task_statement": "2.2",
     "topic": "Lambda vs provisioned throughput deployment",
     "difficulty": "medium",
-    "question_text": "A company needs to deploy a foundation model on Amazon Bedrock. Usage is highly variable — spiky during business hours, near-zero overnight. Which deployment option minimises cost while still meeting sub-3-second response SLA?",
+    "question_text": "A company needs to deploy a foundation model on Amazon Bedrock. Usage is highly variable \u2014 spiky during business hours, near-zero overnight. Which deployment option minimises cost while still meeting sub-3-second response SLA?",
     "question_type": "single",
     "options": [
       {
@@ -28,7 +28,7 @@
     "correct_answers": [
       "A"
     ],
-    "explanation": "Skill 2.2.1 lists Lambda for on-demand invocation as a deployment option for specific application needs. For variable, spiky workloads, on-demand Bedrock via Lambda is most cost-efficient — you pay per token, with no idle capacity cost. Provisioned Throughput commits to reserved capacity 24/7, cost-effective only for sustained high throughput. A permanent EC2 GPU instance has high idle cost. AWS Batch is for large batch jobs, not interactive FM inference.",
+    "explanation": "Skill 2.2.1 lists Lambda for on-demand invocation as a deployment option for specific application needs. For variable, spiky workloads, on-demand Bedrock via Lambda is most cost-efficient \u2014 you pay per token, with no idle capacity cost. Provisioned Throughput commits to reserved capacity 24/7, cost-effective only for sustained high throughput. A permanent EC2 GPU instance has high idle cost. AWS Batch is for large batch jobs, not interactive FM inference.",
     "source_topic": "Amazon Bedrock deployment options, Lambda, cost optimisation"
   },
   {
@@ -65,7 +65,7 @@
       "A",
       "B"
     ],
-    "explanation": "Skill 2.2.2 describes container-based deployment patterns optimised for LLM memory requirements, GPU utilisation, and token processing capacity, plus specialised model loading strategies. LLMs require multi-GPU tensor parallelism, GPU memory management (KV cache), and token throughput capacity planning — all absent in traditional scikit-learn or XGBoost deployments. LLMs require GPUs, not just CPUs. Standard SageMaker instances lack the GPU memory optimisation LLMs need.",
+    "explanation": "Skill 2.2.2 describes container-based deployment patterns optimised for LLM memory requirements, GPU utilisation, and token processing capacity, plus specialised model loading strategies. LLMs require multi-GPU tensor parallelism, GPU memory management (KV cache), and token throughput capacity planning \u2014 all absent in traditional scikit-learn or XGBoost deployments. LLMs require GPUs, not just CPUs. Standard SageMaker instances lack the GPU memory optimisation LLMs need.",
     "source_topic": "LLM deployment, SageMaker, GPU, container optimisation"
   },
   {
@@ -129,7 +129,7 @@
     "correct_answers": [
       "A"
     ],
-    "explanation": "Skill 2.2.1 cites SageMaker AI endpoints for hybrid solutions. A routing layer (e.g., Lambda + API Gateway) inspects the request and dispatches to Bedrock for hosted FMs and to a SageMaker real-time endpoint for the proprietary model. Lambda functions are size-constrained (< 10GB) — unsuitable for multi-gigabyte model weights. Amazon Kendra is a document search service. Models cannot be uploaded to Bedrock's public catalogue by arbitrary customers.",
+    "explanation": "Skill 2.2.1 cites SageMaker AI endpoints for hybrid solutions. A routing layer (e.g., Lambda + API Gateway) inspects the request and dispatches to Bedrock for hosted FMs and to a SageMaker real-time endpoint for the proprietary model. Lambda functions are size-constrained (< 10GB) \u2014 unsuitable for multi-gigabyte model weights. Amazon Kendra is a document search service. Models cannot be uploaded to Bedrock's public catalogue by arbitrary customers.",
     "source_topic": "SageMaker endpoints, Bedrock, hybrid deployment"
   },
   {
@@ -166,7 +166,7 @@
       "A",
       "B"
     ],
-    "explanation": "Skill 2.2.2 covers token processing capacity planning and GPU utilisation. Continuous batching (also called iteration-level batching) lets the GPU process multiple in-flight requests simultaneously, improving GPU utilisation from 40% toward 80%+. INT8 quantisation halves GPU memory per model instance, enabling more concurrent batches or larger batch sizes. Lambda timeout is front-end infrastructure — doesn't affect GPU utilisation. CPU instances don't help for GPU-bound LLM inference. DynamoDB caching helps repeat queries but not novel ones.",
+    "explanation": "Skill 2.2.2 covers token processing capacity planning and GPU utilisation. Continuous batching (also called iteration-level batching) lets the GPU process multiple in-flight requests simultaneously, improving GPU utilisation from 40% toward 80%+. INT8 quantisation halves GPU memory per model instance, enabling more concurrent batches or larger batch sizes. Lambda timeout is front-end infrastructure \u2014 doesn't affect GPU utilisation. CPU instances don't help for GPU-bound LLM inference. DynamoDB caching helps repeat queries but not novel ones.",
     "source_topic": "LLM inference optimisation, batching, quantisation, SageMaker"
   },
   {
@@ -198,7 +198,7 @@
     "correct_answers": [
       "C"
     ],
-    "explanation": "SageMaker Asynchronous Inference (Skill 2.2.2 — LLM deployment strategies) supports large payloads (up to ~1 GB), long processing times (minutes), and on-demand request queuing — exactly matching 35 MB payload + 8 minute processing. Real-Time Inference caps at ~6 MB payload and ~60 second timeout — both exceeded here. Serverless Inference is convenient but does not support GPU instances, making it infeasible for image generation. Batch Transform processes offline batches — not designed for interactive on-demand requests.",
+    "explanation": "SageMaker Asynchronous Inference (Skill 2.2.2 \u2014 LLM deployment strategies) supports large payloads (up to ~1 GB), long processing times (minutes), and on-demand request queuing \u2014 exactly matching 35 MB payload + 8 minute processing. Real-Time Inference caps at ~6 MB payload and ~60 second timeout \u2014 both exceeded here. Serverless Inference is convenient but does not support GPU instances, making it infeasible for image generation. Batch Transform processes offline batches \u2014 not designed for interactive on-demand requests.",
     "source_topic": "SageMaker Asynchronous Inference, inference type selection"
   },
   {
@@ -230,7 +230,39 @@
     "correct_answers": [
       "C"
     ],
-    "explanation": "Skill 2.2.2 covers GPU utilisation and token processing capacity. If the model fits in 4 GPUs and the instance has 8, setting tensor parallelism = 4 allows two replicas (4 × 2 = 8 GPUs fully utilised) — doubling throughput on the same hardware. TP = 8 forces one replica across all 8 GPUs; the remaining 4 GPUs sit idle as the model doesn't need them — no throughput gain. Adding instances increases cost without fixing the per-instance utilisation waste. Speculative decoding reduces token latency but consumes extra VRAM for a draft model and does not increase concurrent replica count.",
+    "explanation": "Skill 2.2.2 covers GPU utilisation and token processing capacity. If the model fits in 4 GPUs and the instance has 8, setting tensor parallelism = 4 allows two replicas (4 \u00d7 2 = 8 GPUs fully utilised) \u2014 doubling throughput on the same hardware. TP = 8 forces one replica across all 8 GPUs; the remaining 4 GPUs sit idle as the model doesn't need them \u2014 no throughput gain. Adding instances increases cost without fixing the per-instance utilisation waste. Speculative decoding reduces token latency but consumes extra VRAM for a draft model and does not increase concurrent replica count.",
     "source_topic": "Tensor parallelism, GPU utilisation, SageMaker"
+  },
+  {
+    "id": "d2-q0509",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Staged fine-tuned model deployment with Provisioned Throughput",
+    "difficulty": "hard",
+    "question_text": "A team has fine-tuned a foundation model on Amazon Bedrock and wants to deploy it for inference in a way that limits blast radius before full rollout. Which is the CORRECT deployment path for a Bedrock custom (fine-tuned) model?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Purchase Provisioned Throughput for the custom model, validate it in a staging environment, then increase capacity for production after quality checks pass"
+      },
+      {
+        "key": "B",
+        "text": "Use the custom model with on-demand API calls exactly like a base model \u2014 no additional step is needed"
+      },
+      {
+        "key": "C",
+        "text": "Deploy the custom model to an EC2 instance and invoke it over SSH"
+      },
+      {
+        "key": "D",
+        "text": "Publish the custom model weights to a public S3 bucket for inference"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Custom (fine-tuned) models on Amazon Bedrock require Provisioned Throughput to be purchased before they can be invoked for inference \u2014 they cannot be called on-demand like base models. The staged approach (staging PT \u2192 quality validation \u2192 production PT) limits blast radius. EC2 + SSH and a public S3 bucket are not valid Bedrock deployment paths and expose model weights unnecessarily.",
+    "source_topic": "Bedrock custom model deployment, Provisioned Throughput for fine-tuned models"
   }
 ]

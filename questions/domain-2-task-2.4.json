@@ -28,7 +28,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 2.4.2 describes the Amazon Bedrock streaming API for incremental response delivery. InvokeModelWithResponseStream returns chunks of the response as they are generated, enabling the application to display text progressively — significantly improving perceived latency. The synchronous API waits for the full response. Bedrock does not use SQS or Kinesis for streaming token delivery.",
+    "explanation": "Skill 2.4.2 describes the Amazon Bedrock streaming API for incremental response delivery. InvokeModelWithResponseStream returns chunks of the response as they are generated, enabling the application to display text progressively \u2014 significantly improving perceived latency. The synchronous API waits for the full response. Bedrock does not use SQS or Kinesis for streaming token delivery.",
     "source_topic": "Bedrock streaming API, real-time FM responses"
   },
   {
@@ -60,7 +60,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 2.4.3 cites the AWS SDK for exponential backoff as a resilience mechanism. Exponential backoff with jitter spaces retries increasingly further apart, reducing load on the throttled service and avoiding retry storms. Tight-loop retries amplify throttling. Immediately returning failure ignores transient errors. Switching regions after every failure is an overreaction — exponential backoff handles transient throttling without cross-region overhead.",
+    "explanation": "Skill 2.4.3 cites the AWS SDK for exponential backoff as a resilience mechanism. Exponential backoff with jitter spaces retries increasingly further apart, reducing load on the throttled service and avoiding retry storms. Tight-loop retries amplify throttling. Immediately returning failure ignores transient errors. Switching regions after every failure is an overreaction \u2014 exponential backoff handles transient throttling without cross-region overhead.",
     "source_topic": "Exponential backoff, AWS SDK, Bedrock throttling"
   },
   {
@@ -92,7 +92,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 2.4.1 describes Amazon SQS for asynchronous processing. An SQS-backed Lambda fan-out processes documents in parallel batches; each Lambda invocation handles one document, stores the result, and exits — no long-running connections. Increasing Lambda timeout to 15 minutes risks exhausting concurrency limits for large batches and doesn't solve the scaling problem. A single EC2 loop is sequential and slow. RDS stored procedures cannot call external HTTP APIs.",
+    "explanation": "Skill 2.4.1 describes Amazon SQS for asynchronous processing. An SQS-backed Lambda fan-out processes documents in parallel batches; each Lambda invocation handles one document, stores the result, and exits \u2014 no long-running connections. Increasing Lambda timeout to 15 minutes risks exhausting concurrency limits for large batches and doesn't solve the scaling problem. A single EC2 loop is sequential and slow. RDS stored procedures cannot call external HTTP APIs.",
     "source_topic": "Asynchronous FM processing, SQS, Lambda"
   },
   {
@@ -110,7 +110,7 @@
       },
       {
         "key": "B",
-        "text": "Use Step Functions with a classification state — invoke a lightweight FM or rule engine to classify query complexity, then route to the appropriate model"
+        "text": "Use Step Functions with a classification state \u2014 invoke a lightweight FM or rule engine to classify query complexity, then route to the appropriate model"
       },
       {
         "key": "C",
@@ -124,7 +124,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 2.4.4 cites Step Functions for dynamic content-based routing to specialised FMs and intelligent model routing based on metrics. A Step Functions state machine classifies the query first (using a lightweight FM or regex/keyword rules), then branches to the appropriate endpoint. Static 50/50 routing ignores content. Prompt compression reduces tokens but doesn't route to cheaper models. Lex is for conversational intent classification within a dialogue system — not a general-purpose routing tier.",
+    "explanation": "Skill 2.4.4 cites Step Functions for dynamic content-based routing to specialised FMs and intelligent model routing based on metrics. A Step Functions state machine classifies the query first (using a lightweight FM or regex/keyword rules), then branches to the appropriate endpoint. Static 50/50 routing ignores content. Prompt compression reduces tokens but doesn't route to cheaper models. Lex is for conversational intent classification within a dialogue system \u2014 not a general-purpose routing tier.",
     "source_topic": "Intelligent routing, Step Functions, model selection"
   },
   {
@@ -156,7 +156,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 2.4.3 cites API Gateway for rate limiting as a resilience mechanism. API Gateway usage plans let you assign throttle rates and daily/monthly quotas per API key — enforcing fair multi-tenant access without blocking teams entirely or requiring separate accounts. Blocking is too severe. Separate Bedrock accounts increase management overhead without solving fair-use policy. Increasing quotas benefits everyone equally but doesn't enforce per-team limits.",
+    "explanation": "Skill 2.4.3 cites API Gateway for rate limiting as a resilience mechanism. API Gateway usage plans let you assign throttle rates and daily/monthly quotas per API key \u2014 enforcing fair multi-tenant access without blocking teams entirely or requiring separate accounts. Blocking is too severe. Separate Bedrock accounts increase management overhead without solving fair-use policy. Increasing quotas benefits everyone equally but doesn't enforce per-team limits.",
     "source_topic": "API Gateway usage plans, rate limiting, multi-tenant GenAI"
   },
   {
@@ -165,7 +165,7 @@
     "task_statement": "2.4",
     "topic": "AWS X-Ray for FM observability",
     "difficulty": "medium",
-    "question_text": "Developers need to trace a request end-to-end — from the API Gateway through Lambda to Bedrock and back — to identify which component introduces the most latency. Which service provides this distributed tracing?",
+    "question_text": "Developers need to trace a request end-to-end \u2014 from the API Gateway through Lambda to Bedrock and back \u2014 to identify which component introduces the most latency. Which service provides this distributed tracing?",
     "question_type": "single",
     "options": [
       {
@@ -188,7 +188,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 2.4.3 explicitly cites AWS X-Ray for observability across service boundaries. X-Ray creates end-to-end trace maps showing latency at each segment: API Gateway → Lambda → Bedrock → response. CloudWatch metrics provide aggregate statistics but not per-request trace trees. Inspector is a security scanner. AWS Config tracks resource configuration changes — not request latency traces.",
+    "explanation": "Skill 2.4.3 explicitly cites AWS X-Ray for observability across service boundaries. X-Ray creates end-to-end trace maps showing latency at each segment: API Gateway \u2192 Lambda \u2192 Bedrock \u2192 response. CloudWatch metrics provide aggregate statistics but not per-request trace trees. Inspector is a security scanner. AWS Config tracks resource configuration changes \u2014 not request latency traces.",
     "source_topic": "AWS X-Ray, distributed tracing, Bedrock"
   },
   {
@@ -220,7 +220,71 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 2.4.3 and 4.3.2 establish this three-way distinction. (1) CloudTrail records control-plane and data-plane API calls with IAM identity, timestamp, and source IP — perfect for 'who called the API at 2 AM.' (2) Bedrock Model Invocation Logs capture the full prompt and response payload — the only source with actual conversation content. (3) Knowledge Base ingestion logs (a separate KB-specific logging feature) record per-document ingestion status (SUCCESS / EMBEDDING_FAILED / INDEXING_FAILED) in CloudWatch Logs. CloudTrail records API calls but never the prompt/response content or document-level ingestion status.",
+    "explanation": "Skill 2.4.3 and 4.3.2 establish this three-way distinction. (1) CloudTrail records control-plane and data-plane API calls with IAM identity, timestamp, and source IP \u2014 perfect for 'who called the API at 2 AM.' (2) Bedrock Model Invocation Logs capture the full prompt and response payload \u2014 the only source with actual conversation content. (3) Knowledge Base ingestion logs (a separate KB-specific logging feature) record per-document ingestion status (SUCCESS / EMBEDDING_FAILED / INDEXING_FAILED) in CloudWatch Logs. CloudTrail records API calls but never the prompt/response content or document-level ingestion status.",
     "source_topic": "CloudTrail, Bedrock Model Invocation Logs, KB ingestion logs"
+  },
+  {
+    "id": "d2-q0510",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Converse API with tool use",
+    "difficulty": "medium",
+    "question_text": "A developer is building a customer support assistant using the Amazon Bedrock Converse API. The assistant must query a real-time shipping status endpoint. How should tool (function) calling be configured with the Converse API?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Pass a toolConfig parameter with a toolSpec for the shipping status function; handle the toolUse block in the model's response by calling the function and returning the result in a toolResult message"
+      },
+      {
+        "key": "B",
+        "text": "Embed the live shipping data in the system prompt before every call"
+      },
+      {
+        "key": "C",
+        "text": "Use the InvokeModel API with a custom JSON wrapper instead of Converse"
+      },
+      {
+        "key": "D",
+        "text": "Hard-code all possible shipping statuses as few-shot examples in the user turn"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "The Bedrock Converse API supports tool use by accepting a toolConfig block containing tool specifications. When the model decides to use a tool, it returns a toolUse block; the application calls the external function and sends back a toolResult \u2014 enabling the model to incorporate live data. Embedding live data in the system prompt does not scale and is stale within seconds. InvokeModel bypasses the structured tool-calling contract. Hard-coded few-shot examples cannot cover all real shipping states.",
+    "source_topic": "Bedrock Converse API, tool use, function calling"
+  },
+  {
+    "id": "d2-q0511",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Structured output with JSON schema",
+    "difficulty": "medium",
+    "question_text": "A developer needs to extract invoice fields (vendor, amount, date, line items) reliably from free-text invoices using an FM. Outputs must always be valid JSON matching a defined schema for downstream processing. Which technique BEST ensures schema-compliant output?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Provide a JSON schema in the prompt and instruct the model to return only valid JSON; optionally enforce stop sequences and validate the output before passing it downstream"
+      },
+      {
+        "key": "B",
+        "text": "Set temperature to 1.0 to encourage varied but accurate outputs"
+      },
+      {
+        "key": "C",
+        "text": "Use a text-to-image model for the extraction task"
+      },
+      {
+        "key": "D",
+        "text": "Use streaming responses and discard chunks that are not valid JSON tokens"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Providing an explicit JSON schema in the prompt and constraining output with instructions and stop sequences (e.g., stopping after the closing brace) produces structured, parseable output. Downstream validation catches any edge cases. A temperature of 1.0 increases randomness and makes structured output less reliable. Text-to-image models cannot extract text fields. Streaming token-level filtering cannot guarantee schema validity.",
+    "source_topic": "Structured output, JSON schema enforcement, stop sequences"
   }
 ]

@@ -1,123 +1,296 @@
 [
   {
-    "id": "d1-q0401", "domain": 1, "task_statement": "1.5", "topic": "Chunking strategies",
+    "id": "d1-q0401",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Chunking strategies",
     "difficulty": "medium",
     "question_text": "A RAG pipeline answers questions from technical API documentation with headings, sections, and nested subsections. Which chunking strategy best preserves contextual coherence?",
     "question_type": "single",
     "options": [
-      {"key": "A", "text": "Fixed-size chunking at 512 tokens with 10% overlap"},
-      {"key": "B", "text": "Hierarchical chunking that splits on heading and section boundaries"},
-      {"key": "C", "text": "Sentence-level chunking where each sentence is one chunk"},
-      {"key": "D", "text": "No chunking — load each document as a single embedding"}
+      {
+        "key": "A",
+        "text": "Fixed-size chunking at 512 tokens with 10% overlap"
+      },
+      {
+        "key": "B",
+        "text": "Hierarchical chunking that splits on heading and section boundaries"
+      },
+      {
+        "key": "C",
+        "text": "Sentence-level chunking where each sentence is one chunk"
+      },
+      {
+        "key": "D",
+        "text": "No chunking \u2014 load each document as a single embedding"
+      }
     ],
-    "correct_answers": ["B"],
+    "correct_answers": [
+      "B"
+    ],
     "explanation": "Skill 1.5.1 describes hierarchical chunking based on content structure as optimal for structured documents. Splitting at heading boundaries keeps related information together within each chunk. Fixed-size chunking may break mid-section. Sentence-level chunking loses paragraph context. Whole-document embeddings exceed most embedding model token limits and lose retrieval granularity.",
     "source_topic": "Chunking strategies, Bedrock Knowledge Bases chunking"
   },
   {
-    "id": "d1-q0402", "domain": 1, "task_statement": "1.5", "topic": "Embedding model selection",
+    "id": "d1-q0402",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Embedding model selection",
     "difficulty": "medium",
     "question_text": "A company is choosing an embedding model for a multilingual medical literature RAG system. Which THREE factors should guide their selection?",
     "question_type": "multi",
     "options": [
-      {"key": "A", "text": "Embedding dimensionality — must match the vector store's configured index dimension"},
-      {"key": "B", "text": "Domain performance — benchmarks on biomedical text"},
-      {"key": "C", "text": "The model's parameter count"},
-      {"key": "D", "text": "Multilingual support — handles all languages in the corpus"},
-      {"key": "E", "text": "The visual design of the model card documentation"}
+      {
+        "key": "A",
+        "text": "Embedding dimensionality \u2014 must match the vector store's configured index dimension"
+      },
+      {
+        "key": "B",
+        "text": "Domain performance \u2014 benchmarks on biomedical text"
+      },
+      {
+        "key": "C",
+        "text": "The model's parameter count"
+      },
+      {
+        "key": "D",
+        "text": "Multilingual support \u2014 handles all languages in the corpus"
+      },
+      {
+        "key": "E",
+        "text": "The visual design of the model card documentation"
+      }
     ],
-    "correct_answers": ["A", "B", "D"],
+    "correct_answers": [
+      "A",
+      "B",
+      "D"
+    ],
     "explanation": "Skill 1.5.2 cites evaluating Amazon Titan embeddings based on dimensionality and domain fit, and evaluating performance characteristics of Bedrock embedding models. (A) Dimensions must match the configured vector store index. (B) Biomedical domain fit directly determines retrieval quality. (D) Multilingual support is essential for a multilingual corpus. Parameter count alone does not predict embedding quality. Documentation aesthetics are irrelevant.",
     "source_topic": "Amazon Titan Embeddings, embedding model selection"
   },
   {
-    "id": "d1-q0403", "domain": 1, "task_statement": "1.5", "topic": "Hybrid search",
+    "id": "d1-q0403",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Hybrid search",
     "difficulty": "hard",
-    "question_text": "A legal research tool must find both exact statutory citations (e.g., '42 U.S.C. § 1983') and conceptually related cases. Which retrieval approach handles both requirements?",
+    "question_text": "A legal research tool must find both exact statutory citations (e.g., '42 U.S.C. \u00a7 1983') and conceptually related cases. Which retrieval approach handles both requirements?",
     "question_type": "single",
     "options": [
-      {"key": "A", "text": "Pure dense vector cosine similarity search"},
-      {"key": "B", "text": "Pure BM25 keyword search"},
-      {"key": "C", "text": "Hybrid search — combine BM25 keyword scoring with dense vector similarity using reciprocal rank fusion"},
-      {"key": "D", "text": "Amazon Neptune graph traversal for legal citation chains"}
+      {
+        "key": "A",
+        "text": "Pure dense vector cosine similarity search"
+      },
+      {
+        "key": "B",
+        "text": "Pure BM25 keyword search"
+      },
+      {
+        "key": "C",
+        "text": "Hybrid search \u2014 combine BM25 keyword scoring with dense vector similarity using reciprocal rank fusion"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Neptune graph traversal for legal citation chains"
+      }
     ],
-    "correct_answers": ["C"],
+    "correct_answers": [
+      "C"
+    ],
     "explanation": "Skill 1.5.4 explicitly names 'hybrid search that combines keywords and vectors.' BM25 handles exact citation matching where semantic search fails; dense vector search finds conceptually related cases. Pure vector search misses exact matches. Pure BM25 misses semantic relevance. Neptune graph traversal suits citation-graph navigation but doesn't provide a general keyword+semantic search capability.",
     "source_topic": "Hybrid search, BM25, OpenSearch"
   },
   {
-    "id": "d1-q0404", "domain": 1, "task_statement": "1.5", "topic": "Reranking",
+    "id": "d1-q0404",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Reranking",
     "difficulty": "hard",
     "question_text": "A RAG system retrieves 20 candidate chunks for broad recall, but only 5 can be passed to the FM due to context window constraints. How should the top-5 be selected?",
     "question_type": "single",
     "options": [
-      {"key": "A", "text": "Randomly sample 5 from the 20 retrieved chunks"},
-      {"key": "B", "text": "Always take the top-5 by initial cosine similarity score"},
-      {"key": "C", "text": "Apply an Amazon Bedrock reranker model that scores each of the 20 candidates against the query and selects the top-5"},
-      {"key": "D", "text": "Use Amazon Textract to re-parse the source documents and pick the first 5 pages"}
+      {
+        "key": "A",
+        "text": "Randomly sample 5 from the 20 retrieved chunks"
+      },
+      {
+        "key": "B",
+        "text": "Always take the top-5 by initial cosine similarity score"
+      },
+      {
+        "key": "C",
+        "text": "Apply an Amazon Bedrock reranker model that scores each of the 20 candidates against the query and selects the top-5"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Textract to re-parse the source documents and pick the first 5 pages"
+      }
     ],
-    "correct_answers": ["C"],
-    "explanation": "Skill 1.5.4 explicitly cites Amazon Bedrock reranker models as part of advanced search architectures. A cross-encoder reranker scores each (query, chunk) pair with much higher accuracy than cosine similarity alone — the standard RAG reranking pattern. Random sampling loses quality. Initial cosine scores are good for recall but cross-encoder reranking improves precision. Textract re-parsing bypasses the retrieval system entirely.",
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Skill 1.5.4 explicitly cites Amazon Bedrock reranker models as part of advanced search architectures. A cross-encoder reranker scores each (query, chunk) pair with much higher accuracy than cosine similarity alone \u2014 the standard RAG reranking pattern. Random sampling loses quality. Initial cosine scores are good for recall but cross-encoder reranking improves precision. Textract re-parsing bypasses the retrieval system entirely.",
     "source_topic": "Amazon Bedrock reranker, RAG reranking"
   },
   {
-    "id": "d1-q0405", "domain": 1, "task_statement": "1.5", "topic": "Query expansion",
+    "id": "d1-q0405",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Query expansion",
     "difficulty": "medium",
     "question_text": "Users query a RAG system with very short, ambiguous questions like 'fix login error'. Retrieval quality is poor. How can this be improved without retraining the embedding model?",
     "question_type": "single",
     "options": [
-      {"key": "A", "text": "Increase top-k retrieval count to 100 to cover all possible matches"},
-      {"key": "B", "text": "Use Amazon Bedrock to generate multiple semantically rich query variants from the original, then union or merge their retrieval results"},
-      {"key": "C", "text": "Reduce chunk size so individual chunks are more specific"},
-      {"key": "D", "text": "Switch to a larger generation FM to compensate for poor retrieval"}
+      {
+        "key": "A",
+        "text": "Increase top-k retrieval count to 100 to cover all possible matches"
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Bedrock to generate multiple semantically rich query variants from the original, then union or merge their retrieval results"
+      },
+      {
+        "key": "C",
+        "text": "Reduce chunk size so individual chunks are more specific"
+      },
+      {
+        "key": "D",
+        "text": "Switch to a larger generation FM to compensate for poor retrieval"
+      }
     ],
-    "correct_answers": ["B"],
-    "explanation": "Skill 1.5.5 describes query expansion via Amazon Bedrock — rewriting a short query into richer variants that capture different aspects of intent, then merging retrieved results. Increasing top-k (A) reduces precision and bloats context. Reducing chunk size (C) may hurt recall for broad queries. Switching generation FMs (D) doesn't fix a retrieval problem.",
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 1.5.5 describes query expansion via Amazon Bedrock \u2014 rewriting a short query into richer variants that capture different aspects of intent, then merging retrieved results. Increasing top-k (A) reduces precision and bloats context. Reducing chunk size (C) may hurt recall for broad queries. Switching generation FMs (D) doesn't fix a retrieval problem.",
     "source_topic": "Query expansion, Amazon Bedrock, RAG"
   },
   {
-    "id": "d1-q0406", "domain": 1, "task_statement": "1.5", "topic": "Query decomposition",
+    "id": "d1-q0406",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Query decomposition",
     "difficulty": "hard",
     "question_text": "A user asks: 'Compare the refund policies of our Premium and Standard plans.' This requires retrieving information from two separate policy sections. Which retrieval strategy handles this best?",
     "question_type": "single",
     "options": [
-      {"key": "A", "text": "Submit the compound question directly to the vector store"},
-      {"key": "B", "text": "Use Lambda to decompose the query into sub-queries ('Premium plan refund' and 'Standard plan refund'), retrieve each separately, then merge before generation"},
-      {"key": "C", "text": "Increase top-k to 50 and hope both topics appear in the results"},
-      {"key": "D", "text": "Ask the user to rephrase the question as two separate queries"}
+      {
+        "key": "A",
+        "text": "Submit the compound question directly to the vector store"
+      },
+      {
+        "key": "B",
+        "text": "Use Lambda to decompose the query into sub-queries ('Premium plan refund' and 'Standard plan refund'), retrieve each separately, then merge before generation"
+      },
+      {
+        "key": "C",
+        "text": "Increase top-k to 50 and hope both topics appear in the results"
+      },
+      {
+        "key": "D",
+        "text": "Ask the user to rephrase the question as two separate queries"
+      }
     ],
-    "correct_answers": ["B"],
+    "correct_answers": [
+      "B"
+    ],
     "explanation": "Skill 1.5.5 describes Lambda functions for query decomposition as a sophisticated query handling approach. Atomic sub-queries each retrieve dedicated evidence for their sub-topic; merging the results ensures both topics are covered before the FM generates a comparison. Submitting the compound query biases retrieval toward whichever sub-topic has stronger vector representation. High top-k inflates context without improving precision. User-side reformulation degrades UX.",
     "source_topic": "Query decomposition, Lambda, RAG"
   },
   {
-    "id": "d1-q0407", "domain": 1, "task_statement": "1.5", "topic": "Batch embedding generation",
+    "id": "d1-q0407",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Batch embedding generation",
     "difficulty": "medium",
     "question_text": "A team needs to generate embeddings for 10 million document chunks stored in S3 within a 4-hour window. Which approach is most appropriate?",
     "question_type": "single",
     "options": [
-      {"key": "A", "text": "Call the Bedrock embedding API sequentially from a single Lambda function"},
-      {"key": "B", "text": "Use SQS to fan out batch embedding requests to multiple Lambda workers calling Amazon Bedrock in parallel"},
-      {"key": "C", "text": "Download all documents to a single EC2 instance and run a local embedding model"},
-      {"key": "D", "text": "Use Amazon Polly to convert documents to audio, then create audio embeddings"}
+      {
+        "key": "A",
+        "text": "Call the Bedrock embedding API sequentially from a single Lambda function"
+      },
+      {
+        "key": "B",
+        "text": "Use SQS to fan out batch embedding requests to multiple Lambda workers calling Amazon Bedrock in parallel"
+      },
+      {
+        "key": "C",
+        "text": "Download all documents to a single EC2 instance and run a local embedding model"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Polly to convert documents to audio, then create audio embeddings"
+      }
     ],
-    "correct_answers": ["B"],
-    "explanation": "Skill 1.5.2 cites Lambda functions for batch embedding generation. An SQS + Lambda fan-out pattern parallelises across thousands of concurrent invocations, processing 10M chunks within the time window while respecting Bedrock API quota controls. Sequential single-Lambda calls would take far too long. A single EC2 instance has limited CPU/GPU throughput. Amazon Polly produces speech audio — irrelevant for text embeddings.",
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 1.5.2 cites Lambda functions for batch embedding generation. An SQS + Lambda fan-out pattern parallelises across thousands of concurrent invocations, processing 10M chunks within the time window while respecting Bedrock API quota controls. Sequential single-Lambda calls would take far too long. A single EC2 instance has limited CPU/GPU throughput. Amazon Polly produces speech audio \u2014 irrelevant for text embeddings.",
     "source_topic": "Batch embedding, SQS, Lambda, Bedrock embeddings"
   },
   {
-    "id": "d1-q0408", "domain": 1, "task_statement": "1.5", "topic": "Model Context Protocol for retrieval",
+    "id": "d1-q0408",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Model Context Protocol for retrieval",
     "difficulty": "hard",
     "question_text": "A team builds multiple AI agents using different frameworks. They want all agents to access the same vector search capability through a standardised, framework-agnostic protocol. What achieves this?",
     "question_type": "single",
     "options": [
-      {"key": "A", "text": "Write a custom HTTP client library for each agent framework"},
-      {"key": "B", "text": "Implement an MCP (Model Context Protocol) server for vector search; agents use MCP clients to call it via the standard protocol"},
-      {"key": "C", "text": "Embed the vector search logic inside each FM's system prompt"},
-      {"key": "D", "text": "Create separate API Gateway endpoints for each agent framework"}
+      {
+        "key": "A",
+        "text": "Write a custom HTTP client library for each agent framework"
+      },
+      {
+        "key": "B",
+        "text": "Implement an MCP (Model Context Protocol) server for vector search; agents use MCP clients to call it via the standard protocol"
+      },
+      {
+        "key": "C",
+        "text": "Embed the vector search logic inside each FM's system prompt"
+      },
+      {
+        "key": "D",
+        "text": "Create separate API Gateway endpoints for each agent framework"
+      }
     ],
-    "correct_answers": ["B"],
+    "correct_answers": [
+      "B"
+    ],
     "explanation": "Skill 1.5.6 explicitly mentions Model Context Protocol (MCP) clients for vector queries and standardised API patterns for retrieval augmentation. MCP provides a vendor-neutral protocol enabling any MCP-compatible agent to call the same vector search resource. Per-framework HTTP clients defeat standardisation. System prompts cannot execute code. Separate API Gateway endpoints per framework creates fragmented governance rather than a standard protocol.",
     "source_topic": "Model Context Protocol (MCP), RAG, agent tool access"
+  },
+  {
+    "id": "d1-q0516",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Multilingual embeddings for cross-lingual retrieval",
+    "difficulty": "medium",
+    "question_text": "A global enterprise stores HR policy documents in English, French, and German. Employees query the knowledge base in their native language. Retrieval quality is poor when the query language differs from the document language. Which solution addresses this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Replace the monolingual English embeddings model with a multilingual embeddings model that maps semantically equivalent text across languages to nearby vectors"
+      },
+      {
+        "key": "B",
+        "text": "Translate all documents to English and delete the originals before indexing"
+      },
+      {
+        "key": "C",
+        "text": "Create a separate knowledge base for each language with no cross-base retrieval"
+      },
+      {
+        "key": "D",
+        "text": "Use keyword search only, which is language-agnostic by nature"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "A multilingual embeddings model places semantically similar text from different languages close together in the shared vector space, enabling a French query to match German or English documents correctly. Translating and discarding originals loses fidelity and legal retention obligations. Separate per-language bases require the user to know which language the answer is in. Keyword search is not language-agnostic \u2014 it only matches exact tokens, missing cross-lingual synonyms.",
+    "source_topic": "Multilingual embeddings, cross-lingual semantic search"
   }
 ]

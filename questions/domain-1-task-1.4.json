@@ -60,7 +60,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 1.4.2 describes S3 object metadata for document timestamps and custom attributes to develop metadata frameworks that improve search precision. Combining cosine similarity with a recency decay factor in a hybrid scorer implements date-preference cleanly. Embedding dates in text adds noise to semantic vectors. Deleting old documents destroys institutional knowledge. Varying embedding dimensions breaks the vector space — dimensions must be consistent.",
+    "explanation": "Skill 1.4.2 describes S3 object metadata for document timestamps and custom attributes to develop metadata frameworks that improve search precision. Combining cosine similarity with a recency decay factor in a hybrid scorer implements date-preference cleanly. Embedding dates in text adds noise to semantic vectors. Deleting old documents destroys institutional knowledge. Varying embedding dimensions breaks the vector space \u2014 dimensions must be consistent.",
     "source_topic": "Vector store metadata, S3 object metadata, hybrid scoring"
   },
   {
@@ -97,7 +97,7 @@
       "A",
       "B"
     ],
-    "explanation": "Skill 1.4.3 cites OpenSearch sharding strategies and high-performance vector database architectures. (A) More primary shards distribute the index, reducing per-shard size and enabling search parallelism. (B) ANN/HNSW runs in O(log n) vs exact k-NN's O(n) — a massive improvement at 500M vectors. Read replicas (C) improve read throughput/availability but don't reduce per-query latency. Changing embedding dimensions (D) would degrade retrieval quality. Cross-cluster replication (E) is for disaster recovery, not latency.",
+    "explanation": "Skill 1.4.3 cites OpenSearch sharding strategies and high-performance vector database architectures. (A) More primary shards distribute the index, reducing per-shard size and enabling search parallelism. (B) ANN/HNSW runs in O(log n) vs exact k-NN's O(n) \u2014 a massive improvement at 500M vectors. Read replicas (C) improve read throughput/availability but don't reduce per-query latency. Changing embedding dimensions (D) would degrade retrieval quality. Cross-cluster replication (E) is for disaster recovery, not latency.",
     "source_topic": "OpenSearch sharding, HNSW, ANN search"
   },
   {
@@ -129,7 +129,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 1.4.5 describes real-time change detection systems, automated synchronisation workflows, and incremental update mechanisms. A nightly batch job produces up to 24-hour staleness — violating the 15-minute SLA. Manual triggers are unreliable and scale poorly. Context window size is irrelevant to index freshness.",
+    "explanation": "Skill 1.4.5 describes real-time change detection systems, automated synchronisation workflows, and incremental update mechanisms. A nightly batch job produces up to 24-hour staleness \u2014 violating the 15-minute SLA. Manual triggers are unreliable and scale poorly. Context window size is irrelevant to index freshness.",
     "source_topic": "Vector store synchronisation, incremental updates, event-driven"
   },
   {
@@ -161,7 +161,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 1.5.3 lists Amazon Aurora with pgvector as a valid vector search solution. At 5M chunks, 500 ms tolerance, and existing PostgreSQL expertise, Aurora pgvector is the best fit — familiar operational model, ACID guarantees, and solid ANN performance within these scale parameters. OpenSearch Serverless excels at hundreds of millions of vectors with sub-100ms SLAs. DynamoDB has no native vector search. An S3 linear scan is O(n) — completely infeasible at 5M vectors.",
+    "explanation": "Skill 1.5.3 lists Amazon Aurora with pgvector as a valid vector search solution. At 5M chunks, 500 ms tolerance, and existing PostgreSQL expertise, Aurora pgvector is the best fit \u2014 familiar operational model, ACID guarantees, and solid ANN performance within these scale parameters. OpenSearch Serverless excels at hundreds of millions of vectors with sub-100ms SLAs. DynamoDB has no native vector search. An S3 linear scan is O(n) \u2014 completely infeasible at 5M vectors.",
     "source_topic": "Aurora pgvector, OpenSearch Serverless, vector store selection"
   },
   {
@@ -193,7 +193,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 1.4.4 describes using AWS services to create integration components that connect resources (document management systems, knowledge bases, internal wikis). Bedrock Knowledge Bases provides native data source connectors for SharePoint, Confluence, S3, and other repositories — automating ingestion and synchronisation. Manual daily Lambda exports create staleness. Fine-tuning embeds knowledge in weights with no ability to update or query source documents. Kendra is being closed to new customers (July 2026).",
+    "explanation": "Skill 1.4.4 describes using AWS services to create integration components that connect resources (document management systems, knowledge bases, internal wikis). Bedrock Knowledge Bases provides native data source connectors for SharePoint, Confluence, S3, and other repositories \u2014 automating ingestion and synchronisation. Manual daily Lambda exports create staleness. Fine-tuning embeds knowledge in weights with no ability to update or query source documents. Kendra is being closed to new customers (July 2026).",
     "source_topic": "Bedrock Knowledge Bases connectors, SharePoint integration"
   },
   {
@@ -207,19 +207,19 @@
     "options": [
       {
         "key": "A",
-        "text": "No — Bedrock Knowledge Bases only supports its own fully managed vector store"
+        "text": "No \u2014 Bedrock Knowledge Bases only supports its own fully managed vector store"
       },
       {
         "key": "B",
-        "text": "Yes — configure the Knowledge Base to use an existing OpenSearch Service domain or OpenSearch Serverless collection as the backing store"
+        "text": "Yes \u2014 configure the Knowledge Base to use an existing OpenSearch Service domain or OpenSearch Serverless collection as the backing store"
       },
       {
         "key": "C",
-        "text": "Yes — but only if you first migrate from OpenSearch to Amazon MemoryDB"
+        "text": "Yes \u2014 but only if you first migrate from OpenSearch to Amazon MemoryDB"
       },
       {
         "key": "D",
-        "text": "No — only Amazon DynamoDB is supported as an external vector store"
+        "text": "No \u2014 only Amazon DynamoDB is supported as an external vector store"
       }
     ],
     "correct_answers": [
@@ -247,7 +247,7 @@
       },
       {
         "key": "C",
-        "text": "Amazon S3 Vectors — a serverless S3 vector bucket with pay-per-query pricing"
+        "text": "Amazon S3 Vectors \u2014 a serverless S3 vector bucket with pay-per-query pricing"
       },
       {
         "key": "D",
@@ -257,7 +257,7 @@
     "correct_answers": [
       "C"
     ],
-    "explanation": "Amazon S3 Vectors is purpose-built for cost-optimised, large-scale, infrequently queried vector workloads (Skill 1.4.1, vector store architectures). It is truly serverless — no always-on compute — and charges only for storage and actual queries, approximately 90% cheaper than OpenSearch for sparse access patterns. OpenSearch Serverless charges minimum OCUs even when idle. Aurora/pgvector requires a provisioned DB instance with hourly charges. DynamoDB has no native vector search — scanning 500M records via Lambda would be impractically slow and expensive.",
+    "explanation": "Amazon S3 Vectors is purpose-built for cost-optimised, large-scale, infrequently queried vector workloads (Skill 1.4.1, vector store architectures). It is truly serverless \u2014 no always-on compute \u2014 and charges only for storage and actual queries, approximately 90% cheaper than OpenSearch for sparse access patterns. OpenSearch Serverless charges minimum OCUs even when idle. Aurora/pgvector requires a provisioned DB instance with hourly charges. DynamoDB has no native vector search \u2014 scanning 500M records via Lambda would be impractically slow and expensive.",
     "source_topic": "Amazon S3 Vectors, cost-optimised vector storage"
   },
   {
@@ -275,7 +275,7 @@
       },
       {
         "key": "B",
-        "text": "Use Amazon Bedrock Knowledge Bases (RAG) — index the current policy documents and retrieve relevant sections at query time"
+        "text": "Use Amazon Bedrock Knowledge Bases (RAG) \u2014 index the current policy documents and retrieve relevant sections at query time"
       },
       {
         "key": "C",
@@ -289,7 +289,76 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "RAG via Bedrock Knowledge Bases (Skill 1.4) is the correct pattern for frequently-updated proprietary documents. Re-ingesting updated S3 documents takes minutes. Fine-tuning (A) bakes knowledge into weights — expensive, slow, and must be fully re-run on every document change. Stuffing all policies into every prompt (C) rapidly exceeds context windows for large corpora and wastes tokens on every call. Pre-training from scratch (D) is the most expensive option and is out-of-scope for application developers.",
+    "explanation": "RAG via Bedrock Knowledge Bases (Skill 1.4) is the correct pattern for frequently-updated proprietary documents. Re-ingesting updated S3 documents takes minutes. Fine-tuning (A) bakes knowledge into weights \u2014 expensive, slow, and must be fully re-run on every document change. Stuffing all policies into every prompt (C) rapidly exceeds context windows for large corpora and wastes tokens on every call. Pre-training from scratch (D) is the most expensive option and is out-of-scope for application developers.",
     "source_topic": "Bedrock Knowledge Bases, RAG vs fine-tuning"
+  },
+  {
+    "id": "d1-q0514",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "Amazon MemoryDB as in-memory vector store",
+    "difficulty": "medium",
+    "question_text": "A retail company is building a real-time product recommendation assistant that requires sub-10 ms vector similarity search with durable storage. Which AWS-native vector store option is BEST suited?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon MemoryDB with vector search enabled"
+      },
+      {
+        "key": "B",
+        "text": "Amazon S3 with a Lambda function performing brute-force cosine similarity"
+      },
+      {
+        "key": "C",
+        "text": "Amazon RDS MySQL with a BLOB column storing raw embeddings"
+      },
+      {
+        "key": "D",
+        "text": "Amazon SQS as a vector storage layer"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Amazon MemoryDB is a durable, in-memory database with native vector search, purpose-built for workloads that need single-digit millisecond latency at scale. S3 with Lambda brute-force is slow and unscalable for real-time use. RDS MySQL with BLOB has no vector indexing capability. SQS is a message queue \u2014 not a data store \u2014 and has no vector search.",
+    "source_topic": "Amazon MemoryDB vector search, low-latency retrieval"
+  },
+  {
+    "id": "d1-q0515",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "Multi-tenant vector store isolation",
+    "difficulty": "hard",
+    "question_text": "A B2B SaaS company hosts a single Bedrock Knowledge Base for multiple enterprise customers, each of whom must only receive answers derived from their own documents. Which approach CORRECTLY enforces tenant isolation at retrieval time?",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Tag every document chunk with a tenant_id metadata attribute and apply a metadata filter on every retrieval request"
+      },
+      {
+        "key": "B",
+        "text": "Provision a separate knowledge base (and vector index) for each tenant"
+      },
+      {
+        "key": "C",
+        "text": "Rely on the model's context window to naturally separate tenant documents"
+      },
+      {
+        "key": "D",
+        "text": "Use a higher temperature value to mix tenant results less frequently"
+      },
+      {
+        "key": "E",
+        "text": "Return all results and let the application post-filter by tenant after retrieval"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "Tenant-level metadata filtering (option A) is an efficient single-index approach: each chunk is tagged with a tenant identifier and only matching chunks are returned. Separate knowledge bases per tenant (option B) provide full physical isolation. The model's context window provides no isolation (C). Temperature affects generation randomness, not retrieval isolation (D). Post-filtering after retrieval (E) is insecure because documents from other tenants could still be passed to the model before being filtered.",
+    "source_topic": "Multi-tenant RAG, metadata filtering, knowledge base isolation"
   }
 ]

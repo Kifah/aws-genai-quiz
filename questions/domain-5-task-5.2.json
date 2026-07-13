@@ -55,7 +55,7 @@
       },
       {
         "key": "C",
-        "text": "Ignore the error — it is intermittent and will self-resolve"
+        "text": "Ignore the error \u2014 it is intermittent and will self-resolve"
       },
       {
         "key": "D",
@@ -65,7 +65,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 5.2.2 describes error logging and request validation for FM integration issues. The correct approach is: instrument the input with a token counter, log it to CloudWatch, identify inputs that breach the model limit, and apply remediation (truncation, summarisation, chunking). Lambda memory doesn't affect the FM's token limit. ValidationException errors are deterministic — they won't self-resolve without code changes. The context limit is a model property, not a region configuration.",
+    "explanation": "Skill 5.2.2 describes error logging and request validation for FM integration issues. The correct approach is: instrument the input with a token counter, log it to CloudWatch, identify inputs that breach the model limit, and apply remediation (truncation, summarisation, chunking). Lambda memory doesn't affect the FM's token limit. ValidationException errors are deterministic \u2014 they won't self-resolve without code changes. The context limit is a model property, not a region configuration.",
     "source_topic": "FM API errors, ValidationException, token limit"
   },
   {
@@ -74,7 +74,7 @@
     "task_statement": "5.2",
     "topic": "Prompt troubleshooting",
     "difficulty": "medium",
-    "question_text": "FM responses to a customer-facing assistant have degraded — answers are suddenly verbose and off-topic. The application code has not changed. A new prompt template was deployed yesterday. Which debugging approach is most systematic?",
+    "question_text": "FM responses to a customer-facing assistant have degraded \u2014 answers are suddenly verbose and off-topic. The application code has not changed. A new prompt template was deployed yesterday. Which debugging approach is most systematic?",
     "question_type": "single",
     "options": [
       {
@@ -83,7 +83,7 @@
       },
       {
         "key": "B",
-        "text": "Use Bedrock Prompt Management version comparison — A/B test the previous and new prompt templates against a golden question set and compare output quality metrics"
+        "text": "Use Bedrock Prompt Management version comparison \u2014 A/B test the previous and new prompt templates against a golden question set and compare output quality metrics"
       },
       {
         "key": "C",
@@ -119,7 +119,7 @@
       },
       {
         "key": "C",
-        "text": "Switch to a larger FM — retrieval issues are always generation problems"
+        "text": "Switch to a larger FM \u2014 retrieval issues are always generation problems"
       },
       {
         "key": "D",
@@ -129,7 +129,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Skill 5.2.4 describes retrieval system troubleshooting including embedding quality diagnostics, drift monitoring, and vectorisation issue resolution. The correct systematic approach: check if relevant documents exist in the index; verify their chunks are appropriately sized; inspect similarity scores for failing queries (low scores indicate embedding mismatch); check for embedding quality drift if a model was recently updated. Increasing top-k may mask the problem. Retrieval failures are distinct from generation — switching FM won't fix a missing-document issue. Full rebuilds are disruptive and don't diagnose root cause.",
+    "explanation": "Skill 5.2.4 describes retrieval system troubleshooting including embedding quality diagnostics, drift monitoring, and vectorisation issue resolution. The correct systematic approach: check if relevant documents exist in the index; verify their chunks are appropriately sized; inspect similarity scores for failing queries (low scores indicate embedding mismatch); check for embedding quality drift if a model was recently updated. Increasing top-k may mask the problem. Retrieval failures are distinct from generation \u2014 switching FM won't fix a missing-document issue. Full rebuilds are disruptive and don't diagnose root cause.",
     "source_topic": "Retrieval debugging, embedding quality, chunking"
   },
   {
@@ -166,14 +166,14 @@
       "A",
       "B"
     ],
-    "explanation": "Skill 5.2.5 explicitly cites CloudWatch Logs to diagnose prompt confusion and X-Ray to implement prompt observability pipelines, alongside schema validation for format inconsistencies. (A) CloudWatch Logs Insights can filter invocations where variable substitution was incomplete — showing the malformed prompt. (B) X-Ray traces the full request path, pinpointing which Lambda function or step lost the variable value. Lambda memory has no effect on template logic. Rekognition is for image/video. Macie detects PII, not template syntax errors.",
+    "explanation": "Skill 5.2.5 explicitly cites CloudWatch Logs to diagnose prompt confusion and X-Ray to implement prompt observability pipelines, alongside schema validation for format inconsistencies. (A) CloudWatch Logs Insights can filter invocations where variable substitution was incomplete \u2014 showing the malformed prompt. (B) X-Ray traces the full request path, pinpointing which Lambda function or step lost the variable value. Lambda memory has no effect on template logic. Rekognition is for image/video. Macie detects PII, not template syntax errors.",
     "source_topic": "CloudWatch Logs Insights, X-Ray, prompt observability"
   },
   {
     "id": "d5-q0206",
     "domain": 5,
     "task_statement": "5.2",
-    "topic": "Embedding model version drift — RAG silent failure",
+    "topic": "Embedding model version drift \u2014 RAG silent failure",
     "difficulty": "hard",
     "question_text": "A financial services RAG application worked correctly for months. After a Lambda code update, it returns 'no relevant information found' for queries that previously retrieved accurate results. CloudWatch shows no errors, X-Ray confirms successful FM invocations, and OpenSearch is healthy with no index changes. What is the most likely root cause?",
     "question_type": "single",
@@ -198,7 +198,7 @@
     "correct_answers": [
       "D"
     ],
-    "explanation": "Skill 5.2.4 (retrieval system troubleshooting) describes embedding model version drift as a classic silent RAG failure. If the Lambda now embeds queries using model v2 while the OpenSearch index contains vectors from model v1, the two vector spaces are mathematically incompatible — no vectors match, retrieval returns zero results. The key diagnostic clue is 'silent failure': no errors (IAM permission errors produce AccessDeniedException logs; deleted indices produce empty-results warnings with different signatures). The FM temperature (B) only affects generation step 2 — retrieval failure happens in step 1 before generation. Vector deletion (C) would normally produce warnings.",
+    "explanation": "Skill 5.2.4 (retrieval system troubleshooting) describes embedding model version drift as a classic silent RAG failure. If the Lambda now embeds queries using model v2 while the OpenSearch index contains vectors from model v1, the two vector spaces are mathematically incompatible \u2014 no vectors match, retrieval returns zero results. The key diagnostic clue is 'silent failure': no errors (IAM permission errors produce AccessDeniedException logs; deleted indices produce empty-results warnings with different signatures). The FM temperature (B) only affects generation step 2 \u2014 retrieval failure happens in step 1 before generation. Vector deletion (C) would normally produce warnings.",
     "source_topic": "Embedding drift, vector-space mismatch, RAG troubleshooting"
   },
   {
@@ -207,7 +207,7 @@
     "task_statement": "5.2",
     "topic": "KB ingestion logging for document-level failures",
     "difficulty": "medium",
-    "question_text": "A company ingests 2,000 documents per day into a Bedrock Knowledge Base from S3. Some documents fail silently — they appear processed but queries return no results for their content. The team needs to identify which specific documents failed and why. Which solution provides document-level ingestion diagnostics?",
+    "question_text": "A company ingests 2,000 documents per day into a Bedrock Knowledge Base from S3. Some documents fail silently \u2014 they appear processed but queries return no results for their content. The team needs to identify which specific documents failed and why. Which solution provides document-level ingestion diagnostics?",
     "question_type": "single",
     "options": [
       {
@@ -230,7 +230,44 @@
     "correct_answers": [
       "A"
     ],
-    "explanation": "Skill 5.2.4 and 4.3.2 describe Knowledge Base logging for ingestion troubleshooting. The KB-specific logging feature emits per-document status records to CloudWatch Logs (RESOURCE_IGNORED, EMBEDDING_FAILED, INDEXING_FAILED, SUCCESS) that can be queried with Logs Insights. CloudTrail (B) records which IAM principal called StartIngestionJob — it has no visibility into per-document processing outcomes. Bedrock Model Invocation Logging (C) captures prompt/response content during chat inference — unrelated to the background ingestion process. CloudWatch Application Signals (D) is APM for microservices (EKS/API Gateway latency) — not for KB ingestion diagnostics.",
+    "explanation": "Skill 5.2.4 and 4.3.2 describe Knowledge Base logging for ingestion troubleshooting. The KB-specific logging feature emits per-document status records to CloudWatch Logs (RESOURCE_IGNORED, EMBEDDING_FAILED, INDEXING_FAILED, SUCCESS) that can be queried with Logs Insights. CloudTrail (B) records which IAM principal called StartIngestionJob \u2014 it has no visibility into per-document processing outcomes. Bedrock Model Invocation Logging (C) captures prompt/response content during chat inference \u2014 unrelated to the background ingestion process. CloudWatch Application Signals (D) is APM for microservices (EKS/API Gateway latency) \u2014 not for KB ingestion diagnostics.",
     "source_topic": "Bedrock Knowledge Base logging, CloudWatch Logs Insights"
+  },
+  {
+    "id": "d5-q0208",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Troubleshooting ThrottlingException",
+    "difficulty": "medium",
+    "question_text": "During a high-traffic product launch, a Bedrock-powered chatbot begins returning ThrottlingException errors. The on-call engineer needs to resolve the issue quickly. Which combination of actions is MOST appropriate?",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Implement exponential backoff with jitter in the client so retries do not cause a retry storm"
+      },
+      {
+        "key": "B",
+        "text": "Purchase Provisioned Throughput for the model to guarantee sustained invocation capacity"
+      },
+      {
+        "key": "C",
+        "text": "Reduce the model temperature to stop throttling"
+      },
+      {
+        "key": "D",
+        "text": "Switch to a larger context window size to avoid the quota"
+      },
+      {
+        "key": "E",
+        "text": "Disable all guardrails to reduce latency overhead"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "ThrottlingException indicates the invocation rate has exceeded the on-demand quota. Exponential backoff with jitter (option A) is the standard immediate mitigation \u2014 it spreads retries over time and prevents a retry storm. Provisioned Throughput (option B) is the long-term fix: it reserves dedicated model capacity ensuring sustained throughput. Lowering temperature, using a larger context window, or disabling guardrails do not affect throttling quotas.",
+    "source_topic": "Throttling, Provisioned Throughput, exponential backoff, quota management"
   }
 ]
