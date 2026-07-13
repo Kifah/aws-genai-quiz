@@ -1,0 +1,236 @@
+[
+  {
+    "id": "d2-q0201",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Lambda vs provisioned throughput deployment",
+    "difficulty": "medium",
+    "question_text": "A company needs to deploy a foundation model on Amazon Bedrock. Usage is highly variable — spiky during business hours, near-zero overnight. Which deployment option minimises cost while still meeting sub-3-second response SLA?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Bedrock on-demand inference via Lambda invocations"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Provisioned Throughput with 24/7 reserved Model Units"
+      },
+      {
+        "key": "C",
+        "text": "A permanently running EC2 GPU instance"
+      },
+      {
+        "key": "D",
+        "text": "AWS Batch for FM inference jobs"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Skill 2.2.1 lists Lambda for on-demand invocation as a deployment option for specific application needs. For variable, spiky workloads, on-demand Bedrock via Lambda is most cost-efficient — you pay per token, with no idle capacity cost. Provisioned Throughput commits to reserved capacity 24/7, cost-effective only for sustained high throughput. A permanent EC2 GPU instance has high idle cost. AWS Batch is for large batch jobs, not interactive FM inference.",
+    "source_topic": "Amazon Bedrock deployment options, Lambda, cost optimisation"
+  },
+  {
+    "id": "d2-q0202",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Container deployment for LLMs",
+    "difficulty": "hard",
+    "question_text": "A company is deploying a large open-source LLM (7B parameters) on Amazon SageMaker for production inference. Which deployment considerations are specific to LLMs compared to traditional ML models? (Choose TWO)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Container images must be optimised for multi-GPU memory requirements and efficient GPU utilisation"
+      },
+      {
+        "key": "B",
+        "text": "LLMs require specialised token-processing capacity planning, unlike traditional batch-prediction models"
+      },
+      {
+        "key": "C",
+        "text": "LLMs always require more CPU cores, not GPUs"
+      },
+      {
+        "key": "D",
+        "text": "LLMs use the same deployment artefacts as scikit-learn classifiers"
+      },
+      {
+        "key": "E",
+        "text": "LLMs can be deployed using standard single-instance SageMaker endpoints with no memory optimisation"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "Skill 2.2.2 describes container-based deployment patterns optimised for LLM memory requirements, GPU utilisation, and token processing capacity, plus specialised model loading strategies. LLMs require multi-GPU tensor parallelism, GPU memory management (KV cache), and token throughput capacity planning — all absent in traditional scikit-learn or XGBoost deployments. LLMs require GPUs, not just CPUs. Standard SageMaker instances lack the GPU memory optimisation LLMs need.",
+    "source_topic": "LLM deployment, SageMaker, GPU, container optimisation"
+  },
+  {
+    "id": "d2-q0203",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Model cascading for cost efficiency",
+    "difficulty": "hard",
+    "question_text": "A company's GenAI application handles both simple FAQ queries and complex multi-step reasoning tasks. Using a large, expensive FM for all queries is too costly. Which strategy balances cost and quality?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use only the smallest available model for all queries to minimise cost"
+      },
+      {
+        "key": "B",
+        "text": "Use API-based model cascading: route simple queries to a small, cheap FM; escalate to a larger FM only when complexity requires it"
+      },
+      {
+        "key": "C",
+        "text": "Fine-tune the large FM to be faster, then use it for everything"
+      },
+      {
+        "key": "D",
+        "text": "Cache all responses and serve cached answers to avoid FM calls"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 2.2.3 explicitly cites 'API-based model cascading to perform routine queries' and 'smaller pre-trained models for specific tasks' as optimised FM deployment approaches. A router that classifies query complexity and dispatches to the appropriate model tier (small for FAQ, large for complex reasoning) significantly reduces cost without degrading quality on hard queries. Using only small models sacrifices quality. Fine-tuning for speed is complex and expensive. Caching is useful but can't cover all unique queries.",
+    "source_topic": "Model cascading, cost-efficient FM deployment"
+  },
+  {
+    "id": "d2-q0204",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "SageMaker hybrid deployment",
+    "difficulty": "medium",
+    "question_text": "A company uses Amazon Bedrock for most inference but needs to run a proprietary fine-tuned model that cannot be hosted on Bedrock. Which architecture handles both?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Host the proprietary model on an Amazon SageMaker AI endpoint; route requests to Bedrock or SageMaker based on model type"
+      },
+      {
+        "key": "B",
+        "text": "Deploy the proprietary model on Lambda with model weights bundled into the deployment package"
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Kendra to serve the proprietary model via an API"
+      },
+      {
+        "key": "D",
+        "text": "Upload the proprietary model to the Amazon Bedrock model catalogue for public use"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Skill 2.2.1 cites SageMaker AI endpoints for hybrid solutions. A routing layer (e.g., Lambda + API Gateway) inspects the request and dispatches to Bedrock for hosted FMs and to a SageMaker real-time endpoint for the proprietary model. Lambda functions are size-constrained (< 10GB) — unsuitable for multi-gigabyte model weights. Amazon Kendra is a document search service. Models cannot be uploaded to Bedrock's public catalogue by arbitrary customers.",
+    "source_topic": "SageMaker endpoints, Bedrock, hybrid deployment"
+  },
+  {
+    "id": "d2-q0205",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Inference optimisation techniques",
+    "difficulty": "hard",
+    "question_text": "A company runs a high-traffic FM inference service on SageMaker. GPU utilisation is only 40% during peak and requests queue during traffic bursts. Which techniques address both issues? (Choose TWO)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable continuous batching so multiple requests share a single forward pass"
+      },
+      {
+        "key": "B",
+        "text": "Apply quantisation (e.g., INT8) to reduce GPU memory footprint and allow more concurrent requests"
+      },
+      {
+        "key": "C",
+        "text": "Increase the Lambda timeout for the front-end service"
+      },
+      {
+        "key": "D",
+        "text": "Add more CPU instances to the SageMaker endpoint"
+      },
+      {
+        "key": "E",
+        "text": "Store model outputs in DynamoDB for reuse"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "Skill 2.2.2 covers token processing capacity planning and GPU utilisation. Continuous batching (also called iteration-level batching) lets the GPU process multiple in-flight requests simultaneously, improving GPU utilisation from 40% toward 80%+. INT8 quantisation halves GPU memory per model instance, enabling more concurrent batches or larger batch sizes. Lambda timeout is front-end infrastructure — doesn't affect GPU utilisation. CPU instances don't help for GPU-bound LLM inference. DynamoDB caching helps repeat queries but not novel ones.",
+    "source_topic": "LLM inference optimisation, batching, quantisation, SageMaker"
+  },
+  {
+    "id": "d2-q0206",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "SageMaker Async Inference for large payloads",
+    "difficulty": "hard",
+    "question_text": "A developer deploys a text-to-image model on SageMaker. User requests include payloads up to 35 MB (high-resolution images) and processing can take up to 8 minutes. The system must handle on-demand requests without users waiting synchronously. Which SageMaker inference type is correct?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "SageMaker Real-Time Inference on a GPU instance"
+      },
+      {
+        "key": "B",
+        "text": "SageMaker Serverless Inference"
+      },
+      {
+        "key": "C",
+        "text": "SageMaker Asynchronous Inference on a GPU (accelerated computing) instance"
+      },
+      {
+        "key": "D",
+        "text": "SageMaker Batch Transform job triggered per request"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "SageMaker Asynchronous Inference (Skill 2.2.2 — LLM deployment strategies) supports large payloads (up to ~1 GB), long processing times (minutes), and on-demand request queuing — exactly matching 35 MB payload + 8 minute processing. Real-Time Inference caps at ~6 MB payload and ~60 second timeout — both exceeded here. Serverless Inference is convenient but does not support GPU instances, making it infeasible for image generation. Batch Transform processes offline batches — not designed for interactive on-demand requests.",
+    "source_topic": "SageMaker Asynchronous Inference, inference type selection"
+  },
+  {
+    "id": "d2-q0207",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Tensor parallelism and GPU replica efficiency",
+    "difficulty": "hard",
+    "question_text": "A fine-tuned LLM is deployed on a SageMaker endpoint with an 8-GPU instance. Production logs show that the model's weights and activations fit within 4 GPUs, and per-instance concurrency is only 25% of capacity. Which configuration improvement maximises throughput on existing hardware?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Set tensor parallelism degree = 8 to utilise all GPUs for one model copy"
+      },
+      {
+        "key": "B",
+        "text": "Add more SageMaker instances to distribute load"
+      },
+      {
+        "key": "C",
+        "text": "Set tensor parallelism degree = 4 so the instance runs two model replicas simultaneously"
+      },
+      {
+        "key": "D",
+        "text": "Enable speculative decoding to reduce per-request latency"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Skill 2.2.2 covers GPU utilisation and token processing capacity. If the model fits in 4 GPUs and the instance has 8, setting tensor parallelism = 4 allows two replicas (4 × 2 = 8 GPUs fully utilised) — doubling throughput on the same hardware. TP = 8 forces one replica across all 8 GPUs; the remaining 4 GPUs sit idle as the model doesn't need them — no throughput gain. Adding instances increases cost without fixing the per-instance utilisation waste. Speculative decoding reduces token latency but consumes extra VRAM for a draft model and does not increase concurrent replica count.",
+    "source_topic": "Tensor parallelism, GPU utilisation, SageMaker"
+  }
+]

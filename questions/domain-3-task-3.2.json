@@ -1,0 +1,231 @@
+[
+  {
+    "id": "d3-q0201",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "VPC isolation for FM workloads",
+    "difficulty": "hard",
+    "question_text": "A company must ensure their Bedrock-based application does not send any traffic over the public internet. Which network architecture achieves this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Place Lambda functions in a public subnet and call Bedrock over the internet with TLS"
+      },
+      {
+        "key": "B",
+        "text": "Use VPC endpoints (AWS PrivateLink) for Bedrock so all traffic remains within AWS's private network"
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon CloudFront as a reverse proxy between the VPC and Bedrock"
+      },
+      {
+        "key": "D",
+        "text": "Enable AWS Shield on the VPC to prevent public internet exposure"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 3.2.1 cites VPC endpoints to isolate networks for protected AI environments. AWS PrivateLink VPC endpoints for Bedrock allow Lambda or EC2 in a private subnet to call Bedrock without internet connectivity — traffic stays within the AWS backbone. A public subnet + TLS still routes over the public internet. CloudFront is a CDN, not a VPC-to-service private connector. Shield protects against DDoS attacks — not internet exposure of outbound traffic.",
+    "source_topic": "VPC endpoints, PrivateLink, Bedrock network isolation"
+  },
+  {
+    "id": "d3-q0202",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "PII detection and redaction",
+    "difficulty": "medium",
+    "question_text": "A GenAI customer service application must prevent users' PII (names, SSNs, credit card numbers) from being stored in FM interaction logs. Which approach addresses this? (Choose TWO)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Comprehend PII detection to identify and redact PII from prompts before FM invocation"
+      },
+      {
+        "key": "B",
+        "text": "Configure Amazon Bedrock Guardrails with sensitive information filters to redact PII from inputs and outputs"
+      },
+      {
+        "key": "C",
+        "text": "Store all raw prompts in a public S3 bucket for transparency"
+      },
+      {
+        "key": "D",
+        "text": "Use AWS CloudTrail to detect PII in management API calls"
+      },
+      {
+        "key": "E",
+        "text": "Increase Lambda concurrency to process PII faster"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "Skill 3.2.2 cites Amazon Comprehend and Amazon Macie for PII detection and Bedrock Guardrails for output filtering. (A) Comprehend PII detection can identify and redact PII before it reaches the FM, preventing ingestion. (B) Guardrails sensitive information filters can redact PII patterns from both inputs and outputs automatically. Storing raw prompts in a public bucket is a critical data exposure violation. CloudTrail logs API calls, not prompt content PII. Lambda concurrency is a scaling setting, not a privacy control.",
+    "source_topic": "Amazon Comprehend, Bedrock Guardrails, PII protection"
+  },
+  {
+    "id": "d3-q0203",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Data retention policies",
+    "difficulty": "medium",
+    "question_text": "A company must ensure that FM interaction logs are automatically deleted after 90 days to comply with data minimisation regulations. How should this be implemented?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Write a nightly Lambda function that manually deletes logs older than 90 days"
+      },
+      {
+        "key": "B",
+        "text": "Configure Amazon S3 Lifecycle policies to automatically expire log objects after 90 days"
+      },
+      {
+        "key": "C",
+        "text": "Archive logs to Amazon Glacier immediately and rely on Glacier's vault lock for policy enforcement"
+      },
+      {
+        "key": "D",
+        "text": "Encrypt logs with a 90-day KMS key rotation schedule to render them unreadable"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 3.2.2 cites Amazon S3 Lifecycle configurations for data retention policies. S3 Lifecycle rules can be set to automatically expire (delete) objects after a specified number of days — fully managed, no code required, and audit-ready. Manual Lambda deletion is error-prone and requires ongoing maintenance. Glacier Vault Lock enforces write-once retention — designed for compliance that prevents early deletion, not a deletion schedule. KMS key rotation changes the encryption key — it doesn't delete the data.",
+    "source_topic": "S3 Lifecycle, data retention, compliance"
+  },
+  {
+    "id": "d3-q0204",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Lake Formation for granular data access",
+    "difficulty": "hard",
+    "question_text": "A RAG system retrieves documents from a data lake. Different user roles should only retrieve documents they are authorised to see — analysts can see marketing data, not HR data; HR staff can see HR data, not financial data. Which service enforces column- and row-level access controls on the data lake?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon S3 bucket policies with public ACLs"
+      },
+      {
+        "key": "B",
+        "text": "AWS Lake Formation with fine-grained access controls (table, column, and row-level permissions)"
+      },
+      {
+        "key": "C",
+        "text": "Amazon VPC security groups"
+      },
+      {
+        "key": "D",
+        "text": "AWS IAM policies at the S3 prefix level only"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 3.2.1 cites AWS Lake Formation for granular data access in protected AI environments. Lake Formation provides table-, column-, and row-level permissions on top of the AWS Glue Data Catalog — far more granular than S3 bucket or prefix policies. S3 public ACLs grant open access — the opposite of what's needed. VPC security groups control network access, not data-level permissions. IAM S3 prefix policies don't offer column or row-level granularity.",
+    "source_topic": "AWS Lake Formation, fine-grained access control"
+  },
+  {
+    "id": "d3-q0205",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Data masking for FM interactions",
+    "difficulty": "medium",
+    "question_text": "A company processes customer survey responses with an FM but must ensure no personally identifiable information reaches the model's context. They want a reversible masking approach (so original data can be restored for reporting). Which strategy is most appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Permanently delete PII from all survey responses before FM processing"
+      },
+      {
+        "key": "B",
+        "text": "Replace PII with unique tokens before FM invocation; store the token-to-PII mapping in a secure vault; restore after processing"
+      },
+      {
+        "key": "C",
+        "text": "Hash all PII with MD5 so it cannot be reverse-engineered"
+      },
+      {
+        "key": "D",
+        "text": "Send the raw data to the FM and instruct it in the system prompt to ignore PII"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 3.2.3 describes data masking techniques and anonymisation strategies for FM interactions. Tokenisation replaces PII with reversible placeholders — the FM processes anonymised content, and the mapping vault restores original values for downstream reporting. Permanent deletion is irreversible — data is lost for reporting. MD5 is a one-way hash — not reversible and not suitable for restoring original values. Instructing the FM to 'ignore PII' sends PII to the model — violating the privacy requirement.",
+    "source_topic": "Data masking, tokenisation, FM privacy"
+  },
+  {
+    "id": "d3-q0206",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "KMS CMK for compliance and audit",
+    "difficulty": "medium",
+    "question_text": "A regulated financial company stores RAG documents in S3. An auditor requires proof that encryption keys are controlled internally with full key-usage audit logs. Which KMS configuration is required?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS-managed keys (SSE-S3) — default encryption managed by AWS"
+      },
+      {
+        "key": "B",
+        "text": "Customer-Managed Keys (CMK) with CloudTrail logging of all key-usage events"
+      },
+      {
+        "key": "C",
+        "text": "Client-side encryption with keys stored in the application code"
+      },
+      {
+        "key": "D",
+        "text": "SSE-KMS with AWS-owned keys"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 3.2.1 describes IAM policies and secure data access patterns for protected AI environments. When compliance and audit requirements demand full key control, Customer-Managed Keys (CMK) in AWS KMS must be used: the customer controls key policy, rotation schedule, and every key usage event is logged by CloudTrail. AWS-managed keys (SSE-S3, AWS-owned) are managed by AWS — customers have no key-policy control and limited audit depth. Client-side encryption with keys in application code is a security anti-pattern — keys are exposed in source code.",
+    "source_topic": "AWS KMS CMK, compliance encryption, CloudTrail audit"
+  },
+  {
+    "id": "d3-q0207",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Secrets Manager vs Parameter Store vs AppConfig",
+    "difficulty": "medium",
+    "question_text": "A GenAI application has three configuration requirements: (1) store the OpenAI/Anthropic API key with automatic 30-day rotation; (2) store a static helper-service URL that never changes; (3) dynamically toggle between Claude and Llama models without redeploying code. Which combination of services is correct?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "(1) Secrets Manager; (2) Parameter Store; (3) AppConfig"
+      },
+      {
+        "key": "B",
+        "text": "(1) Parameter Store; (2) Secrets Manager; (3) AppConfig"
+      },
+      {
+        "key": "C",
+        "text": "(1) Secrets Manager; (2) AppConfig; (3) Parameter Store"
+      },
+      {
+        "key": "D",
+        "text": "(1) AppConfig; (2) Parameter Store; (3) Secrets Manager"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Skill 3.2.1 and 3.2.2 describe secure data access patterns. (1) Secrets Manager is designed for high-security secrets with automatic rotation — exactly right for API keys that must rotate every 30 days. (2) Parameter Store is optimised for static, non-sensitive configuration values (URLs, env names) — cheap and hierarchical. (3) AppConfig provides dynamic feature flags that can change at runtime without redeployment — perfect for model routing switches with canary rollout and automatic rollback.",
+    "source_topic": "Secrets Manager, Parameter Store, AppConfig"
+  }
+]

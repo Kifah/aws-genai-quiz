@@ -1,0 +1,199 @@
+[
+  {
+    "id": "d4-q0101",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Token efficiency and cost reduction",
+    "difficulty": "medium",
+    "question_text": "A company's FM costs are rising rapidly because prompts include unnecessary context. Which techniques reduce token usage without significantly degrading output quality? (Choose TWO)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Context pruning — removing irrelevant prior conversation turns from the context window"
+      },
+      {
+        "key": "B",
+        "text": "Prompt compression — summarising verbose context into a concise form before FM invocation"
+      },
+      {
+        "key": "C",
+        "text": "Increasing the maxTokens parameter to allow more complete responses"
+      },
+      {
+        "key": "D",
+        "text": "Using a larger FM to process tokens more efficiently"
+      },
+      {
+        "key": "E",
+        "text": "Adding more detailed instructions to every prompt"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "Skill 4.1.1 describes context pruning and prompt compression as token efficiency techniques. Context pruning removes stale or irrelevant turns (e.g., greetings, resolved sub-tasks). Prompt compression uses techniques like summarisation to shorten verbose inputs. Both reduce billable input tokens. Increasing maxTokens raises the cost ceiling per call. Larger FMs cost more per token. Adding more instructions increases input token count.",
+    "source_topic": "Token efficiency, prompt compression, context pruning"
+  },
+  {
+    "id": "d4-q0102",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Semantic caching",
+    "difficulty": "hard",
+    "question_text": "A customer support GenAI application receives many semantically identical questions phrased differently (e.g., 'How do I reset my password?' vs 'I forgot my password, how do I change it?'). Calling the FM for each is wasteful. What caching approach addresses this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Exact string match caching — only cache when the query is byte-for-byte identical"
+      },
+      {
+        "key": "B",
+        "text": "Semantic caching — embed incoming queries, search a cache by vector similarity, and return a cached response if similarity exceeds a threshold"
+      },
+      {
+        "key": "C",
+        "text": "Cache all responses for 1 hour regardless of query content"
+      },
+      {
+        "key": "D",
+        "text": "Disable caching and call the FM for every query"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 4.1.4 explicitly describes semantic caching using vector similarity. Embedding the query and comparing against cached query embeddings allows cache hits for semantically equivalent but lexically different questions. Exact string matching misses paraphrase variants. Time-based blanket caching returns stale responses for time-sensitive questions. No caching maximises FM cost.",
+    "source_topic": "Semantic caching, vector similarity, cost optimisation"
+  },
+  {
+    "id": "d4-q0103",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Tiered FM selection for cost",
+    "difficulty": "medium",
+    "question_text": "A company processes millions of queries daily. 80% are simple FAQ lookups; 20% require complex reasoning. How should FM selection be optimised for cost?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use the most expensive large FM for all queries to ensure maximum quality"
+      },
+      {
+        "key": "B",
+        "text": "Use a tiered approach: route simple queries to a small cheap FM; escalate complex queries to a large capable FM based on query complexity classification"
+      },
+      {
+        "key": "C",
+        "text": "Use a single medium-cost FM for all queries as a compromise"
+      },
+      {
+        "key": "D",
+        "text": "Disable the FM for the 80% of simple queries and return static responses only"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 4.1.2 describes tiered FM usage based on query complexity and cost-capability tradeoff evaluation. A routing classifier (simple rule-based or a tiny FM) identifies query type; simple FAQs use a cheap model (e.g., Titan Lite), complex reasoning uses a powerful model (e.g., Claude 3 Opus). A single medium model over-spends on 80% of queries. Static responses for simple queries lose GenAI quality benefits.",
+    "source_topic": "Tiered FM selection, cost-capability tradeoff"
+  },
+  {
+    "id": "d4-q0104",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Batching and provisioned throughput",
+    "difficulty": "hard",
+    "question_text": "A company processes 100,000 document summaries nightly using Bedrock. On-demand API calls result in throttling and high per-token costs. Which approach maximises resource utilisation and reduces cost for this predictable batch workload?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Spread requests across 24 hours to avoid throttling"
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Bedrock Batch Inference with appropriately sized Provisioned Throughput — batch all 100K documents into a single job and process overnight at discounted batch pricing"
+      },
+      {
+        "key": "C",
+        "text": "Use a single Lambda function with a 15-minute timeout to process all documents"
+      },
+      {
+        "key": "D",
+        "text": "Move all processing to an EC2 instance with a self-hosted model"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 4.1.3 describes batching strategies and provisioned throughput optimisation for predictable GenAI workloads. Bedrock Batch Inference lets you submit large document sets as a batch job at significantly lower per-token pricing compared to on-demand. Provisioned Throughput provides reserved capacity for sustained throughput. Spreading over 24 hours uses on-demand pricing throughout. A single Lambda can run only 15 minutes. Self-hosted EC2 adds operational overhead.",
+    "source_topic": "Bedrock Batch Inference, Provisioned Throughput, batching"
+  },
+  {
+    "id": "d4-q0105",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Prompt caching",
+    "difficulty": "medium",
+    "question_text": "An application includes a very long system prompt (10,000 tokens) in every API call because the instructions rarely change. This makes every call expensive. Which Bedrock feature reduces repeated cost for static prompt prefixes?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Reduce the system prompt to 100 tokens and lose the detailed instructions"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock prompt caching — cache the static system prompt so it is only processed once and reused across calls"
+      },
+      {
+        "key": "C",
+        "text": "Store the system prompt in DynamoDB and retrieve it on each call"
+      },
+      {
+        "key": "D",
+        "text": "Use a separate FM call to summarise the system prompt before each invocation"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 4.1.4 explicitly cites prompt caching. Bedrock prompt caching allows a static prefix (e.g., a long system prompt) to be processed once and reused across subsequent calls, dramatically reducing input token costs for applications with large static prompts. Truncating instructions degrades quality. Retrieving from DynamoDB still submits the full prompt to the FM every time. A separate summarisation call adds cost and degrades instruction fidelity.",
+    "source_topic": "Amazon Bedrock prompt caching, cost optimisation"
+  },
+  {
+    "id": "d4-q0106",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Cross-Region Inference for peak throttling",
+    "difficulty": "hard",
+    "question_text": "An e-commerce platform uses Bedrock in us-east-1 to generate product descriptions. During flash sales, requests spike and hit 'ThrottlingException: Too many requests.' The solution must increase throughput using the exact same FM at minimum extra cost, with no additional operational code.",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Purchase Amazon Bedrock Provisioned Throughput for reserved capacity"
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Bedrock Cross-Region Inference — switch to an Inference Profile ARN so AWS automatically routes overflow to other regions' quotas"
+      },
+      {
+        "key": "C",
+        "text": "Write a Lambda that retries on a secondary region on ThrottlingException"
+      },
+      {
+        "key": "D",
+        "text": "Use Bedrock Prompt Router to distribute requests across multiple FM families"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 4.1.3 and 1.2.3 describe Cross-Region Inference for throughput optimisation. Replacing the model ID with a Cross-Region Inference Profile ARN delegates routing to AWS: it pools capacity across multiple regions within a geographic area, effectively multiplying available quota with zero custom code. Provisioned Throughput (A) fixes throttling but commits to 24/7 reserved capacity charges — very expensive for spiky flash-sale traffic. A Lambda retry (C) is exactly the manual implementation that Cross-Region Inference replaces. Prompt Router (D) routes between FM families — it uses different models and violates the 'same FM' requirement.",
+    "source_topic": "Bedrock Cross-Region Inference, throttling, cost optimisation"
+  }
+]

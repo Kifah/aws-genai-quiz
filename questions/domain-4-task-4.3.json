@@ -1,0 +1,92 @@
+[
+  {
+    "id": "d4-q0301", "domain": 4, "task_statement": "4.3", "topic": "Bedrock Model Invocation Logs",
+    "difficulty": "medium",
+    "question_text": "A team wants detailed visibility into every Bedrock FM request and response — including input prompts, output text, latency, and token counts — for debugging and cost attribution. Which monitoring feature provides this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Amazon CloudWatch standard metrics only"},
+      {"key": "B", "text": "Amazon Bedrock Model Invocation Logs — log full request/response payloads to CloudWatch Logs and/or S3"},
+      {"key": "C", "text": "AWS CloudTrail data events for Bedrock"},
+      {"key": "D", "text": "VPC Flow Logs"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Skill 4.3.2 explicitly cites Amazon Bedrock Model Invocation Logs for detailed request and response analysis. When enabled, Bedrock logs the complete prompt, response, token counts, latency, and model ID for every invocation to CloudWatch Logs or S3. Standard CloudWatch metrics provide aggregated statistics (latency, error rate) but not per-invocation content. CloudTrail records control-plane API calls (CreateKnowledgeBase etc.) not inference content. VPC Flow Logs capture network metadata only.",
+    "source_topic": "Bedrock Model Invocation Logs, CloudWatch"
+  },
+  {
+    "id": "d4-q0302", "domain": 4, "task_statement": "4.3", "topic": "Token usage and cost monitoring",
+    "difficulty": "medium",
+    "question_text": "A finance team wants a dashboard that shows daily Bedrock token costs broken down by application team, with anomaly alerts when spending exceeds expected baselines. Which AWS services provide this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Amazon CloudWatch custom metrics (token counts per team tag) + Cost Anomaly Detection"},
+      {"key": "B", "text": "Amazon Inspector for cost scanning"},
+      {"key": "C", "text": "AWS Config rules for spend compliance"},
+      {"key": "D", "text": "Amazon VPC Flow Logs with Athena queries"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Skill 4.3.2 describes CloudWatch for tracking token usage and cost anomaly detection. Custom CloudWatch metrics (published from Model Invocation Logs) can track per-team token usage; AWS Cost Anomaly Detection monitors billing anomalies and sends alerts via SNS. Inspector scans for security vulnerabilities. Config enforces resource configuration policies. VPC Flow Logs/Athena can analyse network traffic — not FM token costs.",
+    "source_topic": "CloudWatch, Cost Anomaly Detection, token monitoring"
+  },
+  {
+    "id": "d4-q0303", "domain": 4, "task_statement": "4.3", "topic": "Hallucination rate monitoring",
+    "difficulty": "hard",
+    "question_text": "An operations team wants to monitor hallucination rates in production FM outputs over time and alert when rates drift above a threshold. Which approach operationalises this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Manually review a random sample of FM outputs weekly"},
+      {"key": "B", "text": "Use golden dataset evaluations — periodically run a set of known-answer queries through the FM, measure the hallucination rate, publish a custom CloudWatch metric, and trigger a CloudWatch alarm if the rate exceeds the threshold"},
+      {"key": "C", "text": "Monitor FM response latency as a proxy for hallucination rate"},
+      {"key": "D", "text": "Use Amazon Inspector to scan responses for false statements"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Skill 4.3.2 cites golden datasets to detect hallucinations and anomaly detection for response drift in FM monitoring systems. Running golden queries at regular intervals, scoring answers against known correct answers, and publishing the hallucination rate as a CloudWatch custom metric enables threshold-based alerting. Manual weekly review is too slow and too subjective. Latency has no correlation with hallucination rate. Inspector is a security tool — not a semantic fact-checker.",
+    "source_topic": "Golden dataset, hallucination monitoring, CloudWatch"
+  },
+  {
+    "id": "d4-q0304", "domain": 4, "task_statement": "4.3", "topic": "Vector store performance monitoring",
+    "difficulty": "medium",
+    "question_text": "The retrieval latency of a RAG system's OpenSearch vector store is increasing as the index grows. What operational measures should be taken?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Ignore the latency increase — it is expected as data grows"},
+      {"key": "B", "text": "Monitor OpenSearch performance metrics (search latency, JVM heap, indexing rate) in CloudWatch; trigger index optimisation (segment merges, HNSW parameter tuning) when thresholds are breached"},
+      {"key": "C", "text": "Delete the vector store and rebuild it from scratch monthly"},
+      {"key": "D", "text": "Disable vector search and switch to keyword search to reduce index complexity"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Skill 4.3.5 describes performance monitoring for vector databases and automated index optimisation routines. Monitoring CloudWatch metrics for OpenSearch (latency percentiles, heap utilisation, merge rate) and triggering HNSW re-indexing or shard rebalancing when thresholds are exceeded keeps latency within SLA. Ignoring latency growth leads to SLA violations. Monthly full rebuilds cause significant downtime. Switching to keyword search loses semantic retrieval capability.",
+    "source_topic": "Vector store monitoring, OpenSearch, index optimisation"
+  },
+  {
+    "id": "d4-q0305", "domain": 4, "task_statement": "4.3", "topic": "Observability for multi-agent systems",
+    "difficulty": "hard",
+    "question_text": "A multi-agent GenAI system involves three agents that call tools and pass results to each other. Debugging failures is difficult because it is unclear which agent and which tool step failed. Which observability pattern addresses this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Log only the final output of the last agent in the chain"},
+      {"key": "B", "text": "Instrument each agent step with AWS X-Ray trace segments and CloudWatch structured logs; use tool calling observability and multi-agent coordination tracking"},
+      {"key": "C", "text": "Add print statements to Lambda functions and check CloudWatch Logs manually after each failure"},
+      {"key": "D", "text": "Use Amazon Inspector to scan agent code for bugs"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Skill 4.3.4 describes tool calling observability and multi-agent coordination tracking. X-Ray distributed traces capture each agent step as a segment/subsegment with timing and metadata; structured CloudWatch Logs per agent step provide searchable context. Together they enable root-cause analysis across the agent chain. Logging only final output hides intermediate failures. Ad-hoc print statements lack structure and correlation IDs. Inspector is a security scanner, not an observability tool.",
+    "source_topic": "AWS X-Ray, multi-agent observability, CloudWatch"
+  },
+  {
+    "id": "d4-q0306", "domain": 4, "task_statement": "4.3", "topic": "Output diff and regression monitoring",
+    "difficulty": "hard",
+    "question_text": "After a model version update, an operations team wants to detect if the FM's responses have drifted semantically — answering correctly before but differently now — without manual review of all outputs. Which technique addresses this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Monitor token count per response — if it changes, flag the response"},
+      {"key": "B", "text": "Use output diffing with semantic similarity scoring — compare embeddings of new responses against golden reference responses; alert when similarity falls below a threshold"},
+      {"key": "C", "text": "Count spelling errors in FM responses as a quality proxy"},
+      {"key": "D", "text": "Deploy both model versions simultaneously and serve both to users for comparison"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Skill 4.3.6 explicitly cites output diffing techniques for response consistency analysis. Computing embedding similarity between the new model's response and a golden reference response (from the previous version) detects semantic drift even when the wording changes. Token count changes don't indicate semantic drift. Spelling errors are not a quality metric for FM outputs. Serving both model versions to users exposes production users to potentially degraded responses.",
+    "source_topic": "Output diffing, semantic drift, FM monitoring"
+  }
+]

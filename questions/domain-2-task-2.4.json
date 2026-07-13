@@ -1,0 +1,226 @@
+[
+  {
+    "id": "d2-q0401",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Streaming API responses",
+    "difficulty": "medium",
+    "question_text": "A customer-facing chatbot must display FM-generated text incrementally as it is produced, rather than waiting for the complete response. Which Bedrock capability enables this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Invoke the Bedrock API synchronously and buffer the full response"
+      },
+      {
+        "key": "B",
+        "text": "Use the Amazon Bedrock streaming API (InvokeModelWithResponseStream) to receive incremental response chunks"
+      },
+      {
+        "key": "C",
+        "text": "Poll a Bedrock SQS queue for response fragments"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Kinesis Data Streams to receive tokens from Bedrock"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 2.4.2 describes the Amazon Bedrock streaming API for incremental response delivery. InvokeModelWithResponseStream returns chunks of the response as they are generated, enabling the application to display text progressively — significantly improving perceived latency. The synchronous API waits for the full response. Bedrock does not use SQS or Kinesis for streaming token delivery.",
+    "source_topic": "Bedrock streaming API, real-time FM responses"
+  },
+  {
+    "id": "d2-q0402",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Exponential backoff and retry",
+    "difficulty": "medium",
+    "question_text": "A Lambda function calling the Bedrock API occasionally receives ThrottlingException errors. What is the recommended retry strategy?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Retry immediately in a tight loop until the request succeeds"
+      },
+      {
+        "key": "B",
+        "text": "Use the AWS SDK's built-in exponential backoff with jitter for retries"
+      },
+      {
+        "key": "C",
+        "text": "Log the error and immediately return a failure to the user"
+      },
+      {
+        "key": "D",
+        "text": "Switch to a different AWS region after every failure"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 2.4.3 cites the AWS SDK for exponential backoff as a resilience mechanism. Exponential backoff with jitter spaces retries increasingly further apart, reducing load on the throttled service and avoiding retry storms. Tight-loop retries amplify throttling. Immediately returning failure ignores transient errors. Switching regions after every failure is an overreaction — exponential backoff handles transient throttling without cross-region overhead.",
+    "source_topic": "Exponential backoff, AWS SDK, Bedrock throttling"
+  },
+  {
+    "id": "d2-q0403",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Asynchronous FM processing",
+    "difficulty": "medium",
+    "question_text": "A batch document summarisation job must process thousands of documents. Synchronous Bedrock calls cause Lambda timeouts. Which architecture resolves this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase Lambda timeout to 15 minutes and call Bedrock synchronously"
+      },
+      {
+        "key": "B",
+        "text": "Push documents to an SQS queue; Lambda workers process each document asynchronously and store results in S3 or DynamoDB"
+      },
+      {
+        "key": "C",
+        "text": "Use a single EC2 instance to loop through all documents"
+      },
+      {
+        "key": "D",
+        "text": "Call the Bedrock API from Amazon RDS stored procedures"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 2.4.1 describes Amazon SQS for asynchronous processing. An SQS-backed Lambda fan-out processes documents in parallel batches; each Lambda invocation handles one document, stores the result, and exits — no long-running connections. Increasing Lambda timeout to 15 minutes risks exhausting concurrency limits for large batches and doesn't solve the scaling problem. A single EC2 loop is sequential and slow. RDS stored procedures cannot call external HTTP APIs.",
+    "source_topic": "Asynchronous FM processing, SQS, Lambda"
+  },
+  {
+    "id": "d2-q0404",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Intelligent model routing",
+    "difficulty": "hard",
+    "question_text": "A company's GenAI application serves queries that vary significantly in complexity. Simple queries should use a cheap small model; complex multi-step reasoning queries should use an expensive large model. Which AWS architecture implements this routing?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure a static routing rule in AWS AppConfig with 50% traffic to each model"
+      },
+      {
+        "key": "B",
+        "text": "Use Step Functions with a classification state — invoke a lightweight FM or rule engine to classify query complexity, then route to the appropriate model"
+      },
+      {
+        "key": "C",
+        "text": "Always use the large model and compress the prompt to reduce cost"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Lex intent detection to route queries"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 2.4.4 cites Step Functions for dynamic content-based routing to specialised FMs and intelligent model routing based on metrics. A Step Functions state machine classifies the query first (using a lightweight FM or regex/keyword rules), then branches to the appropriate endpoint. Static 50/50 routing ignores content. Prompt compression reduces tokens but doesn't route to cheaper models. Lex is for conversational intent classification within a dialogue system — not a general-purpose routing tier.",
+    "source_topic": "Intelligent routing, Step Functions, model selection"
+  },
+  {
+    "id": "d2-q0405",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Rate limiting via API Gateway",
+    "difficulty": "medium",
+    "question_text": "Multiple teams share a single GenAI gateway. One team is sending excessive requests, causing throttling for all others. How should fair usage be enforced?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Block all requests from the heavy-usage team permanently"
+      },
+      {
+        "key": "B",
+        "text": "Configure per-consumer API Gateway usage plans with request quotas and throttle limits per API key"
+      },
+      {
+        "key": "C",
+        "text": "Deploy a separate Bedrock account for the heavy-usage team"
+      },
+      {
+        "key": "D",
+        "text": "Increase Bedrock service quotas to accommodate all usage"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 2.4.3 cites API Gateway for rate limiting as a resilience mechanism. API Gateway usage plans let you assign throttle rates and daily/monthly quotas per API key — enforcing fair multi-tenant access without blocking teams entirely or requiring separate accounts. Blocking is too severe. Separate Bedrock accounts increase management overhead without solving fair-use policy. Increasing quotas benefits everyone equally but doesn't enforce per-team limits.",
+    "source_topic": "API Gateway usage plans, rate limiting, multi-tenant GenAI"
+  },
+  {
+    "id": "d2-q0406",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "AWS X-Ray for FM observability",
+    "difficulty": "medium",
+    "question_text": "Developers need to trace a request end-to-end — from the API Gateway through Lambda to Bedrock and back — to identify which component introduces the most latency. Which service provides this distributed tracing?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon CloudWatch metrics"
+      },
+      {
+        "key": "B",
+        "text": "AWS X-Ray"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Inspector"
+      },
+      {
+        "key": "D",
+        "text": "AWS Config"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 2.4.3 explicitly cites AWS X-Ray for observability across service boundaries. X-Ray creates end-to-end trace maps showing latency at each segment: API Gateway → Lambda → Bedrock → response. CloudWatch metrics provide aggregate statistics but not per-request trace trees. Inspector is a security scanner. AWS Config tracks resource configuration changes — not request latency traces.",
+    "source_topic": "AWS X-Ray, distributed tracing, Bedrock"
+  },
+  {
+    "id": "d2-q0407",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Three Bedrock log types distinguished",
+    "difficulty": "hard",
+    "question_text": "An operations team is investigating three different issues: (1) which IAM principal called the Bedrock API at 2 AM; (2) what exact prompt was sent and what the FM replied in a customer incident; (3) which specific document failed during a Knowledge Base ingestion job. Which log types correctly address each issue?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "CloudTrail for all three issues"
+      },
+      {
+        "key": "B",
+        "text": "(1) CloudTrail; (2) Bedrock Model Invocation Logs; (3) Knowledge Base ingestion logs in CloudWatch"
+      },
+      {
+        "key": "C",
+        "text": "(1) CloudWatch; (2) CloudTrail; (3) Bedrock Model Invocation Logs"
+      },
+      {
+        "key": "D",
+        "text": "(1) VPC Flow Logs; (2) CloudWatch Logs; (3) CloudTrail"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 2.4.3 and 4.3.2 establish this three-way distinction. (1) CloudTrail records control-plane and data-plane API calls with IAM identity, timestamp, and source IP — perfect for 'who called the API at 2 AM.' (2) Bedrock Model Invocation Logs capture the full prompt and response payload — the only source with actual conversation content. (3) Knowledge Base ingestion logs (a separate KB-specific logging feature) record per-document ingestion status (SUCCESS / EMBEDDING_FAILED / INDEXING_FAILED) in CloudWatch Logs. CloudTrail records API calls but never the prompt/response content or document-level ingestion status.",
+    "source_topic": "CloudTrail, Bedrock Model Invocation Logs, KB ingestion logs"
+  }
+]

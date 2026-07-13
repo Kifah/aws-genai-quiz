@@ -1,0 +1,327 @@
+[
+  {
+    "id": "d1-q0201",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Data quality for FM ingestion",
+    "difficulty": "medium",
+    "question_text": "A data engineering team needs to validate documents before ingesting them into a Bedrock Knowledge Base. They need automated quality scoring and metadata-level issue detection. Which AWS service is most appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Macie"
+      },
+      {
+        "key": "B",
+        "text": "AWS Glue Data Quality"
+      },
+      {
+        "key": "C",
+        "text": "Amazon GuardDuty"
+      },
+      {
+        "key": "D",
+        "text": "AWS Config"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "AWS Glue Data Quality lets you define DQDL rules for completeness, freshness, uniqueness, and custom logic — directly applicable to pre-ingestion document validation as cited in Skill 1.3.1. Amazon Macie detects PII/sensitive data but does not score general data quality. GuardDuty is a threat-detection service. AWS Config monitors resource configuration compliance, not dataset quality.",
+    "source_topic": "AWS Glue Data Quality, FM data pipeline"
+  },
+  {
+    "id": "d1-q0202",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Multimodal data processing",
+    "difficulty": "medium",
+    "question_text": "A company is building a knowledge base from audio call recordings, scanned PDFs, and structured spreadsheets. Which pipeline correctly processes all three data types before FM ingestion?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Transcribe for audio → Textract or Glue for PDFs → Bedrock multimodal models for spreadsheet understanding"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Rekognition for audio → Amazon QuickSight for PDFs → Amazon Polly for spreadsheets"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Polly for audio → S3 static hosting for PDFs → Athena for spreadsheets"
+      },
+      {
+        "key": "D",
+        "text": "SageMaker Processing for audio → DynamoDB for PDFs → Lambda for spreadsheets"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Skill 1.3.2 cites Amazon Transcribe for audio and Bedrock multimodal models for complex multimodal pipelines. Transcribe converts speech to text; Textract/Glue extracts text from scanned PDFs; Bedrock multimodal models can interpret tabular/spreadsheet content. Rekognition is for image/video (not audio). Polly converts text to speech — the wrong direction. SageMaker Processing can do audio work but Transcribe is the managed, purpose-built service.",
+    "source_topic": "Amazon Transcribe, Bedrock multimodal, data processing"
+  },
+  {
+    "id": "d1-q0203",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Bedrock API request format",
+    "difficulty": "easy",
+    "question_text": "What format must the request body use when calling the Amazon Bedrock InvokeModel API?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "XML with a model-specific root element"
+      },
+      {
+        "key": "B",
+        "text": "Protocol Buffers (protobuf)"
+      },
+      {
+        "key": "C",
+        "text": "JSON following the model-specific request schema"
+      },
+      {
+        "key": "D",
+        "text": "YAML front matter with a markdown body"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Skill 1.3.3 states: 'Format input data for FM inference using JSON formatting for Amazon Bedrock API requests.' Each Bedrock model has its own JSON schema (e.g., Claude's messages array, Titan's inputText), but the serialisation format is always JSON. XML, protobuf, and YAML are not supported by the Bedrock API.",
+    "source_topic": "Amazon Bedrock InvokeModel API, JSON"
+  },
+  {
+    "id": "d1-q0204",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Conversation formatting",
+    "difficulty": "easy",
+    "question_text": "A developer is building a multi-turn chatbot using the Amazon Bedrock Converse API. How should prior conversation turns be included in each request?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Concatenate all prior messages into one plain-text string in the user field"
+      },
+      {
+        "key": "B",
+        "text": "Pass a messages array with alternating user and assistant role entries; add a system field for persistent instructions"
+      },
+      {
+        "key": "C",
+        "text": "Rely on Bedrock's built-in session memory — the API automatically recalls past turns"
+      },
+      {
+        "key": "D",
+        "text": "Use session cookies to transmit conversation state"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 1.3.3 cites 'conversation formatting for dialog-based applications.' The Bedrock Converse API accepts a messages array with alternating user/assistant role turns and an optional top-level system field. The API is stateless — each request must carry the full conversation history. Concatenating into a single string loses role structure. Session cookies are a browser mechanism, not an FM API construct.",
+    "source_topic": "Amazon Bedrock Converse API, conversation formatting"
+  },
+  {
+    "id": "d1-q0205",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Input quality enhancement",
+    "difficulty": "medium",
+    "question_text": "A chatbot produces inconsistent answers because user inputs contain informal abbreviations, inconsistent casing, and mixed-language tokens. Which preprocessing steps improve response quality? (Choose TWO)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Comprehend to extract named entities and standardise terminology"
+      },
+      {
+        "key": "B",
+        "text": "Use Lambda functions to normalise and clean text before FM invocation"
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Rekognition to detect inappropriate content in text"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Polly to re-read text aloud and re-transcribe for better quality"
+      },
+      {
+        "key": "E",
+        "text": "Use Amazon Translate to force all input to English before FM invocation"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "Skill 1.3.4 lists Amazon Comprehend (entity extraction and text standardisation) and Lambda (normalisation functions) for enhancing input quality. Rekognition is for images/video — not text content. Polly→re-transcription adds latency with no quality benefit for already-text input. Force-translating to English would lose meaning for multilingual use cases and is not listed as a recommended approach.",
+    "source_topic": "Amazon Comprehend, Lambda, input preprocessing"
+  },
+  {
+    "id": "d1-q0206",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "SageMaker Data Wrangler for FM prep",
+    "difficulty": "medium",
+    "question_text": "A data scientist needs to profile, transform, and visually explore a dataset before fine-tuning an FM, without writing custom ETL code. Which service provides a GUI for this task?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Athena"
+      },
+      {
+        "key": "B",
+        "text": "Amazon SageMaker Data Wrangler"
+      },
+      {
+        "key": "C",
+        "text": "AWS Glue Studio"
+      },
+      {
+        "key": "D",
+        "text": "Amazon QuickSight"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 1.3.1 cites SageMaker Data Wrangler as a tool for data validation workflows. Data Wrangler provides a visual interface for profiling, transforming, and quality-checking datasets — purpose-built for ML/FM preparation. Athena is a SQL engine with no visual prep UI. Glue Studio is a visual ETL builder for data engineering pipelines. QuickSight is a BI tool for dashboards and analytics, not data preparation.",
+    "source_topic": "SageMaker Data Wrangler, FM fine-tuning data prep"
+  },
+  {
+    "id": "d1-q0207",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Structured output formatting",
+    "difficulty": "medium",
+    "question_text": "A developer wants the FM to always return a JSON object with specific fields (customer_name, order_id, sentiment) for CRM integration. How should the prompt be structured?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Ask the FM in natural language to 'return something structured'"
+      },
+      {
+        "key": "B",
+        "text": "Provide a JSON Schema definition and few-shot examples in the prompt; instruct the FM to strictly follow the schema"
+      },
+      {
+        "key": "C",
+        "text": "Post-process the FM's free-form output with regex to extract values"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Textract to parse the FM's output as if it were a form document"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 1.3.3 cites 'structured data preparation' and 1.3.1 mentions 'JSON Schema to enforce structured outputs'. Providing a JSON Schema and few-shot examples is the most reliable technique for constrained output formatting — the FM learns the exact schema from examples and the schema constrains its output. Vague natural-language instructions produce inconsistent formats. Regex post-processing is brittle for varied FM outputs. Textract is for extracting data from PDFs/images, not parsing FM text.",
+    "source_topic": "JSON Schema, structured FM output, few-shot prompting"
+  },
+  {
+    "id": "d1-q0208",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "CloudWatch metrics for data pipeline",
+    "difficulty": "easy",
+    "question_text": "A team wants to monitor the health of their FM data ingestion pipeline — specifically detecting when documents fail validation checks. Which AWS service should they use to set up automated alerts?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon CloudWatch metrics and alarms"
+      },
+      {
+        "key": "B",
+        "text": "AWS Trusted Advisor"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Inspector"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Macie"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Skill 1.3.1 lists Amazon CloudWatch metrics as part of data validation workflows. Publishing custom metrics (e.g., failed_validation_count) to CloudWatch and creating alarms with SNS notifications is the standard operational monitoring pattern on AWS. Trusted Advisor is for best-practice recommendations. Inspector scans for vulnerabilities. Macie detects sensitive data — not pipeline health.",
+    "source_topic": "Amazon CloudWatch, data pipeline monitoring"
+  },
+  {
+    "id": "d1-q0209",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Textract vs Bedrock Data Automation",
+    "difficulty": "medium",
+    "question_text": "A company receives invoices from 400 different vendors, each with a different layout and different column names for totals. They need normalised JSON output from every invoice with minimal custom code. Which service is most appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Textract key-value extraction"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Data Automation — uses GenAI to understand context across irregular multi-format documents"
+      },
+      {
+        "key": "C",
+        "text": "AWS Glue DataBrew profiling job"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Comprehend entity recognition"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Amazon Bedrock Data Automation uses GenAI to understand semantic context across documents with highly variable layouts ('Amount Due' = 'Total' = 'Balance Due'), outputting normalised JSON — directly cited in Skill 1.3.2 for automated data processing workflows. Textract is fast and accurate for fixed-template or well-structured forms but cannot handle extreme layout variability. Glue DataBrew processes structured datasets. Comprehend extracts named entities but does not normalise them into a domain-specific schema.",
+    "source_topic": "Amazon Bedrock Data Automation, Amazon Textract"
+  },
+  {
+    "id": "d1-q0210",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Kinesis Firehose for streaming data ingestion",
+    "difficulty": "medium",
+    "question_text": "A company streams millions of IoT sensor events per second to S3 for later RAG ingestion. They need auto-compression, date-based partitioning, and zero custom processing code. Which service delivers this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Kinesis Data Streams with a custom Lambda consumer"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Kinesis Data Firehose — auto-buffers, compresses, date-partitions, and delivers to S3 without code"
+      },
+      {
+        "key": "C",
+        "text": "Amazon MSK with a self-managed Kafka consumer"
+      },
+      {
+        "key": "D",
+        "text": "AWS Glue streaming ETL with a PySpark script"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Kinesis Data Firehose is the no-code streaming-to-S3 funnel: it automatically buffers, compresses (GZIP/Snappy), partitions by date, and delivers to S3 (Skill 1.3.2 — data processing workflows for FM consumption). Data Streams requires writing and maintaining a consumer (Lambda). MSK requires managing Kafka brokers and writing consumer code. A Glue streaming job requires PySpark/Scala code — higher operational effort.",
+    "source_topic": "Amazon Kinesis Data Firehose, FM data pipeline"
+  }
+]

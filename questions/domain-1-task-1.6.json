@@ -1,0 +1,152 @@
+[
+  {
+    "id": "d1-q0501", "domain": 1, "task_statement": "1.6", "topic": "Prompt management and governance",
+    "difficulty": "easy",
+    "question_text": "Ten developers are building different GenAI features that all must follow consistent brand-voice and safety guidelines. Which AWS service provides centralised prompt template management with versioning and approval workflows?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "AWS Systems Manager Parameter Store"},
+      {"key": "B", "text": "Amazon Bedrock Prompt Management"},
+      {"key": "C", "text": "Amazon DynamoDB with a custom key-value schema"},
+      {"key": "D", "text": "AWS CodeCommit with pull-request approvals"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Skill 1.6.3 explicitly cites Amazon Bedrock Prompt Management for parameterised templates and approval workflows. It provides FM-native versioning, template sharing, and centralised governance. Parameter Store can store strings but lacks FM-specific approval features. DynamoDB is a generic store with no prompt governance. CodeCommit can version files but has no FM-integrated approval workflow.",
+    "source_topic": "Amazon Bedrock Prompt Management"
+  },
+  {
+    "id": "d1-q0502", "domain": 1, "task_statement": "1.6", "topic": "System prompt best practices",
+    "difficulty": "medium",
+    "question_text": "A company deploys a public chatbot that must always respond as a financial assistant named 'Aria', never mention competitors, and match the user's language. Where should these persistent instructions be placed in the Bedrock Converse API request?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "In the first user message turn"},
+      {"key": "B", "text": "In the top-level system field of the Bedrock Converse API request"},
+      {"key": "C", "text": "Appended as a suffix to every user message"},
+      {"key": "D", "text": "In the maxTokens parameter as a special code"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Skill 1.6.1 describes using Bedrock Prompt Management to 'enforce role definitions'. The system field in the Converse API carries persistent FM behavioural instructions — role, constraints, output format, language rules. Placing in the first user turn is unreliable and can be overridden by user messages. Appending to every user message wastes tokens. maxTokens is a numeric capacity control, not an instruction field.",
+    "source_topic": "System prompt, Bedrock Converse API, prompt engineering"
+  },
+  {
+    "id": "d1-q0503", "domain": 1, "task_statement": "1.6", "topic": "Chain-of-thought prompting",
+    "difficulty": "medium",
+    "question_text": "A developer wants the FM to solve a complex multi-step maths problem and show verifiable intermediate reasoning steps rather than jumping straight to an answer. Which prompting technique achieves this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Zero-shot prompting"},
+      {"key": "B", "text": "One-shot prompting with a single worked example"},
+      {"key": "C", "text": "Chain-of-thought (CoT) prompting"},
+      {"key": "D", "text": "Negative prompting"}
+    ],
+    "correct_answers": ["C"],
+    "explanation": "Skill 1.6.5 cites chain-of-thought instruction patterns as a technique to enhance FM performance beyond basic prompting. CoT prompting (e.g., 'Let's think step by step') significantly improves accuracy on multi-step reasoning tasks by forcing intermediate steps. Zero-shot and one-shot prompting don't mandate intermediate reasoning. Negative prompting specifies what to avoid — orthogonal to eliciting a reasoning chain.",
+    "source_topic": "Chain-of-thought prompting, Amazon Bedrock"
+  },
+  {
+    "id": "d1-q0504", "domain": 1, "task_statement": "1.6", "topic": "Prompt Flows for orchestration",
+    "difficulty": "hard",
+    "question_text": "A company needs a multi-step automated document review pipeline: step 1 categorises, step 2 extracts entities conditioned on the category, step 3 generates a summary. Which AWS feature supports this natively with conditional branching and no custom orchestration code?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Amazon SageMaker Pipelines"},
+      {"key": "B", "text": "Amazon Bedrock Prompt Flows"},
+      {"key": "C", "text": "AWS Step Functions with Lambda functions calling Bedrock"},
+      {"key": "D", "text": "Amazon EventBridge rules with SNS fan-out"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Skill 1.6.6 explicitly describes Amazon Bedrock Prompt Flows for sequential prompt chains, conditional branching on model responses, reusable prompt components, and integrated pre/post-processing. This is purpose-built for prompt orchestration. SageMaker Pipelines is for ML training. Step Functions + Lambda works but requires custom code. EventBridge/SNS is event-routing infrastructure, not prompt orchestration.",
+    "source_topic": "Amazon Bedrock Prompt Flows"
+  },
+  {
+    "id": "d1-q0505", "domain": 1, "task_statement": "1.6", "topic": "Guardrails for content safety",
+    "difficulty": "medium",
+    "question_text": "An enterprise wants every FM output checked against a content policy — covering hate speech, self-harm, and off-topic requests — before the response reaches users. Which service enforces this at the platform level?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "AWS WAF rules on the API Gateway in front of the FM"},
+      {"key": "B", "text": "Amazon Bedrock Guardrails"},
+      {"key": "C", "text": "Amazon Macie"},
+      {"key": "D", "text": "Amazon Inspector"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Skill 1.6.1 states Amazon Bedrock Guardrails enforces responsible AI guidelines. Guardrails applies content filters, topic denials, grounding checks, word filters, and PII redaction to both FM inputs and outputs. WAF protects against HTTP-level attacks (SQLi, XSS), not semantic FM content. Macie detects PII in S3 data. Inspector is a vulnerability and compliance scanner.",
+    "source_topic": "Amazon Bedrock Guardrails"
+  },
+  {
+    "id": "d1-q0506", "domain": 1, "task_statement": "1.6", "topic": "Conversation history storage",
+    "difficulty": "medium",
+    "question_text": "A chatbot must maintain context across multiple turns so the FM can reference earlier statements. Where should conversation history be stored?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "In the Lambda function's global scope, shared across invocations"},
+      {"key": "B", "text": "Amazon DynamoDB keyed by session ID — retrieved and injected into the messages array on each turn"},
+      {"key": "C", "text": "Amazon S3 Glacier for long-term archival of every turn"},
+      {"key": "D", "text": "The FM retains memory between API calls natively"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Skill 1.6.2 explicitly cites DynamoDB for conversation history storage. DynamoDB offers low-latency lookups by session ID, making it ideal for per-turn context retrieval. Lambda global scope is ephemeral — instances are recycled. Glacier has slow retrieval times, unsuitable for real-time dialogue. FM APIs are stateless — every request must carry the full conversation history explicitly.",
+    "source_topic": "Amazon DynamoDB, conversation history, stateful chatbots"
+  },
+  {
+    "id": "d1-q0507", "domain": 1, "task_statement": "1.6", "topic": "Few-shot prompting for structured extraction",
+    "difficulty": "medium",
+    "question_text": "A developer wants the FM to extract customer name, order ID, and issue type from unstructured support emails in a consistent format. Which prompting technique is most effective?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Zero-shot with a brief instruction like 'extract the fields'"},
+      {"key": "B", "text": "Few-shot: provide 3-5 labelled examples of input email and expected JSON output in the prompt"},
+      {"key": "C", "text": "Generate embeddings of the emails and cluster them by field value"},
+      {"key": "D", "text": "Use Amazon Comprehend NER exclusively — no FM needed"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Skill 1.6.5 cites structured input components and output format specifications as techniques to enhance FM performance. Few-shot examples show the FM exactly what output schema to follow — highly reliable for consistent structured extraction. Zero-shot often produces inconsistent formats. Embeddings and clustering perform similarity grouping, not field extraction. Comprehend NER handles standard entity types but is inflexible for complex, domain-specific extraction schemas.",
+    "source_topic": "Few-shot prompting, structured extraction, output format"
+  },
+  {
+    "id": "d1-q0508", "domain": 1, "task_statement": "1.6", "topic": "Prompt regression testing",
+    "difficulty": "medium",
+    "question_text": "A team wants to automatically detect when prompt template changes cause FM outputs to regress from expected golden answers before the change is deployed. Which mechanism achieves this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Monitor response latency in CloudWatch as a proxy for quality"},
+      {"key": "B", "text": "Set up CloudWatch-triggered tests that compare FM outputs against golden answers after each prompt template change"},
+      {"key": "C", "text": "Randomly sample 10 responses post-deployment and review manually"},
+      {"key": "D", "text": "Use Amazon Inspector to scan prompt templates for security issues"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Skill 1.6.4 describes CloudWatch to test prompt regression — automated tests that evaluate FM outputs against expected golden answers after changes, serving as a quality gate before deployment. Latency is a proxy for speed, not output quality. Manual sampling post-deployment is too late and too subjective. Inspector is a security vulnerability scanner, not a prompt quality tool.",
+    "source_topic": "Prompt regression testing, CloudWatch"
+  },
+  {
+    "id": "d1-q0509", "domain": 1, "task_statement": "1.6", "topic": "Clarification workflows",
+    "difficulty": "hard",
+    "question_text": "A GenAI assistant often receives ambiguous queries where a single clarifying question would dramatically improve the response. Which approach implements an automated clarification workflow?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Increase the FM temperature so it generates more exploratory responses"},
+      {"key": "B", "text": "Use Step Functions to orchestrate a clarification sub-flow: detect ambiguity with Amazon Comprehend, generate a clarifying question via Bedrock, collect the response, then proceed with the enriched query"},
+      {"key": "C", "text": "Always return the top-3 possible answers and let the user choose"},
+      {"key": "D", "text": "Extend the FM context window so it can handle more ambiguous prompts"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Skill 1.6.2 cites Step Functions for clarification workflows and Amazon Comprehend for intent recognition. A multi-step workflow — detect ambiguity → generate clarifying question → collect answer → proceed — is a robust pattern for intent disambiguation. Higher temperature increases randomness, not clarity. Returning multiple answers is a workaround that degrades UX. Context window size doesn't resolve semantic ambiguity.",
+    "source_topic": "Clarification workflow, Step Functions, Amazon Comprehend"
+  },
+  {
+    "id": "d1-q0510", "domain": 1, "task_statement": "1.6", "topic": "Prompt template parameterisation",
+    "difficulty": "easy",
+    "question_text": "A team wants to reuse the same prompt template across multiple products by substituting product-specific values at runtime. Which Amazon Bedrock Prompt Management feature enables this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Prompt versioning"},
+      {"key": "B", "text": "Prompt variables — parameterised placeholders filled at invocation time"},
+      {"key": "C", "text": "Prompt A/B testing"},
+      {"key": "D", "text": "Prompt chaining"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Amazon Bedrock Prompt Management supports prompt variables — named placeholders (e.g., {{product_name}}, {{user_locale}}) that are substituted at invocation time, enabling a single template to serve multiple contexts. Versioning tracks changes over time. A/B testing compares performance between variants. Prompt chaining sequences multiple prompts — a Prompt Flows concept, not the parameterisation feature.",
+    "source_topic": "Amazon Bedrock Prompt Management, prompt variables"
+  }
+]

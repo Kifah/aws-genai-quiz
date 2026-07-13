@@ -1,0 +1,263 @@
+[
+  {
+    "id": "d5-q0101",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Bedrock Model Evaluations",
+    "difficulty": "medium",
+    "question_text": "A company wants to systematically compare three candidate FMs on their specific task (customer email response quality) using automated metrics across a test dataset. Which AWS feature enables this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon SageMaker Autopilot"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Model Evaluations"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Comprehend classification jobs"
+      },
+      {
+        "key": "D",
+        "text": "AWS Glue DataBrew profiling jobs"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 5.1.2 cites Amazon Bedrock Model Evaluations for systematic model evaluation. Bedrock Model Evaluations supports human (crowd-sourced or internal) and automated evaluations across multiple metrics (relevance, coherence, fluency, accuracy), enabling objective multi-model comparison on custom datasets. SageMaker Autopilot is for traditional ML AutoML. Comprehend classification is for supervised NLP tasks. Glue DataBrew is for structured data profiling.",
+    "source_topic": "Amazon Bedrock Model Evaluations"
+  },
+  {
+    "id": "d5-q0102",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "LLM-as-a-judge evaluation",
+    "difficulty": "hard",
+    "question_text": "A team needs to evaluate whether FM-generated customer support responses are helpful, accurate, and professional at scale — without human labellers for every response. Which evaluation approach scales this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Sample 10 responses randomly per week and grade them manually"
+      },
+      {
+        "key": "B",
+        "text": "Use an LLM-as-a-Judge approach — configure a judge FM that evaluates each response against helpfulness, accuracy, and professionalism rubrics"
+      },
+      {
+        "key": "C",
+        "text": "Use BLEU or ROUGE scores against a reference answer corpus"
+      },
+      {
+        "key": "D",
+        "text": "Measure response length — longer responses indicate higher quality"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 5.1.5 describes automated quality assessment with LLM-as-a-Judge techniques. A capable judge FM (e.g., Claude) evaluates each response against a structured rubric — scalable, consistent, and available in Amazon Bedrock Model Evaluations as an automated evaluator. Weekly random sampling has high variance and misses systematic failures. BLEU/ROUGE score lexical overlap — poor proxies for conversational quality. Response length has no correlation with quality.",
+    "source_topic": "LLM-as-a-Judge, automated evaluation, Bedrock"
+  },
+  {
+    "id": "d5-q0103",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "RAG evaluation metrics",
+    "difficulty": "hard",
+    "question_text": "A team is evaluating their RAG system. They need to measure both retrieval quality and generation quality. Which metrics cover both components? (Choose TWO)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Context Recall — the proportion of relevant information from the knowledge base that was successfully retrieved"
+      },
+      {
+        "key": "B",
+        "text": "Answer Faithfulness — whether the generated answer is grounded in the retrieved context (not hallucinated)"
+      },
+      {
+        "key": "C",
+        "text": "FM parameter count — larger models produce higher RAG scores"
+      },
+      {
+        "key": "D",
+        "text": "Token latency — faster retrieval indicates better RAG quality"
+      },
+      {
+        "key": "E",
+        "text": "Embedding model release date — newer embeddings always retrieve better"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "Skill 5.1.5 and 5.1.6 describe RAG evaluation covering retrieval quality and context matching. Context Recall measures retrieval completeness (did we retrieve all relevant chunks?). Answer Faithfulness measures generation quality (does the answer stay grounded in retrieved context?). RAGAS and similar frameworks operationalise both. Parameter count doesn't predict RAG-specific quality. Token latency measures speed — not retrieval/generation quality. Embedding recency is irrelevant — quality depends on domain fit, not release date.",
+    "source_topic": "RAG evaluation, context recall, answer faithfulness, RAGAS"
+  },
+  {
+    "id": "d5-q0104",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Canary testing for FM models",
+    "difficulty": "medium",
+    "question_text": "A team wants to deploy an updated FM version but is concerned about quality regression. They want to test it on a small fraction of real production traffic before full rollout. Which deployment pattern supports this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy the new model to all users simultaneously and roll back if issues arise"
+      },
+      {
+        "key": "B",
+        "text": "Use canary testing — route 5% of production traffic to the new model, monitor quality metrics, and gradually increase the percentage if metrics stay within thresholds"
+      },
+      {
+        "key": "C",
+        "text": "Deploy to production on a Friday afternoon to minimise business impact if something goes wrong"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon SageMaker Autopilot to automatically select the best model version"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 5.1.2 cites canary testing of FMs. Canary deployments route a small traffic percentage to the new model, monitor quality and error metrics, and progressively increase the canary weight — limiting blast radius if the new model underperforms. Full simultaneous rollout exposes all users to regression risk. Weekend deployments mask monitoring data. SageMaker Autopilot is for traditional ML model selection, not FM deployment strategy.",
+    "source_topic": "Canary testing, FM deployment, quality gates"
+  },
+  {
+    "id": "d5-q0105",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Agent evaluation",
+    "difficulty": "hard",
+    "question_text": "A team built a multi-step AI agent for customer order management. How should they evaluate whether the agent completes tasks correctly and uses tools efficiently?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Evaluate only the final output — task completion rate is sufficient"
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Bedrock Agent Evaluations to assess task completion rate, tool usage effectiveness, and reasoning quality across multi-step scenarios"
+      },
+      {
+        "key": "C",
+        "text": "Measure response latency — faster agents are better agents"
+      },
+      {
+        "key": "D",
+        "text": "Count the number of tool calls — fewer calls always means better performance"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 5.1.7 cites Amazon Bedrock Agent Evaluations for task completion rate measurements, tool usage effectiveness evaluations, and reasoning quality assessment in multi-step workflows. Evaluating only final output misses intermediate reasoning errors and inefficient tool use. Latency measures speed — not correctness. Fewer tool calls is sometimes more efficient, but an agent that skips necessary tool calls produces incorrect results — completeness matters more than count.",
+    "source_topic": "Amazon Bedrock Agent Evaluations, agent evaluation"
+  },
+  {
+    "id": "d5-q0106",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Deployment validation for FM updates",
+    "difficulty": "medium",
+    "question_text": "Before promoting a new FM version to production, a team wants automated checks that validate response consistency and detect semantic drift versus the previous version. Which approach implements this as a quality gate in CI/CD?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Review responses manually in a staging environment"
+      },
+      {
+        "key": "B",
+        "text": "Run synthetic user workflow tests against the new FM version; compute semantic similarity of responses versus golden references; fail the gate if similarity drops below threshold"
+      },
+      {
+        "key": "C",
+        "text": "Check that the new FM version has more parameters than the old one"
+      },
+      {
+        "key": "D",
+        "text": "Verify that the new model's API endpoint is reachable"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 5.1.9 describes deployment validation systems using synthetic user workflows and AI-specific output validation for hallucination rates and semantic drift. Automated semantic similarity tests against golden responses provide an objective, repeatable quality gate in CI/CD — far more reliable than manual review. Parameter count doesn't predict output quality. API reachability is a health check — not a quality gate.",
+    "source_topic": "Deployment validation, semantic drift, quality gates, CI/CD"
+  },
+  {
+    "id": "d5-q0107",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "User feedback collection",
+    "difficulty": "easy",
+    "question_text": "A company wants to collect structured user feedback on FM response quality (thumbs up/down + optional comment) to build a dataset for continuous model improvement. Which approach implements this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Monitor CloudWatch error rates as a proxy for user satisfaction"
+      },
+      {
+        "key": "B",
+        "text": "Add a feedback UI (thumbs up/down, optional text) to the application; store feedback records with the original prompt and response in DynamoDB for analysis"
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Rekognition sentiment analysis on user facial expressions during chat sessions"
+      },
+      {
+        "key": "D",
+        "text": "Automatically infer satisfaction from FM response token count"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 5.1.3 describes feedback interfaces and rating systems for model outputs. A structured feedback UI captures direct user signals; storing them linked to the original prompt/response in DynamoDB creates a labelled dataset for RLHF, prompt tuning, or evaluation. Error rates don't measure perceived quality. Facial recognition during chat is invasive, unreliable, and out of scope. Token count has no relationship to user satisfaction.",
+    "source_topic": "User feedback, RLHF, annotation workflow"
+  },
+  {
+    "id": "d5-q0108",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Evaluation workflow ordering",
+    "difficulty": "hard",
+    "question_text": "A company is replacing its production translation FM with a new candidate model. The process must be sequential and each step reviewed before the next. Place the following steps in the correct order: (A) Conduct A/B testing; (B) Create test dataset; (C) Define evaluation metrics; (D) Implement automated quality gates via Step Functions; (E) Analyse results and generate report.",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "C → B → A → D → E"
+      },
+      {
+        "key": "B",
+        "text": "B → C → A → E → D"
+      },
+      {
+        "key": "C",
+        "text": "A → B → C → D → E"
+      },
+      {
+        "key": "D",
+        "text": "C → A → B → D → E"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Skill 5.1.2 describes systematic model evaluation systems. The correct sequence is: (C) Define metrics first — establish what 'good' looks like (the yardstick); (B) Create test dataset — build the 'test paper' with diverse cases, shared to both models; (A) Conduct A/B testing — put both models through the test; (D) Implement automated quality gates via Step Functions — 'machine judge' enforces thresholds and requires human approval before promoting; (E) Analyse and generate report — compile evidence for decision-making. You cannot measure without first defining metrics, and you cannot test without a dataset.",
+    "source_topic": "Model evaluation workflow, Step Functions, quality gates"
+  }
+]

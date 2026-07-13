@@ -1,0 +1,236 @@
+[
+  {
+    "id": "d5-q0201",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Context window overflow troubleshooting",
+    "difficulty": "medium",
+    "question_text": "An FM integration unexpectedly returns incomplete or truncated responses. Context window diagnostic logs show inputs near the model's maximum token limit. Which remediation approaches are correct? (Choose TWO)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use dynamic chunking to limit conversation history size passed to the FM"
+      },
+      {
+        "key": "B",
+        "text": "Redesign the prompt to use summarised conversation history rather than full raw history"
+      },
+      {
+        "key": "C",
+        "text": "Increase the max output tokens to compensate for input truncation"
+      },
+      {
+        "key": "D",
+        "text": "Use a larger FM so it has more parameters to handle long inputs"
+      },
+      {
+        "key": "E",
+        "text": "Add more detail to the system prompt to guide the FM on long inputs"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "Skill 5.2.1 describes context window overflow diagnostics, dynamic chunking strategies, and prompt design optimisation. (A) Dynamic chunking limits how many history tokens are included in the context window at any time. (B) Summarising conversation history compresses many tokens of history into a small summary, freeing context space. Increasing max output tokens doesn't affect the input token limit. A larger FM doesn't have a larger context window by default. Adding more to the system prompt worsens the overflow.",
+    "source_topic": "Context window, truncation, dynamic chunking"
+  },
+  {
+    "id": "d5-q0202",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "FM API integration errors",
+    "difficulty": "medium",
+    "question_text": "A Lambda function calling Bedrock frequently returns `ValidationException: Input is too long for requested model`. What is the correct debugging workflow?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase Lambda memory"
+      },
+      {
+        "key": "B",
+        "text": "Log the input token count before each API call, identify which inputs exceed the model's context limit, and apply input truncation or chunking"
+      },
+      {
+        "key": "C",
+        "text": "Ignore the error — it is intermittent and will self-resolve"
+      },
+      {
+        "key": "D",
+        "text": "Switch to a different AWS region where the limit may be higher"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 5.2.2 describes error logging and request validation for FM integration issues. The correct approach is: instrument the input with a token counter, log it to CloudWatch, identify inputs that breach the model limit, and apply remediation (truncation, summarisation, chunking). Lambda memory doesn't affect the FM's token limit. ValidationException errors are deterministic — they won't self-resolve without code changes. The context limit is a model property, not a region configuration.",
+    "source_topic": "FM API errors, ValidationException, token limit"
+  },
+  {
+    "id": "d5-q0203",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Prompt troubleshooting",
+    "difficulty": "medium",
+    "question_text": "FM responses to a customer-facing assistant have degraded — answers are suddenly verbose and off-topic. The application code has not changed. A new prompt template was deployed yesterday. Which debugging approach is most systematic?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Roll back the entire application to last month's deployment"
+      },
+      {
+        "key": "B",
+        "text": "Use Bedrock Prompt Management version comparison — A/B test the previous and new prompt templates against a golden question set and compare output quality metrics"
+      },
+      {
+        "key": "C",
+        "text": "Increase FM temperature to generate more varied responses"
+      },
+      {
+        "key": "D",
+        "text": "Switch to a different FM provider"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 5.2.3 describes prompt testing frameworks and version comparison for prompt engineering issues. Bedrock Prompt Management retains versioned templates; comparing the current version against the previous one on a golden question set isolates the prompt change as the root cause. Rolling back the full application is overly broad and loses new features. Increasing temperature worsens inconsistency. Switching FM providers doesn't fix a prompt regression.",
+    "source_topic": "Prompt versioning, A/B testing, Bedrock Prompt Management"
+  },
+  {
+    "id": "d5-q0204",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Retrieval quality debugging",
+    "difficulty": "hard",
+    "question_text": "Users report that the RAG assistant gives correct answers to some questions but completely ignores relevant documents for others. How should the team diagnose the retrieval failure?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Assume the FM is hallucinating and increase the top-k retrieval count"
+      },
+      {
+        "key": "B",
+        "text": "Inspect retrieval logs: check embedding quality for failing queries, examine cosine similarity scores for retrieved chunks, and verify that relevant documents are present and properly chunked in the index"
+      },
+      {
+        "key": "C",
+        "text": "Switch to a larger FM — retrieval issues are always generation problems"
+      },
+      {
+        "key": "D",
+        "text": "Delete and rebuild the knowledge base from scratch"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 5.2.4 describes retrieval system troubleshooting including embedding quality diagnostics, drift monitoring, and vectorisation issue resolution. The correct systematic approach: check if relevant documents exist in the index; verify their chunks are appropriately sized; inspect similarity scores for failing queries (low scores indicate embedding mismatch); check for embedding quality drift if a model was recently updated. Increasing top-k may mask the problem. Retrieval failures are distinct from generation — switching FM won't fix a missing-document issue. Full rebuilds are disruptive and don't diagnose root cause.",
+    "source_topic": "Retrieval debugging, embedding quality, chunking"
+  },
+  {
+    "id": "d5-q0205",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Prompt maintenance with CloudWatch and X-Ray",
+    "difficulty": "hard",
+    "question_text": "A production FM assistant started producing inconsistent responses after a prompt template variable was added. The CloudWatch Logs show some prompts fail schema validation. Which tools and approach diagnose and fix the issue? (Choose TWO)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use CloudWatch Logs Insights to query prompt invocation logs and identify which template variable substitutions are missing or malformed"
+      },
+      {
+        "key": "B",
+        "text": "Use AWS X-Ray to trace the prompt construction path through the application and identify where variables are missing"
+      },
+      {
+        "key": "C",
+        "text": "Increase Lambda memory to resolve template substitution failures"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Rekognition to detect problems in prompt text"
+      },
+      {
+        "key": "E",
+        "text": "Use Amazon Macie to scan prompts for PII causing failures"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "Skill 5.2.5 explicitly cites CloudWatch Logs to diagnose prompt confusion and X-Ray to implement prompt observability pipelines, alongside schema validation for format inconsistencies. (A) CloudWatch Logs Insights can filter invocations where variable substitution was incomplete — showing the malformed prompt. (B) X-Ray traces the full request path, pinpointing which Lambda function or step lost the variable value. Lambda memory has no effect on template logic. Rekognition is for image/video. Macie detects PII, not template syntax errors.",
+    "source_topic": "CloudWatch Logs Insights, X-Ray, prompt observability"
+  },
+  {
+    "id": "d5-q0206",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Embedding model version drift — RAG silent failure",
+    "difficulty": "hard",
+    "question_text": "A financial services RAG application worked correctly for months. After a Lambda code update, it returns 'no relevant information found' for queries that previously retrieved accurate results. CloudWatch shows no errors, X-Ray confirms successful FM invocations, and OpenSearch is healthy with no index changes. What is the most likely root cause?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "The Lambda IAM role is missing bedrock:InvokeModel permission"
+      },
+      {
+        "key": "B",
+        "text": "The FM temperature was inadvertently increased in the code update"
+      },
+      {
+        "key": "C",
+        "text": "The document vectors in OpenSearch were deleted during the deployment"
+      },
+      {
+        "key": "D",
+        "text": "The Lambda code update switched to a different embedding model version, creating a vector-space mismatch with the existing index"
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Skill 5.2.4 (retrieval system troubleshooting) describes embedding model version drift as a classic silent RAG failure. If the Lambda now embeds queries using model v2 while the OpenSearch index contains vectors from model v1, the two vector spaces are mathematically incompatible — no vectors match, retrieval returns zero results. The key diagnostic clue is 'silent failure': no errors (IAM permission errors produce AccessDeniedException logs; deleted indices produce empty-results warnings with different signatures). The FM temperature (B) only affects generation step 2 — retrieval failure happens in step 1 before generation. Vector deletion (C) would normally produce warnings.",
+    "source_topic": "Embedding drift, vector-space mismatch, RAG troubleshooting"
+  },
+  {
+    "id": "d5-q0207",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "KB ingestion logging for document-level failures",
+    "difficulty": "medium",
+    "question_text": "A company ingests 2,000 documents per day into a Bedrock Knowledge Base from S3. Some documents fail silently — they appear processed but queries return no results for their content. The team needs to identify which specific documents failed and why. Which solution provides document-level ingestion diagnostics?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable Knowledge Base logging to CloudWatch Logs; use CloudWatch Logs Insights to query per-document status codes (SUCCESS / EMBEDDING_FAILED / INDEXING_FAILED)"
+      },
+      {
+        "key": "B",
+        "text": "Enable AWS CloudTrail data events for all Bedrock APIs"
+      },
+      {
+        "key": "C",
+        "text": "Enable Bedrock Model Invocation Logging to capture embedding metrics"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon CloudWatch Application Signals to detect KB performance issues"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Skill 5.2.4 and 4.3.2 describe Knowledge Base logging for ingestion troubleshooting. The KB-specific logging feature emits per-document status records to CloudWatch Logs (RESOURCE_IGNORED, EMBEDDING_FAILED, INDEXING_FAILED, SUCCESS) that can be queried with Logs Insights. CloudTrail (B) records which IAM principal called StartIngestionJob — it has no visibility into per-document processing outcomes. Bedrock Model Invocation Logging (C) captures prompt/response content during chat inference — unrelated to the background ingestion process. CloudWatch Application Signals (D) is APM for microservices (EKS/API Gateway latency) — not for KB ingestion diagnostics.",
+    "source_topic": "Bedrock Knowledge Base logging, CloudWatch Logs Insights"
+  }
+]

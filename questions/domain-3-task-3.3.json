@@ -1,0 +1,231 @@
+[
+  {
+    "id": "d3-q0301",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Model cards and documentation",
+    "difficulty": "medium",
+    "question_text": "A company needs to document the capabilities, limitations, intended uses, and biases of the FM they have fine-tuned to satisfy internal governance and potential regulatory review. Which AWS mechanism supports this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS CloudTrail logs"
+      },
+      {
+        "key": "B",
+        "text": "Amazon SageMaker AI programmatic model cards"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Inspector vulnerability reports"
+      },
+      {
+        "key": "D",
+        "text": "AWS Config configuration history"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 3.3.1 cites SageMaker AI for developing programmatic model cards. Model cards are structured documents that record a model's intended use, performance metrics, fairness evaluation, limitations, and training data provenance — a governance and compliance artefact. CloudTrail logs API calls, not model documentation. Inspector reports security vulnerabilities. Config records resource configuration changes — not model metadata.",
+    "source_topic": "SageMaker model cards, AI governance"
+  },
+  {
+    "id": "d3-q0302",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Data lineage tracking",
+    "difficulty": "medium",
+    "question_text": "An organisation must be able to trace which data sources contributed to any specific FM-generated output for regulatory audit purposes. Which service provides automated data lineage tracking?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon CloudWatch"
+      },
+      {
+        "key": "B",
+        "text": "AWS Glue — using the Glue Data Catalog to register data sources and track lineage"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Kinesis Data Firehose"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Athena"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 3.3.2 cites AWS Glue Data Catalog to register data sources and metadata tagging for source attribution in FM-generated content, plus CloudTrail for audit logging. AWS Glue tracks data origins, transformations, and target destinations — enabling data lineage chains. CloudWatch monitors metrics and logs. Kinesis Firehose is a streaming data delivery service. Athena runs SQL queries — neither natively provides lineage tracking.",
+    "source_topic": "AWS Glue Data Catalog, data lineage, FM governance"
+  },
+  {
+    "id": "d3-q0303",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Continuous compliance monitoring",
+    "difficulty": "hard",
+    "question_text": "A financial services company must continuously monitor its GenAI application for model drift, policy violations, and ensure AI outputs comply with regulatory requirements — with automated alerting when violations are detected. Which approach best addresses this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run monthly manual audits of FM outputs"
+      },
+      {
+        "key": "B",
+        "text": "Implement automated monitoring using CloudWatch with custom metrics for bias drift, policy violations, and token-level response analysis; configure alarms and SNS notifications for violations"
+      },
+      {
+        "key": "C",
+        "text": "Store all FM outputs in S3 and review them quarterly"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Inspector to scan FM outputs for compliance violations"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 3.3.4 describes automated detection for misuse, drift, and policy violations; bias drift monitoring; and automated alerting and remediation workflows. CloudWatch custom metrics can track hallucination rates, topic violation counts, and response quality scores; alarms with SNS notifications trigger immediate alerts. Monthly manual audits detect violations late. Quarterly S3 review is too infrequent. Inspector scans for software vulnerabilities — not FM semantic compliance.",
+    "source_topic": "CloudWatch, compliance monitoring, bias drift, FM governance"
+  },
+  {
+    "id": "d3-q0304",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "CloudTrail for FM audit logging",
+    "difficulty": "easy",
+    "question_text": "An enterprise must maintain an immutable audit trail of who invoked which FM, when, and with what parameters for a 7-year retention period. Which AWS service provides this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon CloudWatch Logs"
+      },
+      {
+        "key": "B",
+        "text": "AWS CloudTrail"
+      },
+      {
+        "key": "C",
+        "text": "Amazon S3 server access logging"
+      },
+      {
+        "key": "D",
+        "text": "Amazon VPC Flow Logs"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 3.3.2 cites CloudTrail for audit logging of FM usage. CloudTrail records every Bedrock API call with caller identity, timestamp, source IP, and request parameters — creating an immutable audit log. CloudTrail logs can be stored in S3 with Object Lock for compliance. CloudWatch Logs capture application logs but lack the IAM-identity audit depth of CloudTrail. S3 server access logs record S3 operations, not Bedrock API calls. VPC Flow Logs capture network traffic metadata — not API-level identity audit.",
+    "source_topic": "AWS CloudTrail, audit logging, FM governance"
+  },
+  {
+    "id": "d3-q0305",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Responsible AI governance framework",
+    "difficulty": "medium",
+    "question_text": "A company wants a comprehensive AI governance framework that aligns FM deployments with organisational policies, regulatory requirements, and responsible AI principles. Which elements are ESSENTIAL components of such a framework? (Choose TWO)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Documented policies covering FM selection criteria, approved use cases, and prohibited applications"
+      },
+      {
+        "key": "B",
+        "text": "A bias drift monitoring system with regular fairness evaluations"
+      },
+      {
+        "key": "C",
+        "text": "Maximising model parameter count across all deployed FMs"
+      },
+      {
+        "key": "D",
+        "text": "Restricting all access to a single FM to reduce complexity"
+      },
+      {
+        "key": "E",
+        "text": "Deploying FMs only in AWS regions with the lowest latency"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "Skill 3.3.3 describes comprehensive governance frameworks aligned with policies, regulatory requirements, and responsible AI principles. Skill 3.3.4 adds bias drift monitoring and automated governance controls. (A) documented policies establish guardrails for FM selection and usage; (B) bias drift monitoring catches fairness degradation over time. Parameter count is an engineering metric, not a governance component. Restricting to a single FM limits capability without governance benefit. Region selection is an operational decision, not a governance framework element.",
+    "source_topic": "Responsible AI governance, bias monitoring, policy"
+  },
+  {
+    "id": "d3-q0306",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "S3 Object Lock for 7-year immutable compliance logging",
+    "difficulty": "hard",
+    "question_text": "A regulated insurance company must retain all FM model invocation logs (full prompt and response payloads) for 7 years. The logs must be tamper-proof — not modifiable or deletable by anyone, including AWS account administrators. Which storage configuration achieves this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Store logs in Amazon CloudWatch Logs with a 7-year retention policy"
+      },
+      {
+        "key": "B",
+        "text": "Store logs in Amazon S3 with Object Lock in Compliance mode and a 7-year retention period"
+      },
+      {
+        "key": "C",
+        "text": "Store logs in DynamoDB with IAM policies preventing deletion"
+      },
+      {
+        "key": "D",
+        "text": "Enable CloudTrail data events for Bedrock with a 7-year S3 lifecycle policy"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 3.3.4 describes immutable audit logging for regulatory readiness. S3 Object Lock in Compliance mode is the highest level of immutability: once set, no principal — not even the AWS root account — can delete or overwrite objects before the retention period expires. This is the WORM (Write Once Read Many) standard required by financial regulations (SEC/FINRA). CloudWatch Logs retention policies define when logs are purged — not immutable. IAM policies can be overridden by account administrators. CloudTrail captures API metadata (who called the API, when) — not the full prompt/response payload that Bedrock Model Invocation Logging provides.",
+    "source_topic": "S3 Object Lock Compliance mode, WORM, compliance logging"
+  },
+  {
+    "id": "d3-q0307",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "IAM condition key bedrock:GuardrailIdentifier",
+    "difficulty": "hard",
+    "question_text": "A manufacturing company rolls out an AI governance policy requiring every Bedrock InvokeModel and Converse API call to include a guardrail. Developers sometimes forget to attach a guardrail ID in their code. What is the MOST operationally efficient way to enforce this at the infrastructure level?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy a Lambda proxy that validates guardrail presence before forwarding requests to Bedrock"
+      },
+      {
+        "key": "B",
+        "text": "Store the guardrail ID in Parameter Store and write a code review checklist"
+      },
+      {
+        "key": "C",
+        "text": "Configure IAM policies with the bedrock:GuardrailIdentifier condition key on every IAM role that calls Bedrock — requests without a guardrail ID are denied at the AWS IAM layer"
+      },
+      {
+        "key": "D",
+        "text": "Train developers on the importance of guardrails in quarterly workshops"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Skill 3.3.3 describes organisational governance systems for consistent oversight. The IAM condition key `bedrock:GuardrailIdentifier` enforces guardrail attachment at the infrastructure level: any API call that omits the guardrail ID is immediately rejected with AccessDenied — no custom code required. This is zero-maintenance once configured. A Lambda proxy (A) introduces latency, adds a failure point, and requires ongoing maintenance — poor operational efficiency. Parameter Store + code review (B) relies on humans, is error-prone. Training (D) cannot enforce compliance technically.",
+    "source_topic": "IAM condition key bedrock:GuardrailIdentifier, AI governance"
+  }
+]

@@ -1,0 +1,258 @@
+[
+  {
+    "id": "d2-q0501",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "Amazon Q Developer for productivity",
+    "difficulty": "easy",
+    "question_text": "A developer team wants an AI assistant embedded in their IDE that provides code suggestions, explains code, and generates unit tests for their GenAI application. Which AWS service addresses this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon CodeGuru Reviewer"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Q Developer"
+      },
+      {
+        "key": "C",
+        "text": "AWS CloudShell"
+      },
+      {
+        "key": "D",
+        "text": "Amazon SageMaker Studio"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 2.5.4 explicitly cites Amazon Q Developer for generating and refactoring code, code suggestions for API assistance, AI component testing, and performance optimisation. Amazon Q Developer integrates into VS Code, JetBrains IDEs, and the AWS Console. CodeGuru Reviewer performs static code analysis for security/quality — not interactive generation. CloudShell is a browser-based CLI environment. SageMaker Studio is an ML development environment.",
+    "source_topic": "Amazon Q Developer, developer productivity"
+  },
+  {
+    "id": "d2-q0502",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "AWS Amplify for AI interfaces",
+    "difficulty": "medium",
+    "question_text": "A front-end developer wants to build a web interface for a GenAI chatbot using declarative UI components without writing complex WebSocket or streaming API code. Which AWS service accelerates this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon EC2 with a custom Node.js WebSocket server"
+      },
+      {
+        "key": "B",
+        "text": "AWS Amplify with AI kit components that abstract FM streaming and conversation management"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Lightsail static website hosting"
+      },
+      {
+        "key": "D",
+        "text": "Amazon S3 static website hosting with CloudFront"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 2.5.2 cites AWS Amplify for developing declarative UI components for AI interfaces. Amplify's AI kit includes pre-built React/Vue components for conversational AI, streaming responses, and FM interaction — abstracting the underlying Bedrock API complexity. A custom EC2 WebSocket server requires significant boilerplate. Lightsail and S3/CloudFront static hosting serve files but provide no AI-specific UI components.",
+    "source_topic": "AWS Amplify, GenAI UI, conversational interfaces"
+  },
+  {
+    "id": "d2-q0503",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "Bedrock Data Automation",
+    "difficulty": "medium",
+    "question_text": "A company wants to automate extraction of structured data from unstructured documents at scale — invoices, contracts, and reports — using GenAI without building a custom pipeline. Which service enables this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Textract alone"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Data Automation"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Comprehend Medical"
+      },
+      {
+        "key": "D",
+        "text": "AWS Glue DataBrew"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 2.5.3 cites Amazon Bedrock Data Automation for automated data processing workflows. Bedrock Data Automation uses FMs to intelligently extract, classify, and summarise data from documents, images, audio, and video at scale — going beyond Textract's fixed-template extraction. Textract extracts text/tables from structured layouts but lacks semantic understanding for unstructured contracts. Comprehend Medical is healthcare NLP specifically. Glue DataBrew is a data preparation tool for structured datasets.",
+    "source_topic": "Amazon Bedrock Data Automation"
+  },
+  {
+    "id": "d2-q0504",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "CloudWatch Logs Insights for FM debugging",
+    "difficulty": "medium",
+    "question_text": "A developer needs to analyse the prompts and responses that led to a spike in poor-quality FM outputs over the past 24 hours. Which tool should they use?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon CloudWatch Logs Insights to query structured log records of prompts and responses"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Inspector to scan logs for vulnerabilities"
+      },
+      {
+        "key": "C",
+        "text": "AWS Config to review resource changes during the spike"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Athena to query S3 access logs"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Skill 2.5.6 explicitly cites CloudWatch Logs Insights for analysing prompts and responses to improve troubleshooting efficiency. With Bedrock Model Invocation Logging enabled, prompts and responses are logged to CloudWatch Logs, enabling Logs Insights queries to filter by time window, response quality signals, and error codes. Inspector is a security scanner. AWS Config tracks configuration changes — not FM I/O logs. Athena queries S3 files — useful if logs are archived to S3, but CloudWatch Logs Insights is the real-time first step.",
+    "source_topic": "CloudWatch Logs Insights, Bedrock Model Invocation Logs"
+  },
+  {
+    "id": "d2-q0505",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "No-code prompt workflow builder",
+    "difficulty": "easy",
+    "question_text": "A business analyst without coding experience wants to build a multi-step GenAI workflow that chains several FM calls together to process customer feedback. Which Bedrock feature supports this without writing code?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Bedrock Prompt Flows — a visual, no-code workflow builder for FM prompt chaining"
+      },
+      {
+        "key": "B",
+        "text": "AWS Lambda layers for shared GenAI logic"
+      },
+      {
+        "key": "C",
+        "text": "Amazon SageMaker Pipelines"
+      },
+      {
+        "key": "D",
+        "text": "AWS Step Functions Express Workflows"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Skill 2.5.2 cites Amazon Bedrock Prompt Flows as a no-code workflow builder. Prompt Flows provides a visual drag-and-drop interface for creating FM prompt chains, conditional branching, and integrating tools — requiring no code. Lambda layers share code between Lambda functions — requires programming. SageMaker Pipelines is for ML training workflows. Step Functions can orchestrate Bedrock calls but requires JSON/YAML definitions.",
+    "source_topic": "Amazon Bedrock Prompt Flows, no-code GenAI"
+  },
+  {
+    "id": "d2-q0506",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "OpenAPI-first GenAI integration",
+    "difficulty": "medium",
+    "question_text": "A company is building a new GenAI-powered API and wants its interface contract defined before any implementation begins, ensuring all consumers have a consistent expectation. Which approach supports this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Implement the API first, then generate documentation from the code"
+      },
+      {
+        "key": "B",
+        "text": "Define the API contract first with an OpenAPI (Swagger) specification, then import it into API Gateway and implement Lambda handlers"
+      },
+      {
+        "key": "C",
+        "text": "Share the Lambda function ARN directly with consumers"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon EventBridge schema registry as the primary API contract"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 2.5.2 cites OpenAPI specifications for API-first development approaches. Defining the OpenAPI spec first allows consumers to generate client SDKs, write integration tests, and develop in parallel — before any backend implementation exists. API Gateway can import the OpenAPI spec directly to create routes, validation, and documentation. Code-first documentation risks inconsistency. Sharing Lambda ARNs is an internal implementation detail, not a consumer-facing contract. EventBridge schema registry is for event schemas, not request/response API contracts.",
+    "source_topic": "OpenAPI specification, API-first development, API Gateway"
+  },
+  {
+    "id": "d2-q0507",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "Q Business vs Bedrock Knowledge Bases",
+    "difficulty": "medium",
+    "question_text": "A company wants internal staff (HR, Sales, Finance) to search company documents using natural-language queries, with the search results strictly limited by each user's existing SharePoint permissions. They need minimal development effort and no custom UI code. Which solution is most appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Bedrock Knowledge Bases with a custom Lambda access-control layer"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Q Business — managed enterprise RAG with built-in ACL inheritance from connected data sources"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Kendra with a custom post-processing Lambda for access control"
+      },
+      {
+        "key": "D",
+        "text": "Build a custom RAG application using LangChain and Bedrock"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Amazon Q Business (Skill 2.5.2, accessible AI interfaces) is a fully managed enterprise RAG service that inherits access control lists (ACL) directly from connected data sources like SharePoint — users only see documents they already have permission to access, enforced automatically. It provides a built-in web experience with no custom UI code needed. Bedrock Knowledge Bases (A) provides flexible RAG but requires building a custom access-control layer. Kendra (C) is being closed to new customers (July 2026). Custom LangChain (D) maximises flexibility but is the highest-effort option — opposite of minimal development.",
+    "source_topic": "Amazon Q Business, ACL, managed enterprise RAG"
+  },
+  {
+    "id": "d2-q0508",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "Q Business Plugins for write actions",
+    "difficulty": "medium",
+    "question_text": "A company uses Amazon Q Business for internal employee support. Employees want to not just find answers but also create Jira tickets directly from the chat interface without leaving Q Business. Which Q Business feature enables write actions to external systems?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Q Business Data Connectors — extend them to write back to Jira"
+      },
+      {
+        "key": "B",
+        "text": "Q Business Plugins — pre-built enterprise connectors (Jira, ServiceNow, Salesforce) that enable write actions"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Bedrock Agents action groups connected to Q Business"
+      },
+      {
+        "key": "D",
+        "text": "Q Business cannot take write actions — it is read-only"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Q Business Plugins are pre-built enterprise connectors (Jira, ServiceNow, Salesforce, Zendesk) that enable write actions directly from the chat interface. Data Connectors (A) are read-only ingestion connectors — they index documents but cannot write back to source systems. Bedrock Agents action groups are a different product not embedded in Q Business. Q Business supports write actions via Plugins — it is not read-only.",
+    "source_topic": "Amazon Q Business Plugins, enterprise write actions"
+  }
+]

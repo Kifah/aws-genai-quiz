@@ -1,0 +1,359 @@
+[
+  {
+    "id": "d1-q0101",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "FM selection criteria",
+    "difficulty": "medium",
+    "question_text": "A developer must select a foundation model for a legal document summarisation service. Requirements are: minimal hallucinations, support for 100K-token context windows, and a cost under $0.002 per 1K tokens. Which evaluation approach is correct?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Choose the model with the highest parameter count — more parameters always mean better accuracy"
+      },
+      {
+        "key": "B",
+        "text": "Evaluate models using performance benchmarks on representative legal documents, context window capability analysis, and price-to-performance ratio comparison"
+      },
+      {
+        "key": "C",
+        "text": "Select the most recently released Bedrock model as it will always outperform older ones"
+      },
+      {
+        "key": "D",
+        "text": "Use SageMaker Autopilot to automatically select the best FM"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 1.2.1 prescribes performance benchmarks, capability analysis, and limitation evaluation for FM selection. For this scenario: benchmark hallucination rates on legal text, verify the model supports 100K-token contexts, and compare price-to-performance ratios. Parameter count alone does not predict domain-specific quality. Recency does not guarantee domain fit. SageMaker Autopilot is for traditional ML AutoML, not FM selection.",
+    "source_topic": "FM selection, Amazon Bedrock model catalogue"
+  },
+  {
+    "id": "d1-q0102",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Dynamic model switching",
+    "difficulty": "hard",
+    "question_text": "A company wants its GenAI application to switch between Claude, Titan, and Llama models based on runtime cost and latency conditions without redeploying code. Which architecture supports this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Hardcode model IDs in Lambda environment variables and redeploy when routing changes are needed"
+      },
+      {
+        "key": "B",
+        "text": "Store model routing configuration in AWS AppConfig; Lambda reads the configuration at invocation time"
+      },
+      {
+        "key": "C",
+        "text": "Query an RDS table for model preferences on every FM invocation"
+      },
+      {
+        "key": "D",
+        "text": "Use SageMaker Experiments to track which model performs best, then manually update the code"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 1.2.2 explicitly cites AWS AppConfig for flexible architecture patterns that enable dynamic model selection without code modifications. AppConfig supports real-time config updates with rollout controls and automatic rollback. Hardcoded Lambda environment variables require redeployment. RDS queries add latency and coupling to every FM call. SageMaker Experiments tracks results but doesn't provide runtime routing.",
+    "source_topic": "AWS AppConfig, dynamic model routing, Lambda"
+  },
+  {
+    "id": "d1-q0103",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Cross-region inference",
+    "difficulty": "medium",
+    "question_text": "An application deployed in us-east-1 requires a specific Claude model version that is only available in us-west-2. The team also needs the application to remain operational if one region degrades. Which Bedrock feature directly addresses both needs?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Bedrock Provisioned Throughput in us-east-1"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Cross-Region Inference"
+      },
+      {
+        "key": "C",
+        "text": "AWS Global Accelerator routing to a Bedrock endpoint"
+      },
+      {
+        "key": "D",
+        "text": "Amazon CloudFront caching Bedrock responses for multi-region delivery"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Amazon Bedrock Cross-Region Inference lets an application in one region invoke a model available only in another region, and can route to alternate regions for resilience — directly matching Skill 1.2.3. Provisioned Throughput provides reserved capacity within a single region and doesn't solve cross-region model availability. Global Accelerator optimises network routing but doesn't address FM model availability. CloudFront caches static content — not appropriate for dynamic FM invocations.",
+    "source_topic": "Amazon Bedrock Cross-Region Inference"
+  },
+  {
+    "id": "d1-q0104",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Circuit breaker for FM resilience",
+    "difficulty": "hard",
+    "question_text": "During a regional service degradation, calls to Amazon Bedrock time out and cascading failures bring down downstream services. Which architectural pattern prevents this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase Lambda timeout to 15 minutes to allow Bedrock time to recover"
+      },
+      {
+        "key": "B",
+        "text": "Use AWS Step Functions to implement a circuit breaker — open the circuit after a failure threshold and return a cached or default response"
+      },
+      {
+        "key": "C",
+        "text": "Disable retry logic so additional requests do not pile up on the degraded service"
+      },
+      {
+        "key": "D",
+        "text": "Synchronously poll Bedrock in a while loop until it responds"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 1.2.3 explicitly names AWS Step Functions circuit breaker patterns for AI system resilience. When failure rate exceeds a threshold the circuit opens and callers receive a fallback immediately — preventing cascades. Increasing Lambda timeout merely delays failures without adding a fallback path. Disabling retries removes resilience without substituting a fallback. Synchronous polling wastes compute and fails just as hard.",
+    "source_topic": "Circuit breaker, AWS Step Functions, Bedrock resilience"
+  },
+  {
+    "id": "d1-q0105",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "LoRA fine-tuning",
+    "difficulty": "medium",
+    "question_text": "A company wants to customise a large FM for a specialised task using their proprietary data. GPU budget is limited and they cannot afford full fine-tuning. Which technique should they use?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Full fine-tuning of all model parameters"
+      },
+      {
+        "key": "B",
+        "text": "Low-Rank Adaptation (LoRA)"
+      },
+      {
+        "key": "C",
+        "text": "Pre-training from scratch on domain data"
+      },
+      {
+        "key": "D",
+        "text": "Zero-shot prompting with the largest available model"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "LoRA (Low-Rank Adaptation) freezes most model parameters and injects small trainable low-rank matrices, dramatically cutting GPU memory and compute versus full fine-tuning. It is explicitly listed under Skill 1.2.4 as a parameter-efficient adaptation technique. Full fine-tuning trains all billions of parameters — very expensive. Pre-training from scratch is even more expensive. Zero-shot prompting doesn't update model weights at all.",
+    "source_topic": "LoRA, parameter-efficient fine-tuning, Bedrock custom models"
+  },
+  {
+    "id": "d1-q0106",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Model lifecycle and versioning",
+    "difficulty": "hard",
+    "question_text": "A team has fine-tuned a domain-specific FM and needs to version it, promote it to production with a deployment pipeline, and roll back automatically if accuracy drops. Which set of AWS services best supports this? (Choose TWO)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon SageMaker Model Registry for model versioning and approval workflows"
+      },
+      {
+        "key": "B",
+        "text": "AWS CodeCommit to store model weights as Git LFS objects"
+      },
+      {
+        "key": "C",
+        "text": "Amazon SageMaker AI endpoints with automated deployment pipelines and rollback strategies"
+      },
+      {
+        "key": "D",
+        "text": "AWS Backup for scheduled model artefact snapshots"
+      },
+      {
+        "key": "E",
+        "text": "Amazon S3 Lifecycle policies to archive old model versions"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "C"
+    ],
+    "explanation": "Skill 1.2.4 cites SageMaker Model Registry for versioning and deploying customised models, and SageMaker AI endpoints with automated deployment pipelines and rollback strategies. CodeCommit/Git LFS is not suited to multi-gigabyte model artefacts. AWS Backup targets workload data/resources, not ML model lifecycle. S3 Lifecycle policies archive or delete objects — they provide no deployment or rollback capability.",
+    "source_topic": "SageMaker Model Registry, SageMaker endpoints, model lifecycle"
+  },
+  {
+    "id": "d1-q0107",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "FM API Gateway abstraction",
+    "difficulty": "medium",
+    "question_text": "A company wants multiple application teams to access foundation models through a unified internal endpoint that enforces authentication, logs usage, and can route to different models without changing client code. Which architecture best fits?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Give each team direct IAM access to Bedrock with no abstraction layer"
+      },
+      {
+        "key": "B",
+        "text": "Deploy an Amazon API Gateway-backed Lambda function as a GenAI gateway that authenticates callers, routes to the appropriate model, and logs all invocations"
+      },
+      {
+        "key": "C",
+        "text": "Share a single IAM user credential among all teams for simplicity"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon CloudFront as a proxy in front of Bedrock"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 1.2.2 describes flexible architecture patterns that enable dynamic model selection — an API Gateway + Lambda GenAI gateway is the canonical pattern. It centralises auth (via Cognito/API key/IAM), enables per-team usage logging, and allows backend model routing changes without client code changes. Direct per-team IAM access scatters governance. Sharing an IAM user credential is a security anti-pattern. CloudFront is a CDN/edge proxy — not designed for dynamic FM routing and auth.",
+    "source_topic": "GenAI gateway, API Gateway, Lambda, Bedrock"
+  },
+  {
+    "id": "d1-q0108",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Provisioned throughput",
+    "difficulty": "medium",
+    "question_text": "A production GenAI application requires guaranteed, consistent inference throughput for a custom fine-tuned model on Amazon Bedrock, regardless of other customers' usage. Which Bedrock feature provides this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Bedrock on-demand inference (pay-per-token with no guarantees)"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Provisioned Throughput — reserve model units (MUs) for dedicated capacity"
+      },
+      {
+        "key": "C",
+        "text": "Amazon SageMaker real-time endpoints with autoscaling"
+      },
+      {
+        "key": "D",
+        "text": "AWS Lambda reserved concurrency"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Amazon Bedrock Provisioned Throughput lets you purchase Model Units (MUs) — dedicated capacity for a specific model — guaranteeing consistent throughput regardless of shared-service contention. This is referenced in Skill 2.2.1 as a deployment option for specific performance requirements. On-demand inference is subject to throttling. SageMaker endpoints are for non-Bedrock models. Lambda reserved concurrency governs Lambda invocations, not Bedrock model capacity.",
+    "source_topic": "Amazon Bedrock Provisioned Throughput"
+  },
+  {
+    "id": "d1-q0109",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Bedrock model catalogue selection",
+    "difficulty": "easy",
+    "question_text": "Which statement about accessing foundation models through Amazon Bedrock is CORRECT?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Bedrock only offers Amazon's own Titan models"
+      },
+      {
+        "key": "B",
+        "text": "Bedrock provides access to FMs from multiple providers (Amazon, Anthropic, Meta, Mistral, etc.) through a single unified API"
+      },
+      {
+        "key": "C",
+        "text": "You must negotiate a separate contract with each model provider before using Bedrock"
+      },
+      {
+        "key": "D",
+        "text": "Bedrock only supports text modality — no image or embedding models are available"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Amazon Bedrock is a fully managed service that offers foundation models from Amazon (Titan), Anthropic (Claude), Meta (Llama), Mistral, Cohere, AI21 Labs, and others through a single API surface. This is a core architectural advantage — model switching without multi-vendor contract management. Bedrock also offers embedding models (Amazon Titan Embeddings) and image generation models (Amazon Titan Image, Stability AI).",
+    "source_topic": "Amazon Bedrock model catalogue"
+  },
+  {
+    "id": "d1-q0110",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Stop sequences inference parameter",
+    "difficulty": "medium",
+    "question_text": "A developer builds a structured-output assistant that should stop generating immediately after it emits the closing tag </answer>. The output sometimes continues past this tag with extraneous text. Which inference parameter reliably fixes this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Add a prompt instruction: 'Stop after </answer>'"
+      },
+      {
+        "key": "B",
+        "text": "Set the stop_sequences parameter to [\"</answer>\"] in the inference API call"
+      },
+      {
+        "key": "C",
+        "text": "Lower the temperature to 0 to make the model more deterministic"
+      },
+      {
+        "key": "D",
+        "text": "Reduce top_k to 1 to restrict the vocabulary"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "The stop_sequences inference parameter instructs the Bedrock server to halt token generation the instant the specified string is produced — a 100% reliable server-side brake. Prompt instructions (A) are advisory and the FM may ignore them, especially at higher creativity settings. Temperature (C) controls randomness, not stopping behaviour. top_k (D) limits vocabulary breadth, not where generation ends.",
+    "source_topic": "Stop sequences, inference parameters, Amazon Bedrock"
+  },
+  {
+    "id": "d1-q0111",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "On-Demand vs Provisioned Throughput decision",
+    "difficulty": "medium",
+    "question_text": "A financial institution processes 80,000 contract summaries nightly in a predictable 4-hour batch window and requires stable, consistent latency with no shared-queue delays. Which Bedrock pricing mode is most appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "On-Demand — pay per token, no commitment"
+      },
+      {
+        "key": "B",
+        "text": "Provisioned Throughput — purchase Model Units for a committed term to guarantee dedicated capacity"
+      },
+      {
+        "key": "C",
+        "text": "EC2 Spot instances with a self-hosted open-source model"
+      },
+      {
+        "key": "D",
+        "text": "Lambda reserved concurrency with Bedrock on-demand"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock Provisioned Throughput purchases dedicated Model Units for a 1-6 month commitment, guaranteeing stable latency with no shared-queue contention — ideal for large, predictable, high-volume batch workloads. On-Demand is pay-per-token but subject to throttling under shared load. Bedrock has no Spot pricing option. Lambda reserved concurrency governs Lambda invocations, not Bedrock model capacity.",
+    "source_topic": "Bedrock Provisioned Throughput, On-Demand pricing"
+  }
+]

@@ -1,0 +1,28 @@
+{
+  "name": "aws-genai-quiz",
+  "version": "1.0.0",
+  "description": "AIP-C01 AWS Certified Generative AI Developer - Professional practice quiz",
+  "main": "dist/app.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "tsx src/app.ts",
+    "practice": "tsx src/app.ts --mode practice",
+    "exam": "tsx src/app.ts --mode exam",
+    "validate": "tsx src/validate.ts",
+    "test":     "node --test --require tsx/cjs tests/loader.test.ts tests/answers.test.ts tests/validator.test.ts"
+  },
+  "dependencies": {
+    "readline-sync": "^1.4.10"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "tsx": "^4.23.1",
+    "typescript": "^7.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true
+  }
+}

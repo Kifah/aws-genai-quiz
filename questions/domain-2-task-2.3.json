@@ -1,0 +1,263 @@
+[
+  {
+    "id": "d2-q0301",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Legacy system integration",
+    "difficulty": "hard",
+    "question_text": "A company wants to add GenAI capabilities to an existing ERP system that uses SOAP/REST APIs and cannot be modified. Which integration pattern minimises coupling?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Directly couple the FM to the ERP database with read/write permissions"
+      },
+      {
+        "key": "B",
+        "text": "Build an event-driven integration layer: Lambda adapters translate between ERP SOAP calls and the Bedrock API, with EventBridge for loose coupling"
+      },
+      {
+        "key": "C",
+        "text": "Replace the ERP system with a modern platform before adding GenAI"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Kendra to index ERP data and treat it as a search problem"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 2.3.1 describes API-based integrations with legacy systems and event-driven architectures for loose coupling. Lambda adapter functions translate between the ERP's protocol and Bedrock's API; EventBridge decouples producers from consumers so the ERP and GenAI layer evolve independently. Direct FM-to-DB coupling is a security and maintenance anti-pattern. Replacing the ERP is a multi-year project — not a GenAI integration approach. Kendra is being retired to new customers and is search-specific.",
+    "source_topic": "Enterprise integration, event-driven, Lambda, EventBridge"
+  },
+  {
+    "id": "d2-q0302",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Identity federation for FM access",
+    "difficulty": "hard",
+    "question_text": "An enterprise wants employees to invoke Bedrock FMs using their existing corporate identity (Active Directory) without maintaining separate AWS IAM users. Which approach is correct?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create individual IAM users for each employee and distribute long-term access keys"
+      },
+      {
+        "key": "B",
+        "text": "Configure AWS IAM Identity Center (SSO) to federate with the corporate IdP; employees assume an IAM role via SAML/OIDC to call Bedrock"
+      },
+      {
+        "key": "C",
+        "text": "Share a single IAM role credential across all employees"
+      },
+      {
+        "key": "D",
+        "text": "Embed AWS access keys in the application's front-end JavaScript code"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 2.3.3 describes identity federation between FM services and enterprise systems. IAM Identity Center (SSO) integrates with Active Directory via SAML or OIDC, allowing employees to assume time-limited IAM roles — no long-term keys needed. Individual IAM users with long-term keys are hard to manage at scale and violate least-privilege principles. Shared credentials eliminate per-user auditability. Embedding keys in front-end code is a critical security vulnerability.",
+    "source_topic": "IAM Identity Center, identity federation, Bedrock access"
+  },
+  {
+    "id": "d2-q0303",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "CI/CD for GenAI components",
+    "difficulty": "medium",
+    "question_text": "A team wants a CI/CD pipeline for their GenAI application that automatically runs prompt regression tests, vulnerability scans, and supports rollback if quality checks fail. Which services should they use? (Choose TWO)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS CodePipeline for pipeline orchestration"
+      },
+      {
+        "key": "B",
+        "text": "AWS CodeBuild for build, test execution, and security scans"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Kendra for indexing deployment artefacts"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Polly for converting deployment logs to audio"
+      },
+      {
+        "key": "E",
+        "text": "Amazon QuickSight for pipeline dashboards"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "Skill 2.3.5 explicitly cites AWS CodePipeline and AWS CodeBuild for CI/CD pipelines with automated testing frameworks, security scans, and rollback support for GenAI components. CodePipeline orchestrates the stages (source → build → test → deploy); CodeBuild runs the actual build and test commands including prompt regression tests and security scans. Kendra indexes documents — not deployment artefacts. Polly is text-to-speech. QuickSight is BI visualisation, not CI/CD.",
+    "source_topic": "AWS CodePipeline, CodeBuild, CI/CD for GenAI"
+  },
+  {
+    "id": "d2-q0304",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "On-premises data integration",
+    "difficulty": "hard",
+    "question_text": "A financial institution stores sensitive trading data on-premises due to regulatory requirements, but wants to augment GenAI responses with this data without ever sending it to the AWS cloud. Which approach satisfies both constraints?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Copy the data to Amazon S3 and use Bedrock Knowledge Bases normally"
+      },
+      {
+        "key": "B",
+        "text": "Use AWS Outposts to run Bedrock-compatible infrastructure on-premises, processing data locally"
+      },
+      {
+        "key": "C",
+        "text": "Anonymise all data before uploading to S3"
+      },
+      {
+        "key": "D",
+        "text": "Use a public third-party LLM API that supports on-premises data"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 2.3.4 cites AWS Outposts for on-premises data integration in cross-environment AI solutions. Outposts extends AWS infrastructure into the on-premises environment, allowing data to be processed locally without leaving the premises. Copying to S3 violates the 'no cloud transfer' constraint. Anonymisation may not satisfy strict regulatory requirements for certain data types. Third-party LLM APIs typically require cloud transfer.",
+    "source_topic": "AWS Outposts, on-premises integration, data sovereignty"
+  },
+  {
+    "id": "d2-q0305",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "GenAI gateway pattern",
+    "difficulty": "medium",
+    "question_text": "An organisation wants a centralised abstraction layer that provides observability, rate limiting, authentication, and model routing for all internal GenAI consumers. What pattern implements this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Give every team direct Bedrock access with separate IAM policies"
+      },
+      {
+        "key": "B",
+        "text": "Deploy a GenAI gateway — API Gateway + Lambda — that centralises auth, rate limiting, logging, and model routing for all consumers"
+      },
+      {
+        "key": "C",
+        "text": "Use S3 presigned URLs to allow teams to call Bedrock"
+      },
+      {
+        "key": "D",
+        "text": "Publish a shared IAM role ARN for all teams to assume"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 2.3.5 describes centralised abstraction layers and observability/control mechanisms as part of secure GenAI gateway architectures. An API Gateway + Lambda gateway centralises: authentication (API keys/Cognito), usage plans and rate limiting, request/response logging, model routing, and cost attribution. Direct team access scatters governance. S3 presigned URLs are for object access — unrelated to Bedrock. A shared IAM role eliminates per-team auditability.",
+    "source_topic": "GenAI gateway, API Gateway, centralised observability"
+  },
+  {
+    "id": "d2-q0306",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Microservice integration with GenAI",
+    "difficulty": "medium",
+    "question_text": "An e-commerce platform wants to add a GenAI product recommendation feature to an existing microservices architecture without disrupting other services. Which integration pattern is most appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Embed the FM directly into the product catalogue microservice"
+      },
+      {
+        "key": "B",
+        "text": "Create a new GenAI recommendation microservice exposed via API Gateway; existing services call it over its REST API"
+      },
+      {
+        "key": "C",
+        "text": "Add the FM as a database trigger on the product catalogue table"
+      },
+      {
+        "key": "D",
+        "text": "Rewrite all microservices in a single monolith to include the FM"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 2.3.2 describes API Gateway microservice integrations for adding GenAI capabilities to existing applications. A new, isolated GenAI recommendation service with a well-defined API maintains separation of concerns, can be deployed and scaled independently, and minimises blast radius. Embedding the FM inside an existing microservice couples them together and complicates both services. Database triggers are not a GenAI integration mechanism. Monolith migration is counter to microservices principles.",
+    "source_topic": "Microservice integration, API Gateway, GenAI"
+  },
+  {
+    "id": "d2-q0307",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Lambda Durable Functions for long-running workflows",
+    "difficulty": "hard",
+    "question_text": "A company runs a multi-step AI document-review workflow: triage → wait for human expert input (up to 3 days) → generate final report. They want a fault-tolerant, serverless implementation that avoids managing state machines or containers. Which new AWS capability fits best?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Standard AWS Lambda (15-minute timeout) with DynamoDB polling for state"
+      },
+      {
+        "key": "B",
+        "text": "AWS Lambda Durable Functions — checkpoint-aware Lambda that can sleep for up to a year without incurring compute cost"
+      },
+      {
+        "key": "C",
+        "text": "AWS Step Functions Standard Workflow"
+      },
+      {
+        "key": "D",
+        "text": "Amazon ECS Fargate with a persistent container"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "AWS Lambda Durable Functions (launched re:Invent Dec 2025, Skill 2.3.1 — enterprise connectivity and Skill 2.5 — development tools) allows sequential, fault-tolerant workflows written as ordinary Lambda code that can suspend for up to ~366 days with no compute cost while waiting. It auto-checkpoints progress so failures replay from the last checkpoint — exactly right for a 3-day human-wait step. Standard Lambda has a 15-minute cap. Step Functions (C) also works for this pattern but requires writing ASL JSON state definitions — more operational complexity than Durable Functions. ECS Fargate incurs continuous cost even when waiting.",
+    "source_topic": "AWS Lambda Durable Functions, long-running workflows"
+  },
+  {
+    "id": "d2-q0308",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "AppSync GraphQL for multi-source AI queries",
+    "difficulty": "medium",
+    "question_text": "A GenAI dashboard needs to fetch FM-generated summaries, user chat history, and relevant document citations in a single API call to minimise round-trips. Which integration pattern is most appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon API Gateway REST API with three separate endpoints, one per data source"
+      },
+      {
+        "key": "B",
+        "text": "AWS AppSync GraphQL API — resolves multiple data sources (Bedrock, DynamoDB, OpenSearch) in one query"
+      },
+      {
+        "key": "C",
+        "text": "An Amazon SQS queue that batches all three requests"
+      },
+      {
+        "key": "D",
+        "text": "AWS Step Functions calling each source sequentially"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "AWS AppSync is a managed GraphQL API that can resolve fields from multiple backends (Lambda calling Bedrock, DynamoDB for chat history, OpenSearch for citations) in a single client query, eliminating multi-round-trip overhead (Skill 2.3.2 — integrating AI capabilities into existing applications). REST APIs require separate requests per data source. SQS is asynchronous message queuing — not a synchronous multi-source query resolver. Step Functions calls services sequentially, not in a unified single response.",
+    "source_topic": "AWS AppSync, GraphQL, multi-source FM integration"
+  }
+]

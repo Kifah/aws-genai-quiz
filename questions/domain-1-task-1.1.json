@@ -1,0 +1,124 @@
+[
+  {
+    "id": "d1-q0001", "domain": 1, "task_statement": "1.1", "topic": "RAG architecture design",
+    "difficulty": "medium",
+    "question_text": "A company wants to build a document Q&A system that retrieves answers from proprietary internal PDFs stored in Amazon S3. The solution must require minimal infrastructure management and support sub-second retrieval. Which architecture best meets these requirements?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Amazon Kendra with S3 connector and Amazon Lex for natural language query handling"},
+      {"key": "B", "text": "Amazon Bedrock Knowledge Bases with an OpenSearch Serverless vector store and a Bedrock FM for generation"},
+      {"key": "C", "text": "Self-managed Pinecone cluster on EC2 with a custom Python retrieval service"},
+      {"key": "D", "text": "Amazon DynamoDB full-text scan with Amazon Comprehend entity extraction"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Amazon Bedrock Knowledge Bases is a fully managed RAG pipeline — it ingests S3 documents, chunks and embeds them into OpenSearch Serverless, and exposes a retrieval+generation API. This minimises infra management while delivering sub-second vector retrieval. Kendra is being closed to new customers (July 2026) and is keyword-first. A self-managed Pinecone on EC2 requires heavy infra management. DynamoDB has no native vector search.",
+    "source_topic": "Amazon Bedrock Knowledge Bases, RAG"
+  },
+  {
+    "id": "d1-q0002", "domain": 1, "task_statement": "1.1", "topic": "AWS Well-Architected GenAI Lens",
+    "difficulty": "easy",
+    "question_text": "A solutions architect is conducting a structured review of a new GenAI workload on AWS. Which tool provides a review lens specifically designed for generative AI?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "AWS Trusted Advisor"},
+      {"key": "B", "text": "AWS WA Tool Generative AI Lens"},
+      {"key": "C", "text": "Amazon Inspector"},
+      {"key": "D", "text": "AWS Compute Optimizer"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "The AWS Well-Architected Tool Generative AI Lens offers domain-specific best practices for FM-based workloads across all six pillars. Trusted Advisor covers general cost/security. Inspector is a vulnerability scanner. Compute Optimizer focuses on EC2/Lambda rightsizing.",
+    "source_topic": "AWS Well-Architected Generative AI Lens"
+  },
+  {
+    "id": "d1-q0003", "domain": 1, "task_statement": "1.1", "topic": "PoC validation before deployment",
+    "difficulty": "medium",
+    "question_text": "Before committing to a full-scale deployment, a team wants to validate that Amazon Bedrock can meet their customer-support use-case requirements. What is the MOST appropriate first step?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Deploy a SageMaker endpoint with a fine-tuned model and measure production metrics immediately"},
+      {"key": "B", "text": "Use Amazon Bedrock Playgrounds to test FM responses against representative customer queries"},
+      {"key": "C", "text": "Purchase reserved GPU instances to ensure compute capacity"},
+      {"key": "D", "text": "Migrate all customer support tickets to S3 before selecting an FM"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Skill 1.1.2 describes developing a technical PoC to validate feasibility before full-scale deployment, citing Amazon Bedrock. Bedrock Playgrounds provide a zero-infra environment to test and compare FM responses against real queries. Starting directly with a SageMaker production endpoint skips validation. Reserving compute before model selection is premature. Data migration before model selection reverses the logical sequence.",
+    "source_topic": "Amazon Bedrock Playgrounds, PoC"
+  },
+  {
+    "id": "d1-q0004", "domain": 1, "task_statement": "1.1", "topic": "Architectural design principles for GenAI",
+    "difficulty": "hard",
+    "question_text": "A company is designing a GenAI system for financial advisors. The architecture must produce explainable outputs, maintain auditable data lineage, and adapt if regulations change. Which design principles are MOST important? (Choose THREE)",
+    "question_type": "multi",
+    "options": [
+      {"key": "A", "text": "Surface source citations and confidence indicators to support explainability"},
+      {"key": "B", "text": "Use the largest available FM to maximise accuracy"},
+      {"key": "C", "text": "Log all FM interactions via AWS CloudTrail for audit purposes"},
+      {"key": "D", "text": "Separate model logic from business rules so either can be updated independently"},
+      {"key": "E", "text": "Minimise the number of AWS services to reduce operational complexity"}
+    ],
+    "correct_answers": ["A", "C", "D"],
+    "explanation": "For regulated financial applications: (A) explainability satisfies advisors and regulators; (C) CloudTrail audit logging fulfils regulatory traceability requirements (Skill 1.1.3 / 1.6.3); (D) a modular architecture allows regulatory rule changes without FM redeployment. Largest FM ≠ best domain performance and increases cost. Minimising service count is not an architectural principle — using the right tool for each concern is.",
+    "source_topic": "GenAI solution design, explainability, audit logging"
+  },
+  {
+    "id": "d1-q0005", "domain": 1, "task_statement": "1.1", "topic": "Standardised component reuse",
+    "difficulty": "medium",
+    "question_text": "An organisation is deploying GenAI solutions across ten business units. Developers keep reimplementing the same prompt templates, embedding pipelines, and Bedrock integration code. Which approach enforces consistent implementation across deployments?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Allow each team to develop independently so they can optimise for their domain"},
+      {"key": "B", "text": "Create standardised reusable components — shared prompt templates via Bedrock Prompt Management, shared CDK constructs for infrastructure — aligned with the AWS Well-Architected Framework"},
+      {"key": "C", "text": "Copy-paste working code between teams to avoid dependency management"},
+      {"key": "D", "text": "Use a single monolithic Lambda function shared by all teams"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Skill 1.1.3 describes creating standardised technical components that ensure consistent implementation across multiple deployments, citing the AWS Well-Architected Framework and the WA Tool Generative AI Lens. Shared CDK constructs, Bedrock Prompt Management templates, and shared embedding pipeline code reduce drift and promote best practices. Independent reimplementation causes inconsistency and duplicated bugs. Copy-paste creates unmaintainable forks. A shared monolith creates a blast-radius single point of failure.",
+    "source_topic": "Standardised GenAI components, AWS Well-Architected Framework"
+  },
+  {
+    "id": "d1-q0006", "domain": 1, "task_statement": "1.1", "topic": "FM vs traditional ML decision",
+    "difficulty": "medium",
+    "question_text": "A company must classify inbound support tickets into one of 50 fixed categories. They have a labelled dataset of 200,000 tickets. An ML engineer proposes a fine-tuned FM; a data scientist proposes a traditional multi-class classifier. Which guidance is most appropriate?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Always use an FM — larger models always outperform traditional classifiers"},
+      {"key": "B", "text": "Evaluate both options against the business constraints (cost, latency, accuracy); a traditional classifier may be cheaper and faster for a fixed-label, high-data task"},
+      {"key": "C", "text": "Use an FM exclusively because traditional ML is outdated"},
+      {"key": "D", "text": "Deploy both simultaneously and average their predictions"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Skill 1.1.1 requires creating architectural designs that align with business needs and technical constraints. A fixed-label classification task with 200K labelled examples is often well-served by traditional classifiers (lower cost, lower latency, no per-token pricing). An FM brings value for open-ended generation, reasoning, or zero-shot tasks. The right answer is a performance-benchmark-driven evaluation — not a blanket preference for either approach.",
+    "source_topic": "FM vs traditional ML, architectural alignment"
+  },
+  {
+    "id": "d1-q0007", "domain": 1, "task_statement": "1.1", "topic": "GenAI architecture for multimodal workflows",
+    "difficulty": "hard",
+    "question_text": "A retail company wants a GenAI system that accepts product photos and customer text descriptions, then generates marketing copy. Which architecture components are required? (Choose TWO)",
+    "question_type": "multi",
+    "options": [
+      {"key": "A", "text": "A multimodal foundation model capable of processing both image and text inputs"},
+      {"key": "B", "text": "Amazon Rekognition for real-time object detection before FM invocation"},
+      {"key": "C", "text": "An image pre-processing step that converts images to the format expected by the FM API"},
+      {"key": "D", "text": "Amazon Textract to extract text from photos before FM invocation"},
+      {"key": "E", "text": "Amazon Polly to convert generated text to speech for audio output"}
+    ],
+    "correct_answers": ["A", "C"],
+    "explanation": "For a text+image → text generation workflow: (A) a multimodal FM (e.g., Anthropic Claude 3, Amazon Titan Multimodal) can accept both image and text natively; (C) images must be encoded (e.g., base64) and formatted per the model API's schema before submission. Rekognition performs detection/labelling but does not generate marketing copy. Textract extracts text from documents/scanned images — unnecessary if the FM can directly process the image. Polly converts text to speech — out of scope here.",
+    "source_topic": "Multimodal FM, Bedrock API, image pre-processing"
+  },
+  {
+    "id": "d1-q0008", "domain": 1, "task_statement": "1.1", "topic": "Graceful degradation strategy",
+    "difficulty": "medium",
+    "question_text": "A customer-facing GenAI application must continue to serve users during temporary Bedrock FM unavailability, albeit with reduced functionality. Which pattern implements graceful degradation?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Return an HTTP 503 error to users whenever the FM is unavailable"},
+      {"key": "B", "text": "Queue requests in Amazon SQS and process them when the FM recovers, silently delaying all responses"},
+      {"key": "C", "text": "Detect FM unavailability via health checks and fall back to a pre-computed static FAQ response or a smaller, always-available local model"},
+      {"key": "D", "text": "Increase Lambda concurrency limits so requests do not fail"}
+    ],
+    "correct_answers": ["C"],
+    "explanation": "Skill 1.2.3 describes graceful degradation strategies for resilient AI systems. Falling back to static FAQ responses or a simpler always-available model maintains user experience during FM outages. Returning 503 is a hard failure with no degradation. SQS queuing would cause unacceptable latency for a synchronous UX. Increasing Lambda concurrency doesn't help if the downstream FM service is unavailable.",
+    "source_topic": "Graceful degradation, FM resilience"
+  }
+]

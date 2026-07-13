@@ -1,0 +1,78 @@
+[
+  {
+    "id": "d3-q0401", "domain": 3, "task_statement": "3.4", "topic": "Explainability in FM outputs",
+    "difficulty": "medium",
+    "question_text": "A company's AI-powered loan decision system must explain to applicants why a decision was made. Which techniques provide transparency in FM outputs? (Choose TWO)",
+    "question_type": "multi",
+    "options": [
+      {"key": "A", "text": "Display source citations and retrieved document passages alongside the FM response"},
+      {"key": "B", "text": "Enable Amazon Bedrock Agent tracing to surface the reasoning steps taken by the agent"},
+      {"key": "C", "text": "Increase FM temperature to generate more creative explanations"},
+      {"key": "D", "text": "Use a larger FM to reduce the need for explanation"},
+      {"key": "E", "text": "Disable logging to prevent applicants from seeing FM decision traces"}
+    ],
+    "correct_answers": ["A", "B"],
+    "explanation": "Skill 3.4.1 describes reasoning displays for user-facing explanations and Amazon Bedrock agent tracing for reasoning traces. (A) Source citations show applicants which evidence supported the decision. (B) Bedrock Agent tracing exposes each reasoning and action step, making the decision process auditable. Higher temperature increases randomness — the opposite of explainability. A larger FM doesn't inherently explain itself. Disabling logging removes transparency.",
+    "source_topic": "Explainability, Bedrock agent tracing, source citations"
+  },
+  {
+    "id": "d3-q0402", "domain": 3, "task_statement": "3.4", "topic": "Fairness evaluation",
+    "difficulty": "hard",
+    "question_text": "A company suspects their FM-based hiring tool may produce biased recommendations for certain demographic groups. How should they evaluate and address this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Trust that the FM was pre-trained on diverse data and requires no fairness evaluation"},
+      {"key": "B", "text": "Define fairness metrics (e.g., demographic parity) in CloudWatch; use Amazon Bedrock Prompt Management for A/B testing prompts; use an LLM-as-a-judge solution to evaluate outputs across demographic groups"},
+      {"key": "C", "text": "Increase the FM's temperature to randomise outputs and avoid systematic bias"},
+      {"key": "D", "text": "Use Amazon Rekognition to detect demographic groups in CVs"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Skill 3.4.2 cites pre-defined fairness metrics in CloudWatch, Bedrock Prompt Management for systematic A/B testing, and Bedrock with LLM-as-a-judge for automated model evaluations. This approach: measures fairness quantitatively, tests prompt variants for bias, and automates evaluation. Pre-trained models can still exhibit bias — this cannot be assumed away. Temperature randomisation doesn't address systematic demographic bias. Using Rekognition to detect demographics in CVs would itself be a discriminatory practice.",
+    "source_topic": "Fairness evaluation, LLM-as-a-judge, CloudWatch"
+  },
+  {
+    "id": "d3-q0403", "domain": 3, "task_statement": "3.4", "topic": "Responsible AI guardrails policy",
+    "difficulty": "medium",
+    "question_text": "A company wants to ensure their FM deployment adheres to their Responsible AI policy, which prohibits the model from making claims it cannot substantiate and from engaging on politically sensitive topics. How should these policy requirements be enforced technically?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Include the policy text in every user prompt and hope the FM complies"},
+      {"key": "B", "text": "Configure Amazon Bedrock Guardrails with denied topic policies and grounding checks that enforce these constraints automatically"},
+      {"key": "C", "text": "Add a disclaimer to every FM response that the company is not responsible for FM outputs"},
+      {"key": "D", "text": "Use Amazon Comprehend to block all outputs above a confidence threshold"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Skill 3.4.3 cites Amazon Bedrock Guardrails based on policy requirements for policy-compliant AI systems. Guardrails' denied topic feature can block politically sensitive topics; the grounding check can detect and block unsubstantiated claims by verifying response content against retrieved source passages. Prompts can be overridden or forgotten by the FM. Disclaimers don't prevent harmful outputs. Blocking by Comprehend confidence score would filter useful outputs without addressing the semantic policy.",
+    "source_topic": "Amazon Bedrock Guardrails, responsible AI policy enforcement"
+  },
+  {
+    "id": "d3-q0404", "domain": 3, "task_statement": "3.4", "topic": "Confidence scoring and uncertainty",
+    "difficulty": "hard",
+    "question_text": "A medical diagnosis assistant should communicate when it is uncertain about a conclusion. Which approach quantifies and surfaces FM uncertainty to users?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Always display 100% confidence to avoid alarming users"},
+      {"key": "B", "text": "Use CloudWatch to collect token-level log probabilities as confidence signals; instruct the FM in the system prompt to express uncertainty when log probabilities are low"},
+      {"key": "C", "text": "Use a random number generator as a proxy confidence score"},
+      {"key": "D", "text": "Disable streaming so the FM commits to a single response before outputting it"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Skill 3.4.1 describes using CloudWatch to collect confidence metrics and quantify uncertainty. Token log probabilities (accessible for some models) are a proxy for model confidence; piping them to CloudWatch enables monitoring and threshold-based alerts. The system prompt can instruct the FM to add hedging language (e.g., 'I am not certain about this') when the topic is outside its training distribution. Displaying false 100% confidence in a medical context is dangerous. Random scores are meaningless. Streaming mode is a delivery mechanism — unrelated to confidence quantification.",
+    "source_topic": "Confidence scoring, uncertainty quantification, CloudWatch"
+  },
+  {
+    "id": "d3-q0405", "domain": 3, "task_statement": "3.4", "topic": "Automated compliance checks",
+    "difficulty": "medium",
+    "question_text": "A company needs FM outputs checked against a compliance ruleset (e.g., no mention of regulated investment products without required disclosures) before being served to customers. Which architecture enforces this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Display all FM outputs directly without any post-processing"},
+      {"key": "B", "text": "Use Lambda functions to run automated compliance rule checks on FM responses; block or modify non-compliant outputs before returning them"},
+      {"key": "C", "text": "Ask the FM to self-certify that its output is compliant"},
+      {"key": "D", "text": "Use Amazon Inspector to scan FM outputs for compliance violations"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Skill 3.4.3 cites Lambda functions for automated compliance checks. Lambda can apply deterministic rule-based logic (keyword detection, regex, schema validation) to FM outputs — flagging or blocking non-compliant responses before they reach users. This provides a reliable, auditable control that doesn't rely on the FM's self-judgement. FM self-certification is unreliable — FMs can claim compliance while producing non-compliant content. Inspector is a security vulnerability scanner, not a semantic compliance checker.",
+    "source_topic": "Lambda, automated compliance checks, responsible AI"
+  }
+]

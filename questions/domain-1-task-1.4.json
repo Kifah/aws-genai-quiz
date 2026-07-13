@@ -1,0 +1,295 @@
+[
+  {
+    "id": "d1-q0301",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "Vector database architecture",
+    "difficulty": "hard",
+    "question_text": "A RAG application covers millions of documents across three distinct domains: legal, technical, and financial. The team wants to partition the vector space by domain for improved retrieval precision. Which approach is most suitable?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "A single Amazon OpenSearch index with all vectors and a metadata filter at query time"
+      },
+      {
+        "key": "B",
+        "text": "Amazon OpenSearch with the Neural plugin, using separate indices per domain (multi-index approach)"
+      },
+      {
+        "key": "C",
+        "text": "Amazon DynamoDB with a composite key that encodes the domain"
+      },
+      {
+        "key": "D",
+        "text": "A single Aurora pgvector table with a domain column"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skills 1.4.1 and 1.4.3 describe multi-index approaches for specialised domains using Amazon OpenSearch Service with the Neural plugin for Bedrock integration and topic-based segmentation. Separate indices give independent ANN graphs per domain, providing both search precision and performance at scale. A single mixed index reduces precision. DynamoDB lacks native vector search. A single pgvector table with a WHERE clause can work at smaller scale but not hundreds-of-millions of vectors.",
+    "source_topic": "OpenSearch multi-index, vector database, RAG"
+  },
+  {
+    "id": "d1-q0302",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "Metadata for search precision",
+    "difficulty": "medium",
+    "question_text": "A RAG system should prefer the most recently published documents when vector similarity scores are similar. How should this be implemented?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Embed the document creation date as part of the text before generating embeddings"
+      },
+      {
+        "key": "B",
+        "text": "Store document timestamps as S3 object metadata and incorporate a recency score into the hybrid scoring function"
+      },
+      {
+        "key": "C",
+        "text": "Delete older documents from the vector store regularly to enforce recency by elimination"
+      },
+      {
+        "key": "D",
+        "text": "Use a smaller embedding dimension for newer documents so they cluster separately"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 1.4.2 describes S3 object metadata for document timestamps and custom attributes to develop metadata frameworks that improve search precision. Combining cosine similarity with a recency decay factor in a hybrid scorer implements date-preference cleanly. Embedding dates in text adds noise to semantic vectors. Deleting old documents destroys institutional knowledge. Varying embedding dimensions breaks the vector space — dimensions must be consistent.",
+    "source_topic": "Vector store metadata, S3 object metadata, hybrid scoring"
+  },
+  {
+    "id": "d1-q0303",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "OpenSearch sharding for scale",
+    "difficulty": "hard",
+    "question_text": "An OpenSearch cluster storing 500 million 1536-dimension embeddings is experiencing increasing query latency. Which TWO changes most directly improve performance?",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the number of primary shards to distribute the index across more nodes"
+      },
+      {
+        "key": "B",
+        "text": "Switch from exact k-NN to approximate nearest neighbour (ANN) with HNSW algorithm"
+      },
+      {
+        "key": "C",
+        "text": "Add read replica shards to improve availability"
+      },
+      {
+        "key": "D",
+        "text": "Reduce vector dimensions by switching to a smaller embedding model"
+      },
+      {
+        "key": "E",
+        "text": "Enable cross-cluster replication to a different region"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "Skill 1.4.3 cites OpenSearch sharding strategies and high-performance vector database architectures. (A) More primary shards distribute the index, reducing per-shard size and enabling search parallelism. (B) ANN/HNSW runs in O(log n) vs exact k-NN's O(n) — a massive improvement at 500M vectors. Read replicas (C) improve read throughput/availability but don't reduce per-query latency. Changing embedding dimensions (D) would degrade retrieval quality. Cross-cluster replication (E) is for disaster recovery, not latency.",
+    "source_topic": "OpenSearch sharding, HNSW, ANN search"
+  },
+  {
+    "id": "d1-q0304",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "Vector store synchronisation",
+    "difficulty": "medium",
+    "question_text": "A company's internal wiki is continuously edited by hundreds of employees. The RAG system must reflect edits within 15 minutes. Which approach meets this SLA?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run a nightly batch job that re-indexes all documents from scratch"
+      },
+      {
+        "key": "B",
+        "text": "Implement event-driven change detection that triggers incremental re-embedding and index updates within minutes of each edit"
+      },
+      {
+        "key": "C",
+        "text": "Require employees to manually trigger re-indexing after each edit"
+      },
+      {
+        "key": "D",
+        "text": "Increase the context window size so the FM can work with stale data"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 1.4.5 describes real-time change detection systems, automated synchronisation workflows, and incremental update mechanisms. A nightly batch job produces up to 24-hour staleness — violating the 15-minute SLA. Manual triggers are unreliable and scale poorly. Context window size is irrelevant to index freshness.",
+    "source_topic": "Vector store synchronisation, incremental updates, event-driven"
+  },
+  {
+    "id": "d1-q0305",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "pgvector vs OpenSearch selection",
+    "difficulty": "hard",
+    "question_text": "A startup is building a RAG app with up to 5 million document chunks. Their team has deep PostgreSQL expertise and can tolerate up to 500 ms retrieval latency. Which vector store is the BEST fit?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon OpenSearch Serverless vector engine"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Aurora PostgreSQL with the pgvector extension"
+      },
+      {
+        "key": "C",
+        "text": "Amazon DynamoDB with a custom embedding attribute"
+      },
+      {
+        "key": "D",
+        "text": "Amazon S3 with a sequential Python similarity scan"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 1.5.3 lists Amazon Aurora with pgvector as a valid vector search solution. At 5M chunks, 500 ms tolerance, and existing PostgreSQL expertise, Aurora pgvector is the best fit — familiar operational model, ACID guarantees, and solid ANN performance within these scale parameters. OpenSearch Serverless excels at hundreds of millions of vectors with sub-100ms SLAs. DynamoDB has no native vector search. An S3 linear scan is O(n) — completely infeasible at 5M vectors.",
+    "source_topic": "Aurora pgvector, OpenSearch Serverless, vector store selection"
+  },
+  {
+    "id": "d1-q0306",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "Knowledge Base integration with document systems",
+    "difficulty": "medium",
+    "question_text": "A company wants to connect their SharePoint document repository to Amazon Bedrock Knowledge Bases so employees can query it via a GenAI assistant. What is the correct integration approach?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Manually export SharePoint documents to S3 daily using a scheduled Lambda"
+      },
+      {
+        "key": "B",
+        "text": "Use an Amazon Bedrock Knowledge Base data source connector (e.g., SharePoint connector) for automated ingestion"
+      },
+      {
+        "key": "C",
+        "text": "Train a fine-tuned model on SharePoint content to embed knowledge directly in weights"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Kendra SharePoint connector instead of Bedrock"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 1.4.4 describes using AWS services to create integration components that connect resources (document management systems, knowledge bases, internal wikis). Bedrock Knowledge Bases provides native data source connectors for SharePoint, Confluence, S3, and other repositories — automating ingestion and synchronisation. Manual daily Lambda exports create staleness. Fine-tuning embeds knowledge in weights with no ability to update or query source documents. Kendra is being closed to new customers (July 2026).",
+    "source_topic": "Bedrock Knowledge Bases connectors, SharePoint integration"
+  },
+  {
+    "id": "d1-q0307",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "Vector store backends for Bedrock KB",
+    "difficulty": "medium",
+    "question_text": "A team wants to use Amazon Bedrock Knowledge Bases but needs to keep their vectors in their existing Amazon OpenSearch Service domain for operational reasons. Is this possible?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "No — Bedrock Knowledge Bases only supports its own fully managed vector store"
+      },
+      {
+        "key": "B",
+        "text": "Yes — configure the Knowledge Base to use an existing OpenSearch Service domain or OpenSearch Serverless collection as the backing store"
+      },
+      {
+        "key": "C",
+        "text": "Yes — but only if you first migrate from OpenSearch to Amazon MemoryDB"
+      },
+      {
+        "key": "D",
+        "text": "No — only Amazon DynamoDB is supported as an external vector store"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Amazon Bedrock Knowledge Bases supports multiple backing vector stores: Amazon OpenSearch Service, OpenSearch Serverless, Amazon Aurora, Amazon RDS, MongoDB Atlas, Pinecone, and Redis Enterprise Cloud. Teams can bring their existing OpenSearch domain while still using Bedrock's managed ingestion and retrieval APIs. Only the fully managed option (Amazon OpenSearch Serverless) requires no external infra; all others let you bring your own.",
+    "source_topic": "Bedrock Knowledge Bases, vector store backends"
+  },
+  {
+    "id": "d1-q0308",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "S3 Vectors for infrequent large-scale search",
+    "difficulty": "hard",
+    "question_text": "An earth-observation company stores embeddings for 500 million satellite images. Analysts run similarity searches only a few times per week. The priority is minimum cost with no infrastructure to manage. Which vector store is the best fit?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon OpenSearch Serverless vector engine"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Aurora PostgreSQL with pgvector"
+      },
+      {
+        "key": "C",
+        "text": "Amazon S3 Vectors — a serverless S3 vector bucket with pay-per-query pricing"
+      },
+      {
+        "key": "D",
+        "text": "Amazon DynamoDB with a custom Lambda similarity scan"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Amazon S3 Vectors is purpose-built for cost-optimised, large-scale, infrequently queried vector workloads (Skill 1.4.1, vector store architectures). It is truly serverless — no always-on compute — and charges only for storage and actual queries, approximately 90% cheaper than OpenSearch for sparse access patterns. OpenSearch Serverless charges minimum OCUs even when idle. Aurora/pgvector requires a provisioned DB instance with hourly charges. DynamoDB has no native vector search — scanning 500M records via Lambda would be impractically slow and expensive.",
+    "source_topic": "Amazon S3 Vectors, cost-optimised vector storage"
+  },
+  {
+    "id": "d1-q0309",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "RAG vs fine-tuning classic trap",
+    "difficulty": "easy",
+    "question_text": "A company wants their FM assistant to always answer based on the latest internal HR policies, which are updated several times a year. Which approach is most appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Fine-tune the FM on the HR policy documents each time they are updated"
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Bedrock Knowledge Bases (RAG) — index the current policy documents and retrieve relevant sections at query time"
+      },
+      {
+        "key": "C",
+        "text": "Increase the FM context window so it can hold all policies in every prompt"
+      },
+      {
+        "key": "D",
+        "text": "Pre-train the FM from scratch on HR data"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "RAG via Bedrock Knowledge Bases (Skill 1.4) is the correct pattern for frequently-updated proprietary documents. Re-ingesting updated S3 documents takes minutes. Fine-tuning (A) bakes knowledge into weights — expensive, slow, and must be fully re-run on every document change. Stuffing all policies into every prompt (C) rapidly exceeds context windows for large corpora and wastes tokens on every call. Pre-training from scratch (D) is the most expensive option and is out-of-scope for application developers.",
+    "source_topic": "Bedrock Knowledge Bases, RAG vs fine-tuning"
+  }
+]

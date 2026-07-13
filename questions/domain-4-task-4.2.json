@@ -1,0 +1,236 @@
+[
+  {
+    "id": "d4-q0201",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Latency optimisation — streaming and pre-computation",
+    "difficulty": "medium",
+    "question_text": "A GenAI application generates daily personalised reports. Users complain about long wait times before seeing any content. Which TWO approaches most reduce perceived latency?",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable response streaming so users see text incrementally as the FM generates it"
+      },
+      {
+        "key": "B",
+        "text": "Pre-compute reports overnight when query patterns are predictable and cache the results"
+      },
+      {
+        "key": "C",
+        "text": "Increase Lambda memory allocation to maximum (10GB)"
+      },
+      {
+        "key": "D",
+        "text": "Use a larger FM to reduce the number of tokens generated"
+      },
+      {
+        "key": "E",
+        "text": "Increase the max output token limit to generate more complete responses"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "Skill 4.2.1 cites response streaming for immediate feedback and pre-computation for predictable queries. Streaming reduces time-to-first-byte dramatically — users see content immediately rather than waiting for the full response. Pre-computation generates reports before the user requests them, making retrieval instant. Lambda memory affects cold-start and CPU allocation — but the bottleneck is FM inference, not Lambda compute. Larger FMs generate tokens slower per token. More tokens increases total latency.",
+    "source_topic": "Response streaming, pre-computation, latency optimisation"
+  },
+  {
+    "id": "d4-q0202",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Retrieval performance optimisation",
+    "difficulty": "hard",
+    "question_text": "A RAG system retrieves documents from OpenSearch but p99 retrieval latency is 800ms, exceeding the 300ms target. Which approaches specifically address retrieval latency? (Choose TWO)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Optimise OpenSearch index settings — tune HNSW parameters (ef_search, m) for the latency/recall tradeoff"
+      },
+      {
+        "key": "B",
+        "text": "Apply query preprocessing — normalise embeddings and filter on metadata before the ANN search to reduce the candidate set"
+      },
+      {
+        "key": "C",
+        "text": "Increase the FM context window to reduce the number of retrieval calls"
+      },
+      {
+        "key": "D",
+        "text": "Use a larger embedding model to improve result quality"
+      },
+      {
+        "key": "E",
+        "text": "Store vectors in Amazon Glacier for cost efficiency"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "Skill 4.2.2 describes index optimisation and query preprocessing for enhanced retrieval performance. (A) HNSW ef_search controls the ANN search graph traversal depth — lowering it reduces latency at a small recall cost. (B) Metadata pre-filtering narrows the ANN search space before vector comparison, reducing compute. Context window has no effect on retrieval latency. A larger embedding model is slower to embed — may worsen latency. Glacier has hours-long retrieval times — completely unsuitable for real-time RAG.",
+    "source_topic": "OpenSearch index optimisation, HNSW, retrieval latency"
+  },
+  {
+    "id": "d4-q0203",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Temperature and sampling parameters",
+    "difficulty": "medium",
+    "question_text": "A code generation assistant often produces creative but incorrect code. A factual Q&A assistant produces overly conservative, repetitive answers. What parameter adjustments address each issue?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase temperature for both applications"
+      },
+      {
+        "key": "B",
+        "text": "Code assistant: lower temperature (0.1–0.3) for deterministic output; Q&A assistant: slightly higher temperature (0.5–0.7) with diverse beam search to vary responses"
+      },
+      {
+        "key": "C",
+        "text": "Set temperature to 1.0 for all applications as a universal default"
+      },
+      {
+        "key": "D",
+        "text": "Reduce maxTokens for both applications to force conciseness"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 4.2.4 describes appropriate temperature and top-k/top-p selection based on requirements. For deterministic tasks (code generation), low temperature (0.1–0.3) reduces randomness and produces consistent correct code. For creative/diverse tasks (varied Q&A), moderate temperature (0.5–0.7) plus top-p/top-k sampling increases variety. A universal temperature of 1.0 ignores task requirements. Reducing maxTokens constrains output length but doesn't affect creativity or determinism.",
+    "source_topic": "Temperature, top-k, top-p, FM inference parameters"
+  },
+  {
+    "id": "d4-q0204",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Parallel requests for complex workflows",
+    "difficulty": "medium",
+    "question_text": "A GenAI pipeline must retrieve data from 3 independent knowledge bases and combine the results before generation. Sequential retrieval takes 900ms total. How can this be reduced to ~300ms?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Call all three knowledge bases sequentially and optimise each call"
+      },
+      {
+        "key": "B",
+        "text": "Execute all three retrieval calls in parallel (e.g., Promise.all in Node.js or concurrent Futures in Python) and merge results"
+      },
+      {
+        "key": "C",
+        "text": "Use a single larger knowledge base to replace the three separate ones"
+      },
+      {
+        "key": "D",
+        "text": "Remove two of the three knowledge bases to reduce complexity"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 4.2.1 describes parallel requests for complex workflows to improve latency. If the three retrievals are independent, running them concurrently (Promise.all, asyncio.gather, or Step Functions parallel branches) reduces wall-clock time from the sum of all calls to approximately the time of the slowest single call — from 900ms to ~300ms. Sequential calls cannot achieve this. Merging knowledge bases changes the data architecture, not the call pattern. Removing knowledge bases loses coverage.",
+    "source_topic": "Parallel FM requests, latency optimisation, async"
+  },
+  {
+    "id": "d4-q0205",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Auto-scaling for GenAI traffic",
+    "difficulty": "medium",
+    "question_text": "A GenAI application experiences traffic spikes of 10x during weekday business hours and near-zero usage overnight. Which approach correctly handles this for a SageMaker-hosted model?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Provision peak capacity permanently to never fail"
+      },
+      {
+        "key": "B",
+        "text": "Configure SageMaker endpoint auto-scaling with a target tracking policy on InvocationsPerInstance, scaling in/out based on actual traffic"
+      },
+      {
+        "key": "C",
+        "text": "Use a fixed instance count of 2 and throttle requests above that capacity"
+      },
+      {
+        "key": "D",
+        "text": "Deploy a new endpoint every morning and delete it every evening manually"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Skill 4.2.5 describes auto-scaling configurations optimised for GenAI traffic patterns. SageMaker Application Auto Scaling with InvocationsPerInstance target tracking automatically scales out during business-hour spikes and scales in overnight — balancing cost and capacity. Permanent peak capacity wastes cost overnight. A fixed 2-instance count throttles during spikes. Manual endpoint creation/deletion is error-prone and has deployment lead time.",
+    "source_topic": "SageMaker auto-scaling, GenAI traffic, capacity planning"
+  },
+  {
+    "id": "d4-q0206",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "SageMaker Model Monitor for drift detection",
+    "difficulty": "medium",
+    "question_text": "A fraud detection model deployed on a SageMaker endpoint was accurate at launch. Six months later, it is flagging far fewer fraudulent transactions. The team suspects the real-world data distribution has shifted since training. Which service alerts them to this drift automatically?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon SageMaker Clarify"
+      },
+      {
+        "key": "B",
+        "text": "Amazon SageMaker Model Monitor"
+      },
+      {
+        "key": "C",
+        "text": "Amazon CloudTrail"
+      },
+      {
+        "key": "D",
+        "text": "Amazon SageMaker Pipelines"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "SageMaker Model Monitor (Skill 4.2 — optimise application performance) continuously monitors model inputs and outputs in production, comparing real-world distributions against the training baseline and raising CloudWatch alarms when data drift exceeds configured thresholds. SageMaker Clarify (A) diagnoses the root cause of bias and explains model decisions (the 'why') — it is typically run as part of the investigation after Monitor alerts. CloudTrail tracks API calls. SageMaker Pipelines automates the retraining workflow — triggered by Monitor alarms but not responsible for detecting drift.",
+    "source_topic": "SageMaker Model Monitor, data drift detection"
+  },
+  {
+    "id": "d4-q0207",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Clarify vs Model Monitor distinction",
+    "difficulty": "medium",
+    "question_text": "After SageMaker Model Monitor fires a drift alarm, a data scientist needs to understand whether a specific feature (customer age group) is creating biased predictions. Which service provides feature-level explanations and bias metrics?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon SageMaker Model Monitor"
+      },
+      {
+        "key": "B",
+        "text": "Amazon SageMaker Clarify — produces SHAP values and DPL bias metrics per feature"
+      },
+      {
+        "key": "C",
+        "text": "Amazon CloudWatch Logs Insights"
+      },
+      {
+        "key": "D",
+        "text": "Amazon SageMaker Pipelines evaluation step"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "SageMaker Clarify (Skill 3.4.2, fairness evaluations) computes Shapley Values (SHAP) to quantify each feature's contribution to predictions, and Difference in Proportions of Labels (DPL) to measure bias across sensitive groups (e.g. age). This is the 'root cause' tool. Model Monitor detects that something is wrong (drift symptom) — the canonical pair. CloudWatch Logs Insights queries log data. SageMaker Pipelines automates the workflow but does not itself produce SHAP/DPL analysis.",
+    "source_topic": "SageMaker Clarify, SHAP, DPL, bias detection"
+  }
+]
