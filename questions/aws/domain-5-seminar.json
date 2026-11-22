@@ -1,0 +1,365 @@
+[
+  {
+    "id": "d5-q0901",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "LLM-as-a-judge evaluation",
+    "difficulty": "medium",
+    "question_text": "A healthcare company is using Amazon Bedrock to build a Retrieval Augmented Generation (RAG) application that helps practitioners make clinical decisions. The application must achieve high accuracy for patient information retrievals, identify hallucinations in generated content, and reduce human review costs. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Comprehend to analyze and classify RAG responses and to extract medical entities and relationships. Use AWS Step Functions to orchestrate automated evaluations. Configure Amazon CloudWatch metrics to track entity recognition confidence scores. Configure CloudWatch to send an alert when accuracy falls below specified thresholds."
+      },
+      {
+        "key": "B",
+        "text": "Implement automated large language model (LLM)-based evaluations that use a specialized model that is fine-tuned for medical content to assess all responses. Deploy AWS Lambda functions to parallelize evaluations. Publish results to Amazon CloudWatch metrics that track relevance and factual accuracy."
+      },
+      {
+        "key": "C",
+        "text": "Configure Amazon CloudWatch Synthetics to generate test queries that have known answers on a regular schedule, and track model success rates. Set up dashboards that compare synthetic test results against expected outcomes."
+      },
+      {
+        "key": "D",
+        "text": "Deploy a hybrid evaluation system that uses an automated LLM-as-a-judge evaluation to initially screen responses and targeted human reviews for edge cases. Use Amazon SageMaker Feature Store to maintain evaluation datasets. Use a built-in Amazon Bedrock evaluation to track retrieval precision and hallucination rates."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "A hybrid design uses an automated LLM-as-a-judge to screen all responses, reserves human reviewers for edge cases to cut review cost, and uses the built-in Bedrock evaluation for retrieval precision and hallucination rates. Comprehend entity analysis (A) and CloudWatch Synthetics test queries (C) do not measure hallucination or retrieval accuracy, and judging every response with a custom medical fine-tuned model (B) is costly custom work.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 12
+  },
+  {
+    "id": "d5-q0902",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Hallucination troubleshooting",
+    "difficulty": "hard",
+    "question_text": "A company uses Amazon Bedrock to generate technical content for customers. The company has recently experienced a surge in hallucination outputs when the company's model generates summaries of long technical documents. The model outputs include inaccurate or fabricated details. The company's current solution uses a large foundation model (FM) with a basic one-shot prompt that includes the full document in a single input. The company needs a solution that will reduce hallucinations and meet factual accuracy goals. The solution must process more than 1,000 documents each hour and deliver summaries within 3 seconds for each document. Which combination of solutions will meet these requirements? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Implement zero-shot chain-of-thought (CoT) instructions that require step-by-step reasoning with explicit fact verification before the model generates each summary."
+      },
+      {
+        "key": "B",
+        "text": "Use Retrieval Augmented Generation (RAG) with an Amazon Bedrock knowledge base. Apply semantic chunking and tuned embeddings to ground summaries in source content."
+      },
+      {
+        "key": "C",
+        "text": "Configure Amazon Bedrock guardrails to block any generated output that matches patterns that are associated with hallucinated content."
+      },
+      {
+        "key": "D",
+        "text": "Increase the temperature parameter in Amazon Bedrock."
+      },
+      {
+        "key": "E",
+        "text": "Prompt the Amazon Bedrock model to summarize each full document in one pass."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "RAG with a Knowledge Base (semantic chunking, tuned embeddings) grounds summaries in the source text, and zero-shot chain-of-thought with explicit fact verification makes the model check claims before writing them; both fit the throughput and 3-second goals. Guardrails cannot detect 'patterns associated with hallucinated content' (C), a higher temperature (D) increases fabrication, and one-pass summarisation (E) is the current failing approach.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 28,
+    "review_note": "CertyIQ key is B,C. Kept A,B: RAG grounds the summaries; guardrails cannot detect 'patterns of hallucinated content'. Mondal also keys B,C; it likely shares a lineage with the CertyIQ key, so A,B is kept."
+  },
+  {
+    "id": "d5-q0903",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Bedrock Model Evaluations",
+    "difficulty": "hard",
+    "question_text": "An ecommerce company is building an internal platform to develop generative AI applications by using Amazon Bedrock foundation models (FMs). Developers need to select models based on evaluations that are aligned to ecommerce use cases. The platform must display accuracy metrics for text generation and summarization in dashboards. The company has custom ecommerce datasets to use as standardized evaluation inputs. Which combination of steps will meet these requirements with the LEAST operational overhead? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Import the datasets to an Amazon S3 bucket. Provide appropriate IAM permissions and cross-origin resource sharing (CORS) permissions to give the evaluation jobs access to the datasets."
+      },
+      {
+        "key": "B",
+        "text": "Import the datasets to an Amazon S3 bucket. Provide appropriate IAM permissions and a VPC endpoint configuration to give the evaluation jobs access to the datasets."
+      },
+      {
+        "key": "C",
+        "text": "Configure an AWS Lambda function to create model evaluation jobs on a schedule in the Amazon Bedrock console. Provide the URI of the S3 bucket that contains the datasets as an input. Configure the evaluation jobs to measure the real world knowledge (RWK) score for text generation and BERT Score for summarization. Configure a second Lambda function to check the status of the jobs and publish custom logs to Amazon CloudWatch. Create a custom Amazon CloudWatch Logs Insights dashboard."
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon SageMaker Clarify on a schedule to create model evaluation jobs. Use open source frameworks to create and run standardized evaluations. Publish results to Amazon CloudWatch namespaces. Use the word error rate score for text generation and toxicity for summarization as metrics for accuracy. Configure an AWS Lambda function to check the status of the jobs and publish custom logs to CloudWatch. Create a custom Amazon CloudWatch Logs Insights dashboard."
+      },
+      {
+        "key": "E",
+        "text": "Run an Amazon SageMaker AI notebook job on a schedule by using the fmevals or ragas framework to run evaluations that use the datasets in the S3 bucket. Write Python code in the notebook that makes direct InvokeModel API calls to the FMs and processes their responses for evaluation. Publish job status and results to Amazon CloudWatch Logs to measure the real world knowledge (RWK) score for text generation and toxicity for summarization as metrics for accuracy. Create a custom CloudWatch Logs Insights dashboard."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "C"
+    ],
+    "explanation": "Evaluation jobs read the custom datasets from S3, and the bucket needs IAM and CORS permissions, not a VPC endpoint (B). Scheduled Lambda functions that create Bedrock model evaluation jobs with built-in metrics (real world knowledge for text generation, BERTScore for summarisation) and publish status to a CloudWatch Logs Insights dashboard need minimal custom code. Clarify with open-source frameworks (D) and notebook jobs calling InvokeModel directly (E) mean building your own evaluation framework.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 32,
+    "review_note": "Wayground key is B,C. Kept A,C: Bedrock model evaluation jobs read the dataset bucket through S3 CORS configuration, not a VPC endpoint."
+  },
+  {
+    "id": "d5-q0904",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Human and LLM-as-a-judge evaluation",
+    "difficulty": "medium",
+    "question_text": "A financial technology company is using Amazon Bedrock to build an assessment system for the company's customer service AI assistant. The AI assistant must provide financial recommendations that are factually accurate, compliant with financial regulations, and conversationally appropriate. The company needs to combine automated quality evaluations at scale with targeted human reviews of critical interactions. What solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure a pipeline in which financial experts manually score all responses for accuracy, compliance, and conversational quality. Use Amazon SageMaker notebooks to analyze results to identify improvement areas."
+      },
+      {
+        "key": "B",
+        "text": "Configure Amazon Bedrock evaluations that use Anthropic Claude Sonnet as a judge model to assess response accuracy and appropriateness. Configure custom Amazon Bedrock guardrails to check responses for compliance with financial policies. Add Amazon Augmented AI (Amazon A2I) human reviews for flagged critical interactions."
+      },
+      {
+        "key": "C",
+        "text": "Create an Amazon Lex bot to manage the customer service interactions. Configure AWS Lambda functions to check responses against a static compliance database. Configure intents in the bot that call the Lambda functions to check the responses. Add an additional intent to collect end-user reviews."
+      },
+      {
+        "key": "D",
+        "text": "Configure Amazon CloudWatch to monitor response patterns from the AI assistant. Configure CloudWatch alerts for potential compliance violations. Establish a team of human evaluators to review flagged interactions."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock evaluations with Claude Sonnet as the judge assess accuracy and appropriateness at scale, custom guardrails check compliance with financial policies, and Amazon A2I routes flagged critical interactions to human reviewers. Manually scoring every response (A) does not scale, a Lex bot with a static compliance database (C) cannot evaluate quality, and CloudWatch alerts with a human team (D) have no automated quality evaluation.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 52
+  },
+  {
+    "id": "d5-q0905",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "RAG evaluation metrics",
+    "difficulty": "medium",
+    "question_text": "A company uses Amazon Bedrock to implement a Retrieval Augmented Generation (RAG)-based system to serve medical information to users. The company needs to compare multiple chunking strategies, evaluate the generation quality of two foundation models (FMs), and enforce quality thresholds for deployment. Which Amazon Bedrock evaluation configuration will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a retrieve-only evaluation job that uses a supported version of Anthropic Claude Sonnet as the evaluator model. Configure metrics for context relevance and context coverage. Define deployment thresholds in a separate CI/CD pipeline."
+      },
+      {
+        "key": "B",
+        "text": "Create a retrieve-and-generate evaluation job that uses custom precision at k metrics and an LLM-as-a-judge metric that uses a scale of 1-5. Include each chunking strategy in the evaluation dataset. Use a supported version of Anthropic Claude Sonnet to evaluate responses from both FMs."
+      },
+      {
+        "key": "C",
+        "text": "Create a separate evaluation job for each chunking strategy and FM combination. Use Amazon Bedrock built-in metrics for correctness and completeness. Manually review scores before deployment approval."
+      },
+      {
+        "key": "D",
+        "text": "Set up a pipeline that uses multiple retrieve-only evaluation jobs to assess retrieval quality. Create separate evaluation jobs for both FMs that use Amazon Nova Pro as the LLM-as-a-judge model. Evaluate based on faithfulness and citation precision metrics."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A retrieve-and-generate evaluation job evaluates the whole RAG path: custom precision-at-k for retrieval and an LLM-as-a-judge 1-5 metric for generation quality, with each chunking strategy in the dataset and both FMs judged by a Claude Sonnet evaluator. Retrieve-only jobs (A, D) cannot evaluate generation, and separate jobs per combination with manual review (C) do not enforce deployment thresholds.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 75
+  },
+  {
+    "id": "d5-q0906",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Bedrock Model Evaluations",
+    "difficulty": "medium",
+    "question_text": "A social media company wants to use a large language model (LLM) to summarize messages. The company has chosen a few LLMs that are available on Amazon SageMaker JumpStart. The company wants to compare the generated output toxicity of these models. Which strategy gives the company the ability to evaluate the LLMs with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Crowd-sourced evaluation"
+      },
+      {
+        "key": "B",
+        "text": "Automatic model evaluation"
+      },
+      {
+        "key": "C",
+        "text": "Model evaluation with human workers"
+      },
+      {
+        "key": "D",
+        "text": "Reinforcement learning from human feedback (RLHF)"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Automatic model evaluation computes metrics such as toxicity with built-in datasets and needs no human workers, so it carries the least operational overhead. Crowd-sourced and human-worker evaluations (A, C) require organising people, and RLHF (D) is a training technique, not an evaluation method.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 84
+  },
+  {
+    "id": "d5-q0907",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "ROUGE BLEU BERTScore evaluation metric selection",
+    "difficulty": "medium",
+    "question_text": "A company has fine-tuned a large language model (LLM) to answer questions for a help desk. The company wants to determine if the fine-tuning has enhanced the model's accuracy. Which metric should the company use for the evaluation?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Precision"
+      },
+      {
+        "key": "B",
+        "text": "Time to first token"
+      },
+      {
+        "key": "C",
+        "text": "F1 score"
+      },
+      {
+        "key": "D",
+        "text": "Word error rate"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "F1 score combines precision and recall into one accuracy measure, so it shows whether fine-tuning improved the help-desk model's accuracy. Precision alone (A) ignores recall, time to first token (B) measures latency, and word error rate (D) is a speech recognition metric.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 90
+  },
+  {
+    "id": "d5-q0908",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Deployment validation for FM updates",
+    "difficulty": "hard",
+    "question_text": "A company upgraded its Amazon Bedrock powered foundation model (FM) that supports a multilingual customer service assistant. After the upgrade, the assistant exhibited inconsistent behavior across languages. The assistant began generating different responses in some languages when presented with identical questions. The company needs a solution to detect and address similar problems for future updates. The evaluation must be completed within 45 minutes for all supported languages. The evaluation must process at least 15,000 test conversations in parallel. The evaluation process must be fully automated and integrated into the CI/CD pipeline. The solution must block deployment if quality thresholds are not met. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a distributed traffic simulation framework that sends translation-heavy workloads to the assistant in multiple languages simultaneously. Use Amazon CloudWatch metrics to monitor latency, concurrency, and throughput. Run simulations before production releases to identify infrastructure bottlenecks."
+      },
+      {
+        "key": "B",
+        "text": "Deploy the assistant in multiple AWS Regions with Amazon Route 53 latency-based routing and AWS Global Accelerator to improve global performance. Store multilingual conversation logs in Amazon S3. Perform weekly post- deployment audits to review consistency."
+      },
+      {
+        "key": "C",
+        "text": "Create a pre-processing pipeline that normalizes all incoming messages into a consistent format before sending the messages to the assistant. Apply rule-based checks to flag potential hallucinations in the outputs. Focus the evaluation on the normalized text to simplify testing across languages."
+      },
+      {
+        "key": "D",
+        "text": "Set up standardized multilingual test conversations with identical meaning. Run the test conversations in parallel by using Amazon Bedrock model evaluation jobs. Apply similarity and hallucination thresholds. Integrate the process into the CI/CD pipeline to block releases that fail."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Standardised multilingual test conversations with identical meaning, run in parallel through Bedrock model evaluation jobs with similarity and hallucination thresholds in the CI/CD pipeline, block releases that fail and run fully automated within the time window. Load simulation (A), weekly post-deployment audits (B), and normalising inputs (C) neither evaluate cross-language consistency nor gate deployment.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 100
+  },
+  {
+    "id": "d5-q0909",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Business-metric evaluation",
+    "difficulty": "medium",
+    "question_text": "A company is building a large language model (LLM) question-answering chatbot. The company wants to decrease the number of actions call center employees need to take to respond to customer questions. Which business objectve should the company use to evaluate the efiecti of the LLM chatbot?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Website engagement rate"
+      },
+      {
+        "key": "B",
+        "text": "Average call duration"
+      },
+      {
+        "key": "C",
+        "text": "Corporate social responsibility"
+      },
+      {
+        "key": "D",
+        "text": "Regulatory compliance"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Average call duration measures whether the chatbot reduces the effort and actions agents need to answer customer questions. Website engagement rate (A), corporate social responsibility (C), and regulatory compliance (D) do not measure agent efficiency.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 120,
+    "review_note": "Foundational AI Practitioner (AIF-C01) level question; key agrees with my own judgment."
+  },
+  {
+    "id": "d5-q0910",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Evaluation gating in CI/CD",
+    "difficulty": "medium",
+    "question_text": "A company has a customer service application that uses Amazon Bedrock to generate personalized responses to customer inquiries. The company needs to establish a quality assurance process to evaluate prompt effectiveness and model configurations across updates. The process must automatically compare outputs from multiple prompt templates, detect response quality issues, provide quantitative metrics, and allow human reviewers to give feedback on responses. The process must prevent configurations that do not meet a predefined quality threshold from being deployed. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create an AWS Lambda function that sends sample customer inquiries to multiple Amazon Bedrock model configurations and stores responses in Amazon S3. Use Amazon QuickSight to visualize response patterns. Manually review outputs daily. Use AWS CodePipeline to deploy configurations that meet the quality threshold."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Bedrock evaluation jobs to compare model outputs by using custom prompt datasets. Configure AWS CodePipeline to run the evaluation jobs when prompt templates change. Configure CodePipeline to deploy only configurations that exceed the predefined quality threshold."
+      },
+      {
+        "key": "C",
+        "text": "Set up Amazon CloudWatch alarms to monitor response latency and error rates from Amazon Bedrock. Use Amazon EventBridge rules to notify teams when thresholds are exceeded. Configure a manual approval workflow in AWS Systems Manager."
+      },
+      {
+        "key": "D",
+        "text": "Use AWS Lambda functions to create an automated testing framework that samples production traffic and routes duplicate requests to the updated model version. Use Amazon Comprehend sentiment analysis to compare results. Block deployment if sentiment scores decrease."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock evaluation jobs with custom prompt datasets compare outputs and give quantitative metrics, and CodePipeline runs them when prompt templates change and deploys only configurations that exceed the quality threshold. Manual daily reviews (A), CloudWatch latency and error alarms (C), and sentiment comparison (D) do not evaluate response quality against a threshold.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 122
+  }
+]

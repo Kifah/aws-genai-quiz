@@ -13,8 +13,26 @@ import { AttemptRecord } from './history';
 
 const HISTORY_PATH = path.join(__dirname, '..', '.quiz-history.json');
 
+export function migrateHistory(): void {
+  if (!fs.existsSync(HISTORY_PATH)) return;
+
+  try {
+    const raw    = fs.readFileSync(HISTORY_PATH, 'utf8');
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed) || parsed.length === 0) return;
+    if (parsed.every(record => typeof record?.exam_id === 'string')) return;
+
+    const migrated = parsed.map(record => ({ ...record, exam_id: 'aws' })) as AttemptRecord[];
+    fs.writeFileSync(HISTORY_PATH, JSON.stringify(migrated, null, 2) + '\n');
+  } catch {
+    return;
+  }
+}
+
 /** Read the full attempt log. Returns [] if the file is missing or unreadable. */
 export function readHistory(): AttemptRecord[] {
+  migrateHistory();
+
   try {
     const raw = fs.readFileSync(HISTORY_PATH, 'utf8');
     const parsed = JSON.parse(raw);
@@ -23,6 +41,10 @@ export function readHistory(): AttemptRecord[] {
     // Missing file or corrupt JSON → start fresh rather than crash the quiz.
     return [];
   }
+}
+
+export function readHistoryForExam(exam_id: string): AttemptRecord[] {
+  return readHistory().filter(record => record.exam_id === exam_id);
 }
 
 /** Append new attempt records to the log (creates the file if needed). */

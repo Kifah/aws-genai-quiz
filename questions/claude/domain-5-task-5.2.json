@@ -1,0 +1,281 @@
+[
+  {
+    "id": "c5-q0015",
+    "domain": 5,
+    "task_statement": "5A2 Identify Risks, Limitations, and Failure Modes",
+    "topic": "bias versus fairness",
+    "difficulty": "medium",
+    "question_text": "An audit finds a screening model approves one demographic group at a measurably higher rate than another with equivalent qualifications. A stakeholder says detecting this skew means the fairness problem is solved. Why is that conclusion premature?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Detecting skew measures bias; fairness needs choosing and enforcing an objective"
+      },
+      {
+        "key": "b",
+        "text": "The measured skew is not bias unless it also violates a specific regulation by name"
+      },
+      {
+        "key": "c",
+        "text": "Bias and fairness are identical, so measuring one automatically resolves the other"
+      },
+      {
+        "key": "d",
+        "text": "Fairness is a single universal metric that the skew measurement has already satisfied"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Governance, Safety & Risk Management | Subdomain: 5A2 Identify Risks, Limitations, and Failure Modes | Key Concept: bias versus fairness. Bias is the measurable skew in outcomes; fairness is the normative goal reached only by selecting and enforcing a fairness definition. Finding the skew starts the work rather than finishing it. | (A) Bias is the measurable skew; fairness is the normative goal. Detection is necessary but not sufficient, because addressing it requires selecting a fairness definition and acting on it. | (B) Bias is a measurable outcome skew regardless of whether a named regulation is cited; the definition is not regulatory. | (C) They are distinct: bias is the skew, fairness is the equitable-outcome objective. Measuring skew does not resolve fairness. | (D) There is no single universal fairness metric; the architect must choose one, so measurement alone does not satisfy it."
+  },
+  {
+    "id": "c5-q0016",
+    "domain": 5,
+    "task_statement": "5B1 Apply human-in-the-loop validation strategies",
+    "topic": "safeguards escalate with capability",
+    "difficulty": "medium",
+    "question_text": "An organization upgrades an autonomous Claude agent that executes financial trades from a smaller model to a substantially more capable one, expanding its action scope. The existing safeguards, a fixed checklist and prompt guardrails, were signed off a year ago. Which assessment of the controls is BEST?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "The controls remain valid; safeguards are a one-time sign-off and do not expire with model changes"
+      },
+      {
+        "key": "b",
+        "text": "Safeguards scale with capability; the capable agent needs stronger controls and gating reassessed"
+      },
+      {
+        "key": "c",
+        "text": "The controls are now excessive; a more capable model reasons better and needs less oversight"
+      },
+      {
+        "key": "d",
+        "text": "Only latency and cost need re-evaluation; the capability increase does not affect the safety controls"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Governance, Safety & Risk Management | Subdomain: 5B1 Apply human-in-the-loop validation strategies | Key Concept: safeguards escalate with capability. Safety controls are not a one-time checklist; a more capable autonomous agent with expanded action scope raises potential impact and requires stronger controls and a reassessed human gate. Last year's sign-off does not automatically remain adequate as capability increases. | (A) Safety controls are not a fixed one-time checklist; a control set adequate at one capability level is not automatically adequate as capability grows. | (B) Under a responsible-scaling approach, safeguards escalate with model capability. A more capable autonomous agent with broader action scope warrants stronger controls and a reassessed human-in-the-loop gate, not last year's checklist. | (C) Greater capability with wider action scope raises potential impact and demands more oversight, not less; capability does not reduce the need for gating. | (D) A capability increase directly affects the safety posture; treating it as only a cost and latency change ignores escalating risk."
+  },
+  {
+    "id": "c5-q0017",
+    "domain": 5,
+    "task_statement": "5C1 Address ethical AI considerations (bias, fairness, transparency)",
+    "topic": "fairness is an ongoing concern",
+    "difficulty": "medium",
+    "question_text": "After a one-time debiasing pass at launch, a team considers the fairness problem permanently solved and plans no further checks. Which of the following evaluates this stance correctly?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Inadequate; fairness can drift in production and needs ongoing measurement."
+      },
+      {
+        "key": "b",
+        "text": "Adequate; a single debiasing pass permanently removes bias from all future outputs."
+      },
+      {
+        "key": "c",
+        "text": "Inadequate only because the debiasing should have used a larger model instead."
+      },
+      {
+        "key": "d",
+        "text": "Adequate; bias, once measured at launch, cannot re-emerge after deployment."
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Governance, Safety & Risk Management | Subdomain: 5C1 Address ethical AI considerations (bias, fairness, transparency) | Key Concept: fairness is an ongoing concern. A one-time debiasing pass does not settle fairness because drift and feedback loops can reintroduce skew after launch. Fairness requires continuous measurement and monitoring, not a single fix. | (A) Bias and fairness are not settled by one fix; deployment context and feedback loops can reintroduce skew, so fairness needs continuous measurement and monitoring rather than a one-time pass. | (B) A single pass cannot permanently remove bias; drift and feedback effects can reintroduce skew after launch. | (C) Model size is not the issue; the flaw is treating fairness as a one-time fix rather than an ongoing concern. | (D) Bias can re-emerge in production through drift and feedback loops; a launch-time measurement does not stay valid forever."
+  },
+  {
+    "id": "c5-q0018",
+    "domain": 5,
+    "task_statement": "5B1 Apply human-in-the-loop validation strategies",
+    "topic": "right-sizing HITL",
+    "difficulty": "medium",
+    "question_text": "An architect adds mandatory human approval to every step of a high-volume internal summarization tool whose outputs are low-stakes and easily corrected. Throughput collapses and reviewers begin rubber-stamping items without reading them. What is the core design flaw?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "The reviewers lack the training to evaluate summarization quality reliably at speed"
+      },
+      {
+        "key": "b",
+        "text": "Human review should have been replaced entirely by a stronger guardrail prompt"
+      },
+      {
+        "key": "c",
+        "text": "HITL was applied uniformly instead of concentrated at genuinely high-stakes steps"
+      },
+      {
+        "key": "d",
+        "text": "The tool needs a larger model so reviewers can trust its outputs more"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Governance, Safety & Risk Management | Subdomain: 5B1 Apply human-in-the-loop validation strategies | Key Concept: right-sizing HITL. Spreading human review uniformly across every step, including low-stakes correctable ones, overwhelms reviewers and degrades into rubber-stamping that provides no real safety. The design task is choosing which steps warrant review and concentrating it at high-stakes, irreversible decisions rather than applying it everywhere. | (A) Training is not the root issue. Even skilled reviewers rubber-stamp when forced to approve every low-stakes item at high volume. | (B) The failure is over-application, not the existence of review. A prompt guardrail is a different control and does not address where review belongs. | (C) Human review's value concentrates at high-stakes, irreversible decisions. Applying it uniformly to low-stakes, correctable outputs floods reviewers, collapses throughput, and produces rubber-stamping that adds no real protection. | (D) A larger model does not fix the misplacement of review. The problem is reviewing everything, not the model's capability."
+  },
+  {
+    "id": "c5-q0019",
+    "domain": 5,
+    "task_statement": "5C1 Address ethical AI considerations",
+    "topic": "bias evaluation design",
+    "difficulty": "medium",
+    "question_text": "An architect is designing the evaluation for a resume-screening assistant that must be checked for fairness before launch. The current eval reports only overall accuracy on a happy-path set. Leadership wants evidence the system does not disadvantage protected groups. Which evaluation design best surfaces algorithmic bias?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Raise the overall accuracy threshold and re-run the same happy-path evaluation set without any group breakdowns."
+      },
+      {
+        "key": "b",
+        "text": "Ask Claude to self-report whether its own screening decisions appear unbiased across the candidate groups."
+      },
+      {
+        "key": "c",
+        "text": "Measure outcomes on held-out data disaggregated by protected group, scored against a chosen fairness objective."
+      },
+      {
+        "key": "d",
+        "text": "Replace human review entirely with the model's own confidence scores computed for each individual candidate."
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Governance, Safety & Risk Management | Subdomain: 5C1 Address ethical AI considerations | Key Concept: bias evaluation design. Aggregate accuracy on happy-path data hides disparate impact. Measuring outcomes on a held-out set disaggregated by protected group and scoring against a chosen fairness objective surfaces algorithmic bias that a single overall metric conceals. | (A) Aggregate accuracy hides group-level disparities, and a happy-path set omits the cases where bias appears. Raising the threshold does not reveal skew across groups. | (B) A model's self-report is not a measured fairness signal. Bias evaluation requires disaggregated outcome measurement, not model introspection. | (C) Disaggregating held-out outcomes by group and scoring them against a chosen fairness objective directly surfaces disparate impact. This isolates bias that aggregate accuracy conceals. | (D) Confidence scores are not fairness measurements and can themselves be biased. Removing human review weakens oversight rather than surfacing bias."
+  },
+  {
+    "id": "c5-q0020",
+    "domain": 5,
+    "task_statement": "5A2 Risks, limitations, and failure modes",
+    "topic": "retrieval as dominant failure origin",
+    "difficulty": "medium",
+    "question_text": "A grounded knowledge assistant begins giving confident but outdated answers right after a document refresh. Where should debugging start?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Inspect retrieval and index layer for stale or mis-retrieved chunks"
+      },
+      {
+        "key": "b",
+        "text": "Retrain or fine-tune the model on the newly refreshed source documents"
+      },
+      {
+        "key": "c",
+        "text": "Raise the reasoning effort so the model reconsiders its earlier answer"
+      },
+      {
+        "key": "d",
+        "text": "Rewrite the system prompt to demand more careful, accurate responses"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Governance, Safety & Risk Management | Subdomain: 5A2 Risks, limitations, and failure modes | Key Concept: retrieval as dominant failure origin. When a grounded system turns confidently wrong right after a document refresh, suspect the retrieval and index layer serving stale chunks, not the model weights. Debugging starts by inspecting what context was actually retrieved. | (A) Retrieval is the dominant failure origin in RAG systems. Confident-but-wrong answers appearing right after a corpus change point to stale or mis-retrieved chunks, fixed at the index, not the model. | (B) Retraining is slow and unwarranted; the model weights did not change at the refresh. The symptom points elsewhere. | (C) More reasoning cannot repair wrong context. If retrieval serves stale chunks, better reasoning still answers from bad data. | (D) A prompt rewrite does not correct which chunks were retrieved. The failure is upstream of generation."
+  },
+  {
+    "id": "c5-q0021",
+    "domain": 5,
+    "task_statement": "5A1 Implement guardrails and safety controls",
+    "topic": "capability-keyed safeguards",
+    "difficulty": "medium",
+    "question_text": "An organization certified a fixed safety-control checklist for an assistant a year ago. It now upgrades to a substantially more capable model for the same workflow and plans to reuse the identical controls unchanged. Which principle should guide the safety review?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Controls certified once remain sufficient as long as the workflow is unchanged"
+      },
+      {
+        "key": "b",
+        "text": "Safeguards scale with capability; more capable models need stronger controls"
+      },
+      {
+        "key": "c",
+        "text": "A more capable model is inherently safer and justifies relaxing existing controls"
+      },
+      {
+        "key": "d",
+        "text": "Safety controls depend only on data sensitivity, not on model capability"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Governance, Safety & Risk Management | Subdomain: 5A1 Implement guardrails and safety controls | Key Concept: capability-keyed safeguards. Responsible scaling ties safety controls to capability thresholds, so more capable systems trigger stronger required controls. Reusing a year-old checklist unchanged after a major capability upgrade treats safety as a fixed one-time task, which the framework explicitly rejects. | (A) A one-time checklist ignores that a capability increase can change the risk profile. | (B) Under a capability-keyed safety framework, safeguards escalate as capability increases; a control set adequate for a weaker model is not automatically adequate for a more capable one. | (C) Greater capability can widen the range of possible harms, not license weaker controls. | (D) Capability, not just data sensitivity, drives required safeguard strength."
+  },
+  {
+    "id": "c5-q0022",
+    "domain": 5,
+    "task_statement": "5B2 Ensure compliance with regulations",
+    "topic": "processor instructions bound optimizations",
+    "difficulty": "medium",
+    "question_text": "A GDPR controller contracts a vendor to run a Claude summarization pipeline, specifying EU data residency and a 30-day retention limit. The vendor's default pipeline caches prompts globally for 90 days to raise prompt-cache hit rates. The architect must reconcile the performance optimization with the controller's instructions. Which design is correct?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Honor the controller's residency and 30-day limit; scope caching accordingly."
+      },
+      {
+        "key": "b",
+        "text": "Keep the 90-day global cache, since caching is a technical optimization outside GDPR."
+      },
+      {
+        "key": "c",
+        "text": "Extend retention to 90 days and document the change in the agreement afterward."
+      },
+      {
+        "key": "d",
+        "text": "Move all retention decisions to the vendor, since it operates the infrastructure."
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Governance, Safety & Risk Management | Subdomain: 5B2 Ensure compliance with regulations | Key Concept: processor instructions bound optimizations. A prompt cache holding personal data is processing subject to GDPR, so it must operate within the controller's residency and retention instructions. The processor scopes the optimization to those instructions rather than overriding them for cache performance. | (A) A processor acts on the controller's documented instructions, so caching must operate within the stated residency and retention. The optimization is constrained by, not exempt from, those instructions. | (B) Caching personal data is still processing and storage subject to GDPR. It cannot ignore the controller's residency and retention instructions. | (C) A processor cannot unilaterally extend retention beyond the controller's instruction. Documenting after the fact does not authorize the excess retention. | (D) Operating infrastructure does not transfer retention authority to the processor. The controller sets purposes and means, including retention limits."
+  },
+  {
+    "id": "c5-q0023",
+    "domain": 5,
+    "task_statement": "5B2 Ensure compliance with regulations",
+    "topic": "GDPR data minimization",
+    "difficulty": "medium",
+    "question_text": "An EU-facing support assistant currently sends each customer's full profile into every Claude prompt, though most fields are never used to answer tickets. A privacy review flags this practice. Which change best aligns with GDPR's data-minimization principle?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Encrypt the full profile in transit while continuing to send every field."
+      },
+      {
+        "key": "b",
+        "text": "Obtain blanket consent to send all fields for any possible future purpose."
+      },
+      {
+        "key": "c",
+        "text": "Send only the profile fields the ticket actually requires to be answered."
+      },
+      {
+        "key": "d",
+        "text": "Move the workload to a Batch API job to reduce per-call exposure."
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Governance, Safety & Risk Management | Subdomain: 5B2 Ensure compliance with regulations | Key Concept: GDPR data minimization. Article 5 requires limiting personal data to what each purpose needs. Sending only the profile fields a ticket actually requires implements minimization, whereas encryption, consent, or batching do not reduce the data processed. | (A) Encryption protects data in transit but does not reduce what is processed. Minimization requires limiting the fields sent, not just securing them. | (B) Broad consent does not satisfy minimization, which limits data to what each purpose needs. Consent cannot justify processing fields the task never uses. | (C) Data minimization limits processing to what the purpose requires. Passing only the fields a ticket needs directly implements Article 5's minimization principle. | (D) Batching changes cost and scheduling, not the amount of personal data sent. It does not address minimization at all."
+  }
+]

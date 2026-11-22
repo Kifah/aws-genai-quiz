@@ -1,0 +1,593 @@
+[
+  {
+    "id": "c3-q0001",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Evaluating tool/agent configuration for capability bloat",
+    "difficulty": "medium",
+    "question_text": "A team exposes a customer-support agent that can read tickets, draft replies, issue refunds, and delete user accounts. Support staff only ever need to read tickets and draft replies. Applying least-privilege principles, which change best reduces risk?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Add logging to the refund and delete tools so misuse can be audited later."
+      },
+      {
+        "key": "B",
+        "text": "Remove the refund and delete tools from the agent's configuration entirely."
+      },
+      {
+        "key": "C",
+        "text": "Keep all tools but add a confirmation prompt before refunds and deletions."
+      },
+      {
+        "key": "D",
+        "text": "Replace the agent with a larger model that follows instructions more reliably."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Least privilege means removing capabilities the role does not require, eliminating the attack surface rather than monitoring or guarding it. Auditing (A) detects misuse after the fact but does not prevent harm. Confirmation prompts (C) add friction but the risk surface remains. Switching models (D) does not address the fundamental over-provisioning of tools."
+  },
+  {
+    "id": "c3-q0002",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Authentication and authorization security gaps",
+    "difficulty": "hard",
+    "question_text": "An agentic system allows Claude to call an internal API on behalf of users. The API key is embedded in the system prompt. What is the primary security risk and the correct mitigation?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Risk: key is too short. Mitigation: use a longer API key."
+      },
+      {
+        "key": "B",
+        "text": "Risk: the API key in the system prompt can be exfiltrated via prompt injection. Mitigation: store credentials in a secure vault and inject them server-side at runtime, never in the prompt."
+      },
+      {
+        "key": "C",
+        "text": "Risk: the key expires too quickly. Mitigation: use a non-expiring API key."
+      },
+      {
+        "key": "D",
+        "text": "Risk: the model cannot read the system prompt. Mitigation: repeat the key in every user message."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Embedding credentials in the system prompt exposes them to prompt injection attacks — a malicious input could instruct Claude to repeat or transmit the key. Credentials must be stored in a secure secrets manager and injected at the infrastructure layer, never appearing in the prompt itself. Longer keys or non-expiring keys (A, C) address key strength, not exposure. Repeating keys in user messages (D) makes the problem dramatically worse."
+  },
+  {
+    "id": "c3-q0003",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Accuracy-latency trade-offs",
+    "difficulty": "medium",
+    "question_text": "A real-time chatbot requires responses in under 1 second. The team is considering adding a 5-step chain-of-thought reasoning pipeline before each response. What trade-off must they evaluate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Multi-step reasoning increases accuracy but also increases latency — the team must determine whether the accuracy gain justifies exceeding the latency SLA."
+      },
+      {
+        "key": "B",
+        "text": "Multi-step reasoning always reduces latency because it uses fewer tokens."
+      },
+      {
+        "key": "C",
+        "text": "Latency and accuracy are independent; adding reasoning steps has no effect on either."
+      },
+      {
+        "key": "D",
+        "text": "The only trade-off is cost — latency and accuracy are unaffected by reasoning chain length."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Chain-of-thought pipelines improve output quality by externalizing reasoning steps, but each step adds latency. For a sub-1-second SLA, a 5-step reasoning chain is likely incompatible without streaming or caching optimizations. The architect must evaluate whether the quality gain justifies the latency increase and, if not, simplify the chain or redesign the approach. Reasoning steps always add tokens and latency (B is false), and they are not independent of latency (C, D are incorrect)."
+  },
+  {
+    "id": "c3-q0004",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Authorization requirements for agentic systems",
+    "difficulty": "hard",
+    "question_text": "An agent acts on behalf of multiple users with different permission levels. User A can only read data; User B can read and write. Which design correctly enforces per-user authorization?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use a single shared API key for all users and instruct Claude in the system prompt to respect user permission levels."
+      },
+      {
+        "key": "B",
+        "text": "Issue separate API credentials per user or session, and enforce permissions at the API/tool layer — not relying on Claude's instruction following to enforce access control."
+      },
+      {
+        "key": "C",
+        "text": "Ask Claude to verify user permissions by checking a text file in the prompt."
+      },
+      {
+        "key": "D",
+        "text": "Let users self-report their permission level in each message and trust the input."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Authorization must be enforced at the infrastructure layer, not by instructing an LLM to 'remember' permissions. Claude's instruction following can be circumvented by prompt injection or unusual inputs. Credentials and permissions must be scoped at the API/tool layer so that the system is secure even if Claude's output is manipulated. Options A, C, and D all make authorization dependent on Claude's compliance, which is not a security guarantee."
+  },
+  {
+    "id": "c3-q0005",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Observability challenges at scale",
+    "difficulty": "medium",
+    "question_text": "A team deploys a Claude agent in production handling 50,000 requests per day. They notice degraded response quality but cannot identify the cause. Which observability strategy should they implement first?",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Log input prompts, retrieved context, and model outputs for a sample of requests, then analyze patterns in failing cases."
+      },
+      {
+        "key": "B",
+        "text": "Turn off logging entirely to reduce latency overhead."
+      },
+      {
+        "key": "C",
+        "text": "Track latency, token counts, error rates, and user satisfaction signals as structured metrics in a monitoring dashboard."
+      },
+      {
+        "key": "D",
+        "text": "Wait for users to file complaints and use those as the sole signal for quality issues."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "C"
+    ],
+    "explanation": "Effective observability at scale requires both: (A) sampled trace logging of prompts, context, and outputs to enable root-cause analysis of quality failures; and (C) structured metrics dashboards for latency, token usage, error rates, and satisfaction signals for continuous monitoring. Disabling logging (B) eliminates the ability to diagnose issues. Waiting for complaints (D) is reactive and misses systematic degradation that users tolerate without reporting."
+  },
+  {
+    "id": "c3-q0006",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Monitoring strategies for LLM systems",
+    "difficulty": "medium",
+    "question_text": "Which of the following is a challenge unique to monitoring LLM-based systems compared to traditional software systems?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "LLM outputs are deterministic, making them easier to test than traditional systems."
+      },
+      {
+        "key": "B",
+        "text": "Output quality is subjective and not captured by standard metrics like error rate or latency — requiring human evaluation or LLM-as-judge approaches."
+      },
+      {
+        "key": "C",
+        "text": "LLM systems never fail silently, always throwing exceptions on quality issues."
+      },
+      {
+        "key": "D",
+        "text": "LLM API calls always have predictable, fixed costs."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Unlike traditional systems where correctness is binary (the code either returns the right value or throws an error), LLM outputs can be syntactically valid but semantically poor — a fluent, confident-sounding but incorrect response passes all standard checks. This requires quality-specific monitoring using human evaluation samples or LLM-as-judge scoring. LLM outputs are non-deterministic (A is false), failures are often silent (C is false), and costs vary with token usage (D is false)."
+  },
+  {
+    "id": "c3-q0020",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Tool configuration: avoiding capability bloat",
+    "difficulty": "medium",
+    "question_text": "An agent is provided with tools for: reading files, writing files, executing shell commands, sending emails, and querying a database. Its only task is answering questions about a read-only data set. Which tools should be removed to apply least-privilege?",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Write files — the agent only needs to read data, not modify the file system."
+      },
+      {
+        "key": "B",
+        "text": "Execute shell commands — shell execution is not needed for read-only data Q&A and creates a large attack surface."
+      },
+      {
+        "key": "C",
+        "text": "Read files — reading files is required for accessing the data set."
+      },
+      {
+        "key": "D",
+        "text": "Query database — database querying may be needed to retrieve data."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "Applying least-privilege means removing all tools not required for the specific task. File writing (A) and shell command execution (B) are unnecessary for read-only data Q&A and represent significant risk if misused or exploited via prompt injection. Reading files (C) and querying databases (D) are core capabilities needed for the stated task and should be retained."
+  },
+  {
+    "id": "c3-q0033",
+    "domain": 3,
+    "task_statement": "3A3 Evaluate accuracy-latency trade-offs and justify configuration decisions",
+    "topic": "adaptive thinking versus budget_tokens",
+    "difficulty": "medium",
+    "question_text": "On the newest Claude models, an architect wants deeper reasoning for a hard analytical task while respecting a latency budget. A teammate suggests raising budget_tokens to control depth. Testing on these models returns errors. What is the correct guidance?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "budget_tokens is the current control; the errors mean the value was simply set too low"
+      },
+      {
+        "key": "b",
+        "text": "Reasoning depth cannot be tuned on these models, so accept the default latency profile"
+      },
+      {
+        "key": "c",
+        "text": "budget_tokens is rejected here; use adaptive thinking and effort to balance latency"
+      },
+      {
+        "key": "d",
+        "text": "Lower the sampling temperature, which reduces reasoning depth and speeds responses"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3A3 Evaluate accuracy-latency trade-offs and justify configuration decisions | Key Concept: adaptive thinking versus budget_tokens. Questions about reasoning depth must name the model because the mechanism changed. On the newest models budget_tokens is rejected; adaptive thinking plus the effort lever is how depth is balanced against the latency budget."
+  },
+  {
+    "id": "c3-q0034",
+    "domain": 3,
+    "task_statement": "3B2 Apply retrieval strategies matched to data shape and query pattern",
+    "topic": "whole-corpus-in-prompt below the threshold",
+    "difficulty": "hard",
+    "question_text": "An internal wiki is about 300 pages and fits within roughly 120k tokens, yet the team is about to build a full retrieval pipeline. The simpler alternative is to:",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Fine-tune a model on the wiki so the knowledge lives in the weights"
+      },
+      {
+        "key": "b",
+        "text": "Split the wiki and build a hybrid dense-and-sparse index anyway"
+      },
+      {
+        "key": "c",
+        "text": "Add a reranking stage over retrieved chunks to raise precision"
+      },
+      {
+        "key": "d",
+        "text": "Load the whole knowledge base into the prompt and rely on caching"
+      }
+    ],
+    "correct_answers": [
+      "d"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3B2 Apply retrieval strategies matched to data shape and query pattern | Key Concept: whole-corpus-in-prompt below the threshold. Guidance holds that a corpus fitting within roughly 200k tokens (about 500 pages) can be loaded entirely into the prompt with caching, skipping retrieval and its error modes. A 300-page, 120k-token wiki qualifies, so a full pipeline is unjustified machinery."
+  },
+  {
+    "id": "c3-q0035",
+    "domain": 3,
+    "task_statement": "3C3 Evaluate progressive discovery vs. monolithic context strategy",
+    "topic": "choose loading strategy by capability-set size and growth",
+    "difficulty": "medium",
+    "question_text": "An architect must write team guidance for when to choose progressive discovery over monolithic upfront loading of tools and context. Reviewers want a single decision principle rather than a long, tool-by-tool list. Which of the following BEST captures the deciding factor?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Always prefer progressive discovery because it is simply the most modern integration pattern available"
+      },
+      {
+        "key": "b",
+        "text": "Always prefer monolithic upfront loading because having fewer moving parts inherently fails less often"
+      },
+      {
+        "key": "c",
+        "text": "Choose progressive discovery when capabilities are large or growing, monolithic when small and fixed"
+      },
+      {
+        "key": "d",
+        "text": "Base the choice purely on the model size, reserving discovery only for smaller, cheaper models"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3C3 Evaluate progressive discovery vs. monolithic context strategy | Key Concept: choose loading strategy by capability-set size and growth. The single decision principle is footprint: progressive discovery for large or growing capability sets, monolithic upfront loading for small, fixed ones. Modernity or model size are not the deciding factors."
+  },
+  {
+    "id": "c3-q0036",
+    "domain": 3,
+    "task_statement": "3B2 Apply retrieval strategies matched to data shape and query pattern",
+    "topic": "use retrieval-specific metrics",
+    "difficulty": "medium",
+    "question_text": "An architect must determine whether a RAG system's wrong answers come from retrieval or generation. End-answer accuracy alone cannot separate the two stages. The team can compute additional metrics on a labeled query set with known relevant documents. Which measurement BEST isolates the retrieval stage?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Recall@k and MRR computed on retrieved chunks against the known-relevant documents per query"
+      },
+      {
+        "key": "b",
+        "text": "End-to-end answer accuracy compared across two different generation models on the same query set"
+      },
+      {
+        "key": "c",
+        "text": "Token cost and latency per request aggregated across the entire labeled evaluation query set"
+      },
+      {
+        "key": "d",
+        "text": "Judge-model scores rating final answer fluency on a small held-out sample of responses"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3B2 Apply retrieval strategies matched to data shape and query pattern | Key Concept: use retrieval-specific metrics. Recall@k, MRR, and similar diagnostics score the retrieved set against known-relevant documents, isolating retrieval quality from generation. End-answer accuracy alone mixes the two stages and cannot localize the failure."
+  },
+  {
+    "id": "c3-q0037",
+    "domain": 3,
+    "task_statement": "3C3 Progressive Discovery vs Monolithic Context",
+    "topic": "the savings come from not loading definitions until needed",
+    "difficulty": "medium",
+    "question_text": "An architecture review claims switching to code-on-filesystem tool loading cut tool-loading tokens dramatically. A reviewer asks what actually produced the savings and how to characterize the reported figure. What is the accurate explanation?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Prompt caching of the tool definitions produced the savings as a universal constant"
+      },
+      {
+        "key": "b",
+        "text": "A smaller model reduced the definition tokens, applicable to any integration"
+      },
+      {
+        "key": "c",
+        "text": "Semantic chunking of the tool docs drove the reduction across all toolsets"
+      },
+      {
+        "key": "d",
+        "text": "On-demand loading drove it; the figure is Anthropic's example, not universal"
+      }
+    ],
+    "correct_answers": [
+      "d"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3C3 Progressive Discovery vs Monolithic Context | Key Concept: the savings come from not loading definitions until needed. Code-on-filesystem loading is progressive disclosure; its large token reduction is Anthropic's reported example for a specific setup, not a universal constant, and is not caused by caching, a smaller model, or chunking."
+  },
+  {
+    "id": "c3-q0038",
+    "domain": 3,
+    "task_statement": "3A2 Analyze authentication and authorization requirements to identify security gaps",
+    "topic": "authorization gap under working authentication",
+    "difficulty": "hard",
+    "question_text": "A production integration verifies a signed token on every request and rejects unsigned calls, so the team believes access control is complete. Testing reveals that any authenticated user token can trigger the agent's admin-only tools, because tool calls carry no per-action permission check. Which statement BEST characterizes the posture?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Authentication works, but an authorization gap lets verified callers exceed their role"
+      },
+      {
+        "key": "b",
+        "text": "Authentication is broken, because a valid token should never reach the tool layer at all"
+      },
+      {
+        "key": "c",
+        "text": "The posture is complete, since verifying the token already establishes what each caller may do"
+      },
+      {
+        "key": "d",
+        "text": "This is a transport gap, resolved by encrypting the tool calls rather than checking permissions"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3A2 Analyze authentication and authorization requirements to identify security gaps | Key Concept: authorization gap under working authentication. Solid token verification can coexist with a missing per-action permission check. When any authenticated caller can invoke admin-only tools, authentication is fine and the defect is squarely an authorization gap that a per-action check must close."
+  },
+  {
+    "id": "c3-q0039",
+    "domain": 3,
+    "task_statement": "3A1 Evaluate tool/agent configuration for capability bloat",
+    "topic": "diagnose bloat with span-level telemetry, then fix it with progressive disclosur",
+    "difficulty": "medium",
+    "question_text": "An agent fleet in production shows rising cost and degraded tool selection after months of teams adding tools. The architect wants to confirm the cause before changing anything and to keep confirming it as the fleet grows. Observability is available through OpenTelemetry. The most defensible plan is to:",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "immediately switch every agent to a smaller model and watch whether the cost falls"
+      },
+      {
+        "key": "b",
+        "text": "read individual request logs one by one to find the slow tool calls"
+      },
+      {
+        "key": "c",
+        "text": "delete tools at random until the monthly cost falls to an acceptable level"
+      },
+      {
+        "key": "d",
+        "text": "Trace cost to upfront loading via span-level telemetry, adopt on-demand discovery"
+      }
+    ],
+    "correct_answers": [
+      "d"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3A1 Evaluate tool/agent configuration for capability bloat | Key Concept: diagnose bloat with span-level telemetry, then fix it with progressive disclosure. Attributing cost to upfront tool loading via OpenTelemetry confirms the cause before acting and scales with the fleet, unlike blind model swaps, manual log reading, or random tool deletion."
+  },
+  {
+    "id": "c3-q0040",
+    "domain": 3,
+    "task_statement": "3A2 Analyze authentication and authorization requirements to identify security gaps",
+    "topic": "downscope credentials to the user",
+    "difficulty": "medium",
+    "question_text": "An agent uses a single OAuth token with broad scopes to serve requests from many users with differing entitlements. Security asks how to close the gap where a low-privileged user can trigger actions only admins should perform. Which change BEST addresses this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Rotate the broad OAuth token more frequently to limit exposure windows"
+      },
+      {
+        "key": "b",
+        "text": "Issue per-user tokens scoped to each user's actual entitlements"
+      },
+      {
+        "key": "c",
+        "text": "Add a prompt instruction telling the agent to refuse admin actions for non-admins"
+      },
+      {
+        "key": "d",
+        "text": "Encrypt the token at rest so it cannot be extracted from configuration"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3A2 Analyze authentication and authorization requirements to identify security gaps | Key Concept: downscope credentials to the user. When one broad token serves many users, entitlements are not enforced. Per-user tokens scoped to real permissions close the authorization gap; rotation, prompts, and encryption do not."
+  },
+  {
+    "id": "c3-q0041",
+    "domain": 3,
+    "task_statement": "3B1 Design a RAG pipeline with appropriate chunking and indexing strategies",
+    "topic": "whole-KB-in-prompt for small corpora",
+    "difficulty": "hard",
+    "question_text": "A knowledge base is about 300 pages and fits within roughly 200k tokens. Queries need grounded answers from it. Which approach is simplest while avoiding retrieval failure modes?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Load the whole knowledge base into the prompt with caching"
+      },
+      {
+        "key": "b",
+        "text": "Build a full RAG stack with chunking, embeddings, and reranking"
+      },
+      {
+        "key": "c",
+        "text": "Fine-tune a model on the knowledge base contents instead"
+      },
+      {
+        "key": "d",
+        "text": "Split the corpus across several agents each holding one section"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3B1 Design a RAG pipeline with appropriate chunking and indexing strategies | Key Concept: whole-KB-in-prompt for small corpora. When a knowledge base fits within roughly 200k tokens, loading it entirely into the prompt with caching avoids building a retrieval pipeline and its failure modes. This is the simplest grounded design for a small corpus, so a full RAG stack, fine-tuning, or sharding across agents all add unnecessary machinery."
+  },
+  {
+    "id": "c3-q0042",
+    "domain": 3,
+    "task_statement": "3A1 Evaluate tool/agent configuration for capability bloat",
+    "topic": "context isolation, not full-catalog sharing, is the multi-agent default",
+    "difficulty": "medium",
+    "question_text": "An orchestrator delegates work to three specialized subagents. A developer gives every subagent the orchestrator's full tool catalog so nothing is missing. Token cost triples and subagents sometimes call tools outside their role. Which of the following MOST directly explains the problem?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Subagents inherit context automatically, so the shared catalog was redundant"
+      },
+      {
+        "key": "b",
+        "text": "The orchestrator should use a larger model to coordinate the subagents"
+      },
+      {
+        "key": "c",
+        "text": "Reranking the tool catalog per subagent would restore correct tool choice"
+      },
+      {
+        "key": "d",
+        "text": "Broad sharing raised cost and reach; subagents need only scoped tools"
+      }
+    ],
+    "correct_answers": [
+      "d"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3A1 Evaluate tool/agent configuration for capability bloat | Key Concept: context isolation, not full-catalog sharing, is the multi-agent default. Giving each subagent the orchestrator's entire toolset inflates cost and widens reach; scoping each subagent to only its required tools controls both, and subagents never inherit context automatically."
+  },
+  {
+    "id": "c3-q0043",
+    "domain": 3,
+    "task_statement": "3C2 Analyze observability challenges and select monitoring strategies at scale",
+    "topic": "span-level attribution",
+    "difficulty": "medium",
+    "question_text": "A platform runs thousands of concurrent agent sessions, each spawning subagents and dozens of tool calls. On-call engineers cannot inspect requests individually, and leadership wants latency and cost attributed to specific components. Which monitoring strategy fits best?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Emit OTLP telemetry and read span hierarchy to attribute latency and cost per component"
+      },
+      {
+        "key": "b",
+        "text": "Sample a handful of full transcripts hourly and extrapolate the fleet's behavior from them"
+      },
+      {
+        "key": "c",
+        "text": "Add verbose logging on every tool call and grep the logs during incidents"
+      },
+      {
+        "key": "d",
+        "text": "Rely on user complaints to flag which sessions warrant deeper investigation"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3C2 Analyze observability challenges and select monitoring strategies at scale | Key Concept: span-level attribution. Observing a large agent fleet means structured, aggregated OpenTelemetry with span-level attribution, not manual log inspection or transcript sampling. The span hierarchy is what lets latency and cost be pinned to specific tool calls and subagents."
+  },
+  {
+    "id": "c3-q0044",
+    "domain": 3,
+    "task_statement": "3C1 Evaluate connection protocols and select the integration mechanism",
+    "topic": "transport by deployment",
+    "difficulty": "medium",
+    "question_text": "An architect assumes every Model Context Protocol server must run as a remote web service. Which statement corrects this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "MCP servers run only over HTTP because the standard forbids local transport"
+      },
+      {
+        "key": "b",
+        "text": "MCP requires a cloud endpoint since the protocol is proprietary to Claude"
+      },
+      {
+        "key": "c",
+        "text": "Local servers are allowed only after registering with a central directory"
+      },
+      {
+        "key": "d",
+        "text": "MCP servers can run locally over STDIO or remotely over HTTP"
+      }
+    ],
+    "correct_answers": [
+      "d"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3C1 Evaluate connection protocols and select the integration mechanism | Key Concept: transport by deployment. The Model Context Protocol is an open standard, and its servers can run locally over STDIO or remotely over HTTP. Assuming MCP is always a remote web service, or proprietary to Claude, misstates how the protocol deploys."
+  }
+]

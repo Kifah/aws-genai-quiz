@@ -1,0 +1,540 @@
+[
+  {
+    "id": "d4-q0901",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Hallucination rate monitoring",
+    "difficulty": "medium",
+    "question_text": "A healthcare company uses Amazon Bedrock to deploy an application that generates summaries of clinical documents. The application experiences inconsistent response quality with occasional factual hallucinations. Monthly costs exceed the company's projections by 40%. A GenAI developer must implement a near real-time monitoring solution to detect hallucinations, identify abnormal token consumption, and provide early warnings of cost anomalies. The solution must require minimal custom development work and maintenance overhead. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure Amazon CloudWatch alarms to monitor InputTokenCount and OutputTokenCount metrics to detect anomalies. Store model invocation logs in an Amazon S3 bucket. Use AWS Glue and Amazon Athena to identify potential hallucinations."
+      },
+      {
+        "key": "B",
+        "text": "Run Amazon Bedrock evaluation jobs that use LLM-based judgments to detect hallucinations. Configure Amazon CloudWatch to track token usage. Create an AWS Lambda function to process CloudWatch metrics. Configure the Lambda function to send usage pattern notifications."
+      },
+      {
+        "key": "C",
+        "text": "Configure Amazon Bedrock to store model invocation logs in an Amazon S3 bucket. Enable text output logging. Configure Amazon Bedrock guardrails to run contextual grounding checks to detect hallucinations. Create Amazon CloudWatch anomaly detection alarms for token usage metrics."
+      },
+      {
+        "key": "D",
+        "text": "Use AWS CloudTrail to log all Amazon Bedrock API calls. Create a custom dashboard in Amazon QuickSight to visualize token usage patterns. Use Amazon SageMaker Model Monitor to detect quality drift in generated summaries."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Invocation logging with text output plus guardrail contextual grounding checks detects hallucinations, and CloudWatch anomaly detection alarms on token metrics give early warning of abnormal consumption and cost, all with managed features. Static alarms with Glue and Athena (A), evaluation jobs with a custom Lambda (B), and CloudTrail with QuickSight and Model Monitor (D) need more custom work and are not near real time.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 17
+  },
+  {
+    "id": "d4-q0902",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Parallel requests for complex workflows",
+    "difficulty": "medium",
+    "question_text": "A financial services company needs to build a document analysis system that uses Amazon Bedrock to process quarterly reports. The system must analyze financial data, perform sentiment analysis, and validate compliance across batches of reports. Each batch contains 5 reports. Each report requires multiple foundation model (FM) calls. The solution must finish the analysis within 10 seconds for each batch. Current sequential processing takes 45 seconds for each batch. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use AWS Lambda functions with provisioned concurrency to process each analysis type sequentially. Configure the Lambda function timeouts to 10 seconds. Configure automatic retries with exponential backoff."
+      },
+      {
+        "key": "B",
+        "text": "Use AWS Step Functions with a Parallel state to invoke separate AWS Lambda functions for each analysis type simultaneously. Configure Amazon Bedrock client timeouts. Use Amazon CloudWatch metrics to track execution time and model inference latency."
+      },
+      {
+        "key": "C",
+        "text": "Create an Amazon SQS queue to buffer analysis requests. Deploy multiple AWS Lambda functions with reserved concurrency. Configure each Lambda function to process different aspects of each report sequentially and then combine the results."
+      },
+      {
+        "key": "D",
+        "text": "Deploy an Amazon ECS cluster that runs containers that process each report sequentially. Use a load balancer to distribute batch workloads. Configure an auto-scaling policy based on CPU utilization to handle demand fluctuations."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A Step Functions Parallel state invokes separate Lambda functions for each analysis type at the same time, so total time approaches the slowest branch rather than the sum, which is how 45 seconds can drop under 10. Options A, C and D still process each report's analyses sequentially, so provisioned concurrency, queues or extra containers cannot meet the 10-second target.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 19,
+    "review_note": "Yellow and Most Voted both say A, but sequential processing cannot cut 45s to 10s. A Step Functions Parallel state (B) can."
+  },
+  {
+    "id": "d4-q0903",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Token usage and cost monitoring",
+    "difficulty": "medium",
+    "question_text": "A financial services company uses multiple foundation models (FMs) through Amazon Bedrock for its generative AI (GenAI) applications. To comply with a new regulation for GenAI use with sensitive financial data, the company needs a token management solution. The token management solution must proactively alert when applications approach model-specific token limits. The solution must also process more than 5,000 requests each minute and maintain token usage metrics to allocate costs across business units. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Develop model-specific tokenizers in an AWS Lambda function. Configure the Lambda function to estimate token usage before sending requests to Amazon Bedrock. Configure the Lambda function to publish metrics to Amazon CloudWatch and trigger alarms when requests approach thresholds. Store detailed token usage in Amazon DynamoDB to report costs."
+      },
+      {
+        "key": "B",
+        "text": "Implement Amazon Bedrock Guardrails with token quota policies. Capture metrics on rejected requests. Configure Amazon EventBridge rules to trigger notifications based on Amazon Bedrock Guardrails metrics. Use Amazon CloudWatch dashboards to visualize token usage trends across models."
+      },
+      {
+        "key": "C",
+        "text": "Deploy an Amazon SQS dead-letter queue for failed requests. Configure an AWS Lambda function to analyze token-related failures. Use Amazon CloudWatch Logs Insights to generate reports on token usage patterns based on error logs from Amazon Bedrock API responses."
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon API Gateway to create a proxy for all Amazon Bedrock API calls. Configure request throttling based on custom usage plans with predefined token quotas. Configure API Gateway to reject requests that will exceed token limits."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Model-specific tokenizers in Lambda estimate token counts before each call, publish CloudWatch metrics and alarms when requests approach a model's limit, and store per-request usage in DynamoDB for cost allocation by business unit. Guardrails has no token quota policy (B), analysing error logs (C) is reactive rather than proactive, and API Gateway throttling counts requests, not tokens (D).",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 23
+  },
+  {
+    "id": "d4-q0904",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "CloudWatch anomaly detection for token and latency",
+    "difficulty": "medium",
+    "question_text": "A company has a recommendation system. The system's applications run on Amazon EC2 instances. The applications make API calls to Amazon Bedrock foundation models (FMs) to analyze customer behavior and generate personalized product recommendations. The system is experiencing intermittent issues. Some recommendations do not match customer preferences. The company needs an observability solution to monitor operational metrics and detect patterns of operational performance degradation compared to established baselines. The solution must also generate alerts with correlation data within 10 minutes when FM behavior deviates from expected patterns. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure Amazon CloudWatch Container Insights for the application infrastructure. Set up CloudWatch alarms for latency thresholds. Add custom metrics for token counts by using the CloudWatch embedded metric format. Create CloudWatch dashboards to visualize the data."
+      },
+      {
+        "key": "B",
+        "text": "Implement AWS X-Ray to trace requests through the application components. Enable CloudWatch Logs Insights for error pattern detection. Set up AWS CloudTrail to monitor all API calls to Amazon Bedrock. Create custom dashboards in Amazon QuickSight."
+      },
+      {
+        "key": "C",
+        "text": "Enable Amazon CloudWatch Application Insights for the application resources. Create custom metrics for recommendation quality, token usage, and response latency by using the CloudWatch embedded metric format with dimensions for request types and user segments. Configure CloudWatch anomaly detection on the model metrics. Establish log pattern analysis by using CloudWatch Logs Insights."
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon OpenSearch Service with the Observability plugin. Ingest model metrics and logs by using Amazon Kinesis. Create custom Piped Processing Language (PPL) queries to analyze model behavior patterns. Establish operational dashboards to visualize anomalies in real time."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "CloudWatch Application Insights, custom EMF metrics (recommendation quality, token usage, latency, with request-type and user-segment dimensions), anomaly detection against learned baselines, and Logs Insights pattern analysis detect deviations from baseline and alert with correlation data. Container Insights with static latency alarms (A) has no baseline detection, X-Ray with CloudTrail and QuickSight (B) does not alert on behaviour drift, and the OpenSearch and Kinesis stack (D) is a heavy custom build.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 29
+  },
+  {
+    "id": "d4-q0905",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Low-latency model selection and provisioned throughput",
+    "difficulty": "medium",
+    "question_text": "A company is developing a generative AI (GenAI) application that analyzes customer service calls in real-time and generates suggested responses for human customer service agents. The application must process 500,000 concurrent calls during peak hours with less than 200 ms end-to-end latency for each suggestion. The company uses existing architecture to transcribe customer call audio streams. The application must not exceed a pre-defined monthly compute budget and must maintain auto scaling capabilities. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy a large, complex reasoning model on Amazon Bedrock. Purchase provisioned throughput and optimize for batch processing."
+      },
+      {
+        "key": "B",
+        "text": "Deploy a low-latency, real-time optimized model on Amazon Bedrock. Purchase provisioned throughput and set up automatic scaling policies."
+      },
+      {
+        "key": "C",
+        "text": "Deploy a large language model (LLM) on an Amazon SageMaker AI real-time endpoint that uses dedicated GPU instances."
+      },
+      {
+        "key": "D",
+        "text": "Deploy a mid-sized language model on an Amazon SageMaker AI serverless endpoint that is optimized for batch processing."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A low-latency, real-time-optimised model on Bedrock with provisioned throughput and automatic scaling policies gives consistent sub-200 ms suggestions at very high concurrency while keeping cost controlled. Large reasoning models or batch-optimised setups (A, D) are too slow for real-time suggestions, and dedicated GPU instances on a SageMaker real-time endpoint (C) are expensive and hard to scale to this concurrency within a fixed budget.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 31
+  },
+  {
+    "id": "d4-q0906",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Prompt caching",
+    "difficulty": "medium",
+    "question_text": "An ecommerce company is using Amazon Bedrock to build a customer service AI assistant. The AI assistant needs to process over 50,000 customer inquiries every day. The AI assistant occasionally experiences traffic spikes of up to 150,000 inquiries every day during promotional events. Analysis shows that 40% of inquiries follow similar patterns that share the same context. A GenAI developer must design a solution that will ensure low latency and consistent performance for the AI assistant during traffic spikes. Which solution will meet these requirements MOST cost-effectively?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure latency-optimized inference by setting the latency parameter to optimized in the performance configuration of the request to Amazon Bedrock. Use prompt caching to handle the repetitive inquiries."
+      },
+      {
+        "key": "B",
+        "text": "Purchase provisioned throughput and model units (MUs) that are sized to handle peak traffic loads. Use Amazon ElastiCache (Redis OSS) to cache repetitive inquiries."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Bedrock Agents and custom knowledge bases to pre-process customer inquiries. Configure cross-Region inference to distribute traffic."
+      },
+      {
+        "key": "D",
+        "text": "Use AWS Lambda functions to pre-process requests by using a custom prompt routing mechanism. Use Amazon DynamoDB as a caching layer to handle frequently asked questions."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Setting the Bedrock latency performance configuration to optimized and using prompt caching for the repeated shared context lowers latency and token cost during spikes without paying for provisioned capacity sized for the peak. Provisioned throughput sized to peak with ElastiCache (B) is expensive, and Agents with cross-Region inference (C) or custom Lambda routing with a DynamoDB cache (D) add complexity with no cost benefit.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 40
+  },
+  {
+    "id": "d4-q0907",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Cross-Region inference for throughput",
+    "difficulty": "medium",
+    "question_text": "A company is using Amazon Bedrock and Anthropic Claude 3 Haiku to develop an AI assistant. The AI assistant normally processes 10,000 requests each hour but experiences surges of up 30,000 requests each hour during peak usage periods. The AI assistant must respond within 2 seconds while operating across multiple AWS Regions. The company observes that during peak usage periods, the AI assistant experiences throughput bottlenecks that cause increased latency and occasional request timeouts. The company must resolve the performance issues. Which solution will meet this requirement?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Purchase provisioned throughput and sufficient model units (MUs) in a single Region. Configure the application to retry failed requests with exponential backoff."
+      },
+      {
+        "key": "B",
+        "text": "Implement token batching to reduce API overhead. Use cross-Region inference profiles to automatically distribute traffic across available Regions."
+      },
+      {
+        "key": "C",
+        "text": "Set up auto scaling AWS Lambda functions in each Region. Implement client-side round-robin request distribution. Purchase one model unit (MU) of provisioned throughput as a backup."
+      },
+      {
+        "key": "D",
+        "text": "Implement batch inference for all requests by using Amazon S3 buckets across multiple Regions. Use Amazon SQS to set up an asynchronous retrieval process."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Cross-Region inference profiles automatically spread peak traffic across Regions, removing the throughput bottleneck, and token batching reduces API overhead, so latency stays under 2 seconds. Provisioned throughput in a single Region (A) cannot absorb multi-Region surges, one model unit as a backup (C) is too small, and batch inference through S3 and SQS (D) is asynchronous and cannot meet a 2-second response.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 48
+  },
+  {
+    "id": "d4-q0908",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Token usage and cost monitoring",
+    "difficulty": "hard",
+    "question_text": "A company deploys multiple Amazon Bedrock based generative AI (GenAI) applications across multiple business units for customer service, content generation, and document analysis. Some applications show unpredictable token consumption patterns. The company requires a comprehensive observability solution that provides real-time visibility into token usage patterns across multiple models. The observability solution must support custom dashboards for multiple stakeholder groups and provide alerting capabilities for token consumption across all the foundational models that the company's applications use. Which combination of solutions will meet these requirements with the LEAST operational overhead? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon CloudWatch metrics as data sources to create custom Amazon QuickSight dashboards that show token usage trends and usage patterns across FMs."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon CloudWatch Logs Insights to analyze Amazon Bedrock invocation logs for token consumption patterns and usage attribution by application. Create custom queries to identify high-usage scenarios. Add log widgets to dashboards to enable continuous monitoring."
+      },
+      {
+        "key": "C",
+        "text": "Create custom Amazon CloudWatch dashboards that combine native Amazon Bedrock token and invocation CloudWatch metrics. Set up CloudWatch alarms to monitor token usage thresholds."
+      },
+      {
+        "key": "D",
+        "text": "Create dashboards that show token usage trends and patterns across the company's FMs by using an Amazon Bedrock zero-ETL integration with Amazon Managed Grafana."
+      },
+      {
+        "key": "E",
+        "text": "Implement Amazon EventBridge rules to capture Amazon Bedrock model invocation events. Route token usage data to an Amazon Data Firehose delivery stream that targets Amazon OpenSearch Serverless. Use OpenSearch dashboards to analyze usage patterns"
+      }
+    ],
+    "correct_answers": [
+      "B",
+      "C"
+    ],
+    "explanation": "CloudWatch Logs Insights over invocation logs gives per-application token attribution and dashboard log widgets, and CloudWatch dashboards plus alarms on the native Bedrock token and invocation metrics give real-time visibility and alerting without extra infrastructure. QuickSight (A), Managed Grafana (D), and an EventBridge, Firehose and OpenSearch pipeline (E) add services to build and operate.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 62,
+    "review_note": "Mondal key is C,D. Kept B,C: four other sources agree on B,C."
+  },
+  {
+    "id": "d4-q0909",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "CloudWatch anomaly detection for token and latency",
+    "difficulty": "medium",
+    "question_text": "A company is developing a generative AI (GenAI) application that uses Amazon Bedrock foundation models (FMs). The application has several custom tool integrations. The application has experienced unexpected token consumption surges despite consistent user traffic. The company needs a solution that uses Amazon Bedrock model invocation logging to monitor InputTokenCount metrics and OutputTokenCount metrics. The solution must detect unusual patterns in tool usage and identify which specific tool integrations cause abnormal token consumption. The solution must also automatically adjust thresholds as traffic patterns change. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon CloudWatch Logs to capture model invocation logs. Create CloudWatch dashboards based on InputTokenCount metrics and OutputTokenCount metrics. Configure static CloudWatch alarms with fixed thresholds for each tool integration."
+      },
+      {
+        "key": "B",
+        "text": "Store model invocation logs in an Amazon S3 bucket. Use AWS Glue to catalog the logs. Analyze token consumption patterns by using scheduled Amazon Athena queries that generate reports on tool usage trends."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon CloudWatch Logs to capture model invocation logs. Create CloudWatch metric filters to extract tool-specific invocation patterns. Apply CloudWatch anomaly detection alarms that adjust baselines for each tool's metrics."
+      },
+      {
+        "key": "D",
+        "text": "Store model invocation logs in an Amazon S3 bucket. Create an AWS Lambda function to process logs in real time. Manually update Amazon CloudWatch alarm thresholds based on token consumption trends that the Lambda function identifies."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Invocation logs in CloudWatch Logs with metric filters extract tool-specific patterns, so abnormal token use can be attributed to a particular tool integration, and anomaly detection alarms adjust their baselines automatically as traffic changes. Static alarms (A) and manual threshold updates (D) cannot adapt automatically, and scheduled Athena reports (B) are not real-time detection.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 66
+  },
+  {
+    "id": "d4-q0910",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Cross-Region Inference for peak throttling",
+    "difficulty": "medium",
+    "question_text": "A company is building a serverless application that uses AWS Lambda functions to help students around the world summarize notes. The application uses Anthropic Claude through Amazon Bedrock. The company observed that most of the traffic occurs during evenings in each time zone. Users report experiencing throttling errors during peak usage times in their times zones. The company needs to resolve the throttling issues by ensuring continuous operation of the application. The solution must maintain application performance quality. The company needs a solution that does not require a fixed hourly cost during low traffic periods. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create custom Amazon CloudWatch metrics to monitor model errors. Set provisioned throughput to a value that is safely higher than the peak traffic observed."
+      },
+      {
+        "key": "B",
+        "text": "Create custom Amazon CloudWatch metrics to monitor model errors. Set up a failover mechanism to redirect invocations to a backup AWS Region when the errors exceed a specified threshold."
+      },
+      {
+        "key": "C",
+        "text": "Enable invocation logging in Amazon Bedrock. Monitor key metrics such as Invocations, InputTokenCount, OutputTokenCount, and Invocation Throttles. Distribute traffic across cross-Region inference endpoints."
+      },
+      {
+        "key": "D",
+        "text": "Enable invocation logging in Amazon Bedrock. Monitor InvocationLatency, InvocationClientErrors, and InvocationServerErrors metrics. Distribute traffic across multiple versions of the same model."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Bedrock invocation logging with monitoring of invocation throttles, plus cross-Region inference that spreads traffic across Regions, relieves the per-time-zone peak throttling while staying on-demand, so there is no fixed hourly cost. Provisioned throughput (A) has a fixed hourly cost, a manual failover to a backup Region (B) is reactive, and spreading traffic across versions of the same model (D) adds no capacity.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 70
+  },
+  {
+    "id": "d4-q0911",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Intelligent model routing",
+    "difficulty": "medium",
+    "question_text": "A retail company is using Amazon Bedrock to develop a customer service AI assistant. Analysis shows that 70% of customer inquiries are simple product questions that a smaller model can effectively handle. However, 30% of inquiries are complex return policy questions that require advanced reasoning. The company wants to implement a cost-effective model selection framework to automatically route customer inquiries to appropriate models based on inquiry complexity. The framework must maintain high customer satisfaction and minimize response latency. Which solution will meet these requirements with the LEAST implementation effort?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a multi-stage architecture that uses a small foundation model (FM) to classify the complexity of each inquiry. Route simple inquiries to a smaller, more cost-effective model. Route complex inquiries to a larger, more capable model. Use AWS Lambda functions to handle the routing logic."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Bedrock intelligent prompt routing to automatically analyze inquiries. Route simple product inquiries to smaller models, and route complex return policy inquiries to more capable larger models."
+      },
+      {
+        "key": "C",
+        "text": "Implement a single-model solution that uses an Amazon Bedrock mid-sized foundation model (FM) with on-demand pricing. Include special instructions in model prompts to handle both simple and complex inquiries by using the same model."
+      },
+      {
+        "key": "D",
+        "text": "Create separate Amazon Bedrock endpoints for simple and complex inquiries. Implement a rule-based routing system based on keyword detection. Use on-demand pricing for the smaller model and provisioned throughput for the larger model."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock intelligent prompt routing automatically analyses each inquiry and routes simple ones to a smaller model and complex ones to a larger model, with the least implementation effort. A custom classifier with Lambda routing (A) and keyword rules with separate endpoints (D) must be built and maintained, and a single mid-sized model (C) cannot be both cost-efficient on simple questions and capable on complex ones.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 79
+  },
+  {
+    "id": "d4-q0912",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Semantic caching",
+    "difficulty": "medium",
+    "question_text": "A company uses Amazon Bedrock to develop an AI assistant to provide customer support. Analysis shows that 40% of customer queries use varied phrasing or wording to ask the same questions. The company wants a solution to reduce redundant model calls. The solution must ensure that semantically equivalent questions receive consistent answers. The solution must ensure low latency. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy an Amazon DynamoDB Accelerator (DAX) cluster as an in-memory cache. Specify the query text as the partition key and the model response text as the sort key. Query the cache by using a filter expression with the LIKE operator."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Bedrock to generate embeddings from customer queries. Use Amazon MemoryDB for Valkey to store hash sets of vector embeddings and model responses. Use a RANGE query to find similar queries and their responses."
+      },
+      {
+        "key": "C",
+        "text": "Deploy Amazon OpenSearch Service that has k-nearest neighbor (k-NN) capabilities to store query-response text pairs. Use an approximate k-NN technique to find similar queries and their responses."
+      },
+      {
+        "key": "D",
+        "text": "Create a caching solution by using Amazon DynamoDB to create a global secondary index on the normalized query text. Apply stemming to incoming queries. Query the index of cached customer queries."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Storing query-response pairs in OpenSearch Service and finding semantically similar queries with approximate k-NN reuses cached answers for rephrased questions, which cuts redundant model calls with low latency. DAX with a LIKE filter (A) and a DynamoDB index on stemmed text (D) match on text rather than meaning, so they cannot unify differently worded versions of the same question.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 94,
+    "review_note": "Wayground key is C. Changed to B: MemoryDB for Valkey vector search (hash sets, range query) is the low-latency semantic cache; OpenSearch approximate k-NN is slower and less suited to caching. Medium confidence. CertyIQ key is C as well; kept my answer. Wayground and Final Doc keys are both C. Changed to C: three sources agree and MemoryDB versus OpenSearch k-NN is a close call. Medium confidence."
+  },
+  {
+    "id": "d4-q0913",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Bedrock Model Invocation Logs",
+    "difficulty": "medium",
+    "question_text": "An AI practitioner is using an Amazon Bedrock base model to summarize session chats from the customer service department. The AI practitioner wants to store invocation logs to monitor model input and output data. Which strategy should the AI practitioner use?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure AWS CloudTrail as the logs destination for the model."
+      },
+      {
+        "key": "B",
+        "text": "Enable invocation logging in Amazon Bedrock."
+      },
+      {
+        "key": "C",
+        "text": "Configure AWS Audit Manager as the logs destination for the model."
+      },
+      {
+        "key": "D",
+        "text": "Configure model invocation logging in Amazon EventBridge."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Enabling model invocation logging in Amazon Bedrock stores the input and output data of model calls in S3 or CloudWatch Logs. CloudTrail (A) records API calls but not prompt and response content, Audit Manager (C) is a compliance evidence tool, and EventBridge (D) is not a destination for invocation logging.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 97
+  },
+  {
+    "id": "d4-q0914",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Observability for business and technical metrics",
+    "difficulty": "hard",
+    "question_text": "A large ecommerce company has deployed a foundation model (FM) to generate product descriptions. The company's engineering team monitors technical metrics such as token usage, latency, and error rates by using Amazon CloudWatch. The company's marketing team tracks business metrics such as conversion rates and revenue impact in its own systems. The company needs a unified observability solution that correlates technical performance with business outcomes. The solution must provide automatic alerts to stakeholders when operational metrics indicate degradation. The solution must provide comprehensive visibility across both technical and business metrics. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create CloudWatch dashboards that include technical metrics and imported business metrics. Configure CloudWatch composite alarms that combine technical data and business data. Use Amazon SNS to set up notifications to stakeholders."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Managed Grafana to visualize technical metrics from CloudWatch with business metrics from external sources. Configure Amazon Managed Grafana alerts to invoke AWS Lambda functions. Configure the Lambda functions to remediate issues automatically when metrics exceed predefined thresholds."
+      },
+      {
+        "key": "C",
+        "text": "Stream CloudWatch metrics to Amazon S3 by using CloudWatch metric streams. Create Amazon QuickSight dashboards to visualize the combined technical metrics and business metrics. Set up Amazon EventBridge rules to send notifications to stakeholders when metrics exceed predefined thresholds."
+      },
+      {
+        "key": "D",
+        "text": "Configure CloudWatch custom dashboards that integrate operational metrics with imported business metrics. Set up CloudWatch composite alarms with anomaly detection. Use Amazon SNS to create alarm actions to notify stakeholders when correlated metrics indicate performance issues."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "CloudWatch custom dashboards that combine operational and imported business metrics, composite alarms with anomaly detection, and SNS alarm actions give unified correlation and automatic stakeholder alerts with managed features. Composite alarms without anomaly detection (A), Managed Grafana with Lambda remediation (B), and S3 metric streams with QuickSight (C) are less integrated or add components.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 110
+  },
+  {
+    "id": "d4-q0915",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Latency optimisation via connection reuse and warm capacity",
+    "difficulty": "hard",
+    "question_text": "A publishing company is developing a chat assistant that uses a containerized large language model (LLM) that runs on Amazon SageMaker AI. The architecture consists of an Amazon API Gateway REST API that routes user requests to an AWS Lambda function. The Lambda function invokes a SageMaker AI real-time endpoint that hosts the LLM. Users report uneven response times. Analytics show that a high number of chats are abandoned after 2 seconds of waiting for the first token. The company wants a solution to ensure that p95 latency is under 800 ms for interactive requests to the chat assistant. Which combination of solutions will meet this requirement? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable model preload upon container startup. Implement dynamic batching to process multiple user requests together in a single inference pass."
+      },
+      {
+        "key": "B",
+        "text": "Select a larger GPU instance type for the SageMaker AI endpoint. Set the minimum number of instances to 0. Continue to perform per-request processing. Lazily load model weights on the first request."
+      },
+      {
+        "key": "C",
+        "text": "Switch to a multi-model endpoint. Use lazy loading without request batching."
+      },
+      {
+        "key": "D",
+        "text": "Set the minimum number of instances to greater than 0. Enable response streaming."
+      },
+      {
+        "key": "E",
+        "text": "Switch to Amazon SageMaker Asynchronous Inference for all requests. Store requests in an Amazon S3 bucket. Set the minimum number of instances to 0."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "D"
+    ],
+    "explanation": "Preloading the model at container startup with dynamic batching removes cold-load delay and uses the GPU efficiently, and keeping at least one instance warm with response streaming gives fast time-to-first-token for interactive chat. A minimum of 0 instances, lazy loading, and multi-model or asynchronous endpoints (B, C, E) add cold starts and queue delay that break an 800 ms p95 target.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 126
+  }
+]

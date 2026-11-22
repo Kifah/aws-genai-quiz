@@ -1,0 +1,121 @@
+[
+  {
+    "id": "c2-q0005",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "System prompt design and guardrails",
+    "difficulty": "medium",
+    "question_text": "A customer service bot must never discuss competitor products and must always respond in formal English. Where should these constraints be defined?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "In the user message, reminding Claude of the rules on each turn." },
+      { "key": "B", "text": "In the system prompt, which sets persistent behavioral constraints for all turns in the conversation." },
+      { "key": "C", "text": "In a post-processing filter that strips competitor names from output." },
+      { "key": "D", "text": "In the model parameters, such as temperature and top-p settings." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "System prompts are the designated location for persistent behavioral instructions that apply across the entire conversation — they are processed before user messages and establish the model's role, constraints, and tone. Repeating rules in every user message (A) is fragile and wastes tokens. Post-processing filters (C) are a secondary safeguard, not a substitute for clear behavioral instructions. Temperature and top-p (D) control sampling randomness, not behavioral constraints."
+  },
+  {
+    "id": "c2-q0006",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Prompt engineering: few-shot technique",
+    "difficulty": "medium",
+    "question_text": "A developer wants Claude to extract structured data from unstructured meeting notes and output JSON. Initial zero-shot attempts produce inconsistent JSON schemas. What is the most direct improvement?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Switch to a larger model and hope the output becomes more consistent." },
+      { "key": "B", "text": "Add 2–3 few-shot examples in the prompt that demonstrate the exact input format, desired JSON schema, and a filled-in example output." },
+      { "key": "C", "text": "Increase the temperature to 1.0 to allow more creative JSON generation." },
+      { "key": "D", "text": "Ask Claude to generate 10 variations and pick the best one." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Few-shot prompting directly addresses inconsistent output format by showing the model exactly what the desired input-output mapping looks like. When the output schema needs to be precise (as with structured JSON), concrete examples are more reliable than verbal descriptions alone. Switching models (A) may improve results marginally but does not address the root cause. Higher temperature (C) would worsen consistency. Generating 10 variations (D) is costly and non-deterministic."
+  },
+  {
+    "id": "c2-q0007",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Chain-of-thought prompting",
+    "difficulty": "medium",
+    "question_text": "A math tutoring application uses Claude to solve word problems. Users report that Claude sometimes gives wrong final answers. Which prompting technique most directly addresses this?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Use a shorter prompt to reduce token overhead." },
+      { "key": "B", "text": "Use chain-of-thought prompting: instruct Claude to show its reasoning step by step before providing the final answer." },
+      { "key": "C", "text": "Lower the temperature to 0 and regenerate until the answer looks correct." },
+      { "key": "D", "text": "Remove all instructions from the system prompt and let Claude reason freely." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Chain-of-thought (CoT) prompting instructs the model to externalize its reasoning steps before stating the final answer. For math word problems, this forces intermediate calculations to be explicit — errors become visible and correctable, and the reasoning process itself tends to produce more accurate final answers. Setting temperature to 0 (C) reduces variability but does not improve logical correctness. Shorter prompts (A) and removing instructions (D) both reduce the model's guidance without addressing the reasoning quality issue."
+  },
+  {
+    "id": "c2-q0008",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Prompt template design",
+    "difficulty": "easy",
+    "question_text": "A team builds a content moderation system where the same policy document (2,000 tokens) is included in every request alongside a variable piece of user-submitted content. What is the best way to structure the prompt template?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Place the user-submitted content first, then the policy document at the end." },
+      { "key": "B", "text": "Mix the policy document and user content together in a single block." },
+      { "key": "C", "text": "Place the static policy document in the system prompt (or at the start of the prompt), followed by the variable user content." },
+      { "key": "D", "text": "Summarize the policy document to 50 tokens before every request to save space." }
+    ],
+    "correct_answers": ["C"],
+    "explanation": "Placing static content (the policy document) before the variable content is standard prompt template design for two reasons: it establishes context before the dynamic input, and it is the prerequisite for enabling prompt caching (which caches from the beginning of a prompt up to a cache breakpoint). Summarizing the policy (D) risks losing important detail. Interleaving content (B) makes caching impossible and reduces clarity. Content-first ordering (A) is the reverse of best practice."
+  },
+  {
+    "id": "c2-q0009",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Zero-shot vs. few-shot prompt techniques",
+    "difficulty": "easy",
+    "question_text": "When is zero-shot prompting the most appropriate technique?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "When the desired output format is complex and unusual, requiring precise formatting." },
+      { "key": "B", "text": "When the task is well-understood by the model and examples would add cost without improving quality." },
+      { "key": "C", "text": "When the task is novel and the model has never encountered it before." },
+      { "key": "D", "text": "When token budget is unlimited and examples are free to include." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Zero-shot prompting is most appropriate when the task is well within the model's capabilities and the instructions alone are sufficient — adding examples in these cases wastes tokens without quality gain. Few-shot prompting adds value when the output format is unusual, the task is domain-specific, or initial zero-shot attempts produce inconsistent results. Novel tasks (C) warrant few-shot examples, not zero-shot. Complex output formats (A) also benefit from examples."
+  },
+  {
+    "id": "c2-q0014",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Prompt engineering: role prompting and persona",
+    "difficulty": "easy",
+    "question_text": "A developer wants Claude to review code as an experienced senior software engineer with security expertise. What prompt technique is most appropriate?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Provide no context and let Claude determine its own approach." },
+      { "key": "B", "text": "Assign Claude a specific role in the system prompt: 'You are a senior software engineer with deep expertise in security vulnerabilities. Review the following code for security issues.'" },
+      { "key": "C", "text": "Ask Claude to pretend it has no security knowledge to get unbiased results." },
+      { "key": "D", "text": "Use a higher temperature to make responses more creative and varied." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Role prompting assigns a specific persona and expertise context in the system prompt, which conditions Claude's responses to adopt the perspective, terminology, and analytical lens of that role. For code security review, framing Claude as a senior security engineer primes it to focus on security-relevant patterns. No context (A) produces generic responses without security focus. Removing knowledge (C) is counterproductive. Temperature (D) affects diversity, not expertise focus."
+  },
+  {
+    "id": "c2-q0015",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Output format control in prompt design",
+    "difficulty": "medium",
+    "question_text": "A workflow requires Claude's output to always be valid JSON that downstream code can parse. Initial testing shows Claude sometimes wraps the JSON in markdown code fences. What prompt technique most reliably enforces bare JSON output?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Hope Claude produces bare JSON and handle parsing errors in downstream code." },
+      { "key": "B", "text": "Explicitly instruct in the system prompt: 'Respond with valid JSON only. Do not include any surrounding text, explanation, or markdown formatting. Your entire response must be parseable by JSON.parse().'" },
+      { "key": "C", "text": "Set temperature to 0 — deterministic sampling always produces bare JSON." },
+      { "key": "D", "text": "Use a larger model that inherently respects formatting constraints." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Explicit, unambiguous output format instructions in the system prompt are the most reliable mechanism for enforcing structured output. The instruction should state what to include, what to exclude (markdown fences, explanation), and provide the parsability criterion. Error handling in downstream code (A) is a fallback, not a prevention strategy. Temperature 0 (C) reduces variability but does not guarantee format compliance. Model size (D) does not reliably control output format."
+  }
+]

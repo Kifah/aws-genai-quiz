@@ -3,9 +3,9 @@
  * Pure formatting helpers (color, progressBar, etc.) are in utils/format.ts.
  */
 
-import { DOMAINS } from './config';
+import { DomainConfig } from './config';
 import { color, progressBar, formatTimer, wrapText } from './utils/format';
-import { Question } from './loader';
+import { Question, priorityOf, DEFAULT_PRIORITY } from './loader';
 
 export function clearScreen(): void {
   process.stdout.write('\x1b[2J\x1b[0f');
@@ -19,20 +19,25 @@ export function printHeader(title: string): void {
 }
 
 /**
- * @param index     1-based position within the current session
- * @param showDomain  hide domain/task info in exam mode to mimic the real exam
+ * @param index      1-based position within the current session
+ * @param showDomain hide domain/task info in exam mode to mimic the real exam
+ * @param domains    per-exam domain config used for name lookup
  */
 export function printQuestion(
   question: Question,
   index: number,
   total: number,
   showDomain = true,
+  domains: Record<number, DomainConfig> = {},
 ): void {
   console.log('');
   if (showDomain) {
-    const domainName = DOMAINS[question.domain]?.name ?? `Domain ${question.domain}`;
+    const domainName = domains[question.domain]?.name ?? `Domain ${question.domain}`;
     console.log(color(`  Domain ${question.domain}: ${domainName}`, 'dim'));
     console.log(color(`  Task ${question.task_statement} · ${question.topic}`, 'dim'));
+    if (priorityOf(question) > DEFAULT_PRIORITY) {
+      console.log(color(`  ★ Priority ${priorityOf(question)} · trusted seminar question`, 'yellow'));
+    }
   }
 
   const multiLabel = question.question_type === 'multi'
@@ -118,11 +123,14 @@ export interface DomainStat {
 }
 
 /** Print per-domain breakdown table after an exam. */
-export function printDomainBreakdown(domainStats: Record<number, DomainStat>): void {
+export function printDomainBreakdown(
+  domainStats: Record<number, DomainStat>,
+  domains: Record<number, DomainConfig> = {},
+): void {
   console.log(color('  Per-Domain Breakdown:', 'bold', 'yellow'));
   console.log('  ' + '─'.repeat(68));
   for (const [domainNum, stats] of Object.entries(domainStats)) {
-    const name = DOMAINS[Number(domainNum)]?.name ?? `Domain ${domainNum}`;
+    const name = domains[Number(domainNum)]?.name ?? `Domain ${domainNum}`;
     const pct  = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
     const bar  = progressBar(stats.correct, stats.total, 20);
     const indicator = pct >= 75 ? color('✓', 'green') : color('✗', 'red');

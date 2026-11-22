@@ -2,7 +2,7 @@ import { describe, it, before } from 'node:test';
 import assert from 'node:assert/strict';
 import * as path from 'path';
 
-const QUESTIONS_DIR = path.join(__dirname, '..', 'questions');
+const QUESTIONS_DIR = path.join(__dirname, '..', 'questions', 'aws');
 
 import {
   validateQuestion,

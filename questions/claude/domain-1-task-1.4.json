@@ -1,0 +1,374 @@
+[
+  {
+    "id": "c1-q0020",
+    "domain": 1,
+    "task_statement": "1B1 Design end-to-end architectures",
+    "topic": "output-delivery stage",
+    "difficulty": "medium",
+    "question_text": "A downstream billing service consumes Claude's output and requires a strict JSON schema. In the end-to-end design, enforcing that output contract should be owned by:",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "The input-handling stage, by rejecting requests that lack schema hints"
+      },
+      {
+        "key": "b",
+        "text": "The output-delivery stage, validating schema before returning results"
+      },
+      {
+        "key": "c",
+        "text": "The feedback loop, by flagging malformed responses after delivery"
+      },
+      {
+        "key": "d",
+        "text": "The processing stage, trusting the model to always emit valid JSON"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Solution Design & Architecture | Subdomain: 1B1 Design end-to-end architectures | Key Concept: output-delivery stage. The output stage owns shaping and validating results for the consumer. A strict schema for a downstream service is a programmatic guardrail enforced in code at delivery, not a hope that the model complies, so malformed payloads never leave the system. | (A) Input handling governs requests, not the shape of responses; rejecting requests cannot enforce an output contract. | (B) Output delivery is where responses are shaped and validated for the consumer. Enforcing the JSON schema there, in code, guarantees the billing service never receives a malformed payload regardless of model variation. | (C) The feedback loop reacts after delivery; by then a malformed response has already reached the billing service. | (D) Trusting the model to always emit valid JSON is a prompt-only guarantee; a high-stakes contract needs programmatic validation."
+  },
+  {
+    "id": "c1-q0021",
+    "domain": 1,
+    "task_statement": "1B2 Select architectural patterns",
+    "topic": "decomposition versus monolithic prompt",
+    "difficulty": "medium",
+    "question_text": "A cohesive summarization task fits comfortably in one context window and reads as a single coherent request. An engineer proposes splitting it into five subagents to seem more robust. Latency and simplicity matter. Which approach is best?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Split into five subagents, since decomposition always improves reliability on essentially any task."
+      },
+      {
+        "key": "b",
+        "text": "Handle it in one well-structured prompt, since the task is cohesive and fits in context."
+      },
+      {
+        "key": "c",
+        "text": "Use an orchestrator-worker design to add the isolation this summarization inherently requires."
+      },
+      {
+        "key": "d",
+        "text": "Chain five sequential calls so each subagent refines the previous step's summary."
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Solution Design & Architecture | Subdomain: 1B2 Select architectural patterns | Key Concept: decomposition versus monolithic prompt. Decomposition improves reliability on genuinely multi-part tasks but adds handoff overhead and failure points; a cohesive task that fits in context is better served by one well-structured prompt. Do not decompose reflexively. | (A) Decomposition helps multi-part tasks; applied reflexively to a cohesive one it adds overhead without a reliability gain. | (B) When a task is cohesive and fits comfortably in context, a single well-structured prompt beats decomposition, which adds handoff overhead, latency, and failure points. Splitting a coherent task for appearance is unjustified. | (C) Isolation benefits separable subtasks; a single cohesive summary does not inherently require it. | (D) Chaining five calls multiplies latency and handoffs for a task that one prompt handles directly."
+  },
+  {
+    "id": "c1-q0022",
+    "domain": 1,
+    "task_statement": "1A1 Business-to-Solution Translation",
+    "topic": "pattern selection favors the least complex option",
+    "difficulty": "hard",
+    "question_text": "A team must add a single fixed processing step to summarize incoming tickets, with control flow fully owned by developers. Which pattern BEST fits this bounded requirement?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "A multi-agent orchestrator delegating summaries to specialized worker subagents"
+      },
+      {
+        "key": "b",
+        "text": "An augmented LLM call with retrieval and developer-defined control flow"
+      },
+      {
+        "key": "c",
+        "text": "An autonomous agent that dynamically decides each processing step itself"
+      },
+      {
+        "key": "d",
+        "text": "A routing workflow classifying tickets across several specialized model paths"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Solution Design & Architecture | Subdomain: 1A1 Business-to-Solution Translation | Key Concept: pattern selection favors the least complex option. A single fixed step with developer-owned control flow is served by an augmented LLM, the lowest-complexity building block. Added autonomy must be justified by a requirement a simpler pattern cannot meet. | (A) Multi-agent orchestration adds coordination overhead unjustified for one fixed step; it suits separable subtasks needing isolated context, not a single bounded task. | (B) An augmented LLM enhances one Claude call with retrieval or tools while developers keep control flow. It is the lowest-complexity pattern and the right default when the process is fixed and known. | (C) An agent lets the model direct its own steps, adding latency and unpredictability the requirement does not need; reserve autonomy for unscriptable paths. | (D) Routing suits directing varied inputs to specialized paths; a single fixed summarization step has no branching to classify."
+  },
+  {
+    "id": "c1-q0023",
+    "domain": 1,
+    "task_statement": "1C2 Apply decomposition techniques for complex problem solving",
+    "topic": "resist reflexive decomposition",
+    "difficulty": "hard",
+    "question_text": "A summarization service condenses a single cohesive document into one paragraph. The task fits comfortably within context, has no separable parts, and latency is the binding SLA for the service. A team proposes a five-step chain plus a reviewer subagent to appear rigorous. Reliability is already acceptable with a single prompt. What should the architect recommend?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Adopt the five-step chain, since more steps always raise output quality"
+      },
+      {
+        "key": "b",
+        "text": "Add the reviewer subagent to catch any rare summarization error later"
+      },
+      {
+        "key": "c",
+        "text": "Split the document into sections handled by separate parallel subagents"
+      },
+      {
+        "key": "d",
+        "text": "Keep the single prompt; the cohesive task meets the latency SLA"
+      }
+    ],
+    "correct_answers": [
+      "d"
+    ],
+    "explanation": "Domain: Solution Design & Architecture | Subdomain: 1C2 Apply decomposition techniques for complex problem solving | Key Concept: resist reflexive decomposition. A cohesive task that fits in context and already meets reliability is best served by one prompt. When latency is the binding SLA, added chains and subagents impose coordination cost and threaten the SLA for no benefit. | (A) More steps do not universally raise quality; on a cohesive task they add latency that directly threatens the binding SLA. | (B) A reviewer subagent adds a handoff and latency for a task whose reliability is already acceptable, harming the SLA. | (C) The document is cohesive with no separable parts, so parallel section subagents fragment it and add coordination cost. | (D) When a task is cohesive, fits in context, and reliability already holds, a single well-structured prompt beats decomposition. With latency as the binding SLA, chains and subagents only spend latency for no needed gain."
+  },
+  {
+    "id": "c1-q0024",
+    "domain": 1,
+    "task_statement": "1B2 Select appropriate architectural patterns",
+    "topic": "distinguishing augmented from agentic",
+    "difficulty": "medium",
+    "question_text": "A team insists their system is 'agentic' because it calls tools and retrieves documents. In their design, the developer's code fixes the exact sequence of tool calls every run. How should the pattern be classified?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "An augmented LLM, since a fixed developer control flow is not agentic"
+      },
+      {
+        "key": "b",
+        "text": "An agent, because using tools and retrieval alone makes a system agentic"
+      },
+      {
+        "key": "c",
+        "text": "A multi-agent system, since each tool acts as an autonomous subagent"
+      },
+      {
+        "key": "d",
+        "text": "An agent-to-agent design, given the coordination across multiple tool calls"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Solution Design & Architecture | Subdomain: 1B2 Select appropriate architectural patterns | Key Concept: distinguishing augmented from agentic. A system where developer code fixes the exact step sequence is an augmented LLM, not an agent, no matter how many tools it invokes. The line is dynamic, model-directed control flow; without it, tool use alone is not agentic. | (A) The defining test is who controls step order. With the developer fixing the exact tool sequence, it is an augmented LLM, however many tools it uses. | (B) This is the core misconception. Tool and retrieval use does not make a system agentic; dynamic model-directed step selection does. | (C) Tools are not autonomous subagents with scoped context and delegation, so this is not a multi-agent design. | (D) Multiple tool calls in a fixed sequence are not independent agents coordinating; agent-to-agent requires autonomous agents exchanging tasks."
+  },
+  {
+    "id": "c1-q0025",
+    "domain": 1,
+    "task_statement": "1A2 Align solutions to business value pillars",
+    "topic": "balance competing pillars instead of discarding one",
+    "difficulty": "medium",
+    "question_text": "A fraud-review copilot must cut analyst review time (productivity), stay under a per-case cost cap (cost), and respond within two seconds (performance SLA). Load tests show the largest model meets accuracy and latency but blows the cost cap at production volume, roughly tripling the projected monthly spend. Which approach BEST balances all three stated pillars?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Standardize on the largest model and renegotiate the per-case cost cap upward"
+      },
+      {
+        "key": "b",
+        "text": "Batch all cases overnight to capture the roughly-half asynchronous pricing discount"
+      },
+      {
+        "key": "c",
+        "text": "Drop the two-second latency target so the largest model fits the budget"
+      },
+      {
+        "key": "d",
+        "text": "Route routine cases to a smaller model, escalating only hard ones upward"
+      }
+    ],
+    "correct_answers": [
+      "d"
+    ],
+    "explanation": "Domain: Solution Design & Architecture | Subdomain: 1A2 Align solutions to business value pillars | Key Concept: balance competing pillars instead of discarding one. Routing routine cases to a smaller model and escalating only hard cases keeps most traffic cheap and fast while spending capability where it pays off, honoring cost, latency, and accuracy at once. Renegotiating the cap, batching a real-time flow, or dropping the SLA each solve one pillar by abandoning another. | (A) Renegotiating the cap abandons a stated constraint rather than designing to it. It optimizes one pillar by discarding another the business set. | (B) Batching violates the two-second real-time SLA. The discount applies only to workloads that tolerate asynchronous turnaround, which a live copilot does not. | (C) Dropping the SLA sacrifices the performance pillar to satisfy cost. It trades one binding constraint for another rather than balancing all three. | (D) A routing tier sends the bulk of cases to a cheaper, faster model and reserves the expensive model for the few hard ones. This holds latency and cost within cap while preserving accuracy where it matters, balancing all three pillars."
+  },
+  {
+    "id": "c1-q0026",
+    "domain": 1,
+    "task_statement": "1C1 Design multi-agent systems and orchestration strategies",
+    "topic": "unshared context as the default",
+    "difficulty": "medium",
+    "question_text": "In a multi-agent design, an orchestrator delegates a subtask to a subagent. Regarding the subagent's context, which statement is correct?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Context must be explicitly passed in the handoff; it is not inherited"
+      },
+      {
+        "key": "b",
+        "text": "The subagent automatically inherits the orchestrator's full conversation context"
+      },
+      {
+        "key": "c",
+        "text": "Sharing all orchestrator context with every subagent is always safest"
+      },
+      {
+        "key": "d",
+        "text": "Subagents share a single context pool the framework maintains automatically"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Solution Design & Architecture | Subdomain: 1C1 Design multi-agent systems and orchestration strategies | Key Concept: unshared context as the default. In multi-agent orchestration, subagents do not inherit the orchestrator's context; it must be explicitly passed in the handoff. Forgetting this is a primary cause of multi-agent failures, and broad sharing to compensate raises cost and leakage risk. | (A) Unshared context is the default in multi-agent systems. The orchestrator must explicitly pass whatever context a subagent needs; assuming inheritance is a primary cause of failures. | (B) Subagents do not inherit the orchestrator's context by default. Assuming they do is a leading multi-agent failure mode. | (C) Broad context sharing raises token cost and information-leakage risk; isolation, not maximal sharing, is the deliberate design goal. | (D) There is no automatic shared pool; isolation is engineered and context is passed deliberately, not maintained for you by the framework."
+  },
+  {
+    "id": "c1-q0027",
+    "domain": 1,
+    "task_statement": "1C1 Design multi-agent systems and orchestration strategies",
+    "topic": "pattern plus governance",
+    "difficulty": "hard",
+    "question_text": "A bank wants an AI system that files regulatory reports. The steps are known and fixed, every filing is high-stakes and legally consequential, and errors must be caught before submission. A team proposes an autonomous multi-agent design for flexibility. As the architect weighing patterns, governance, and risk, what do you recommend?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "An autonomous multi-agent system, because agentic flexibility handles regulatory edge cases best"
+      },
+      {
+        "key": "b",
+        "text": "A predictable workflow with programmatic guardrails and human review before each filing"
+      },
+      {
+        "key": "c",
+        "text": "Multiple negotiating agents so they cross-check each other and entirely skip human review"
+      },
+      {
+        "key": "d",
+        "text": "A single prompt with a prompt-based instruction telling it not to make mistakes"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Solution Design & Architecture | Subdomain: 1C1 Design multi-agent systems and orchestration strategies | Key Concept: pattern plus governance. Known, fixed steps favor a predictable, auditable workflow over autonomy. Legally consequential, irreversible actions require programmatic guardrails and human-in-the-loop review before submission, because guardrails reduce but do not bound risk. The best design pairs the least complex pattern with high-stakes gating. | (A) Flexibility is unneeded for a fixed, known process and adds unpredictability that is dangerous when every filing is legally consequential. | (B) Known steps call for a predictable, auditable workflow; legal stakes call for programmatic guardrails and human-in-the-loop review at the irreversible submission point. This pairs the right pattern with the right governance. | (C) Agents cross-checking each other do not bound risk on high-stakes decisions, and skipping human review removes the required gate for legally consequential actions. | (D) Prompt-only guardrails are probabilistic and can be overridden; a legal, high-stakes constraint requires programmatic enforcement and human review, not a hopeful instruction."
+  },
+  {
+    "id": "c1-q0028",
+    "domain": 1,
+    "task_statement": "1A2 Align solutions to business value pillars",
+    "topic": "measure the pillar you are claiming",
+    "difficulty": "medium",
+    "question_text": "An internal drafting assistant is proposed to raise analyst output on routine client memos. Sponsors want a single headline number to track its business value across the whole team over each quarter. Which metric BEST expresses the productivity pillar for this particular use case?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Total monthly API spend aggregated across all participating analysts"
+      },
+      {
+        "key": "b",
+        "text": "Drafts per analyst hour, compared before and after adoption"
+      },
+      {
+        "key": "c",
+        "text": "Average model response latency measured across all drafting requests"
+      },
+      {
+        "key": "d",
+        "text": "Number of model calls issued during a typical drafting session"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Solution Design & Architecture | Subdomain: 1A2 Align solutions to business value pillars | Key Concept: measure the pillar you are claiming. A productivity claim is verified by output per unit of human effort, so drafts completed per analyst hour against a baseline is the fitting metric. Spend, latency, and raw call counts measure other pillars or mere activity, and none of them shows that analysts actually produce more. | (A) Aggregate spend measures the cost pillar, not productivity. It tracks what the tool consumes, not the output analysts produce with it. | (B) The productivity pillar is measured by output per unit of human effort. Drafts per analyst hour, compared against a baseline, directly captures the raised output the solution promises. | (C) Latency measures the performance pillar. Fast responses do not by themselves demonstrate that analysts produce more, which is the stated goal. | (D) Call volume is an activity count, not a value measure. More calls could reflect inefficiency rather than higher analyst output."
+  },
+  {
+    "id": "c1-q0029",
+    "domain": 1,
+    "task_statement": "1A1 Translate business problems into Claude-based AI solutions",
+    "topic": "at scale, progressive discovery beats monolithic context",
+    "difficulty": "medium",
+    "question_text": "An agent integration must scale to a large, growing set of tools across many services. Loading every tool definition upfront has caused rising cost, latency, and increasingly confused tool selection. The team wants a structural pattern here, not incremental prompt tuning or description edits. Which of the following BEST describes the right approach?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Monolithic context loading, since front-loading every definition is most reliable at scale"
+      },
+      {
+        "key": "b",
+        "text": "A single larger model whose wider context window absorbs all the tool definitions"
+      },
+      {
+        "key": "c",
+        "text": "Splitting the tools evenly across several parallel agents that share full context"
+      },
+      {
+        "key": "d",
+        "text": "Progressive discovery, letting the agent find and load only the tools it currently needs"
+      }
+    ],
+    "correct_answers": [
+      "d"
+    ],
+    "explanation": "Domain: Solution Design & Architecture | Subdomain: 1A1 Translate business problems into Claude-based AI solutions | Key Concept: at scale, progressive discovery beats monolithic context. Loading tool definitions on demand as the task requires keeps a large, growing toolset tractable and counters the capability bloat, cost, and latency that front-loading every definition causes. | (A) Front-loading everything is what triggers capability bloat; it is not most reliable at scale. | (B) A wider context window still pays the cost and confusion of loading every definition. | (C) Splitting tools across agents adds coordination overhead without stopping upfront loading per agent. | (D) Progressive discovery keeps large integrations tractable by discovering and loading tools on demand rather than all upfront, directly countering capability bloat, cost, and latency."
+  },
+  {
+    "id": "c1-q0030",
+    "domain": 1,
+    "task_statement": "1B1 Design end-to-end architectures",
+    "topic": "production monitoring in the feedback loop",
+    "difficulty": "medium",
+    "question_text": "A summarization service passed all pre-deployment evals and shipped. Two months later users report drift in quality, but the team has no signal until complaints arrive. They pass offline evals whenever they re-run them. Which gap in the end-to-end design explains this, and what closes it?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Missing production monitoring; add live metrics to the loop"
+      },
+      {
+        "key": "b",
+        "text": "Weak offline evals; expand the held-out test set substantially"
+      },
+      {
+        "key": "c",
+        "text": "Model too small; upgrade to a more capable model tier"
+      },
+      {
+        "key": "d",
+        "text": "Insufficient logging; increase log verbosity across all requests"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Solution Design & Architecture | Subdomain: 1B1 Design end-to-end architectures | Key Concept: production monitoring in the feedback loop. Pre-deployment evals do not catch live drift. A complete end-to-end design instruments production with quality metrics that feed the feedback loop, so degradation is detected against targets in real time instead of surfacing only when users complain. | (A) Offline evals cannot catch traffic drift; the design lacks continuous production monitoring. Adding live quality metrics that feed the feedback loop surfaces drift as it happens, rather than waiting for user complaints. | (B) Offline evals already pass; the failure is live drift the test set cannot represent, not a weak eval suite. | (C) Nothing indicates a capability gap; the model was adequate at launch and degradation traces to drift, not model size. | (D) More verbose logs record events without measuring quality against targets; monitoring, not logging, closes this gap."
+  },
+  {
+    "id": "c1-q0031",
+    "domain": 1,
+    "task_statement": "1C2 Apply decomposition techniques for complex problem solving",
+    "topic": "unshared context by default",
+    "difficulty": "hard",
+    "question_text": "A research orchestrator delegates 'summarize the retrieved sources' to a subagent, but the subagent returns a summary missing the key sources because it never saw them. The orchestrator held the sources in its own context. What is the root cause?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "The subagent's model was too small to summarize the sources"
+      },
+      {
+        "key": "b",
+        "text": "Required context was not passed in the handoff to the subagent"
+      },
+      {
+        "key": "c",
+        "text": "The orchestrator should have used prompt caching for the sources"
+      },
+      {
+        "key": "d",
+        "text": "Retrieval failed, so the sources never existed in any context"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Solution Design & Architecture | Subdomain: 1C2 Apply decomposition techniques for complex problem solving | Key Concept: unshared context by default. Subagents do not inherit the orchestrator's context; whatever a subagent needs must be passed explicitly in the handoff. Forgetting this is a primary cause of multi-agent failures, here a summary missing sources the subagent never received. | (A) Model size is not implicated; the subagent could not summarize sources it was never given, regardless of capability. | (B) Subagents do not inherit the orchestrator's context; unshared context is the default. The sources had to be passed explicitly in the handoff, and forgetting this is a primary cause of multi-agent failures like the missing-source summary. | (C) Caching affects cost for repeated prefixes, not whether a subagent receives the content; the handoff omission is the cause. | (D) The stem states the orchestrator held the sources, so retrieval succeeded; the failure is in passing them onward, not retrieving them."
+  }
+]

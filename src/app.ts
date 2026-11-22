@@ -5,6 +5,8 @@ import { runExam }     from './exam';
 import { runFocus }    from './focus';
 import { runStats }    from './stats';
 import * as display    from './display';
+import { EXAMS, ExamDefinition } from './exams';
+import { migrateHistory }        from './store';
 
 const rl = readline.createInterface({
   input:    process.stdin,
@@ -13,7 +15,54 @@ const rl = readline.createInterface({
 });
 
 async function main(): Promise<void> {
+  migrateHistory();
+
   const args      = process.argv.slice(2);
+
+  // ── Exam flag ──────────────────────────────────────────────────────────────
+  const examFlag  = args.find(a => a.startsWith('--exam=') || a === '--exam');
+  let examId: string | null = null;
+
+  if (examFlag === '--exam') {
+    examId = args[args.indexOf('--exam') + 1] ?? null;
+  } else if (examFlag) {
+    examId = examFlag.split('=')[1] ?? null;
+  }
+
+  let exam: ExamDefinition;
+
+  if (examId !== null) {
+    if (!EXAMS[examId]) {
+      console.error(display.color(`\nUnknown exam: "${examId}". Use --exam aws | claude\n`, 'red'));
+      process.exit(1);
+    }
+    exam = EXAMS[examId];
+  } else {
+    display.clearScreen();
+    display.printHeader('AWS Generative AI Quiz');
+    console.log('');
+    console.log(display.color('  Select an exam:', 'bold'));
+    console.log('  ' + display.color('1', 'cyan') + ' = AWS AIP-C01   (Certified Generative AI Developer – Professional)');
+    console.log('  ' + display.color('2', 'cyan') + ' = Claude CCAR-P (Certified Architect – Professional)');
+    console.log('');
+
+    await new Promise<void>(resolve => {
+      rl.question('  Enter 1-2: ', answer => {
+        const choice = answer.trim();
+        if (choice === '1') {
+          exam = EXAMS['aws'];
+        } else if (choice === '2') {
+          exam = EXAMS['claude'];
+        } else {
+          console.log(display.color('  Invalid choice. Defaulting to AWS.\n', 'yellow'));
+          exam = EXAMS['aws'];
+        }
+        resolve();
+      });
+    });
+  }
+
+  // ── Mode flag ──────────────────────────────────────────────────────────────
   const modeFlag  = args.find(a => a.startsWith('--mode=') || a === '--mode');
   let mode: string | null = null;
 
@@ -25,7 +74,7 @@ async function main(): Promise<void> {
 
   if (!mode) {
     display.clearScreen();
-    display.printHeader('AIP-C01 AWS Certified Generative AI Developer - Professional');
+    display.printHeader(`${exam!.shortName} ${exam!.displayName}`);
     console.log('');
     console.log('  Select a mode:');
     console.log('  ' + display.color('1', 'cyan') + ' = Practice Mode  (study with immediate feedback)');
@@ -51,13 +100,13 @@ async function main(): Promise<void> {
   }
 
   if (mode === 'practice') {
-    await runPractice(rl);
+    await runPractice(rl, exam!);
   } else if (mode === 'exam') {
-    await runExam(rl);
+    await runExam(rl, exam!);
   } else if (mode === 'focus') {
-    await runFocus(rl);
+    await runFocus(rl, exam!);
   } else if (mode === 'stats') {
-    await runStats(rl);
+    await runStats(rl, exam!);
   } else {
     console.error(display.color(`\nUnknown mode: "${mode}". Use --mode practice | exam | focus | stats\n`, 'red'));
     process.exit(1);

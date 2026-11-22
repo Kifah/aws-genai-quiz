@@ -1,0 +1,374 @@
+[
+  {
+    "id": "c3-q0021",
+    "domain": 3,
+    "task_statement": "3A3 Evaluate accuracy-latency trade-offs and justify configuration decisions",
+    "topic": "adaptive thinking versus budget_tokens",
+    "difficulty": "medium",
+    "question_text": "On the newest Claude models, an architect wants deeper reasoning for a hard analytical task while respecting a latency budget. A teammate suggests raising budget_tokens to control depth. Testing on these models returns errors. What is the correct guidance?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "budget_tokens is the current control; the errors mean the value was simply set too low"
+      },
+      {
+        "key": "b",
+        "text": "Reasoning depth cannot be tuned on these models, so accept the default latency profile"
+      },
+      {
+        "key": "c",
+        "text": "budget_tokens is rejected here; use adaptive thinking and effort to balance latency"
+      },
+      {
+        "key": "d",
+        "text": "Lower the sampling temperature, which reduces reasoning depth and speeds responses"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3A3 Evaluate accuracy-latency trade-offs and justify configuration decisions | Key Concept: adaptive thinking versus budget_tokens. Questions about reasoning depth must name the model because the mechanism changed. On the newest models budget_tokens is rejected; adaptive thinking plus the effort lever is how depth is balanced against the latency budget. | (A) The errors are not a value problem; on these models the legacy budget_tokens path is rejected outright. | (B) Depth is tunable; the effort lever adjusts it. Concluding it cannot be tuned misreads the newer mechanism. | (C) The newest models use adaptive thinking, where the model decides how much to reason, and the effort setting tunes depth; budget_tokens returns an error and must be dropped. | (D) Temperature governs randomness, not reasoning depth or latency, and is not the mechanism for controlling how much the model reasons."
+  },
+  {
+    "id": "c3-q0022",
+    "domain": 3,
+    "task_statement": "3B2 Apply retrieval strategies matched to data shape and query pattern",
+    "topic": "whole-corpus-in-prompt below the threshold",
+    "difficulty": "medium",
+    "question_text": "An internal wiki is about 300 pages and fits within roughly 120k tokens, yet the team is about to build a full retrieval pipeline. The simpler alternative is to:",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Fine-tune a model on the wiki so the knowledge lives in the weights"
+      },
+      {
+        "key": "b",
+        "text": "Split the wiki and build a hybrid dense-and-sparse index anyway"
+      },
+      {
+        "key": "c",
+        "text": "Add a reranking stage over retrieved chunks to raise precision"
+      },
+      {
+        "key": "d",
+        "text": "Load the whole knowledge base into the prompt and rely on caching"
+      }
+    ],
+    "correct_answers": [
+      "d"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3B2 Apply retrieval strategies matched to data shape and query pattern | Key Concept: whole-corpus-in-prompt below the threshold. Guidance holds that a corpus fitting within roughly 200k tokens (about 500 pages) can be loaded entirely into the prompt with caching, skipping retrieval and its error modes. A 300-page, 120k-token wiki qualifies, so a full pipeline is unjustified machinery. | (A) Fine-tuning is costly, slow to update, and bakes stale facts into weights. For a small corpus it is far heavier than loading the content into the prompt. | (B) Building a retrieval stack for a corpus that fits in context adds machinery and retrieval failure modes with no payoff at this size. | (C) Reranking refines a retrieval pipeline you do not need here. It presumes retrieval, which the small-corpus case lets you skip entirely. | (D) When a knowledge base fits within roughly 200k tokens (about 500 pages), you can place the whole corpus in the prompt and lean on prompt caching, avoiding a retrieval pipeline and its failure modes. This 120k-token wiki fits comfortably."
+  },
+  {
+    "id": "c3-q0023",
+    "domain": 3,
+    "task_statement": "3C3 Evaluate progressive discovery vs. monolithic context strategy",
+    "topic": "choose loading strategy by capability-set size and growth",
+    "difficulty": "medium",
+    "question_text": "An architect must write team guidance for when to choose progressive discovery over monolithic upfront loading of tools and context. Reviewers want a single decision principle rather than a long, tool-by-tool list. Which of the following BEST captures the deciding factor?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Always prefer progressive discovery because it is simply the most modern integration pattern available"
+      },
+      {
+        "key": "b",
+        "text": "Always prefer monolithic upfront loading because having fewer moving parts inherently fails less often"
+      },
+      {
+        "key": "c",
+        "text": "Choose progressive discovery when capabilities are large or growing, monolithic when small and fixed"
+      },
+      {
+        "key": "d",
+        "text": "Base the choice purely on the model size, reserving discovery only for smaller, cheaper models"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3C3 Evaluate progressive discovery vs. monolithic context strategy | Key Concept: choose loading strategy by capability-set size and growth. The single decision principle is footprint: progressive discovery for large or growing capability sets, monolithic upfront loading for small, fixed ones. Modernity or model size are not the deciding factors. | (A) Modernity is not the criterion; discovery adds overhead that a small fixed footprint does not justify. | (B) Monolithic loading fails at scale through bloat, cost, and mis-selection, so a blanket preference for it is wrong. | (C) The deciding factor is footprint and trajectory: discovery keeps large or growing sets tractable, while monolithic loading is simpler for small, fixed ones. The principle scales to any specific toolset. | (D) Model size does not determine loading strategy; the driver is the size and growth of the capability set, not the model."
+  },
+  {
+    "id": "c3-q0024",
+    "domain": 3,
+    "task_statement": "3B2 Apply retrieval strategies matched to data shape and query pattern",
+    "topic": "use retrieval-specific metrics",
+    "difficulty": "medium",
+    "question_text": "An architect must determine whether a RAG system's wrong answers come from retrieval or generation. End-answer accuracy alone cannot separate the two stages. The team can compute additional metrics on a labeled query set with known relevant documents. Which measurement BEST isolates the retrieval stage?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Recall@k and MRR computed on retrieved chunks against the known-relevant documents per query"
+      },
+      {
+        "key": "b",
+        "text": "End-to-end answer accuracy compared across two different generation models on the same query set"
+      },
+      {
+        "key": "c",
+        "text": "Token cost and latency per request aggregated across the entire labeled evaluation query set"
+      },
+      {
+        "key": "d",
+        "text": "Judge-model scores rating final answer fluency on a small held-out sample of responses"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3B2 Apply retrieval strategies matched to data shape and query pattern | Key Concept: use retrieval-specific metrics. Recall@k, MRR, and similar diagnostics score the retrieved set against known-relevant documents, isolating retrieval quality from generation. End-answer accuracy alone mixes the two stages and cannot localize the failure. | (A) Retrieval-specific metrics like Recall@k (fraction of relevant items in the top k) and MRR (rank of the first relevant hit) score the retrieved set against known-relevant documents, isolating retrieval quality from generation. | (B) Comparing generation models still measures end-answer quality and cannot tell whether retrieval supplied the right chunks in the first place. | (C) Cost and latency describe efficiency, not whether the correct chunks were retrieved; they do not separate retrieval from generation. | (D) Judging answer fluency evaluates generation output, not whether retrieval surfaced the relevant documents; it cannot isolate the retrieval stage."
+  },
+  {
+    "id": "c3-q0025",
+    "domain": 3,
+    "task_statement": "3C3 Progressive Discovery vs Monolithic Context",
+    "topic": "the savings come from not loading definitions until needed",
+    "difficulty": "medium",
+    "question_text": "An architecture review claims switching to code-on-filesystem tool loading cut tool-loading tokens dramatically. A reviewer asks what actually produced the savings and how to characterize the reported figure. What is the accurate explanation?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Prompt caching of the tool definitions produced the savings as a universal constant"
+      },
+      {
+        "key": "b",
+        "text": "A smaller model reduced the definition tokens, applicable to any integration"
+      },
+      {
+        "key": "c",
+        "text": "Semantic chunking of the tool docs drove the reduction across all toolsets"
+      },
+      {
+        "key": "d",
+        "text": "On-demand loading drove it; the figure is Anthropic's example, not universal"
+      }
+    ],
+    "correct_answers": [
+      "d"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3C3 Progressive Discovery vs Monolithic Context | Key Concept: the savings come from not loading definitions until needed. Code-on-filesystem loading is progressive disclosure; its large token reduction is Anthropic's reported example for a specific setup, not a universal constant, and is not caused by caching, a smaller model, or chunking. | (A) Caching reuses computation for a repeated prefix; it does not explain not loading definitions at all. Stating the figure as universal misattributes the mechanism. | (B) Model size does not change how many tool definitions are placed in context; the savings come from deferring the load, not from the model. | (C) Chunking is a retrieval-indexing concern, unrelated to when tool definitions load. It does not produce the reported token reduction. | (D) The savings come from progressive disclosure, reading tool code only on demand rather than upfront. The dramatic reduction is Anthropic's reported figure for their example, so it should not be cited as a fixed constant."
+  },
+  {
+    "id": "c3-q0026",
+    "domain": 3,
+    "task_statement": "3A2 Analyze authentication and authorization requirements to identify security gaps",
+    "topic": "authorization gap under working authentication",
+    "difficulty": "medium",
+    "question_text": "A production integration verifies a signed token on every request and rejects unsigned calls, so the team believes access control is complete. Testing reveals that any authenticated user token can trigger the agent's admin-only tools, because tool calls carry no per-action permission check. Which statement BEST characterizes the posture?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Authentication works, but an authorization gap lets verified callers exceed their role"
+      },
+      {
+        "key": "b",
+        "text": "Authentication is broken, because a valid token should never reach the tool layer at all"
+      },
+      {
+        "key": "c",
+        "text": "The posture is complete, since verifying the token already establishes what each caller may do"
+      },
+      {
+        "key": "d",
+        "text": "This is a transport gap, resolved by encrypting the tool calls rather than checking permissions"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3A2 Analyze authentication and authorization requirements to identify security gaps | Key Concept: authorization gap under working authentication. Solid token verification can coexist with a missing per-action permission check. When any authenticated caller can invoke admin-only tools, authentication is fine and the defect is squarely an authorization gap that a per-action check must close. | (A) Token verification proves identity correctly; the missing per-action check means verified callers can exceed their role, which is a pure authorization gap. | (B) Authentication works as intended; valid tokens are meant to reach the tool layer. The defect is the absent permission check, not identity verification. | (C) This is the core misconception: verifying identity does not establish permissions. Authorization is a separate control that is missing here. | (D) Encryption does not decide which actions a caller may take; the gap is the missing authorization check, not transport security."
+  },
+  {
+    "id": "c3-q0027",
+    "domain": 3,
+    "task_statement": "3A1 Evaluate tool/agent configuration for capability bloat",
+    "topic": "diagnose bloat with span-level telemetry, then fix it with progressive disclosur",
+    "difficulty": "medium",
+    "question_text": "An agent fleet in production shows rising cost and degraded tool selection after months of teams adding tools. The architect wants to confirm the cause before changing anything and to keep confirming it as the fleet grows. Observability is available through OpenTelemetry. The most defensible plan is to:",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "immediately switch every agent to a smaller model and watch whether the cost falls"
+      },
+      {
+        "key": "b",
+        "text": "read individual request logs one by one to find the slow tool calls"
+      },
+      {
+        "key": "c",
+        "text": "delete tools at random until the monthly cost falls to an acceptable level"
+      },
+      {
+        "key": "d",
+        "text": "Trace cost to upfront loading via span-level telemetry, adopt on-demand discovery"
+      }
+    ],
+    "correct_answers": [
+      "d"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3A1 Evaluate tool/agent configuration for capability bloat | Key Concept: diagnose bloat with span-level telemetry, then fix it with progressive disclosure. Attributing cost to upfront tool loading via OpenTelemetry confirms the cause before acting and scales with the fleet, unlike blind model swaps, manual log reading, or random tool deletion. | (A) Switching models before diagnosing acts on a guess; it may not address a bloat-driven cost rise and skips the confirmation the architect wants. | (B) Reading individual logs does not scale to a fleet and cannot attribute aggregate cost; observability at scale needs structured telemetry, not manual log reading. | (C) Deleting tools at random loses capability teams depend on and is not a diagnosis; it treats a symptom blindly. | (D) Span-level OpenTelemetry attribution confirms that upfront tool loading drives the cost before any change, and progressive discovery then fixes it structurally. Diagnosing with the span hierarchy, then adopting on-demand loading, is defensible and repeatable as the fleet grows."
+  },
+  {
+    "id": "c3-q0028",
+    "domain": 3,
+    "task_statement": "3A2 Analyze authentication and authorization requirements to identify security gaps",
+    "topic": "downscope credentials to the user",
+    "difficulty": "medium",
+    "question_text": "An agent uses a single OAuth token with broad scopes to serve requests from many users with differing entitlements. Security asks how to close the gap where a low-privileged user can trigger actions only admins should perform. Which change BEST addresses this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Rotate the broad OAuth token more frequently to limit exposure windows"
+      },
+      {
+        "key": "b",
+        "text": "Issue per-user tokens scoped to each user's actual entitlements"
+      },
+      {
+        "key": "c",
+        "text": "Add a prompt instruction telling the agent to refuse admin actions for non-admins"
+      },
+      {
+        "key": "d",
+        "text": "Encrypt the token at rest so it cannot be extracted from configuration"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3A2 Analyze authentication and authorization requirements to identify security gaps | Key Concept: downscope credentials to the user. When one broad token serves many users, entitlements are not enforced. Per-user tokens scoped to real permissions close the authorization gap; rotation, prompts, and encryption do not. | (A) Rotation shortens exposure but the token still carries broad scopes usable by any user during its life. | (B) The gap is authorization, not identity. Per-user tokens carrying each user's real entitlements enforce least privilege at the credential, so a low-privileged user cannot invoke admin-only actions regardless of the agent's behavior. | (C) A prompt instruction is probabilistic and can be overridden; high-stakes access control needs programmatic enforcement. | (D) Encryption at rest protects the secret, not what any user can do once the broad token is in use."
+  },
+  {
+    "id": "c3-q0029",
+    "domain": 3,
+    "task_statement": "3B1 Design a RAG pipeline with appropriate chunking and indexing strategies",
+    "topic": "whole-KB-in-prompt for small corpora",
+    "difficulty": "easy",
+    "question_text": "A knowledge base is about 300 pages and fits within roughly 200k tokens. Queries need grounded answers from it. Which approach is simplest while avoiding retrieval failure modes?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Load the whole knowledge base into the prompt with caching"
+      },
+      {
+        "key": "b",
+        "text": "Build a full RAG stack with chunking, embeddings, and reranking"
+      },
+      {
+        "key": "c",
+        "text": "Fine-tune a model on the knowledge base contents instead"
+      },
+      {
+        "key": "d",
+        "text": "Split the corpus across several agents each holding one section"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3B1 Design a RAG pipeline with appropriate chunking and indexing strategies | Key Concept: whole-KB-in-prompt for small corpora. When a knowledge base fits within roughly 200k tokens, loading it entirely into the prompt with caching avoids building a retrieval pipeline and its failure modes. This is the simplest grounded design for a small corpus, so a full RAG stack, fine-tuning, or sharding across agents all add unnecessary machinery. | (A) When a corpus fits within roughly 200k tokens, it can be placed entirely in the prompt with caching, skipping retrieval and its failure modes. This is simpler than a RAG stack and avoids mis-retrieval on a small knowledge base. | (B) A full retrieval pipeline adds machinery and failure modes a small corpus does not require. Below roughly 200k tokens the whole base fits in the prompt. | (C) Fine-tuning bakes knowledge into weights, is costly to update, and is unnecessary when the corpus fits in context. It does not provide grounded, citable answers. | (D) Sharding a small corpus across agents adds coordination overhead for no benefit. The entire base fits in a single context window."
+  },
+  {
+    "id": "c3-q0030",
+    "domain": 3,
+    "task_statement": "3A1 Evaluate tool/agent configuration for capability bloat",
+    "topic": "context isolation, not full-catalog sharing, is the multi-agent default",
+    "difficulty": "medium",
+    "question_text": "An orchestrator delegates work to three specialized subagents. A developer gives every subagent the orchestrator's full tool catalog so nothing is missing. Token cost triples and subagents sometimes call tools outside their role. Which of the following MOST directly explains the problem?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Subagents inherit context automatically, so the shared catalog was redundant"
+      },
+      {
+        "key": "b",
+        "text": "The orchestrator should use a larger model to coordinate the subagents"
+      },
+      {
+        "key": "c",
+        "text": "Reranking the tool catalog per subagent would restore correct tool choice"
+      },
+      {
+        "key": "d",
+        "text": "Broad sharing raised cost and reach; subagents need only scoped tools"
+      }
+    ],
+    "correct_answers": [
+      "d"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3A1 Evaluate tool/agent configuration for capability bloat | Key Concept: context isolation, not full-catalog sharing, is the multi-agent default. Giving each subagent the orchestrator's entire toolset inflates cost and widens reach; scoping each subagent to only its required tools controls both, and subagents never inherit context automatically. | (A) Subagents do not inherit context automatically; context must be passed explicitly, so the claim reverses the real behavior. | (B) A larger orchestrator model does not shrink each subagent's over-broad catalog; cost and mis-selection persist. | (C) Reranking reorders retrieved documents, not a subagent's tool options, and does not reduce the tokens the full catalog loads. | (D) Handing every subagent the full catalog is broad context sharing, which inflates tokens and lets subagents reach tools outside their role; context isolation gives each subagent only the scoped tools its task requires."
+  },
+  {
+    "id": "c3-q0031",
+    "domain": 3,
+    "task_statement": "3C2 Analyze observability challenges and select monitoring strategies at scale",
+    "topic": "span-level attribution",
+    "difficulty": "medium",
+    "question_text": "A platform runs thousands of concurrent agent sessions, each spawning subagents and dozens of tool calls. On-call engineers cannot inspect requests individually, and leadership wants latency and cost attributed to specific components. Which monitoring strategy fits best?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Emit OTLP telemetry and read span hierarchy to attribute latency and cost per component"
+      },
+      {
+        "key": "b",
+        "text": "Sample a handful of full transcripts hourly and extrapolate the fleet's behavior from them"
+      },
+      {
+        "key": "c",
+        "text": "Add verbose logging on every tool call and grep the logs during incidents"
+      },
+      {
+        "key": "d",
+        "text": "Rely on user complaints to flag which sessions warrant deeper investigation"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3C2 Analyze observability challenges and select monitoring strategies at scale | Key Concept: span-level attribution. Observing a large agent fleet means structured, aggregated OpenTelemetry with span-level attribution, not manual log inspection or transcript sampling. The span hierarchy is what lets latency and cost be pinned to specific tool calls and subagents. | (A) OTLP telemetry with a nested span hierarchy lets you attribute latency and cost to specific tool calls and subagents, which is exactly what the constraints demand at scale. | (B) A few sampled transcripts cannot represent thousands of concurrent sessions or attribute cost to components reliably. | (C) Flat logs lack trace structure, so grepping cannot correlate calls across a session or attribute latency by component. | (D) Complaint-driven triage is reactive and blind to cost and latency, providing no proactive attribution at all."
+  },
+  {
+    "id": "c3-q0032",
+    "domain": 3,
+    "task_statement": "3C1 Evaluate connection protocols and select the integration mechanism",
+    "topic": "transport by deployment",
+    "difficulty": "medium",
+    "question_text": "An architect assumes every Model Context Protocol server must run as a remote web service. Which statement corrects this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "MCP servers run only over HTTP because the standard forbids local transport"
+      },
+      {
+        "key": "b",
+        "text": "MCP requires a cloud endpoint since the protocol is proprietary to Claude"
+      },
+      {
+        "key": "c",
+        "text": "Local servers are allowed only after registering with a central directory"
+      },
+      {
+        "key": "d",
+        "text": "MCP servers can run locally over STDIO or remotely over HTTP"
+      }
+    ],
+    "correct_answers": [
+      "d"
+    ],
+    "explanation": "Domain: Integration | Subdomain: 3C1 Evaluate connection protocols and select the integration mechanism | Key Concept: transport by deployment. The Model Context Protocol is an open standard, and its servers can run locally over STDIO or remotely over HTTP. Assuming MCP is always a remote web service, or proprietary to Claude, misstates how the protocol deploys. | (A) The standard does not forbid local transport. STDIO is a supported way to run a server on the same host. | (B) MCP is an open, model-agnostic standard, not a Claude-proprietary or cloud-only service. | (C) No central registration gates local servers. Transport choice follows the deployment context, not a directory. | (D) MCP transport follows deployment: servers run locally over STDIO or remotely over HTTP. Neither is mandated by the protocol; the choice is the integrator's."
+  }
+]

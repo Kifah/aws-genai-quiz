@@ -1,0 +1,167 @@
+[
+  {
+    "id": "d2-q0615",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "CDK multi-environment FM deployment with CodePipeline",
+    "difficulty": "hard",
+    "question_text": "A company is deploying a GenAI summarisation application to both a development and production environment using AWS CDK. Product owners need to easily switch between different Amazon Bedrock foundation models in each environment without redeploying infrastructure. The team uses AWS CodePipeline for CI/CD. Which approach meets these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create one CDK application with environment-specific context variables that specify the model ID. Use aws_bedrock.FoundationModel.fromFoundationModelId() to reference the model. Deploy through a single CodePipeline with separate stages for each environment."
+      },
+      {
+        "key": "B",
+        "text": "Create separate CDK applications for each environment. Hard-code the model ARN in each application. Create a separate CodePipeline for each environment."
+      },
+      {
+        "key": "C",
+        "text": "Create one CDK application that uses aws_bedrock.ProvisionedModel.fromProvisionedModelArn() to reference the model. Store the ARN in AWS Secrets Manager. Deploy through a single CodePipeline."
+      },
+      {
+        "key": "D",
+        "text": "Create one CDK application. Manually deploy the development environment using cdk deploy. Use CodePipeline only for the production environment."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Using a single CDK application with environment-specific context variables and FoundationModel.fromFoundationModelId() provides the cleanest separation. Context variables (cdk.json or --context flags) let product owners change model IDs per environment without code changes. A single pipeline with per-environment stages ensures consistent deployment processes. Separate CDK apps (B) duplicate code and increase maintenance. ProvisionedModel (C) requires pre-provisioned throughput which is unnecessary for model switching and adds cost. Manual development deploys (D) bypass CI/CD best practices and introduce drift.",
+    "source_topic": "CDK FoundationModel construct, multi-environment GenAI deployment, CodePipeline"
+  },
+  {
+    "id": "d2-q0616",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Amplify AI Kit streaming for AppSync timeout resolution",
+    "difficulty": "hard",
+    "question_text": "A company has deployed an AI assistant as a React application using AWS Amplify, AWS AppSync with a Lambda resolver, and Amazon Bedrock Knowledge Bases. The Lambda resolver calls the RetrieveAndGenerate API using the RequestResponse invocation type. Users report frequent timeouts for complex questions that require longer model processing. Which solution resolves the timeout issues while improving user experience?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the Lambda function timeout to 15 minutes and add retry logic with exponential backoff in the client application."
+      },
+      {
+        "key": "B",
+        "text": "Use the Amplify AI Kit to implement streaming responses from the GraphQL API, enabling tokens to be delivered incrementally as they are generated."
+      },
+      {
+        "key": "C",
+        "text": "Replace AppSync with Amazon API Gateway WebSocket API and rewrite the application to use the InvokeModelWithResponseStream API directly."
+      },
+      {
+        "key": "D",
+        "text": "Add an Amazon SQS queue between the client and the Lambda resolver. Poll the queue for completed responses."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Amplify AI Kit provides built-in support for streaming AI responses through AppSync subscriptions, eliminating timeout issues by delivering tokens incrementally as they are generated rather than waiting for the full response. This is purpose-built for the Amplify + AppSync + Bedrock stack. Increasing Lambda timeout (A) does not solve the fundamental problem — AppSync has its own 30-second timeout for synchronous resolvers. Replacing with API Gateway WebSocket (C) requires a complete architecture rewrite, losing Amplify's built-in auth and UI integration. SQS polling (D) adds latency, complexity, and a poor user experience compared to streaming.",
+    "source_topic": "Amplify AI Kit, AppSync streaming, Bedrock Knowledge Bases timeout resolution"
+  },
+  {
+    "id": "d2-q0617",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Amazon Q Developer admin dashboard for adoption tracking",
+    "difficulty": "medium",
+    "question_text": "A company has purchased 500 Amazon Q Developer Pro subscriptions. Management wants to identify which developers actively use the tool, recognise power users, and detect underused subscriptions to determine which teams need additional training. The solution must show per-user metrics such as lines of code accepted. Which approach meets these requirements with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure AWS CloudTrail to capture all Amazon Q Developer API calls across the organisation. Process logs with a Lambda function, store results in DynamoDB, and build custom dashboards in Amazon Managed Grafana."
+      },
+      {
+        "key": "B",
+        "text": "Use the Amazon Q Developer built-in administrator dashboard to view per-user adoption metrics including code suggestions accepted, active users, and usage trends across the organisation."
+      },
+      {
+        "key": "C",
+        "text": "Create an Amazon QuickSight dashboard connected to CloudWatch Logs. Configure each developer's IDE to emit custom metrics about Q Developer usage to CloudWatch."
+      },
+      {
+        "key": "D",
+        "text": "Deploy Amazon Q Developer usage telemetry to an Amazon S3 data lake. Run weekly Athena queries to generate adoption reports."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Amazon Q Developer includes a built-in administrator dashboard that provides per-user and organisation-wide adoption metrics out of the box, including active users, code suggestions generated and accepted, lines of code accepted, and usage patterns — with no additional infrastructure to build or maintain. CloudTrail-based approaches (A) require significant custom development for what is already a native feature. Custom IDE telemetry (C) requires per-developer configuration and does not capture server-side metrics. S3 data lake approaches (D) add unnecessary complexity when the built-in dashboard already provides the required visibility.",
+    "source_topic": "Amazon Q Developer administrator dashboard, subscription management, adoption metrics"
+  },
+  {
+    "id": "d2-q0618",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Bedrock Prompt Management versioning with Flows orchestration",
+    "difficulty": "medium",
+    "question_text": "A university is building an AI-powered platform with multiple sub-applications (AI tutors, assignment graders, analytics). The team needs to version-control prompts, compare prompt variants across different foundation models, maintain audit trails for prompt changes, and orchestrate multi-step workflows combining FMs with other AWS services. Which combination of solutions meets these requirements with the LEAST operational overhead? (Select TWO.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Bedrock Prompt Management to create versioned prompts with parameterised variables for each use case."
+      },
+      {
+        "key": "B",
+        "text": "Store prompt templates in Amazon S3 with versioning enabled. Use AWS Step Functions to orchestrate model interactions."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Bedrock Flows to create workflows that combine foundation models with AWS service integrations."
+      },
+      {
+        "key": "D",
+        "text": "Configure AWS Config rules to record prompt changes and use CloudTrail to track prompt usage independently."
+      },
+      {
+        "key": "E",
+        "text": "Use Amazon Bedrock intelligent prompt routing to automatically select the best model for each request."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "C"
+    ],
+    "explanation": "Amazon Bedrock Prompt Management (A) provides native prompt versioning, parameterised variables, variant comparison across models, and built-in change tracking — exactly matching the version control and testing requirements. Amazon Bedrock Flows (C) provides visual workflow creation that orchestrates multiple FMs and AWS services together, supporting the multi-application integration requirement. S3 versioning with Step Functions (B) requires custom integration code and lacks prompt-specific features like variant comparison. AWS Config (D) does not natively track Bedrock prompt changes — Prompt Management already includes audit capabilities. Intelligent prompt routing (E) automatically selects models based on cost/capability but does not provide version control or variant testing.",
+    "source_topic": "Bedrock Prompt Management versioning, Bedrock Flows orchestration, multi-FM testing"
+  },
+  {
+    "id": "d2-q0619",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "RAG data pipeline with PII removal and embedding generation at scale",
+    "difficulty": "hard",
+    "question_text": "A company needs to process 50 GB of customer conversation JSON files stored in Amazon S3 to build a RAG retrieval corpus. The pipeline must extract relevant data, remove personally identifiable information (PII), and generate vector embeddings for storage. The workflow must complete within 4 hours and be cost-effective. Which solution meets these requirements with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use AWS Lambda with Amazon Comprehend for parallel PII detection. Call Amazon Bedrock APIs to generate embeddings. Configure Lambda concurrency limits and memory to optimise throughput."
+      },
+      {
+        "key": "B",
+        "text": "Create an AWS Glue ETL job to run PII detection. Use Amazon SageMaker Processing with HuggingFaceProcessor to generate embeddings. Store results in Amazon OpenSearch Service."
+      },
+      {
+        "key": "C",
+        "text": "Deploy an Amazon EMR cluster running Apache Spark with UDFs calling Amazon Comprehend for PII detection and Amazon Bedrock for embedding generation. Store outputs in Aurora PostgreSQL with pgvector."
+      },
+      {
+        "key": "D",
+        "text": "Use AWS Step Functions to orchestrate Amazon Comprehend for PII detection and Amazon Bedrock for embedding generation. Integrate directly with Amazon OpenSearch Serverless for vector storage and similarity search."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "AWS Step Functions provides serverless orchestration with direct service integrations for both Amazon Comprehend (PII detection) and Amazon Bedrock (embedding generation), plus native integration with OpenSearch Serverless — eliminating custom glue code. Step Functions handles parallelism via Map states, scales automatically, and charges per state transition rather than provisioned compute time. Lambda (A) has a 15-minute execution limit per invocation which complicates 50 GB processing and requires custom orchestration logic. Glue + SageMaker Processing (B) requires managing two separate compute environments and custom container setup. EMR (C) requires cluster provisioning and management, adding significant operational overhead for a batch pipeline.",
+    "source_topic": "Step Functions orchestration, Comprehend PII, Bedrock embeddings, OpenSearch Serverless"
+  }
+]

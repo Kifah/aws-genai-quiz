@@ -17,6 +17,7 @@
 import { Question } from './loader';
 
 export interface AttemptRecord {
+  exam_id:     string;
   question_id: string;
   timestamp:   string;   // ISO 8601
   was_correct: boolean;

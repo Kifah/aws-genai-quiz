@@ -13,7 +13,7 @@ import {
 import { Question } from '../src/loader';
 
 function attempt(qid: string, ts: string, correct: boolean): AttemptRecord {
-  return { question_id: qid, timestamp: ts, was_correct: correct, selected: ['A'], mode: 'practice', session_id: 's1' };
+  return { exam_id: 'aws', question_id: qid, timestamp: ts, was_correct: correct, selected: ['A'], mode: 'practice', session_id: 's1' };
 }
 
 function q(id: string, domain: number, topic: string): Question {

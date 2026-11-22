@@ -1,0 +1,155 @@
+[
+  {
+    "id": "c4-q0009",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Latency optimization techniques",
+    "difficulty": "medium",
+    "question_text": "A Claude-powered application suffers from high p99 latency on complex queries. The team has already implemented prompt caching. Which additional optimization is most likely to reduce p99 latency?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Route simple queries to a fast lightweight model and reserve the large model for queries that require complex reasoning — reducing average and tail latency for simpler requests." },
+      { "key": "B", "text": "Increase the maximum output token limit to give Claude more space to think." },
+      { "key": "C", "text": "Remove streaming and wait for the full response before returning to the user." },
+      { "key": "D", "text": "Add more logging to identify which requests are slow." }
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Routing-based optimization (sending simple queries to a faster model) directly reduces p99 latency because many tail-latency requests are complex queries hitting the large model. By segmenting traffic and using a lightweight model for simpler cases, the overall latency distribution improves. Increasing output token limit (B) increases latency. Removing streaming (C) increases perceived latency. More logging (D) is diagnostic, not optimization."
+  },
+  {
+    "id": "c4-q0010",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Iterative prompt improvement process",
+    "difficulty": "easy",
+    "question_text": "What is the correct order of steps in an iterative prompt improvement cycle?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Deploy → Evaluate → Modify prompt → Re-evaluate → Repeat." },
+      { "key": "B", "text": "Baseline evaluation → Identify failure modes → Hypothesize fixes → Implement change → Re-evaluate against baseline → Accept or reject change." },
+      { "key": "C", "text": "Modify the prompt until it looks right → Deploy to production." },
+      { "key": "D", "text": "Run a single test → Deploy if the test passes." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "A rigorous iterative improvement cycle requires: establishing a baseline before changes (so improvements are measurable), identifying specific failure modes (so fixes are targeted), hypothesizing and implementing a fix, re-evaluating against the same baseline, and making an evidence-based accept/reject decision. Skipping baseline establishment (A, C, D) makes it impossible to measure whether a change improved or degraded performance."
+  },
+  {
+    "id": "c4-q0011",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Monitoring LLM systems with logging and observability",
+    "difficulty": "medium",
+    "question_text": "A production Claude deployment begins showing a spike in user-reported dissatisfaction on Tuesday afternoons. The team has no structured observability. What is the minimum observability setup needed to diagnose this?",
+    "question_type": "multi",
+    "options": [
+      { "key": "A", "text": "Log request timestamps, input prompts (sampled), output responses (sampled), and latency per request." },
+      { "key": "B", "text": "Track user satisfaction signals (thumbs up/down, explicit ratings) with timestamps to correlate with the spike pattern." },
+      { "key": "C", "text": "Monitor the development team's calendar for meetings on Tuesday afternoons." },
+      { "key": "D", "text": "Record which Claude model version is active and whether any system prompt changes were deployed." }
+    ],
+    "correct_answers": ["A", "B"],
+    "explanation": "Diagnosing time-correlated quality issues requires: (A) sampled request logs to analyze what inputs and outputs look like during the spike period; and (B) satisfaction signals with timestamps to confirm the pattern and correlate with logs. Model version and prompt change records (D) are also valuable for change-correlation analysis, but logs and satisfaction signals are the minimum for diagnosis. Calendar data (C) is irrelevant."
+  },
+  {
+    "id": "c4-q0012",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Evaluation metric: safety scoring",
+    "difficulty": "hard",
+    "question_text": "A trust and safety team evaluates a Claude deployment for compliance. They want to measure the rate at which Claude correctly refuses harmful requests while also correctly fulfilling legitimate similar requests. What evaluation design captures both?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Count only the number of refused requests — higher is always better." },
+      { "key": "B", "text": "Design a test set with both harmful requests (measuring refusal rate) and boundary legitimate requests (measuring false-positive refusal rate), computing both true-positive refusal rate and false-positive refusal rate separately." },
+      { "key": "C", "text": "Measure only the false-positive refusal rate — lower is always better." },
+      { "key": "D", "text": "Ask users whether they feel the system is safe, without testing specific scenarios." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Safety evaluation requires measuring both recall (does the model refuse actually harmful requests?) and precision (does it avoid over-refusing legitimate requests?). A test set with both harmful examples and boundary-case legitimate examples yields both metrics. Measuring only refusals (A) incentivizes refusing everything. Measuring only false positives (C) incentivizes never refusing anything. User sentiment (D) is too coarse to identify specific failure modes."
+  },
+  {
+    "id": "c4-q0013",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Monitoring for model degradation",
+    "difficulty": "medium",
+    "question_text": "A deployed Claude application uses a model that was updated by the provider. After the update, the team notices different formatting in outputs. What monitoring practice would have detected this change automatically?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Reading the provider's release notes after the fact." },
+      { "key": "B", "text": "Running a scheduled regression test suite against a set of fixed test inputs, comparing outputs to golden references or using automated checks for format consistency." },
+      { "key": "C", "text": "Asking users to report formatting changes." },
+      { "key": "D", "text": "Checking the model version string in the API response only when an incident is reported." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Automated regression testing with fixed inputs and expected output patterns detects behavioral changes proactively. A scheduled test suite that runs against golden examples or applies format checks catches model update side effects before users are widely affected. Reading release notes (A) is reactive and may not cover behavioral changes. User reports (C) are delayed and incomplete. Incident-driven version checks (D) only run after impact is already felt."
+  },
+  {
+    "id": "c4-q0014",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Cost monitoring and anomaly detection",
+    "difficulty": "medium",
+    "question_text": "A team's monthly Claude API cost doubles unexpectedly. Which monitoring setup would have alerted them to this anomaly before the billing cycle ended?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Review the monthly invoice when it arrives." },
+      { "key": "B", "text": "Track daily token consumption and cost metrics, with automated alerts when daily spend exceeds a configurable threshold (e.g., 150% of the 7-day rolling average)." },
+      { "key": "C", "text": "Ask individual developers to estimate their API usage manually each week." },
+      { "key": "D", "text": "Monitor only the number of API requests, not token counts." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Proactive cost monitoring requires tracking daily token consumption and spend in real time with automated threshold alerts. A rolling-average-based alert detects anomalous cost growth early enough to investigate and act. Monthly invoice review (A) is reactive — the damage is already done. Manual estimation (C) is inaccurate. Monitoring request count without token counts (D) misses the fact that cost scales with tokens, not requests."
+  },
+  {
+    "id": "c4-q0015",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Evaluation framework components",
+    "difficulty": "easy",
+    "question_text": "Which combination of components forms a complete evaluation framework for a production Claude system?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "A fixed evaluation dataset, defined quality metrics, automated scoring, and a human review process for edge cases." },
+      { "key": "B", "text": "A single test prompt run manually before each deployment." },
+      { "key": "C", "text": "User complaints as the only feedback signal." },
+      { "key": "D", "text": "API response time monitoring only." }
+    ],
+    "correct_answers": ["A"],
+    "explanation": "A complete evaluation framework combines: a fixed evaluation dataset (reproducible, versioned test cases), defined quality metrics (what 'good' means for each dimension), automated scoring (scalable, consistent), and human review for subtle or edge-case failures that automated metrics miss. Single test prompts (B) are not representative. User complaints (C) miss silent failures and are unstructured. Latency-only monitoring (D) ignores output quality entirely."
+  },
+  {
+    "id": "c4-q0016",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Defining evaluation metrics: latency SLA",
+    "difficulty": "hard",
+    "question_text": "A team sets a p99 latency SLA of 3 seconds for their Claude assistant. During load testing at 100 concurrent requests, p50 is 1.2 seconds but p99 is 8 seconds. What does this pattern indicate and what should they investigate?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "The system is performing fine — p50 meets the SLA so the average experience is good." },
+      { "key": "B", "text": "There is a significant tail-latency problem: a small fraction of requests take much longer than typical. Investigate: context length distribution of slow requests, model routing under concurrency, and whether complex queries cluster at the p99 tail." },
+      { "key": "C", "text": "The SLA is too strict — lower it to p99 of 10 seconds." },
+      { "key": "D", "text": "Reduce the context window for all requests to fix tail latency." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "A p50 of 1.2s with a p99 of 8s indicates that while most requests are fast, about 1% take dramatically longer — a classic tail-latency problem often caused by high-complexity queries, context length outliers, or resource contention under load. The correct response is to investigate the characteristics of slow requests (are they longer? more complex?) and optimize those code paths. Ignoring the tail (A) means 1% of users have a very poor experience. Relaxing the SLA (C) avoids the problem. Reducing context for all requests (D) is a blunt instrument that may degrade quality."
+  },
+  {
+    "id": "c4-q0017",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Diagnosing output quality degradation",
+    "difficulty": "hard",
+    "question_text": "A Claude application's output quality degrades after a system prompt update. The team wants to identify which part of the prompt change caused the regression. What is the most systematic diagnostic approach?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Revert the entire prompt change and accept that the improvement cannot be made." },
+      { "key": "B", "text": "Use binary bisection: isolate each changed section of the prompt, create variants with each change applied individually, run the evaluation suite against each variant, and identify which specific change correlates with the regression." },
+      { "key": "C", "text": "Increase the model size to compensate for prompt issues." },
+      { "key": "D", "text": "Ask users which version they preferred through a survey." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Binary bisection or A/B isolation of individual prompt changes is the systematic way to identify which specific change caused a regression. By running the evaluation suite against variants with each change applied in isolation, you can identify the causal change and either fix it or roll back only that portion. Full reversion (A) loses the beneficial parts of the update. Model size (C) does not fix prompt regressions. User surveys (D) are too slow and imprecise for prompt debugging."
+  }
+]

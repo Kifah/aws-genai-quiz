@@ -1,0 +1,281 @@
+[
+  {
+    "id": "c4-q0018",
+    "domain": 4,
+    "task_statement": "4C1 Optimize token usage, latency, and cost-performance trade-offs",
+    "topic": "skip RAG below ~200k tokens",
+    "difficulty": "medium",
+    "question_text": "A team is about to build a full retrieval pipeline for a 120-page internal handbook that rarely changes. Queries need the whole handbook's context. Given the size, which approach is simpler and avoids retrieval failure modes?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Build the RAG pipeline anyway, assuming retrieval always scales better than in-context loading"
+      },
+      {
+        "key": "b",
+        "text": "Load the whole handbook into the prompt with caching, skipping retrieval"
+      },
+      {
+        "key": "c",
+        "text": "Fine-tune a model on the handbook so its content lives in weights"
+      },
+      {
+        "key": "d",
+        "text": "Chunk and embed the handbook using semantic chunking for accuracy"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Evaluation, Testing & Optimization | Subdomain: 4C1 Optimize token usage, latency, and cost-performance trade-offs | Key Concept: skip RAG below ~200k tokens. When a knowledge base fits within roughly 200k tokens, loading it whole into the prompt with caching is simpler than a retrieval pipeline and sidesteps retrieval failure modes. Building RAG or fine-tuning for a small, static handbook adds machinery without payoff. | (A) For a small corpus, a full RAG pipeline adds retrieval machinery and its failure modes for no benefit over in-context loading. | (B) A 120-page handbook fits well under the roughly 200k-token guidance, so loading it whole with prompt caching answers from complete context and avoids retrieval error modes. It is simpler and cheaper at this size. | (C) Fine-tuning is costly, must be repeated when the handbook changes, and is overkill for a small, static document. | (D) Chunking and embedding builds the retrieval pipeline the small-corpus case is meant to avoid."
+  },
+  {
+    "id": "c4-q0019",
+    "domain": 4,
+    "task_statement": "4B2 Diagnose System Issues",
+    "topic": "silent failures evade error codes",
+    "difficulty": "medium",
+    "question_text": "A pipeline emits plausible but incorrect outputs with no error code, so retry logic never fires. Which control catches this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Semantic output validation gates that check correctness beyond error codes"
+      },
+      {
+        "key": "b",
+        "text": "More aggressive retry-on-error logic with exponential backoff between attempts"
+      },
+      {
+        "key": "c",
+        "text": "A larger context window so the model retains more supporting detail"
+      },
+      {
+        "key": "d",
+        "text": "Higher reasoning effort applied uniformly to every request in the pipeline"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Evaluation | Subdomain: 4B2 Diagnose System Issues | Key Concept: silent failures evade error codes. Plausible-but-wrong output emits no error, so retry and error-code handling never fire. Only semantic validation of the output content catches this failure class. | (A) Silent failures raise no error, so retry logic never triggers. Semantic validation of the output content is the only defense that catches plausible-but-wrong results. | (B) Retries fire on error codes; a silent failure produces none, so retrying never engages. | (C) Window size does not detect an incorrect but well-formed output that emits no error. | (D) Effort may improve some answers but does not detect the silent failures that slip through without an error."
+  },
+  {
+    "id": "c4-q0020",
+    "domain": 4,
+    "task_statement": "4B1 A/B testing and iterative improvements",
+    "topic": "cost-performance trade-off",
+    "difficulty": "medium",
+    "question_text": "A classification task already meets its SMART accuracy threshold on the largest Claude model, but cost and latency are over budget. During iteration, the move that BEST reduces spend while preserving the met criteria is:",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Try the smallest model that clears the held-out accuracy threshold"
+      },
+      {
+        "key": "b",
+        "text": "Keep the largest model to be safe and simply accept the budget overrun"
+      },
+      {
+        "key": "c",
+        "text": "Raise the accuracy threshold so the large model looks better justified"
+      },
+      {
+        "key": "d",
+        "text": "Add a reranking step to squeeze out even more accuracy headroom"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Evaluation, Testing & Optimization | Subdomain: 4B1 A/B testing and iterative improvements | Key Concept: cost-performance trade-off. When SMART accuracy criteria are already met, the cheapest configuration that still clears them wins. Selecting the smallest sufficient model, confirmed on a held-out set, cuts cost and latency without sacrificing the target, whereas defaulting to the largest model is over-provisioning. | (A) Once the criteria are met, the correct move is the smallest model that still clears the threshold, verified on the held-out set. Over-provisioning capability is a cost and latency defect, not a safety margin. | (B) Defaulting to the largest model 'to be safe' is exactly the over-provisioning that wastes cost and latency once a smaller model already meets the bar. | (C) Raising the threshold to justify the big model manipulates the criteria rather than meeting the actual budget constraint. | (D) Reranking adds latency and cost for accuracy already above the threshold; it worsens the very budgets under pressure."
+  },
+  {
+    "id": "c4-q0021",
+    "domain": 4,
+    "task_statement": "4A1 Define evaluation metrics (accuracy, latency, cost, safety, security)",
+    "topic": "caching cost model",
+    "difficulty": "medium",
+    "question_text": "A team wants a defensible cost metric for a workload that reuses a large, stable document prefix across many calls. Someone claims cache writes are cheaper than cache reads. Which statement about the caching cost model is accurate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Cache reads bill near 0.1x base input; writes cost more than reads"
+      },
+      {
+        "key": "b",
+        "text": "Reads and writes bill identically, so ordering the prefix does not matter"
+      },
+      {
+        "key": "c",
+        "text": "Cache writes bill at 0.1x base input while reads bill at full price"
+      },
+      {
+        "key": "d",
+        "text": "Caching lowers cost only when the variable content precedes the prefix"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Evaluation, Testing & Optimization | Subdomain: 4A1 Define evaluation metrics (accuracy, latency, cost, safety, security) | Key Concept: caching cost model. A cache read bills at roughly 0.1x base input while a write costs more than base input, so reuse pays off through cheap reads on a stable prefix ordered first. Claiming writes are cheaper than reads reverses the pricing. | (A) A cache read is billed at roughly 0.1x base input, while a write costs more than base input (about 1.25x for a 5-minute write). Cheap reads dominate once the prefix is cached, so the write is not cheaper than the read. | (B) Reads and writes are priced differently, and ordering the stable prefix first is exactly what makes caching work. | (C) This reverses the model: reads, not writes, bill near 0.1x; writes cost more than base input. | (D) Caching helps only when the stable prefix comes first; putting variable content ahead of it defeats the cache."
+  },
+  {
+    "id": "c4-q0022",
+    "domain": 4,
+    "task_statement": "4A2 Design evaluation datasets and test frameworks using mixed methodologies",
+    "topic": "measure numeric criteria on data untouched by tuning",
+    "difficulty": "medium",
+    "question_text": "SMART numeric thresholds must be measured on a dataset that reflects true generalization. Which dataset qualifies?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "The same labeled examples the prompts were iteratively tuned and optimized against"
+      },
+      {
+        "key": "b",
+        "text": "The full production log, including cases previously optimized during tuning"
+      },
+      {
+        "key": "c",
+        "text": "A held-out set reserved entirely from all prompt and system tuning"
+      },
+      {
+        "key": "d",
+        "text": "A fresh random sample redrawn anew on each separate evaluation run"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Evaluation, Testing & Optimization | Subdomain: 4A2 Design evaluation datasets and test frameworks using mixed methodologies | Key Concept: measure numeric criteria on data untouched by tuning. A held-out set is reserved from all prompt and system tuning, so scores are not inflated by having been optimized against, which is precisely what proves the system generalizes rather than memorizes. | (A) Scoring on tuning data overstates performance because the system was optimized against those exact cases. The numbers reflect memorization, not generalization. | (B) Reusing cases the prompts were tuned on inflates results. A generalization measure must exclude any data used during tuning. | (C) A held-out set is never used to tune prompts or configuration, so scores measure how the system performs on unseen inputs. This is where SMART thresholds must be validated. | (D) A set that changes each run cannot detect regressions or measure a stable threshold. Generalization is measured on a fixed, held-out set, not a moving target."
+  },
+  {
+    "id": "c4-q0023",
+    "domain": 4,
+    "task_statement": "4B2 Diagnose System Issues",
+    "topic": "no single toggle removes hallucination",
+    "difficulty": "medium",
+    "question_text": "An architect must reduce fabrication in a customer-facing assistant that answers from a large knowledge base. Fabrication appears in three situations: when retrieval misses the relevant chunk, when the chunk is present but the model over-elaborates, and when the question is genuinely out of scope. A stakeholder asks for the one setting that eliminates hallucination. How should the architect respond?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Set temperature to zero; deterministic decoding removes fabrication across all three situations at once"
+      },
+      {
+        "key": "b",
+        "text": "Adopt the largest model; greater capability eliminates hallucination regardless of retrieval or scope"
+      },
+      {
+        "key": "c",
+        "text": "No single toggle works; pair better retrieval, grounded generation, and an out-of-scope refusal path"
+      },
+      {
+        "key": "d",
+        "text": "Add unlimited retries; regenerating until answers agree converges on the non-fabricated response"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Evaluation | Subdomain: 4B2 Diagnose System Issues | Key Concept: no single toggle removes hallucination. Missed retrieval, over-elaboration on present context, and out-of-scope questions are distinct origins that require better retrieval, citation-grounded generation, and a refusal path respectively, not one temperature, model, or retry setting. | (A) Deterministic decoding does not add grounding or coverage; the model can still confidently invent content at temperature zero. | (B) Capability reduces but never eliminates hallucination, and it does not fix missed retrieval or out-of-scope questions. | (C) Each situation has a different origin, so mitigation is layered: improve retrieval for missed chunks, require citations to curb over-elaboration, and allow refusal when out of scope. No one setting covers all three. | (D) Agreement among regenerations can converge on a shared fabrication and does not enforce grounding."
+  },
+  {
+    "id": "c4-q0024",
+    "domain": 4,
+    "task_statement": "4C1 Optimize token usage, latency, and cost-performance trade-offs",
+    "topic": "latency optimization",
+    "difficulty": "medium",
+    "question_text": "A multi-step assistant runs three independent enrichment calls sequentially, then composes a final answer, missing its latency SLA. Accuracy is fine. The steps do not depend on each other's output, and cost headroom exists. As architect, which changes most reduce latency without hurting the accuracy bar?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Chain the calls more tightly so each one reuses the previous call's result"
+      },
+      {
+        "key": "b",
+        "text": "Switch to a single larger model, hoping it finishes the sequential steps sooner"
+      },
+      {
+        "key": "c",
+        "text": "Add extended thinking so the model can plan the enrichment call ordering itself first"
+      },
+      {
+        "key": "d",
+        "text": "Run the three independent enrichment calls in parallel, then stream the final answer"
+      }
+    ],
+    "correct_answers": [
+      "d"
+    ],
+    "explanation": "Domain: Evaluation, Testing & Optimization | Subdomain: 4C1 Optimize token usage, latency, and cost-performance trade-offs | Key Concept: latency optimization. Independent steps run sequentially are the classic latency waste; parallelizing them and streaming the result reduces end-to-end and perceived latency without changing accuracy. Tighter chaining, a larger model, or extra thinking all add time instead of removing it. | (A) Chaining forces sequential dependency the independent steps do not have, keeping latency high rather than reducing it. | (B) A larger model does not remove the sequential structure and typically adds per-call latency. | (C) Extended thinking adds reasoning time and does not exploit the independence of the steps. | (D) Because the three calls do not depend on each other, running them in parallel collapses their latency to roughly one call, and streaming the composed answer cuts perceived time further. Accuracy is untouched since the same work runs."
+  },
+  {
+    "id": "c4-q0025",
+    "domain": 4,
+    "task_statement": "4C2 Monitor system performance using logging and observability tools",
+    "topic": "a feedback loop closes the path from outcomes to changes",
+    "difficulty": "medium",
+    "question_text": "A system logs every request and response to durable storage and calls this its feedback loop. Over a year the logs grow, but the system never improves. An architect is asked why comprehensive logging alone failed to make the system any better. What is the accurate diagnosis?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Logging records events; a feedback loop must route outcomes back into system changes"
+      },
+      {
+        "key": "b",
+        "text": "The logs were simply not retained nearly long enough to drive real improvement"
+      },
+      {
+        "key": "c",
+        "text": "Log volume stayed far too low to reveal any actionable improvement patterns yet"
+      },
+      {
+        "key": "d",
+        "text": "Logging improves a system automatically once a large enough request history slowly accumulates over time"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Evaluation, Testing & Optimization | Subdomain: 4C2 Monitor system performance using logging and observability tools | Key Concept: a feedback loop closes the path from outcomes to changes. Logging only records events; what makes a system improvable is routing observed outcomes and corrections back into prompt, retrieval, or model changes, which mere storage never does. | (A) Logging records discrete events; it does not change the system. A feedback loop closes the path from observed outcomes and corrections back into prompt refinement, retrieval fixes, or retraining. Storing events without acting on them makes a system observable, not improvable. | (B) Retention length is irrelevant if nothing consumes the logs. The gap is the missing path from outcomes back into changes, not storage duration. | (C) Volume is not the issue; even complete logs do not self-improve a system. Improvement requires routing signals into deliberate changes. | (D) Logs never improve a system on their own, at any volume or age. Improvement is driven by a feedback loop acting on the recorded outcomes."
+  },
+  {
+    "id": "c4-q0026",
+    "domain": 4,
+    "task_statement": "4C2 Monitor system performance using logging and observability tools",
+    "topic": "production monitoring is distinct from pre-deploy evaluation",
+    "difficulty": "medium",
+    "question_text": "A team passed a rigorous held-out evaluation before launch and considers monitoring optional. Two months in, accuracy has quietly degraded as user phrasing shifted. What principle did they overlook?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Offline evaluation misses live traffic drift; ongoing monitoring is required"
+      },
+      {
+        "key": "b",
+        "text": "Held-out test sets should simply be redrawn each week to keep pace with the traffic"
+      },
+      {
+        "key": "c",
+        "text": "The pre-launch evaluation was simply too small and needed many more graded questions"
+      },
+      {
+        "key": "d",
+        "text": "A larger, more capable model would have absorbed the phrasing shift automatically"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Evaluation, Testing & Optimization | Subdomain: 4C2 Monitor system performance using logging and observability tools | Key Concept: production monitoring is distinct from pre-deploy evaluation. Offline evals validate a snapshot and cannot detect traffic drift or live regressions; continuously measuring accuracy, latency, cost, and safety against SLOs is a separate, ongoing obligation, not an optional add-on. | (A) Pre-deployment evals measure a fixed snapshot and cannot see traffic that shifts after launch. Monitoring accuracy against SLOs in production is a distinct, continuous requirement that offline testing does not replace. | (B) Redrawing a held-out set does not substitute for observing live traffic. The gap is missing production monitoring, not a stale offline dataset. | (C) Volume improves offline signal but still measures pre-launch conditions. No dataset size catches drift that only appears in live traffic. | (D) A bigger model does not immunize a system against distribution shift. Drift is detected by monitoring, not prevented by capability."
+  }
+]

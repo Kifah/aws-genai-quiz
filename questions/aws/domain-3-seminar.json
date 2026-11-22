@@ -1,0 +1,1274 @@
+[
+  {
+    "id": "d3-q0901",
+    "domain": 3,
+    "task_statement": "3.4",
+    "topic": "Fairness evaluation",
+    "difficulty": "hard",
+    "question_text": "A retail company has a generative AI (GenAI) product recommendation application that uses Amazon Bedrock. The application suggests products to customers based on browsing history and demographics. The company needs to implement fairness evaluation across multiple demographic groups to detect and measure bias in recommendations between two prompt approaches. The company wants to collect and monitor fairness metrics in real time. The company must receive an alert if the fairness metrics show a discrepancy of more than 15% between demographic groups. The company must receive weekly reports that compare the performance of the two prompt approaches. Which solution will meet these requirements with the LEAST custom development effort?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure an Amazon CloudWatch dashboard to display default metrics from Amazon Bedrock API calls. Create custom metrics based on model outputs. Set up Amazon EventBridge rules to invoke AWS lambda functions that perform post-processing analysis on model responses and publish custom fairness metrics."
+      },
+      {
+        "key": "B",
+        "text": "Create the two prompt variants in Amazon Bedrock Prompt Management. Use Amazon Bedrock Flows to deploy the prompt variants with defined traffic allocation. Configure Amazon Bedrock guardrails that have content filters to monitor demographic fairness. Set up Amazon CloudWatch alarms on the GuardrailContentSource dimension that use InvocationsIntervened metrics to detect recommendation discrepancy threshold violations."
+      },
+      {
+        "key": "C",
+        "text": "Set up Amazon SageMaker Clarify to analyze model outputs. Publish fairness metrics to Amazon CloudWatch. Create CloudWatch composite alarms that combine SageMaker Clarify bias metrics with Amazon Bedrock latency metrics to provide a comprehensive fairness evaluation dashboard."
+      },
+      {
+        "key": "D",
+        "text": "Create an Amazon Bedrock model evaluation job to compare fairness between the two prompt variants. Enable model invocation logging in Amazon CloudWatch. Set up CloudWatch alarms for InvocationsIntervened metrics with a dimension for each demographic group."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "SageMaker Clarify is the AWS service that measures bias and fairness across demographic groups and can publish those metrics to CloudWatch, where composite alarms can enforce the 15% discrepancy threshold with little custom code. Guardrails intervention metrics (InvocationsIntervened) count blocked content, not demographic fairness, so B and D cannot measure bias; A would require building the whole fairness analysis yourself.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 1,
+    "review_note": "Mondal key is B. Kept C: Guardrails intervention metrics do not measure demographic fairness; SageMaker Clarify does. ExamTopics and Yellow agree."
+  },
+  {
+    "id": "d3-q0902",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Bedrock Guardrails content filtering",
+    "difficulty": "hard",
+    "question_text": "A finance company is developing an AI assistant to help clients plan investments and manage their portfolios. The company identifies several high-risk conversation patterns such as requests for specific stock recommendations or guaranteed returns. High-risk conversation patterns could lead to regulatory violations if the company cannot implement appropriate controls. The company must ensure that the AI assistant does not provide inappropriate financial advice, generate content about competitors, or make claims that are not factually grounded in the company's approved financial guidance. The company wants to use Amazon Bedrock Guardrails to implement a solution. Which combination of steps will meet these requirements? (Choose three.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Add the high-risk conversation patterns to a denied topics guardrail."
+      },
+      {
+        "key": "B",
+        "text": "Configure a content filter guardrail to filter prompts that contain the high-risk conversation patterns."
+      },
+      {
+        "key": "C",
+        "text": "Configure a content filter guardrail to filter prompts that contain competitor names."
+      },
+      {
+        "key": "D",
+        "text": "Add the names of competitors as custom word filters. Set the input and output actions to block."
+      },
+      {
+        "key": "E",
+        "text": "Set a low grounding score threshold."
+      },
+      {
+        "key": "F",
+        "text": "Set a high grounding score threshold."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "D",
+      "F"
+    ],
+    "explanation": "A denied topic captures the high-risk conversation patterns (specific stock picks, guaranteed returns); a content filter only covers fixed harm categories, so B is wrong. Custom word filters set to block on input and output reliably stop competitor names (C misuses content filters). Contextual grounding needs a HIGH threshold so that responses not supported by the approved guidance are blocked; a low threshold (E) lets ungrounded claims through.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 2
+  },
+  {
+    "id": "d3-q0903",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Lake Formation for granular data access",
+    "difficulty": "hard",
+    "question_text": "A company runs a generative AI (GenAI)-powered summarization application in an application AWS account that uses Amazon Bedrock. The application architecture includes an Amazon API Gateway REST API that forwards requests to AWS Lambda functions that are attached to private VPC subnets. The application summarizes sensitive customer records that the company stores in a governed data lake in a centralized data storage account. The company has enabled Amazon S3, Amazon Athena, and AWS Glue in the data storage account. The company must ensure that calls that the application makes to Amazon Bedrock use only private connectivity between the company's application VPC and Amazon Bedrock. The company's data lake must provide fine-grained column-level access across the company's AWS accounts. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "In the application account, create interface VPC endpoints for Amazon Bedrock runtimes. Run Lambda functions in private subnets. Use IAM conditions on inference and data-plane policies to allow calls only to approved endpoints and roles. In the data storage account, use AWS Lake Formation LF-tag-based access control to create table and column-level cross-account grants."
+      },
+      {
+        "key": "B",
+        "text": "Run Lambda functions in private subnets. Configure a NAT gateway to provide access to Amazon Bedrock and the data lake. Use S3 bucket policies and ACLs to manage permissions. Export AWS CloudTrail logs to Amazon S3 to perform weekly reviews."
+      },
+      {
+        "key": "C",
+        "text": "Create a gateway endpoint only for Amazon S3 in the application account. Invoke Amazon Bedrock through public endpoints. Use database-level grants in AWS Lake Formation to manage data access. Stream AWS CloudTrail logs to Amazon CloudWatch Logs. Do not set up metric filters or alarms."
+      },
+      {
+        "key": "D",
+        "text": "Use VPC endpoints to provide access to Amazon Bedrock and Amazon S3 in the application account. Use only IAM path-based policies to manage data lake access. Send AWS CloudTrail logs to Amazon CloudWatch Logs. Periodically create dashboards and allow public fallback for cross-Region reads to reduce setup time."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Interface VPC endpoints for the Bedrock runtime keep calls on private connectivity, IAM conditions restrict calls to approved endpoints and roles, and Lake Formation LF-tag-based access control provides table- and column-level cross-account grants. A NAT gateway or public Bedrock endpoints (B, C) are not private connectivity, and database-level grants (C) or IAM path policies (D) are not column-level access control.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 8,
+    "review_note": "Mondal prints key B, but its explanation praises the interface-VPC-endpoint option (A here) and says the NAT gateway option is wrong; treated as an option-labelling slip in the book."
+  },
+  {
+    "id": "d3-q0904",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Bedrock Guardrails content filtering",
+    "difficulty": "medium",
+    "question_text": "A financial services company is developing a customer service AI assistant by using Amazon Bedrock. The AI assistant must not discuss investment advice with users. The AI assistant must block harmful content, mask personally identifiable information (PII), and maintain audit trails for compliance reporting. The AI assistant must apply content filtering to both user inputs and model responses based on content sensitivity. The company requires an Amazon Bedrock guardrail configuration that will effectively enforce policies with minimal false positives. The solution must provide multiple handling strategies for multiple types of sensitive content. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure a single guardrail and set content filters to high for all categories. Set up denied topics for investment advice and include sample phrases to block. Set up sensitive information filters that apply the block action for all PII entities. Apply the guardrail to all model inference calls."
+      },
+      {
+        "key": "B",
+        "text": "Configure multiple guardrails by using tiered policies. Create one guardrail and set content filters to high. Configure the guardrail to block PII for public interactions. Configure a second guardrail and set content filters to medium. Configure the second guardrail to mask PII for internal use. Configure multiple topic-specific guardrails to block investment advice and set up contextual grounding checks."
+      },
+      {
+        "key": "C",
+        "text": "Configure a guardrail and set content filters to medium for harmful content. Set up denied topics for investment advice and include clear definitions and sample phrases to block. Configure sensitive information filters to mask PII in responses and to block financial information in inputs. Enable both input and output evaluations that use custom blocked messages for audits."
+      },
+      {
+        "key": "D",
+        "text": "Create a separate guardrail for each use case. Create one guardrail that applies a harmful content filter. Create a guardrail to apply topic filters for investment advice. Create a guardrail to apply sensitive information filters to block PII. Use AWS Step Functions to chain the guardrails together sequentially. Use conditional logic based on content classification."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "One guardrail with medium harmful-content filters (fewer false positives), a denied topic for investment advice with clear definitions and sample phrases, PII masked in responses and financial information blocked in inputs, and both input and output evaluation with custom blocked messages meets every requirement. High filters with block-everything PII handling (A) cause false positives and cannot mask, and tiered or chained guardrails (B, D) add needless complexity.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 13
+  },
+  {
+    "id": "d3-q0905",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Data lineage tracking",
+    "difficulty": "medium",
+    "question_text": "A company is building a generative AI (GenAI) application that produces content based on a variety of internal and external data sources. The company wants to ensure that the generated output is fully traceable. The application must support data source registration and enable metadata tagging to attribute content to its original source. The application must also maintain audit logs of data access and usage throughout the pipeline. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use AWS Lake Formation to catalog data sources and control access. Apply metadata tags directly in Amazon S3. Use AWS CloudTrail to monitor API activity."
+      },
+      {
+        "key": "B",
+        "text": "Use AWS Glue Data Catalog to register and tag data sources. Use Amazon CloudWatch Logs to monitor access patterns and application behavior."
+      },
+      {
+        "key": "C",
+        "text": "Store data in Amazon S3 and use object tagging for attribution. Use AWS Glue Data Catalog to manage schema information. Use AWS CloudTrail to log access to S3 buckets."
+      },
+      {
+        "key": "D",
+        "text": "Use AWS Glue Data Catalog to register all data sources. Apply metadata tags to attribute data sources. Use AWS CloudTrail to log access and activity across services."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "D registers every source in the Glue Data Catalog, applies metadata tags to attribute content to its source, and uses CloudTrail to log access and activity across services, which gives end-to-end traceability. B relies on CloudWatch Logs, which is not an audit of data access, and A and C attribute and monitor data only at the S3 level.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 18
+  },
+  {
+    "id": "d3-q0906",
+    "domain": 3,
+    "task_statement": "3.4",
+    "topic": "Transparency in FM reasoning",
+    "difficulty": "medium",
+    "question_text": "A company is building an AI advisory application by using Amazon Bedrock. The application will provide recommendations to customers. The company needs the application to explain its reasoning process and cite specific sources for data. The application must retrieve information from company data sources and show step-by-step reasoning for recommendations. The application must also link data claims to source documents and maintain response latency under 3 seconds. Which solution will meet these requirements with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Bedrock Knowledge Bases with source attribution enabled. Use the Anthropic Claude Messages API with RAG to set high-relevance thresholds for source documents. Store reasoning and citations in Amazon S3 for auditing purposes."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Bedrock with Anthropic Claude models and extended thinking. Configure a 4,000-token thinking budget. Store reasoning traces and citations in Amazon DynamoDB for auditing purposes."
+      },
+      {
+        "key": "C",
+        "text": "Configure Amazon SageMaker AI with a custom Anthropic Claude model. Use the model's reasoning parameter and AWS Lambda to process responses. Add source citations from a separate Amazon RDS database."
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Bedrock with Anthropic Claude models and chain-of-thought reasoning. Configure custom retrieval tracking with the Amazon Bedrock Knowledge Bases API. Use Amazon CloudWatch to monitor response latency metrics."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Knowledge Bases with source attribution retrieves company data and returns citations natively, and Claude through the Messages API with RAG covers the reasoning, with low latency and the least overhead. Extended thinking alone (B, C) has no retrieval or source linking and needs extra storage and processing, and custom retrieval tracking (D) is more work than built-in attribution.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 22,
+    "review_note": "Wayground key is B. Kept A: Knowledge Bases with source attribution gives retrieval plus citations natively; extended thinking alone has no retrieval or source linking."
+  },
+  {
+    "id": "d3-q0907",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Regional data residency and PII redaction",
+    "difficulty": "hard",
+    "question_text": "A bank is building a generative AI (GenAI) application that uses Amazon Bedrock to assess loan applications by using scanned financial documents. The application must extract structured data from the documents. The application must redact personally identifiable information (PII) before inference. The application must use foundation models (FMs) to generate approvals. The application must route low-confidence document extraction results to human reviewers who are within the same AWS Region as the loan applicant. The company must ensure that the application complies with strict Regional data residency and auditability requirements. The application must be able to scale to handle 25,000 applications each day and provide 99.9% availability. Which combination of solutions will meet these requirements? (Choose three.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy Amazon Textract and Amazon Augmented AI (Amazon A2I) within the same Region to extract relevant data from the scanned documents. Route low-confidence pages to human reviewers."
+      },
+      {
+        "key": "B",
+        "text": "Use AWS Lambda functions to detect and redact PII from submitted documents before inference. Apply Amazon Bedrock guardrails to prevent inappropriate or unauthorized content in model outputs. Configure Region-specific IAM roles to enforce data residency requirements and to control access to the extracted data."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Kendra and Amazon OpenSearch Service to extract field level values semantically from the uploaded documents before inference."
+      },
+      {
+        "key": "D",
+        "text": "Store uploaded documents in Amazon S3 and apply object metadata. Configure IAM policies to store original documents within the same Region as each applicant. Enable object tagging for future audits."
+      },
+      {
+        "key": "E",
+        "text": "Use AWS Glue Data Quality to validate the structured document data. Use AWS Step Functions to orchestrate a review workflow that includes a prompt engineering step that transforms validated data into optimized prompts before invoking Amazon Bedrock to assess loan applications."
+      },
+      {
+        "key": "F",
+        "text": "Use Amazon SageMaker Clarify to generate fairness and bias reports based on model scoring decisions that Amazon Bedrock makes."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B",
+      "D"
+    ],
+    "explanation": "A: Textract extracts structured data and A2I routes low-confidence pages to reviewers in the same Region. B: Lambda redacts PII before inference, guardrails filter outputs, and Region-specific IAM roles enforce residency. D: S3 with metadata, tags and Region-bound policies keeps each applicant's documents in-Region and supports audits. Kendra with OpenSearch (C) is not a field extractor, and Glue/Step Functions prompt shaping (E) and Clarify bias reports (F) do not address extraction, residency or review routing.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 34
+  },
+  {
+    "id": "d3-q0908",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Amazon Q Business document-level access control",
+    "difficulty": "hard",
+    "question_text": "A software company is using Amazon Q Business to build an AI assistant that allows employees to access company information and personal information by using natural language prompts. The company stores this information in an Amazon S3 bucket. Each department in the company has a dedicated prefix in the S3 bucket. Each object name includes the S3 prefix of the department that it belongs to. Each department can belong to only a single group in AWS IAM Identity Center. Each employee belongs to a single department. The company configures Amazon Q Business to access data stored in an S3 bucket as a data source. The company needs to ensure that the AI assistant respects access controls based on the user's IAM Identity Center group membership. Which solution will meet this requirement with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a JSON file named acl.json in each department folder. In each file, create access control entries that specify the IAM Identity Center group that should have access to that department's data. Indicate the location of the JSON file in the Access Control section of the data source settings."
+      },
+      {
+        "key": "B",
+        "text": "Create a single JSON file named acl.json at the top level of the S3 bucket. Add access control entries that map each department's S3 prefix to its corresponding IAM Identity Center group. Indicate the location of the JSON file in the Access Control section of the data source settings."
+      },
+      {
+        "key": "C",
+        "text": "For each IAM Identity Center group, create a separate permissions set that denies access to all prefixes in the S3 bucket. Add a StringNotEquals condition key to the permissions set for each group that specifies the department each group is associated with. Attach the permissions sets to the Identity Center groups."
+      },
+      {
+        "key": "D",
+        "text": "Create a metadata file named metadata.json at the top level of the S3 bucket. Add an AccessControlList object to the file that specifies the S3 path of each department's prefix. Specify the IAM Identity Center group that should have access to each department's prefix. Reference the file location in the data source metadata settings."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Amazon Q Business reads an ACL file from the S3 data source's Access Control setting, so a single acl.json at the top level that maps each department prefix to its IAM Identity Center group applies access control to every document with only one file to maintain. A file per department folder (A) multiplies upkeep, IAM permission sets with StringNotEquals conditions (C) do not control what Q Business returns, and D points at the data source metadata settings instead of the Access Control section.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 35
+  },
+  {
+    "id": "d3-q0909",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Defence-in-depth for FM safety",
+    "difficulty": "medium",
+    "question_text": "A media company is launching a platform that allows thousands of users every hour to upload images and text content. The platform uses Amazon Bedrock to process the uploaded content to generate creative compositions. The company needs a solution to ensure that the platform does not process or produce inappropriate content. The platform must not expose personally identifiable information (PII) in the compositions. The solution must integrate with the company's existing Amazon S3 storage workflow. Which solution will meet these requirements with the LEAST infrastructure management overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable the Enhanced Monitoring tool. Use an Amazon CloudWatch alarm to filter traffic to the platform. Use Amazon Comprehend PII detection to pre-process the data. Create a CloudWatch alarm to monitor for Amazon Comprehend PII detection events. Create an AWS Step Functions workflow that includes an Amazon Rekognition image moderation step."
+      },
+      {
+        "key": "B",
+        "text": "Use an Amazon API Gateway HTTP API with request validation templates to screen content before storing the uploaded content in Amazon S3. Use Amazon SageMaker AI to build custom content moderation models that process content before sending the processed content to Amazon Bedrock."
+      },
+      {
+        "key": "C",
+        "text": "Create an Amazon Cognito user pool that uses pre-authentication AWS Lambda functions to run content moderation checks. Use Amazon Textract to filter text content and Amazon Rekognition to filter image content before allowing users to upload content to the platform."
+      },
+      {
+        "key": "D",
+        "text": "Create an AWS Step Functions workflow that uses built-in Amazon Bedrock guardrails to filter content. Use Amazon Comprehend PII detection to pre-process the content. Use Amazon Rekognition image moderation."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Step Functions orchestrating built-in Bedrock guardrails for content filtering, Comprehend PII detection, and Rekognition image moderation uses managed services that fit the existing S3 workflow with minimal infrastructure management. Custom SageMaker moderation models (B) and Cognito pre-authentication Lambdas with Textract and Rekognition (C) add management work, and A relies on CloudWatch alarms for monitoring rather than filtering.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 38
+  },
+  {
+    "id": "d3-q0910",
+    "domain": 3,
+    "task_statement": "3.4",
+    "topic": "Responsible AI challenges",
+    "difficulty": "easy",
+    "question_text": "A student at a university is copying content from generative AI to write essays. Which challenge of responsible generative AI does this scenario represent?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Toxicity"
+      },
+      {
+        "key": "B",
+        "text": "Hallucinations"
+      },
+      {
+        "key": "C",
+        "text": "Plagiarism"
+      },
+      {
+        "key": "D",
+        "text": "Privacy"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Presenting AI-generated content as one's own work is plagiarism, a recognised responsible-AI challenge. Hallucinations are fabricated outputs, toxicity is harmful content, and privacy concerns exposure of personal data; none of them describes copying generated content into an essay.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 49
+  },
+  {
+    "id": "d3-q0911",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Image content moderation",
+    "difficulty": "medium",
+    "question_text": "A company has built a chatbot that can respond to natural language questions with images. The company wants to ensure that the chatbot does not return inappropriate or unwanted images. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Implement moderation APIs."
+      },
+      {
+        "key": "B",
+        "text": "Retrain the model with a general public dataset."
+      },
+      {
+        "key": "C",
+        "text": "Perform model validation."
+      },
+      {
+        "key": "D",
+        "text": "Automate user feedback integration."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Moderation APIs, such as Amazon Rekognition image moderation, detect and block inappropriate images before they are returned. Retraining on a general public dataset (B) does not guarantee safe output, model validation (C) measures quality rather than filtering, and user-feedback integration (D) is reactive.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 57
+  },
+  {
+    "id": "d3-q0912",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Regional data residency for RAG",
+    "difficulty": "medium",
+    "question_text": "An international company is building an AI assistant that uses RAG. The company wants the AI assistant to have near real-time, low-latency performance. The AI assistant must provide service to several geographic areas. The company's customers will use proprietary data with the AI assistant. The proprietary data must not leave the company's immediate geographic area. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy an Amazon Bedrock model with a cross-Region model inference profile. Create Amazon S3 buckets in each AWS Region the company operates in. Store a knowledge base in each respective S3 bucket. In each Region, configure Amazon Kendra to interact with the respective knowledge base. In each Region, configure an AWS Lambda function that uses Kendra and Amazon Bedrock to process AI assistant prompts."
+      },
+      {
+        "key": "B",
+        "text": "Deploy an Amazon Bedrock model in each AWS Region the company operates in. Configure an Amazon Bedrock cross-Region model inference profile. Configure a vector database that uses Amazon Bedrock Knowledge Bases. Store the knowledge bases in Amazon S3 in each Region the company operates in."
+      },
+      {
+        "key": "C",
+        "text": "Use AWS Outposts to deploy an outpost in each AWS Region the company operates in. Create Amazon S3 buckets to store knowledge bases in each corresponding Region. Deploy Amazon RDS configured as a vector database to each outpost. Deploy an Amazon Bedrock model with a cross-Region inference profile in a central Region."
+      },
+      {
+        "key": "D",
+        "text": "Configure a knowledge base stored in the Amazon S3 Express One Zone storage class in each AWS Local Zone the company operates in. Use Amazon RDS to deploy a vector database in each Local Zone the company operates in. Deploy a large language model (LLM) to Amazon EC2 instances in each Local Zone. Configure the AI assistant to route prompts to the model in the respective Local Zone."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Deploying Bedrock in each operating Region with geography-scoped cross-Region inference profiles, plus Bedrock Knowledge Bases whose data lives in S3 in each Region, keeps proprietary data inside its geography with low latency and managed components. A adds Kendra with a global cross-Region profile, Outposts with a model in a central Region (C) sends prompts out of the area, and self-hosted LLMs on EC2 in Local Zones (D) means running your own inference infrastructure.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 68,
+    "review_note": "Wayground key is A. Kept B (low confidence): both options mix cross-Region inference with per-Region data; B is the lower-overhead managed design."
+  },
+  {
+    "id": "d3-q0913",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "CloudTrail for FM audit logging",
+    "difficulty": "medium",
+    "question_text": "A company is building a video analysis platform on AWS. The platform will analyze a large video archive by using Amazon Rekognition and Amazon Bedrock. The platform must comply with predefined privacy standards. The platform must also use secure model I/O, control foundation model (FM) access patterns, and provide an audit of who accessed what and when. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure VPC endpoints for Amazon Bedrock model API calls. Implement Amazon Bedrock Guardrails to filter harmful or unauthorized content in prompts and responses. Use Amazon Bedrock trace events to track all agent and model invocations for auditing purposes. Export the traces to Amazon CloudWatch Logs as an audit record of model usage. Store all prompts and outputs in Amazon S3 with server-side encryption with AWS KMS keys (SSE-KMS)."
+      },
+      {
+        "key": "B",
+        "text": "Define access control by using IAM with attribute-based controls to map departments to specific permissions. Configure VPC endpoints for Amazon Bedrock model API calls. Use IAM condition keys to enforce specific GuardrailIdentifier and ModelId values. Configure AWS CloudTrail to capture management and data events for S3 objects and KMS key usage activities. Enable S3 server access logging to record detailed file-level interactions with the video archives. Send all CloudTrail logs to AWS CloudTrail Lake. Set up Amazon CloudWatch alarms to detect and alert on unexpected activity from Amazon Bedrock, Amazon Rekognition, and AWS KMS."
+      },
+      {
+        "key": "C",
+        "text": "Restrict access to services by using VPC endpoint policies. Use AWS Config to track resource changes and compliance with security rules. Use server-side encryption with AWS KMS keys (SSE-KMS) to encrypt data at rest. Store the model's I/O in separate Amazon S3 buckets. Enable S3 server access logging to track file-level interactions."
+      },
+      {
+        "key": "D",
+        "text": "Configure AWS CloudTrail Insights to analyze API call patterns across accounts and detect anomalous activity in Amazon Bedrock, Amazon Rekognition, Amazon S3, and AWS KMS. Deploy Amazon Macie to scan and classify the video archive. Use server-side encryption with AWS KMS keys (SSE-KMS) to encrypt all stored data. Configure CloudTrail to capture KMS API usage events for audit purposes. Configure Amazon EventBridge rules to process CloudTrail Insights anomalies and Macie findings. Use CloudWatch alarms to trigger automated notifications and security responses when potential security issues are detected."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "IAM attribute-based controls, VPC endpoints, IAM condition keys that enforce GuardrailIdentifier and ModelId, CloudTrail management and data events (including S3 and KMS) delivered to CloudTrail Lake, S3 server access logging, and CloudWatch alarms satisfy privacy, secure model I/O, controlled FM access, and a full who/what/when audit. A and C lack granular access control or a complete audit trail, and D focuses on anomaly detection rather than access control.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 73
+  },
+  {
+    "id": "d3-q0914",
+    "domain": 3,
+    "task_statement": "3.4",
+    "topic": "Responsible AI guardrails policy",
+    "difficulty": "medium",
+    "question_text": "A wildlife conservation agency operates zoos globally. The agency uses various sensors, trackers, and audiovisual recorders to monitor animal behavior. The agency wants to launch a generative AI (GenAI) assistant that can ingest multimodal data to study animal behavior. The GenAI assistant must support natural language queries, avoid speculative behavioral interpretations, and maintain audit logs for ethical research audits. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Ingest raw videos into Amazon Rekognition to detect animal postures and expressions. Use Amazon Data Firehose to stream sensor and GPS data into an Amazon S3 data lake. Prompt an Amazon Bedrock foundation model (FM) by using basic templates that are stored in AWS Systems Manager Parameter Store. Use IAM policies to control access. Use AWS CloudTrail for audit logging."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon SageMaker Processing and Amazon Transcribe to pre-process multimodal data. Ingest summaries into an Amazon Bedrock Retrieval Augmented Generation (RAG) knowledge base. Apply Amazon Bedrock guardrails to restrict speculative outputs. Use AWS AppConfig to manage prompt templates. Use AWS CloudTrail to log research activity for audits."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon OpenSearch Serverless to index behavioral logs and telemetry events. Use Amazon Comprehend to extract entities. Use Amazon Bedrock to build a layer to answer questions. Embed study summaries into OpenSearch Serverless documents. Use IAM to control access. Use AWS CloudTrail to log user interactions with the AI assistant."
+      },
+      {
+        "key": "D",
+        "text": "Configure Amazon Q Business to federate data across Amazon S3, Amazon Kinesis, and Amazon SageMaker Feature Store. Configure Amazon EventBridge to invoke data ingestion jobs. Use custom AWS Lambda functions to filter large language model (LLM) outputs for ethical compliance before returning results to users."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Pre-processing the multimodal data (SageMaker Processing, Transcribe), grounding a Bedrock RAG knowledge base on the summaries, applying guardrails to restrict speculative outputs, managing prompt templates in AppConfig, and logging research activity with CloudTrail meets every requirement. A and C have no control against speculative interpretations, and D depends on custom Lambda filtering of LLM outputs and a Q Business federation that does not fit these data types.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 76
+  },
+  {
+    "id": "d3-q0915",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Org-wide model restriction with SCPs",
+    "difficulty": "hard",
+    "question_text": "A company uses an organization in AWS Organizations with all features enabled to manage multiple AWS accounts. Employees use Amazon Bedrock across multiple accounts. The company must prevent specific topics and proprietary information from being included in prompts to Amazon Bedrock models. The company must ensure that employees can use only approved Amazon Bedrock models. The company centrally manages IAM roles for employees. Which combination of solutions will meet these requirements? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create an IAM permissions boundary for each employee's IAM role. Configure the permissions boundary to require an approved Amazon Bedrock guardrail identifier to invoke Amazon Bedrock models. Create an SCP that allows employees to use only approved models."
+      },
+      {
+        "key": "B",
+        "text": "Create an SCP that allows employees to use only approved models. Configure the SCP to require employees to specify a guardrail identifier in calls to invoke an approved model."
+      },
+      {
+        "key": "C",
+        "text": "Create an SCP that prevents an employee from invoking a model if a centrally deployed guardrail identifier is not specified in a call to the model. Create a permissions boundary on each employee's IAM role that allows each employee to invoke only approved models."
+      },
+      {
+        "key": "D",
+        "text": "Use AWS CloudFormation to create a custom Amazon Bedrock guardrail that has a block filtering policy. Use stack sets to deploy the guardrail to each account in the organization."
+      },
+      {
+        "key": "E",
+        "text": "Use AWS CloudFormation to create a custom Amazon Bedrock guardrail that has a mask filtering policy. Use stack sets to deploy the guardrail to each account in the organization."
+      }
+    ],
+    "correct_answers": [
+      "B",
+      "D"
+    ],
+    "explanation": "An SCP that allows only approved models and requires a guardrail identifier enforces both governance rules across all accounts, and CloudFormation StackSets deploy a blocking guardrail to every account so prompts with prohibited topics and proprietary information are stopped. A mask filter (E) does not prevent the content from being sent, and per-role permissions boundaries (A, C) are harder to manage than a single SCP.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 77,
+    "review_note": "CertyIQ key is B,E. Kept B,D: the requirement is to prevent content, so the guardrail must block, not mask."
+  },
+  {
+    "id": "d3-q0916",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Regional data residency for RAG",
+    "difficulty": "medium",
+    "question_text": "A company is developing a generative AI (GenAI) application by using Amazon Bedrock. The application will analyze patterns and relationships in the company's data. The application will process millions of new data points daily across AWS Regions in Europe, North America, and Asia before storing the data in Amazon S3. The application must comply with local data protection and storage regulations. Data residency and processing must occur within the same continent. The application must also maintain audit trails of the application's decision-making processes and provide data classification capabilities. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy the application in each Region with local IAM policies. Use Amazon Bedrock cross-Region inference to distribute the workload. Use Amazon CloudWatch to log AI decision-making processes and data processing activities. Manually track compliance certifications across Regions."
+      },
+      {
+        "key": "B",
+        "text": "Use SCPs with AWS Organizations to manage location-specific permissions. Use AWS CloudTrail immutable logs to audit the decision-making processes. Import a custom model into Amazon Bedrock and deploy the model to each Region."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon S3 Object Lock with Region-specific S3 bucket policies. Pre-process the data points within the Region based on geographic origin before sending the data points to Amazon Bedrock. Use Amazon Macie to classify the data. Use AWS CloudTrail immutable logs to audit the decision-making processes."
+      },
+      {
+        "key": "D",
+        "text": "Create separate AWS accounts for each Region with individual compliance frameworks. Use Amazon SageMaker AI with custom monitoring to track model performance and compliance with data residency requirements. Create manual reports for each regulatory jurisdiction."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "S3 Object Lock with Region-specific bucket policies, in-Region pre-processing by geographic origin before data reaches Bedrock, Macie for data classification, and CloudTrail immutable logs for decision audits satisfy continent-level residency, classification and auditability. Cross-Region inference with manual compliance tracking (A) can move data across Regions, SCPs with custom model import (B) lack classification, and separate accounts with manual reports (D) are manual and lack classification.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 81
+  },
+  {
+    "id": "d3-q0917",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Prompt injection defence",
+    "difficulty": "easy",
+    "question_text": "Which prompting attack directly exposes the configured behavior of a large language model (LLM)?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Prompted persona switches"
+      },
+      {
+        "key": "B",
+        "text": "Exploiting friendliness and trust"
+      },
+      {
+        "key": "C",
+        "text": "Ignoring the prompt template"
+      },
+      {
+        "key": "D",
+        "text": "Extracting the prompt template"
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Extracting the prompt template (prompt leaking) directly exposes the configured instructions of the LLM. Persona switches, exploiting friendliness and trust, and ignoring the prompt template are attacks that manipulate model behaviour, but they do not directly reveal the configuration.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 82
+  },
+  {
+    "id": "d3-q0918",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Shared responsibility model for Bedrock",
+    "difficulty": "medium",
+    "question_text": "A company wants to use Amazon Bedrock. The company needs to review which security aspects the company is responsible for when using Amazon Bedrock. Which security aspect will the company be responsible for?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Patching and updating the versions of Amazon Bedrock"
+      },
+      {
+        "key": "B",
+        "text": "Protecting the infrastructure that hosts Amazon Bedrock"
+      },
+      {
+        "key": "C",
+        "text": "Securing the company's data in transit and at rest"
+      },
+      {
+        "key": "D",
+        "text": "Provisioning Amazon Bedrock within the company network"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Under the shared responsibility model AWS secures and patches the Bedrock service and its infrastructure, while the customer is responsible for securing its own data in transit and at rest. Patching Bedrock (A) and protecting the infrastructure (B) are AWS responsibilities, and Bedrock is a managed service that is not provisioned inside the company network (D).",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 83
+  },
+  {
+    "id": "d3-q0919",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Jailbreak attacks",
+    "difficulty": "medium",
+    "question_text": "A company is testing the security of a foundation model (FM). During testing, the company wants to get around the safety features and make harmful content. Which security technique is this an example of?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Fuzzing training data to find vulnerabilities"
+      },
+      {
+        "key": "B",
+        "text": "Denial of service (DoS)"
+      },
+      {
+        "key": "C",
+        "text": "Penetration testing with authorization"
+      },
+      {
+        "key": "D",
+        "text": "Jailbreak"
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Deliberately getting around a model's safety features to produce harmful content is a jailbreak. Authorised penetration testing (C) is permitted security testing, fuzzing training data (A) looks for data vulnerabilities, and denial of service (B) targets availability.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 85
+  },
+  {
+    "id": "d3-q0920",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Model cards and documentation",
+    "difficulty": "medium",
+    "question_text": "An ML research team develops custom ML models. The model artifacts are shared with other teams for integration into products and services. The ML team retains the model training code and data. The ML team wants to build a mechanism that the ML team can use to audit models. Which solution should the ML team use when publishing the custom ML models?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create documents with the relevant information. Store the documents in Amazon S3."
+      },
+      {
+        "key": "B",
+        "text": "Use AWS AI Service Cards for transparency and understanding models."
+      },
+      {
+        "key": "C",
+        "text": "Create Amazon SageMaker Model Cards with intended uses and training and inference details."
+      },
+      {
+        "key": "D",
+        "text": "Create model training scripts. Commit the model training scripts to a Git repository."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "SageMaker Model Cards document the intended uses and the training and inference details of a model in a structured, auditable form that travels with the model. Ad-hoc documents in S3 (A) or scripts in Git (D) have no standard structure, and AWS AI Service Cards (B) describe AWS services, not your own custom models.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 86
+  },
+  {
+    "id": "d3-q0921",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Prompt injection defence",
+    "difficulty": "easy",
+    "question_text": "Which prompting technique can protect against prompt injection attacks?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Adversarial prompting"
+      },
+      {
+        "key": "B",
+        "text": "Zero-shot prompting"
+      },
+      {
+        "key": "C",
+        "text": "Least-to-most prompting"
+      },
+      {
+        "key": "D",
+        "text": "Chain-of-thought prompting"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Adversarial prompting exposes the model to injection-style prompts so defences against prompt injection can be built and tested. Zero-shot, least-to-most and chain-of-thought prompting (B, C, D) are techniques for eliciting answers or reasoning, not protections.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 89
+  },
+  {
+    "id": "d3-q0922",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Org-wide model restriction with SCPs",
+    "difficulty": "hard",
+    "question_text": "Company configures a landing zone in AWS Control Tower. The company handles sensitive data that must remain within the European Union. The company must use only the eu-central-1 Region. The company uses SCPs to enforce data residency policies. GenAI developers at the company are assigned IAM roles that have full permissions for Amazon Bedrock. The company must ensure that GenAI developers can use the Amazon Nova Pro model through Amazon Bedrock only by using cross-Region inference (CRI) and only in eu-central-1. The company enables model access for the GenAI developer IAM roles in Amazon Bedrock. However, when a GenAI developer attempts to invoke the model through the Amazon Bedrock Chat/Text playground, the GenAI developer receives the following error. User: arn:aws:sts::123456789012:assumed-role/AssumedDevRole/DevUserName Action: bedrock:InvokeModelWithResponseStream On resource(s): arn:aws:bedrock:eu-west-3::foundation-model/amazon.nova-pro-v1:0 Context: a service control policy explicitly denies the action The company needs a solution to resolve the error. The solution must retain the company's existing governance controls and must provide precise access control. The solution must comply with the company's existing data residency policies. Which combination of solutions will meet these requirements? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Add an AdministratorAccess policy to the GenAI developer IAM role."
+      },
+      {
+        "key": "B",
+        "text": "Extend the existing SCPs to enable CRI for the eu.amazon.nova-pro-v1:0 inference profile."
+      },
+      {
+        "key": "C",
+        "text": "Enable Amazon Bedrock model access for Amazon Nova Pro in the eu-west-3 Region."
+      },
+      {
+        "key": "D",
+        "text": "Validate that the GenAI developer IAM roles have permissions to invoke Amazon Nova Pro through the eu.amazon.nova-pro.v1:0 inference profile on all European Union AWS Regions that can serve the model."
+      },
+      {
+        "key": "E",
+        "text": "Extend the existing SCP to enable CRI for the eu.* inference profile."
+      }
+    ],
+    "correct_answers": [
+      "B",
+      "D"
+    ],
+    "explanation": "Extending the existing SCPs to allow cross-Region inference for the single eu.amazon.nova-pro-v1:0 inference profile, and validating that the developer roles can invoke Nova Pro through that profile in every EU Region that can serve it, resolves the denial with precise access control and EU residency. AdministratorAccess (A) is overly broad, enabling model access in eu-west-3 (C) does not address the SCP denial, and a wildcard eu.* profile (E) is less precise.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 92,
+    "review_note": "Mondal key is B,E. Kept B,D: the requirement is precise access control, which the single eu.amazon.nova-pro-v1:0 profile gives and a wildcard eu.* profile does not; three other sources agree."
+  },
+  {
+    "id": "d3-q0923",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Prompt injection defence",
+    "difficulty": "medium",
+    "question_text": "A company is using Amazon Bedrock to build a customer-facing AI assistant to handle sensitive customer inquiries. The company must use defense-in-depth safety controls to block sophisticated prompt injection attacks. The company must keep audit logs of all safety interventions. The AI assistant must have cross-Region failover capabilities. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure Amazon Bedrock guardrails to use content filters to protect against prompt injection attacks. Set the content filters to high. Use a guardrail profile to implement cross-Region guardrail inference. Use Amazon CloudWatch Logs with custom metrics to capture detailed guardrail intervention events."
+      },
+      {
+        "key": "B",
+        "text": "Configure Amazon Bedrock guardrails to use content filters to protect against prompt injection attacks. Set the content filters to high. Use AWS WAF to block suspicious inputs. Use AWS CloudTrail to log API calls for audits."
+      },
+      {
+        "key": "C",
+        "text": "Deploy Amazon Comprehend custom classification to detect prompt injection attacks. Use Amazon API Gateway to validate requests. Use Amazon CloudWatch Logs with custom metrics to capture detailed intervention events."
+      },
+      {
+        "key": "D",
+        "text": "Configure Amazon Bedrock guardrails to use custom content filters to protect against harmful content. Set the content filters to high. Use word filters to protect against known attack patterns. Configure cross-Region guardrail replication to provide failover capabilities. Store logs in AWS CloudTrail for compliance auditing."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Guardrail content filters set to high protect against prompt attacks, a guardrail profile enables cross-Region guardrail inference for failover, and CloudWatch Logs with custom metrics capture detailed intervention events for audit. WAF with CloudTrail (B) gives no cross-Region guardrail failover, Comprehend custom classification with API Gateway validation (C) is not the managed guardrail path, and replication-based failover with word filters (D) misdescribes how guardrail failover works.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 93,
+    "review_note": "CertyIQ key is B. Kept A: only a guardrail profile gives cross-Region failover; WAF and CloudTrail do not."
+  },
+  {
+    "id": "d3-q0924",
+    "domain": 3,
+    "task_statement": "3.4",
+    "topic": "Transparency in FM reasoning",
+    "difficulty": "medium",
+    "question_text": "A financial services company is developing a customer service AI assistant application that uses a foundation model (FM) in Amazon Bedrock. The application must provide transparent responses by documenting reasoning and by citing sources that are used for Retrieval Augmented Generation (RAG). The application must capture comprehensive audit trails for all responses to users. The application must be able to serve up to 10,000 concurrent users and must respond to each customer inquiry within 2 seconds. Which solution will meet these requirements with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable tracing for Amazon Bedrock agents. Configure structured prompts that direct the FM to provide evidence presentations. Integrate Amazon Bedrock knowledge bases with data sources to enable RAG. Configure the application to reference and cite authoritative content. Deploy the application in a Multi-AZ architecture. Use Amazon API Gateway and AWS Lambda functions to scale the application. Use Amazon CloudFront to provide low-latency delivery."
+      },
+      {
+        "key": "B",
+        "text": "Enable tracing for Amazon Bedrock agents. Integrate a custom RAG pipeline with Amazon OpenSearch Service to retrieve and cite sources. Configure structured prompts to present retrieved evidence. Deploy the application behind an Amazon API Gateway REST API. Use AWS Lambda functions and Amazon CloudFront to scale the application and to provide low latency. Store logs in Amazon S3 and use AWS CloudTrail to capture audit trails."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon CloudWatch to monitor latency and error rates. Embed model prompts directly in the application backend to cite sources. Store application interactions with users in Amazon RDS for audits."
+      },
+      {
+        "key": "D",
+        "text": "Store generated responses and supporting evidence in an Amazon S3 bucket. Enable versioning on the bucket for audits. Use AWS Glue to catalog retrieved documents. Process the retrieved documents in Amazon Athena to generate periodic compliance reports."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Bedrock agent tracing documents the reasoning, Knowledge Bases provide RAG with citations, structured prompts present the evidence, and a Multi-AZ API Gateway, Lambda and CloudFront design supplies scale and low latency, all managed. A custom OpenSearch RAG pipeline (B) adds operational work, prompts embedded in code with RDS audits (C) lack tracing, and S3, Glue and Athena compliance reports (D) are not real-time answers.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 98
+  },
+  {
+    "id": "d3-q0925",
+    "domain": 3,
+    "task_statement": "3.4",
+    "topic": "Responsible AI governance framework",
+    "difficulty": "hard",
+    "question_text": "A financial services company is deploying a generative AI (GenAI) application that uses Amazon Bedrock to assist customer service representatives to provide personalized investment advice to customers. The company must implement a comprehensive governance solution that follows responsible AI practices and meets regulatory requirements. The solution must detect and prevent hallucinations in recommendations. The solution must have safety controls for customer interactions. The solution must also monitor model behavior drift in real time and maintain audit trails of all prompt-response pairs for regulatory review. The company must deploy the solution within 60 days. The solution must integrate with the company's existing compliance dashboard and respond to customers within 200 ms. Which solution will meet these requirements with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure Amazon Bedrock guardrails to apply custom content filters and toxicity detection. Use Amazon Bedrock Model Evaluation to detect hallucinations. Store prompt- response pairs in Amazon DynamoDB to capture audit trails and set a TTL. Integrate Amazon CloudWatch custom metrics with the existing compliance dashboard."
+      },
+      {
+        "key": "B",
+        "text": "Deploy Amazon Bedrock and use AWS PrivateLink to access the application securely. Use AWS Lambda functions to implement custom prompt validation. Store prompt- response pairs in an Amazon S3 bucket and configure S3 Lifecycle policies. Create custom Amazon CloudWatch dashboards to monitor model performance metrics."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Bedrock Agents and Amazon Bedrock Knowledge Bases to ground responses. Use Amazon Bedrock Guardrails to enforce content safety. Use Amazon OpenSearch Service to store and index prompt-responses pairs. Integrate OpenSearch Service with Amazon QuickSight to create compliance reports and to detect model behavior drift."
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon SageMaker Model Monitor to detect model behavior drift. Use AWS WAF to filter content. Store customer interactions in an encrypted Amazon RDS database. Use Amazon API Gateway to create custom HTTP APIs to integrate with the compliance dashboard."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Guardrails with custom content filters and toxicity detection, Bedrock Model Evaluation to detect hallucinations, DynamoDB with TTL for prompt-response audit trails, and CloudWatch custom metrics integrated with the compliance dashboard provide the required controls with the least overhead and low latency. Custom Lambda validation (B), OpenSearch with QuickSight (C), and WAF with RDS (D) add components that must be built and maintained.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 101,
+    "review_note": "Low confidence: Wayground key A kept; C is arguable but adds OpenSearch and QuickSight overhead."
+  },
+  {
+    "id": "d3-q0926",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Lake Formation for granular data access",
+    "difficulty": "hard",
+    "question_text": "A company uses AWS Lake Formation to set up a data lake that contains databases and tables for multiple business units across multiple AWS Regions. The company wants to use a foundation model (FM) through Amazon Bedrock to perform fraud detection. The FM must ingest sensitive financial data from the data lake. The data includes some customer personally identifiable information (PM). The company must design an access control solution that prevents PI I from appearing in a production environment. The FM must access only authorized data subsets that have PH redacted from specific data columns. The company must capture audit trails for all data access. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a separate dataset in a separate Amazon S3 bucket for each business unit and Region combination. Configure S3 bucket policies to control access based on IAM roles that are assigned to FM training instances. Use S3 access logs to track data access."
+      },
+      {
+        "key": "B",
+        "text": "Configure the FM to authenticate by using IAM roles and Lake Formation permissions based on LF-Tag expressions. Define business units and Regions as LF-Tags that are assigned to databases and tables. Use AWS CloudTrail to collect comprehensive audit trails of data access."
+      },
+      {
+        "key": "C",
+        "text": "Use direct IAM principal grants on specific databases and tables in Lake Formation. Create a custom application layer that logs access requests and further filters sensitive columns before sending data to the FM."
+      },
+      {
+        "key": "D",
+        "text": "Configure the FM to request temporary credentials from AWS STS. Access the data by using presigned S3 URLs that are generated by an API that applies business unit and Regional filters. Use AWS CloudTrail to collect comprehensive audit trails of data access."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Lake Formation permissions based on LF-tag expressions (business unit, Region) give fine-grained, scalable control over databases, tables and columns, so the FM sees only authorised subsets with PII columns redacted, and CloudTrail audits all data access. Per-unit S3 buckets with bucket policies (A), direct IAM grants with a custom filtering layer (C), and presigned URLs (D) lack column-level governance.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 102
+  },
+  {
+    "id": "d3-q0927",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Layered content filtering with Comprehend",
+    "difficulty": "hard",
+    "question_text": "A company is developing a customer communication platform that uses an AI assistant powered by an Amazon Bedrock foundation model (FM). The AI assistant summarizes customer messages and generates initial response drafts. The company wants to use Amazon Comprehend to implement layered content filtering. The layered content filtering must prevent sharing of offensive content, protect customer privacy, and detect potential inappropriate advice solicitation. Inappropriate advice solicitation includes requests for unethical practices, harmful activities, or manipulative behaviors. The solution must maintain acceptable overall response times, so all pre-processing filters must finish before the content reaches the FM. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use parallel processing with asynchronous API calls. Use toxicity detection for offensive content. Use prompt safety classification for inappropriate advice solicitation. Use personally identifiable information (PII) detection without redaction."
+      },
+      {
+        "key": "B",
+        "text": "Use custom classification to build an FM that detects offensive content and inappropriate advice solicitation. Apply personally identifiable information (PII) detection as a secondary filter only when messages pass the custom classifier."
+      },
+      {
+        "key": "C",
+        "text": "Deploy a multi-stage process. Configure the process to use prompt safety classification first, then toxicity detection on safe prompts only, and finally personally identifiable information (PII) detection in streaming mode. Route flagged messages through Amazon EventBridge for human review."
+      },
+      {
+        "key": "D",
+        "text": "Use toxicity detection with thresholds configured to 0.5 for all categories. Use parallel processing for both prompt safety classification and personally identifiable information (PII) detection with entity redaction. Apply Amazon CloudWatch alarms to filter metrics."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Toxicity detection, prompt safety classification, and PII detection with entity redaction run in parallel before the FM, which keeps pre-processing within the response-time budget while protecting customer privacy through redaction. Detecting PII without redaction (A) does not protect privacy, and a custom classifier (B) or a strictly sequential multi-stage process (C) adds build effort or latency.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 104,
+    "review_note": "Wayground key is A; CertyIQ says D. Changed to D: protecting customer privacy needs PII redaction, which A explicitly omits."
+  },
+  {
+    "id": "d3-q0928",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Bedrock Guardrails sensitive information filters",
+    "difficulty": "medium",
+    "question_text": "A company is using Amazon Bedrock to develop a customer support AI assistant. The AI assistant must respond to customer questions about their accounts. The AI assistant must not expose personal information in responses. The company must comply with data residency policies by ensuring that all processing occurs within the same AWS Region where each customer is located. The company wants to evaluate how effective the AI assistant is at preventing the exposure of personal information before the company makes the AI assistant available to customers. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure a cross-Region Amazon Bedrock guardrail to apply sensitive information filters. Set the guardrail to detect mode during development and testing. Switch to block mode for production deployment."
+      },
+      {
+        "key": "B",
+        "text": "Configure an Amazon Bedrock guardrail to apply sensitive information filters. Set the guardrail to mask mode during development and testing. Switch to block mode for production deployment. Deploy a copy of the guardrail to each Region where the company operates."
+      },
+      {
+        "key": "C",
+        "text": "Configure an Amazon Bedrock guardrail to apply content and topic filters. Set the guardrail to detect mode during development, testing, and production. Disable invocation logging for the Amazon Bedrock model."
+      },
+      {
+        "key": "D",
+        "text": "Configure a cross-Region Amazon Bedrock guardrail to apply a set of content and word filters. Set the guardrail to detect mode during development and testing. Switch to mask mode for production deployment."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A sensitive-information guardrail in mask mode during testing lets the company see how well PII is caught before launch, block mode in production prevents exposure, and a copy of the guardrail in each Region keeps processing in the customer's Region. Cross-Region guardrails (A, D) conflict with the residency policy, and content, topic or word filters (C, D) do not target PII.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 106
+  },
+  {
+    "id": "d3-q0929",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "PII detection and redaction",
+    "difficulty": "medium",
+    "question_text": "A medical device company wants to feed reports of medical procedures that used the company's devices into an AI assistant. To protect patient privacy, the AI assistant must expose patient personally identifiable information (PII) only to surgeons. The AI assistant must redact PII for engineers. The AI assistant must reference only medical reports that are less than 3 years old. The company stores reports in an Amazon S3 bucket as soon as each report is published. The company has already set up an Amazon Bedrock knowledge base. The AI assistant uses Amazon Cognito to authenticate users. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable Amazon Macie PII detection on the S3 bucket. Use an S3 trigger to invoke an AWS Lambda function that redacts PII from the reports. Configure the Lambda function to delete outdated documents from the bucket and to invoke knowledge base syncing."
+      },
+      {
+        "key": "B",
+        "text": "Invoke an AWS Lambda function to sync the S3 bucket and the knowledge base when a new report is uploaded to the bucket. Use a second Lambda function to invoke Amazon Comprehend to detect and redact PII if a user is part of the engineer Cognito user group. Set up an S3 Lifecycle configuration to remove reports that are older than 3 years from the bucket."
+      },
+      {
+        "key": "C",
+        "text": "Set up an S3 Lifecycle configuration on the bucket to remove reports that are older than 3 years. Schedule an AWS Lambda function to run daily syncs between the bucket and the knowledge base. When users interact with the AI assistant, call the ApplyGuardrail configuration that matches the user's Cognito user group to redact PII from the agent’s responses if appropriate."
+      },
+      {
+        "key": "D",
+        "text": "Create a second knowledge base. Set up an S3 Lifecycle configuration on the bucket to remove reports that are older than 3 years. Invoke an AWS Lambda function that syncs the bucket with the original knowledge base when a new report is uploaded to the bucket. Use Amazon Comprehend to detect and redact PII before syncing the bucket with the second knowledge base. When a user interacts with the AI assistant, redirect the model to the appropriate knowledge base depending on the user’s Cognito us"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "An S3 Lifecycle rule removes reports older than 3 years, a scheduled Lambda keeps the knowledge base in sync, and ApplyGuardrail with the guardrail matching the user's Cognito group redacts PII only for engineers. Lambda deletion or Comprehend redaction at upload and query time (A, B) is custom and fragile, and maintaining a second knowledge base (D) duplicates data.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 109
+  },
+  {
+    "id": "d3-q0930",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Regional data residency for RAG",
+    "difficulty": "hard",
+    "question_text": "A GenAI developer is evaluating Amazon Bedrock foundation models (FMs) to enhance a Europe-based company's internal business application. The company has a multi-account landing zone in AWS Control Tower. The company uses SCPs to allow its accounts to use only the eu-north-1 Region and the eu-west-1 Region. All customer data must remain in private networks within the approved AWS Regions. The GenAI developer selects an FM based on analysis and testing and hosts the model in the eu-central-1 Region and the eu-west- 3 Region. The GenAI developer must enable access to the FM for the company’s employees. The GenAI developer must ensure that requests to the FM are private and remain with the same Regions as the FM. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy an AWS Lambda function that is exposed by a private Amazon API Gateway REST API to a VPC in eu- north-1. Create a VPC endpoint for the selected FM in eu- central-1 and eu-west-3. Extend existing SCPs to allow employees to use the FM. Integrate the REST API with the business application."
+      },
+      {
+        "key": "B",
+        "text": "Deploy the FM on Amazon EC2 instances in eu-north-1. Deploy a private Amazon API Gateway REST API in front of the EC2 instances. Configure an Amazon Bedrock VPC endpoint. Integrate the REST API with the business application."
+      },
+      {
+        "key": "C",
+        "text": "Configure the FM to use cross-Region inference through an eu.amazon.* endpoint to ensure that all calls remain within Europe. Configure an Amazon Bedrock VPC endpoint. Extend existing SCPs to allow employees to use the FM through inference profiles in Europe-based Regions where the FM is available. Use an inference profile to integrate Amazon Bedrock with the business application."
+      },
+      {
+        "key": "D",
+        "text": "Deploy the FM in Amazon SageMaker AI in eu-north-1. Configure a SageMaker AI VPC endpoint. Extend existing SCPs to allow employees to use the SageMaker AI endpoint. Integrate the FM in SageMaker AI with the business application."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Cross-Region inference through the EU inference profile keeps calls inside Europe, a Bedrock VPC endpoint keeps requests private, and extending the SCPs to allow the inference profile in the European Regions where the FM is available satisfies the governance controls. Hosting the model on EC2 or SageMaker (B, D) abandons the Bedrock FM, and A places endpoints and APIs in Regions that do not match the Regional constraints.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 111
+  },
+  {
+    "id": "d3-q0931",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Bedrock Guardrails content filtering",
+    "difficulty": "medium",
+    "question_text": "A bank is developing a generative AI (GenAI)-powered AI assistant that uses Amazon Bedrock to assist the bank's website users with account inquiries and financial guidance. The bank must ensure that the AI assistant does not reveal any personally identifiable information (PII) in customer interactions. The AI assistant must not send PII in prompts to the GenAI model. The AI assistant must not respond to customer requests to provide investment advice. The bank must collect audit logs of all customer interactions, including any images or documents that are transmitted during customer interactions. Which solution will meet these requirements with the LEAST operational effort?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Macie to detect and redact PII in user inputs and in the model responses. Apply prompt engineering techniques to force the model to avoid investment advice topics. Use AWS CloudTrail to capture conversation logs."
+      },
+      {
+        "key": "B",
+        "text": "Use an AWS Lambda function and Amazon Comprehend to detect and redact PII. Use Amazon Comprehend topic modeling to prevent the AI assistant from discussing investment advice topics. Set up custom metrics in Amazon CloudWatch to capture customer conversations."
+      },
+      {
+        "key": "C",
+        "text": "Configure Amazon Bedrock guardrails to apply a sensitive information policy to detect and filter PII. Set up a topic policy to ensure that the AI assistant avoids investment advice topics. Use the Converse API to log model invocations. Enable delivery and image logging to Amazon S3."
+      },
+      {
+        "key": "D",
+        "text": "Use regex controls to match patterns for PII. Apply prompt engineering techniques to avoid returning PII or investment advice topics to customers. Enable model invocation logging, delivery logging, and image logging to Amazon S3."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Guardrails with a sensitive-information policy filter PII in prompts and responses, a denied topic blocks investment advice, and Bedrock model invocation logging with delivery and image logging to S3 captures audit logs including images and documents, all with minimal effort. Macie (A) discovers sensitive data in S3 rather than filtering live conversations, and custom Comprehend or regex solutions with prompt-only controls (B, D) are not enforceable.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 113
+  },
+  {
+    "id": "d3-q0932",
+    "domain": 3,
+    "task_statement": "3.4",
+    "topic": "Bias mitigation",
+    "difficulty": "medium",
+    "question_text": "An AI practitioner is building a model to generate images of humans in various professions. The practitioner discovered that the input data is biased, and specific attributes affect the image generation. Which technique will solve the problem?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Data augmentation for imbalanced classes"
+      },
+      {
+        "key": "B",
+        "text": "Model monitoring for class distribution"
+      },
+      {
+        "key": "C",
+        "text": "Retrieval Augmented Generation (RAG)"
+      },
+      {
+        "key": "D",
+        "text": "Watermark detection for images"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Data augmentation for imbalanced classes rebalances underrepresented attributes in the training data, which reduces bias in the generated images. Model monitoring for class distribution (B) detects the imbalance but does not fix it, RAG (C) grounds text generation, and watermark detection (D) identifies AI-generated images.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 116,
+    "review_note": "Foundational AI Practitioner (AIF-C01) level question; key agrees with my own judgment."
+  },
+  {
+    "id": "d3-q0933",
+    "domain": 3,
+    "task_statement": "3.4",
+    "topic": "Explainability in FM outputs",
+    "difficulty": "medium",
+    "question_text": "A medical company is customizing a foundation model for diagnostic purposes. The company needs the model to be transparent and explainable to meet regulatory requirements. Which soluton will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure security and compliance using Amazon Inspector."
+      },
+      {
+        "key": "B",
+        "text": "Generate simple metrics, reports, and examples by using Amazon SageMaker Clarify."
+      },
+      {
+        "key": "C",
+        "text": "Encrypt and secure training data by using Amazon Macie."
+      },
+      {
+        "key": "D",
+        "text": "Gather more data. Use Amazon Rekognition to add custom labels."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "SageMaker Clarify produces metrics, reports and examples that make model behaviour transparent and explainable, supporting regulatory requirements. Inspector (A) scans for vulnerabilities, Macie (C) discovers sensitive data in S3, and Rekognition custom labels (D) provides no explainability.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 118,
+    "review_note": "Foundational AI Practitioner (AIF-C01) level question; key agrees with my own judgment."
+  },
+  {
+    "id": "d3-q0934",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Compliance capabilities for regulated AI workloads",
+    "difficulty": "hard",
+    "question_text": "A company wants to deploy a conversational chatbot based on a fine-tuned Amazon SageMaker JumpStart model. The application must comply with multiple regulatory frameworks. Which capabilites can the company show compliance for? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Auto scaling inference endpoints"
+      },
+      {
+        "key": "B",
+        "text": "Threat detection"
+      },
+      {
+        "key": "C",
+        "text": "Data protection"
+      },
+      {
+        "key": "D",
+        "text": "Cost optimization"
+      },
+      {
+        "key": "E",
+        "text": "Loosely coupled microservices"
+      }
+    ],
+    "correct_answers": [
+      "B",
+      "C"
+    ],
+    "explanation": "Threat detection and data protection are security capabilities for which the company can demonstrate compliance with regulatory frameworks. Auto scaling, cost optimisation and loosely coupled microservices (A, D, E) are architectural best practices rather than compliance capabilities.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 119,
+    "review_note": "Foundational AI Practitioner (AIF-C01) level question; key agrees with my own judgment."
+  },
+  {
+    "id": "d3-q0935",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Identity federation for FM access",
+    "difficulty": "medium",
+    "question_text": "A company is creating a generative AI (GenAI) application that uses Amazon Bedrock foundation models (FMs). The application must use Microsoft Entra ID to authenticate. All FM API calls must stay on private network paths. Access to the application must be limited by department to specific model families. The company also needs a comprehensive audit trail of model interactions. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure SAML federation between Microsoft Entra ID and AWS Identity and Access Management. Create department-specific IAM roles that allow only the required ModelId values. Create AWS PrivateLink interface VPC endpoints for Amazon Bedrock runtime services. Enable AWS CloudTrail to capture Amazon Bedrock API calls. Configure Amazon Bedrock model invocation logging to record detailed model interactions."
+      },
+      {
+        "key": "B",
+        "text": "Create an identity provider (IdP) connection in IAM to authenticate by using Microsoft Entra ID. Assign department permission sets to control access to specific model families. Deploy AWS Lambda functions in private subnets with a NAT gateway for egress to Amazon Bedrock public endpoints. Enable CloudWatch Logs to capture model interactions for auditing purposes."
+      },
+      {
+        "key": "C",
+        "text": "Create a SAML identity provider (IdP) in IAM to authenticate by using Microsoft Entra ID. Use IAM permissions boundaries to limit department roles' access to specific model families. Configure public Amazon Bedrock API endpoints with VPC routing to maintain private network connectivity. Set up CloudTrail with Amazon S3 Lifecycle rules to manage audit logs of model interactions."
+      },
+      {
+        "key": "D",
+        "text": "Configure OpenID Connect (OIDC) federation between Microsoft Entra ID and IAM. Use attribute-based access control to map department attributes to specific model access permissions. Apply SCP policies to restrict access to Amazon Bedrock FM families based on department. Use Microsoft Entra ID's built-in logging capabilities to maintain an audit trail of model interactions."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "SAML federation between Microsoft Entra ID and IAM, department-specific IAM roles that allow only the required ModelId values, PrivateLink interface endpoints for the Bedrock runtime, and CloudTrail plus model invocation logging deliver authentication, private paths, per-department model control, and a full audit trail. NAT gateways or public endpoints (B, C) are not private network paths, and relying on Entra ID logs (D) does not audit model interactions.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 125
+  }
+]

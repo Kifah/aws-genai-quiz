@@ -1,0 +1,130 @@
+[
+  {
+    "id": "d2-q0620",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Multi-agent orchestration + Step Functions payload management for production workflows",
+    "difficulty": "hard",
+    "question_text": "A logistics company uses Amazon Bedrock Agents in a multi-agent architecture orchestrated by AWS Step Functions. Agent 1 analyses shipment documents (producing ~400 KB reasoning traces), Agent 2 validates compliance rules, and Agent 3 generates customer notifications. The team needs the full reasoning trace preserved for audit purposes while keeping the workflow operational within Step Functions quotas. The solution must maintain the sequential ReAct pattern and require minimal custom code. Which approach meets all requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure each agent task state to write its full output to Amazon S3 using the ResultPath and OutputPath intrinsic functions. Pass only the S3 object reference and a compact summary (<50 KB) between states. Configure S3 Lifecycle rules to retain audit traces for 7 years."
+      },
+      {
+        "key": "B",
+        "text": "Enable Step Functions Express Workflows which have a 5 MB payload limit. Pass the full reasoning traces directly between states."
+      },
+      {
+        "key": "C",
+        "text": "Compress each agent's output using a Lambda function between states. Decompress at the start of each subsequent state."
+      },
+      {
+        "key": "D",
+        "text": "Split the workflow into three separate Standard state machines. Use Amazon EventBridge to coordinate execution order. Pass outputs via event payloads."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Storing large outputs in S3 and passing only compact references between states is the AWS-recommended pattern for handling the 256 KB Standard Workflow payload quota. ResultPath controls where output is placed in the state, and OutputPath filters what is passed forward — both are native Step Functions features requiring no custom code. S3 Lifecycle rules provide the audit retention requirement. Express Workflows (B) have a 256 KB output limit too (not 5 MB) and are designed for short-duration high-volume workloads, not multi-minute agent processing. Compression (C) adds Lambda invocations between every state, increases complexity, and may not reliably reduce 400 KB below 256 KB. Separate state machines (D) break the sequential orchestration pattern and EventBridge payloads are limited to 256 KB anyway.",
+    "source_topic": "Step Functions payload management, multi-agent Bedrock orchestration, S3 intermediate storage, audit retention"
+  },
+  {
+    "id": "d2-q0621",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "AppConfig feature flags + Bedrock model switching for zero-downtime A/B testing",
+    "difficulty": "hard",
+    "question_text": "A fintech company runs a GenAI fraud detection assistant behind Amazon API Gateway and AWS Lambda. The team wants to A/B test Claude 3.5 Sonnet against Claude 3 Haiku — routing 20% of premium-tier customers to Sonnet and all standard-tier customers to Haiku. Model parameters (temperature, max_tokens) must be validated against schema constraints before taking effect, and switching between models must not require code redeployment. Which solution provides this capability with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use AWS AppConfig with feature flags and freeform configuration profiles. Define a JSON Schema validator for model parameters. Use the AppConfig Lambda extension to retrieve the active configuration at invocation time. Route based on a customer-tier attribute in the feature flag targeting rules."
+      },
+      {
+        "key": "B",
+        "text": "Store model configurations in an Amazon DynamoDB table keyed by customer tier. Read the configuration at the start of each Lambda invocation. Use DynamoDB Streams to trigger a validation Lambda when configurations change."
+      },
+      {
+        "key": "C",
+        "text": "Use AWS Systems Manager Parameter Store with parameter policies. Create separate parameters for each tier. Poll for changes every 60 seconds from the Lambda function."
+      },
+      {
+        "key": "D",
+        "text": "Deploy separate Lambda function versions for each model configuration. Use API Gateway canary deployments to split traffic by percentage."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "AWS AppConfig combines feature flags (for A/B split and tier-based targeting), configuration profiles (for model parameters), built-in JSON Schema validators (ensuring temperature/max_tokens are within bounds), and the Lambda extension (near-instant local cache with background refresh) — all managed with no custom infrastructure. DynamoDB (B) requires building custom validation logic, lacks native feature-flag targeting semantics, and adds a DynamoDB read on every invocation. Parameter Store (C) lacks feature-flag targeting, requires polling (adds latency), and has no built-in schema validation. Separate Lambda versions (D) require redeployment for every configuration change and API Gateway canary doesn't support customer-attribute-based routing.",
+    "source_topic": "AppConfig feature flags, JSON Schema validation, Bedrock model A/B testing, customer tier routing"
+  },
+  {
+    "id": "d2-q0622",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Bedrock Agents + Knowledge Bases action groups for multi-step tool use with RAG context",
+    "difficulty": "hard",
+    "question_text": "An insurance company is building a claims processing assistant. The assistant must (1) retrieve policy details from a 100,000-document knowledge base, (2) call an external fraud scoring API, (3) update claim status in a DynamoDB table, and (4) generate a summary email — all within a single conversational turn. The assistant must cite specific policy clauses in its response and autonomously decide the sequence of operations based on the claim context. Which architecture supports this with minimal custom orchestration code?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create an Amazon Bedrock Agent with an associated Knowledge Base for policy retrieval. Define action groups with Lambda functions for the fraud API call, DynamoDB update, and email generation. The agent's ReAct reasoning autonomously sequences the operations and cites KB sources."
+      },
+      {
+        "key": "B",
+        "text": "Build a Step Functions workflow with four sequential states: Retrieve API → Lambda (fraud) → Lambda (DynamoDB) → Lambda (email). Pass the Knowledge Base results through each state."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Bedrock Knowledge Bases RetrieveAndGenerate API. Post-process the response with a chain of Lambda functions that call the fraud API, update DynamoDB, and send the email."
+      },
+      {
+        "key": "D",
+        "text": "Deploy a LangChain agent on Amazon ECS with tools for each operation. Use FAISS as the vector store loaded from S3 at startup."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Amazon Bedrock Agents natively combine Knowledge Base access (with source citations) and action groups (Lambda-backed tool calls) in a single ReAct loop. The agent autonomously decides which tools to invoke and in what order based on the conversation context — no manual orchestration code needed. Citations from the Knowledge Base are automatically included in responses. Step Functions (B) requires pre-defined sequencing and cannot dynamically adapt based on claim context. RetrieveAndGenerate + post-processing (C) separates retrieval from action execution, losing the agent's ability to interleave retrieval with tool calls. LangChain on ECS (D) requires managing infrastructure, FAISS lacks the scalability of managed vector stores, and custom agent code must handle what Bedrock Agents provides natively.",
+    "source_topic": "Bedrock Agents action groups, Knowledge Base citations, autonomous multi-step tool use"
+  },
+  {
+    "id": "d2-q0623",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "CDK infrastructure-as-code + Bedrock custom model deployment with CI/CD guardrails",
+    "difficulty": "hard",
+    "question_text": "A media company has fine-tuned a custom model using Amazon Bedrock. The team needs to deploy the model through a CI/CD pipeline that enforces: (1) automated testing of model outputs against a golden dataset before promotion to production, (2) infrastructure changes reviewed via pull request, and (3) ability to roll back to the previous model version within minutes if quality degrades. Which architecture meets all requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Define the Bedrock custom model provisioned throughput in AWS CDK. Use CodePipeline with a CodeBuild test stage that invokes the model against the golden dataset and asserts quality thresholds. Deploy via CDK with CloudFormation change sets requiring manual approval. Use Provisioned Throughput model version switching for rollback."
+      },
+      {
+        "key": "B",
+        "text": "Store the model configuration in a JSON file in CodeCommit. Use a Lambda function triggered by repository changes to deploy the model. Test manually after deployment."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon SageMaker Pipelines to orchestrate model testing and deployment. Store infrastructure in Terraform. Use SageMaker Model Registry for version management."
+      },
+      {
+        "key": "D",
+        "text": "Deploy the model manually through the Bedrock console. Use CloudWatch alarms to detect quality degradation and trigger an SNS notification for manual rollback."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "CDK provides infrastructure-as-code that integrates with pull request workflows (review requirement). CodePipeline with a CodeBuild test stage automates golden dataset evaluation before promotion — failing tests block deployment. CloudFormation change sets with manual approval add an additional gate. Bedrock Provisioned Throughput supports model version management, enabling rapid rollback by pointing to the previous model version. Lambda-triggered deploys (B) bypass PR review and lack structured testing. SageMaker Pipelines (C) is designed for SageMaker-hosted models, not Bedrock custom models — mixing Terraform with SageMaker adds complexity without matching the Bedrock-native workflow. Console deployment (D) violates all three requirements — no automation, no PR review, no automated testing.",
+    "source_topic": "CDK IaC, CodePipeline CI/CD, Bedrock custom model deployment, automated quality gates"
+  }
+]

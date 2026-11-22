@@ -1,0 +1,1005 @@
+[
+  {
+    "id": "d2-q0901",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Streaming API responses",
+    "difficulty": "medium",
+    "question_text": "A company has deployed an AI assistant as a React application that uses AWS Amplify, an AWS AppSync GraphQL API, and Amazon Bedrock Knowledge Bases. The application uses the GraphQL API to call the Amazon Bedrock RetrieveAndGenerate API for knowledge base interactions. The company configures an AWS Lambda resolver to use the RequestResponse invocation type. Application users report frequent timeouts and slow response times. Users report these problems more frequently for complex questions that require longer processing. The company needs a solution to fix these performance issues and enhance the user experience. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use AWS Amplify AI Kit to implement streaming responses from the GraphQL API and to optimize client-side rendering."
+      },
+      {
+        "key": "B",
+        "text": "Increase the timeout value of the Lambda resolver. Implement retry logic with exponential backoff."
+      },
+      {
+        "key": "C",
+        "text": "Update the application to send an API request to an Amazon SQS queue. Update the AWS AppSync resolver to poll and process the queue."
+      },
+      {
+        "key": "D",
+        "text": "Change the RetrieveAndGenerate API to the InvokeModelWithResponseStream API. Update the application to use an Amazon API Gateway WebSocket API to support the streaming response."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Amplify AI Kit streams model output through the AppSync GraphQL API, so users see tokens as they arrive instead of waiting on one long RequestResponse Lambda call, which removes the timeouts on complex questions. Raising the Lambda timeout and retrying (B) does not improve perceived latency, and re-architecting around SQS polling (C) or a WebSocket API (D) is far more work than the managed Amplify capability.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 3
+  },
+  {
+    "id": "d2-q0902",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Streaming API responses",
+    "difficulty": "medium",
+    "question_text": "A company is developing a customer support application that uses Amazon Bedrock foundation models (FMs) to provide real-time AI assistance to the company's employees. The application must display AI-generated responses character by character as the responses are generated. The application needs to support thousands of concurrent users with minimal latency. The responses typically take 15 to 45 seconds to finish. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure an Amazon API Gateway WebSocket API with an AWS Lambda integration. Configure the WebSocket API to invoke the Amazon Bedrock InvokeModelWithResponseStream API and stream partial responses through WebSocket connections."
+      },
+      {
+        "key": "B",
+        "text": "Configure an Amazon API Gateway REST API with an AWS Lambda integration. Configure the REST API to invoke the Amazon Bedrock standard InvokeModel API and implement frontend client-side polling every 100 ms for complete response chunks."
+      },
+      {
+        "key": "C",
+        "text": "Implement direct frontend client connections to Amazon Bedrock by using IAM user credentials and the InvokeModelWithResponseStream API without any intermediate gateway or proxy layer."
+      },
+      {
+        "key": "D",
+        "text": "Configure an Amazon API Gateway HTTP API with an AWS Lambda integration. Configure the HTTP API to cache complete responses in an Amazon DynamoDB table and serve the responses through multiple paginated GET requests to frontend clients."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "An API Gateway WebSocket API with Lambda calling InvokeModelWithResponseStream pushes partial tokens to clients over a persistent connection, which suits 15-45 second generations at high concurrency. Client polling (B) and paginated cached responses (D) are not true streaming, and calling Bedrock straight from the frontend with IAM user credentials (C) is a security anti-pattern.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 10
+  },
+  {
+    "id": "d2-q0903",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "AgentCore core primitives",
+    "difficulty": "hard",
+    "question_text": "A company is using AWS Lambda and REST APIs to build a reasoning agent to automate support workflows. The system must preserve memory across interactions, share the relevant agent state, and support event-driven invocation and synchronous invocation. The system must also enforce access control and session-based permissions. Which combination of steps provides the MOST scalable solution? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Bedrock AgentCore to manage memory and session-aware reasoning. Deploy the agent with built-in identity support, event handling, and observability."
+      },
+      {
+        "key": "B",
+        "text": "Register the Lambda functions and the REST APIs as actions by using Amazon API Gateway and Amazon EventBridge. Enable Amazon Bedrock AgentCore to invoke the Lambda functions and the REST APIs without custom orchestration code."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Bedrock Agents for reasoning and conversation management. Use AWS Step Functions and Amazon SQS queues for orchestration. Store the agent state in Amazon DynamoDB to maintain memory between steps."
+      },
+      {
+        "key": "D",
+        "text": "Deploy the reasoning logic as a container on Amazon ECS behind Amazon API Gateway. Use Amazon Aurora to store memory data and identity data."
+      },
+      {
+        "key": "E",
+        "text": "Build a custom RAG pipeline by using Amazon Kendra and Amazon Bedrock. Use AWS Lambda to orchestrate tool invocations. Store the agent state in Amazon S3."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "AgentCore provides managed memory, session-aware reasoning, built-in identity, event handling and observability, and can invoke the existing Lambda functions and REST APIs as tools through API Gateway and EventBridge registrations with no custom orchestration code. Step Functions, SQS and DynamoDB (C), ECS with Aurora (D), and a custom Kendra RAG pipeline (E) all require you to build and operate orchestration, memory and identity yourself.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 15,
+    "review_note": "Wayground key is B,C. Kept A,B: both are AgentCore options that cover memory, session, identity, events and action invocation without custom orchestration; C needs Step Functions, SQS and DynamoDB."
+  },
+  {
+    "id": "d2-q0904",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Canary deployment with traffic shifting",
+    "difficulty": "hard",
+    "question_text": "A company is designing a canary deployment strategy for a payment processing API. The system must support automated gradual traffic shifting between multiple Amazon Bedrock models based on real-time inference metrics, historical traffic patterns, and service health. The solution must be able to gradually increase traffic to new model versions. The system must increase traffic if metrics remain healthy and decrease traffic if the performance degrades below acceptable thresholds. The company needs to comprehensively monitor inference latency and error rates during the deployment phase. The company must also be able to halt deployments and revert to a previous model version without any manual intervention. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Bedrock with provisioned throughput to host the versions of the model. Configure an Amazon EventBridge rule to invoke an AWS Step Functions workflow when a new model version is released. Configure the workflow to shift traffic in stages, wait for a specified time period, and invoke an AWS Lambda function to check Amazon CloudWatch performance metrics. Configure the workflow to increase traffic if the metrics meet thresholds and to trigger a traffic rollback if performance metrics fall below thresholds."
+      },
+      {
+        "key": "B",
+        "text": "Use AWS Lambda functions to invoke various Amazon Bedrock model versions. Use an Amazon API Gateway HTTP API with stage variables and weighted routing to shift traffic gradually to new model versions. Use Amazon CloudWatch to monitor performance metrics. Use external logic to adjust traffic between model versions and to roll back if performance falls below thresholds."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon SageMaker AI endpoint variants to represent multiple Amazon Bedrock model versions. Use variant weights to shift traffic. Use Amazon CloudWatch to monitor performance metrics. Use SageMaker Model Monitor to trigger AWS Lambda functions to roll back a model deployment if performance drops below a specified threshold. Configure an Amazon EventBridge rule to roll back model deployments if an anomaly is detected."
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon OpenSearch Service to track inference logs. Configure OpenSearch Service to invoke an AWS Systems Manager Automation runbook to update Amazon Bedrock model endpoints to shift traffic based on the inference logs."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Provisioned throughput hosts the model versions on Bedrock, and an EventBridge-triggered Step Functions workflow shifts traffic in stages, waits, checks CloudWatch metrics through Lambda, and rolls back automatically when thresholds are missed, with no manual steps. API Gateway weighted routing with external logic (B) and OpenSearch with Systems Manager (D) are not purpose-built for this, and SageMaker endpoint variants (C) cannot represent Bedrock model versions.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 20
+  },
+  {
+    "id": "d2-q0905",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Provisioned throughput",
+    "difficulty": "hard",
+    "question_text": "A financial services company uses an AI application to process financial documents by using Amazon Bedrock. During business hours, the application handles approximately 10,000 requests each hour, which requires consistent throughput. The company uses the CreateProvisionedModelThroughput API to purchase provisioned throughput. Amazon CloudWatch metrics show that the provisioned capacity is unused while on-demand requests are being throttled. The company finds the following code in the application: python response = bedrock_runtime.invoke_model(modelId=\"anthropic.claude-v2\", body=json.dumps(payload)) The company needs the application to use the provisioned throughput and to resolve the throttling issues. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the number of model units (MUs) in the provisioned throughput configuration."
+      },
+      {
+        "key": "B",
+        "text": "Replace the model ID parameter with the ARN of the provisioned model that the CreateProvisionedModelThroughput API returns."
+      },
+      {
+        "key": "C",
+        "text": "Add exponential backoff retry logic to handle throttling exceptions during peak hours."
+      },
+      {
+        "key": "D",
+        "text": "Modify the application to use the InvokeModelWithResponseStream API instead of the InvokeModel API."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Provisioned throughput is used only when the request's modelId is the provisioned model's ARN. The code calls the base model ID, so requests run on on-demand capacity and get throttled while the purchased capacity sits unused. More model units (A) or retries (C) do not redirect traffic, and switching to the streaming API (D) does not change which capacity is used.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 21
+  },
+  {
+    "id": "d2-q0906",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Amazon Bedrock Agents",
+    "difficulty": "medium",
+    "question_text": "A retail company is developing a customer service application that must process 10,000 daily queries about products, orders, and warranties. The application must be able to respond to queries about 50,000 product documents that are updated every day. The application must integrate with an order management API to check the status of orders and to help process returns. The application must maintain context throughout multi-turn interactions with customers. The company must collect complete audit trails for application responses. Which solution will meet these requirements with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy a fine-tuned Amazon Bedrock Anthropic Claude model for each product category. Create AWS Lambda functions to connect each model to the order management API. Store conversation history in Amazon DynamoDB."
+      },
+      {
+        "key": "B",
+        "text": "Create a custom model that uses continued pre-training on Amazon Bedrock to handle all product documentation. Set up an Amazon API Gateway REST API that uses AWS Lambda functions to connect the model to the order management API."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon SageMaker AI with containers to deploy models. Use Amazon Kendra to search product documents. Use AWS Step Functions to orchestrate calls to the order management API."
+      },
+      {
+        "key": "D",
+        "text": "Use an Amazon Bedrock agent with action groups to integrate with the order management API. Associate an Amazon Bedrock knowledge base with the agent to search product documentation by using Retrieval Augmentation Generation (RAG). Enable trace events to capture audit trails."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "A Bedrock agent with action groups calls the order management API, an associated knowledge base gives RAG over the daily-updated product documents, the agent keeps multi-turn session context, and trace events provide the audit trail, all managed. Fine-tuned or continued-pretrained models (A, B) cannot track daily document changes, and SageMaker with Kendra and Step Functions (C) is far more to operate.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 24
+  },
+  {
+    "id": "d2-q0907",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Step Functions 256 KB payload handling",
+    "difficulty": "hard",
+    "question_text": "An ecommerce company is using Amazon Bedrock to build a generative AI (GenAI) application. The application uses AWS Step Functions to orchestrate a multi-agent workflow to produce detailed product descriptions. The workflow consists of three sequential states: a description generator, a technical specifications validator, and a brand voice consistency checker. Each state produces intermediate reasoning traces and outputs that are passed to the next state. The application uses an Amazon S3 bucket for process storage and to store outputs. During testing, the company discovers that outputs between Step Functions states frequently exceed the 256 KB quota and cause workflow failures. A GenAI Developer needs to revise the application architecture to efficiently handle the Step Functions 256 KB quota and maintain workflow observability. The revised architecture must preserve the existing multi-agent reasoning and acting (ReAct) pattern. Which solution will meet these requirements with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Store intermediate outputs in Amazon DynamoDB. Pass only references between states. Create a Map state that retrieves the complete data from DynamoDB when required for each agent's processing step."
+      },
+      {
+        "key": "B",
+        "text": "Configure an Amazon Bedrock integration to use the S3 bucket URI in the input parameter for large outputs. Use the ResultPath field and the ResultSelector field to route S3 references between the agent steps while maintaining the sequential validation workflow."
+      },
+      {
+        "key": "C",
+        "text": "Use AWS Lambda functions to compress outputs to less than 256 KB before each agent state. Configure each agent task to decompress the outputs before processing and to compress results before passing them to the next state."
+      },
+      {
+        "key": "D",
+        "text": "Configure a separate Step Functions state machine to handle each agent's processing. Use Amazon EventBridge to coordinate the execution flow between state machines. Use S3 references for the outputs as event data."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Pass S3 references instead of payloads: the Bedrock integration reads input from an S3 URI, and ResultPath and ResultSelector route only the references between states, which avoids the 256 KB limit while keeping the sequential ReAct workflow and its observability. DynamoDB with a Map state (A), compression Lambdas (C), and separate state machines coordinated by EventBridge (D) add components and change the existing design.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 25
+  },
+  {
+    "id": "d2-q0908",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Human-in-the-loop approval workflows",
+    "difficulty": "medium",
+    "question_text": "An elevator service company has developed an AI assistant application by using Amazon Bedrock. The application generates elevator maintenance recommendations to support the company's elevator technicians. The company uses Amazon Kinesis Data Streams to collect the elevator sensor data. New regulatory rules require that a human technician must review all AI-generated recommendations. The company needs to establish human oversight workflows to review and approve AI recommendations. The company must store all human technician review decisions for audit purposes. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a custom approval workflow by using AWS Lambda functions and Amazon SQS queues for human review of AI recommendations. Store all review decisions in Amazon DynamoDB for audit purposes."
+      },
+      {
+        "key": "B",
+        "text": "Create an AWS Step Functions workflow that has a human approval step that uses the waitForTaskToken API to pause execution. After a human technician completes a review, use an AWS Lambda function to call the SendTaskSuccess API that has the approval decision. Store all review decisions in Amazon DynamoDB."
+      },
+      {
+        "key": "C",
+        "text": "Create an AWS Glue workflow that has a human approval step. After the human technician review, integrate the application with an AWS Lambda function that calls the SendTaskSuccess API. Store all human technician review decisions in Amazon DynamoDB."
+      },
+      {
+        "key": "D",
+        "text": "Configure Amazon EventBridge rules with custom event patterns to route AI recommendations to human technicians for review. Create AWS Glue jobs to process human technician approval queues. Use Amazon ElastiCache to cache all human technician review decisions."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "The Step Functions waitForTaskToken pattern pauses the workflow until a technician reviews the recommendation, SendTaskSuccess resumes it with the decision, and DynamoDB stores the decisions for audit, all with managed services. A Lambda and SQS workflow (A) is more to build, Glue workflows (C) have no human-approval step or SendTaskSuccess, and ElastiCache (D) is not durable audit storage.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 33
+  },
+  {
+    "id": "d2-q0909",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Streaming API responses",
+    "difficulty": "medium",
+    "question_text": "A financial services company is developing a real-time generative AI (GenAI) assistant to support human call center agents. The GenAI assistant must transcribe live customer speech, analyze context, and provide incremental suggestions to call center agents while a customer is still speaking. To preserve responsiveness, the GenAI assistant must maintain end-to-end latency under 1 second from speech to initial response display. The architecture must use only managed AWS services and must support bidirectional streaming to ensure that call center agents receive updates in real time. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use the Amazon Transcribe streaming API to transcribe calls. Pass the text to Amazon Comprehend to perform sentiment analysis. Feed the results to Anthropic Claude on Amazon Bedrock by using the InvokeModel API. Store results in Amazon DynamoDB. Use a WebSocket API to display the results."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Transcribe streaming with partial results enabled to deliver fragments of transcribed text before customers finish speaking. Forward text fragments to Amazon Bedrock by using the InvokeModelWithResponseStream API. Stream responses to call center agents through an Amazon API Gateway WebSocket API."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Transcribe batch processing to convert calls to text. Pass complete transcripts to Anthropic Claude on Amazon Bedrock by using the ConverseStream API. Return responses through an Amazon Lex chatbot interface that call center agents can access from their work computers."
+      },
+      {
+        "key": "D",
+        "text": "Use the Amazon Transcribe streaming API with an AWS Lambda function to transcribe each audio segment. Configure the Lambda function to call the Amazon Titan Embeddings model on Amazon Bedrock by using the InvokeModel API. Configure the Lambda function to publish results to an Amazon SNS topic. Subscribe the call center agents to the SNS topic."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Transcribe streaming with partial results gives text before the customer finishes speaking, InvokeModelWithResponseStream streams tokens back, and an API Gateway WebSocket API delivers them bidirectionally in real time within the 1-second budget. Batch transcription (C) and non-streaming InvokeModel (A) cannot meet the latency target, and SNS (D) is not bidirectional streaming.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 37
+  },
+  {
+    "id": "d2-q0910",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "Amazon Q Developer for productivity",
+    "difficulty": "medium",
+    "question_text": "A company has set up Amazon Q Developer Pro licenses for all developers at the company. The company maintains a list of approved resources that developers must use when developing applications. The approved resources include internal libraries, proprietary algorithmic techniques, and sample code with approved styling. A new team of developers is using Amazon Q Developer to develop a new Java-based application. The company must ensure that the new developer team uses the company's approved resources. The company does not want to make project-level modifications. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a Git repository that contains all of the approved internal libraries, algorithms, and code samples. Include this Git repository in the application project locally as part of the workspace. Ensure that the developers use the @workspace context to retrieve suggestions from the Git repository."
+      },
+      {
+        "key": "B",
+        "text": "In the project root folder, create a folder named .amazonq/rules. Add the approved internal libraries, algorithms, and code samples to the folder."
+      },
+      {
+        "key": "C",
+        "text": "Create a folder in the application project named rules. Store the guidelines and code in the folder for Amazon Q Developer to reference product code suggestions."
+      },
+      {
+        "key": "D",
+        "text": "Create an Amazon Q Developer customization that includes the approved data sources. Ensure that the developers use the customization to develop the application."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "An Amazon Q Developer customization is built from the company's approved internal libraries, algorithms and code samples and applies to developers without touching any project. Adding the approved material to the workspace or to rules folders in the project (A, B, C) is project-level modification, which the company wants to avoid.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 39
+  },
+  {
+    "id": "d2-q0911",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Agent orchestration with Step Functions retry and catch",
+    "difficulty": "hard",
+    "question_text": "A company wants to create an annual rewards program for its customers. The rewards that customers earn vary based on different parameters such as the categories of the items ordered and the customers' purchase history. The company needs a generative AI (GenAI) solution that uses three Amazon Bedrock agents to help customers during online catalog browsing. The agents must use knowledge bases and action groups to handle the search, recommendation, and order modules. The modules must operate sequentially. An AWS Lambda function must calculate estimated rewards for each recommended item. The solution must provide graceful degradation during service disruptions. Which solution will meet these requirements with the MOST operational efficiency?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Define an Amazon API Gateway REST API behind each agent. Create a second Lambda function to orchestrate the calls to the agents and the rewards Lambda function. Configure the second Lambda function with a retry/fallback mechanism."
+      },
+      {
+        "key": "B",
+        "text": "Create an AWS Step Functions state machine with four tasks that run the agents and the rewards Lambda function. Set up retry and catch branches for each of the task steps."
+      },
+      {
+        "key": "C",
+        "text": "Configure each agent with a separate retry/fallback mechanism. Create a second Lambda function to orchestrate the calls to the agents and the rewards Lambda function. Define an Amazon API Gateway REST API behind the second Lambda function."
+      },
+      {
+        "key": "D",
+        "text": "Create a second Lambda function to orchestrate the calls to the agents and the rewards Lambda function. Create an AWS Step Functions state machine with one task that runs the second Lambda function. Set up retry and catch branches for the task step."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A Step Functions state machine with four tasks (the three agents and the rewards Lambda) runs the modules sequentially, and retry and catch branches on each task give graceful degradation during disruptions with the least custom orchestration. Extra orchestrator Lambdas behind API Gateway (A, C) add components, and wrapping everything in one task (D) gives a single retry/catch for all steps instead of per-step handling.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 50
+  },
+  {
+    "id": "d2-q0912",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Step Functions SDK integrations with Bedrock",
+    "difficulty": "medium",
+    "question_text": "A company is creating a workflow to review customer-facing communications before the company sends the communications. The company uses a pre-defined message template to generate the communications and stores the communications in an Amazon S3 bucket. The workflow needs to capture a specific portion from the template and send it to an Amazon Bedrock model. The workflow must store model responses back to the original S3 bucket. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a flow in Amazon Bedrock Flows. Configure S3 action nodes at the beginning and end of the flow to retrieve and store the communications and the model responses. In the middle of the flow, configure an expression to parse each communication. Configure an agent step to send the parsed input to the model for review."
+      },
+      {
+        "key": "B",
+        "text": "Create an AWS Step Functions Express workflow state machine. Use an Amazon S3 integration GetObject step to retrieve the original communications. Use an intrinsic function Pass step to parse the communications and to pass the results to an Amazon Bedrock InvokeModel step. Configure an Amazon S3 integration PutObject step to store the model responses back to the S3 bucket."
+      },
+      {
+        "key": "C",
+        "text": "Create an Amazon Bedrock agent that has an action group. Configure instructions to define how the agent should parse the communications. Configure the action group to retrieve the communications from the S3 bucket, invoke the Amazon Bedrock model, and store the model responses back to the S3 bucket."
+      },
+      {
+        "key": "D",
+        "text": "Create an Amazon Bedrock agent that has a single action group. Configure three AWS Lambda functions in the action group. Configure the functions to retrieve the communications from the S3 bucket, parse the communications and invoke the Amazon Bedrock model, and store the model responses back to the S3 bucket."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Step Functions can do the whole job with native integrations: S3 GetObject, an intrinsic-function Pass state to extract the template portion, Bedrock InvokeModel, and S3 PutObject. Bedrock Flows (A) has no general parsing expression for pulling a portion out of the template, and Bedrock agents with action groups (C, D) add agent orchestration where a deterministic workflow is enough.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 51,
+    "review_note": "Wayground key is A. Kept B: Step Functions with S3 GetObject, an intrinsic-function Pass state, Bedrock InvokeModel and S3 PutObject maps exactly onto the parse step; Bedrock Flows has no general parsing expression node. Mondal key is A, as is Wayground. Kept B: the Bedrock Flows documentation allows only $.data on a string input and the S3 retrieval node returns a string, so a flow cannot extract a portion of the template."
+  },
+  {
+    "id": "d2-q0913",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Multi-agent supervisor-collaborator architecture",
+    "difficulty": "medium",
+    "question_text": "A healthcare company is using Amazon Bedrock to develop a real-time patient care AI assistant to respond to queries for separate departments that handle clinical inquiries, insurance verification, appointment scheduling, and insurance claims. The company wants to use a multi-agent architecture. The company must ensure that the AI assistant is scalable and can onboard new features for patients. The AI assistant must be able to handle thousands of parallel patient interactions. The company must ensure that patients receive appropriate domain-specific responses to queries. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Isolate data for each agent by using separate knowledge bases. Use IAM filtering to control access to each knowledge base. Deploy a supervisor agent to perform natural language intent classification on patient inquiries. Configure the supervisor agent to route queries to specialized collaborator agents to respond to department-specific queries. Configure each specialized collaborator agent to use Retrieval Augmented Generation (RAG) with the agent's department-specific knowledge base."
+      },
+      {
+        "key": "B",
+        "text": "Create a separate supervisor agent for each department. Configure individual collaborator agents to perform natural language intent classification for each specialty domain within each department. Integrate each collaborator agent with department-specific knowledge bases only. Implement manual handoff processes between the supervisor agents."
+      },
+      {
+        "key": "C",
+        "text": "Isolate data for each department in separate knowledge bases. Use IAM filtering to control access to each knowledge base. Deploy a single general-purpose agent. Configure multiple action groups within the general-purpose agent to perform specific department functions. Implement rule-based routing logic within the general-purpose agent instructions."
+      },
+      {
+        "key": "D",
+        "text": "Implement multiple independent supervisor agents that run in parallel to respond to patient inquiries for each department. Configure multiple collaborator agents for each supervisor agent. Integrate all agents with the same knowledge base. Use external routing logic to merge responses from multiple supervisor agents."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "A supervisor agent classifies intent and routes queries to specialised collaborator agents, each using its own department knowledge base, which gives domain-specific answers and a design that scales and accepts new features. Separate supervisors per department with manual handoff (B), one general-purpose agent with rule-based routing (C), and independent supervisors sharing one knowledge base with external merging (D) fail on scalability, data isolation or domain-specific responses.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 53
+  },
+  {
+    "id": "d2-q0914",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "CDK multi-environment FM deployment",
+    "difficulty": "medium",
+    "question_text": "A company uses an AI assistant application to summarize the company's website content and provide information to customers. The company plans to use Amazon Bedrock to give the application access to a foundation model (FM). The company needs to deploy the AI assistant application to a development environment and a production environment. The solution must integrate the environments with the FM. The company wants to test the effectiveness of various FMs in each environment. The solution must provide product owners with the ability to easily switch between FMs for testing purposes in each environment. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create one AWS CDK application. Create multiple pipelines in AWS CodePipeline. Configure each pipeline to have its own settings for each FM. Configure the application to invoke the Amazon Bedrock FMs by using the aws_bedrock.ProvisionedModel.fromProvisionedModelArn() method."
+      },
+      {
+        "key": "B",
+        "text": "Create a separate AWS CDK application for each environment. Configure the applications to invoke the Amazon Bedrock FMs by using the aws_bedrock.FoundationModel.fromFoundationModelId() method. Create a separate pipeline in AWS CodePipeline for each environment."
+      },
+      {
+        "key": "C",
+        "text": "Create one AWS CDK application. Configure the application to invoke the Amazon Bedrock FMs by using the aws_bedrock.FoundationModel.fromFoundationModelId() method. Create a pipeline in AWS CodePipeline pipeline that has a deployment stage for each environment that uses AWS CodeBuild deploy actions."
+      },
+      {
+        "key": "D",
+        "text": "Create one AWS CDK application for the production environment. Configure the application to invoke the Amazon Bedrock FMs by using the aws_bedrock.ProvisionedModel.fromProvisionedModelArn() method. Create a pipeline in AWS CodePipeline. Configure the pipeline to deploy to the production environment by using an AWS CodeBuild deploy action. For the development environment, manually recreate the resources by referring to the production application code."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "One CDK application with a single CodePipeline that has a deployment stage per environment keeps environments consistent, and FoundationModel.fromFoundationModelId lets product owners switch FMs through configuration in each environment. Separate applications or pipelines per environment (A, B) duplicate work, manually recreating dev resources (D) is error-prone, and ProvisionedModel ARNs (A, D) tie deployments to purchased capacity.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 54
+  },
+  {
+    "id": "d2-q0915",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "SageMaker inference options",
+    "difficulty": "medium",
+    "question_text": "A company is building an ML model to analyze archived data. The company must perform inference on large datasets that are multiple GBs in size. The company does not need to access the model predictions immediately. Which Amazon SageMaker inference option will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Batch transform"
+      },
+      {
+        "key": "B",
+        "text": "Real-time inference"
+      },
+      {
+        "key": "C",
+        "text": "Serverless inference"
+      },
+      {
+        "key": "D",
+        "text": "Asynchronous inference"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Batch transform runs offline inference over large multi-GB datasets when predictions are not needed immediately and no persistent endpoint is required. Real-time (B) and serverless (C) inference suit low-latency individual requests, and asynchronous inference (D) queues individual large-payload requests rather than processing a whole dataset as a batch job.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 58
+  },
+  {
+    "id": "d2-q0916",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Amazon Q Business data accessor",
+    "difficulty": "hard",
+    "question_text": "Example Corp provides a personalized video generation service that millions of enterprise customers use. Customers generate marketing videos by submitting prompts to the company's proprietary generative AI (GenAI) model. To improve output relevance and personalization, Example Corp wants to enhance the prompts by using customer-specific context such as product preferences, customer attributes, and business history. The customers have strict data governance requirements. The customers must retain full ownership and control over their own data. The customers do not require real-time access. However, semantic accuracy must be high and retrieval latency must remain low to support customer experience use cases. Example Corp wants to minimize architectural complexity in its integration pattern. Example Corp does not want to deploy and manage services in each customer's environment unless necessary. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Ensure that each customer sets up an Amazon Q Business index that includes the customer's internal data. Ensure that each customer designates Example Corp as a data accessor to allow Example Corp to retrieve relevant content by using a secure API to enrich prompts at runtime."
+      },
+      {
+        "key": "B",
+        "text": "Use federated search with Model Context Protocol (MCP) by deploying real-time MCP servers for each customer. Retrieve data in real time during prompt generation."
+      },
+      {
+        "key": "C",
+        "text": "Ensure that each customer configures an Amazon Bedrock knowledge base. Allow cross-account querying so Example Corp can retrieve structured data for prompt augmentation."
+      },
+      {
+        "key": "D",
+        "text": "Configure Amazon Kendra to crawl customer data sources. Share the resulting indexes across accounts so Example Corp can query each customer's Amazon Kendra index to retrieve augmentation data."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "The Amazon Q Business data accessor lets an ISV query a customer-owned Q Business index through a secure API, so customers keep ownership and control of their data, retrieval is low-latency and semantically accurate, and nothing has to be deployed in customer environments. Per-customer real-time MCP servers (B) require deployment in every environment, and cross-account Knowledge Base or Kendra index sharing (C, D) is not the purpose-built pattern.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 60,
+    "review_note": "Wayground key is C. Kept A: Amazon Q Business data accessor is the purpose-built pattern for an ISV to query customer-owned indexes without deploying anything in the customer environment. CertyIQ key is C as well; kept my answer. Wayground, CertyIQ and Final Doc keys are all C; only the yellow highlight says A. Kept A because the ISV data accessor is the purpose-built Q Business pattern. Low confidence, I am in the minority here."
+  },
+  {
+    "id": "d2-q0917",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "SageMaker hybrid deployment",
+    "difficulty": "hard",
+    "question_text": "A company is designing a solution that uses foundation models (FMs) to support multiple AI workloads. Some FMs must be invoked on demand and in real time. Other FMs require consistent high-throughput access for batch processing. The solution must support hybrid deployment patterns and run workloads across cloud infrastructure and on-premises infrastructure to comply with data residency and compliance requirements. Which combination of steps will meet these requirements? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use AWS Lambda to orchestrate low-latency FM inference by invoking FMs hosted on Amazon SageMaker AI asynchronous endpoints."
+      },
+      {
+        "key": "B",
+        "text": "Configure provisioned throughput in Amazon Bedrock to ensure consistent performance for high-volume workloads."
+      },
+      {
+        "key": "C",
+        "text": "Deploy FMs to Amazon SageMaker AI endpoints with support for edge deployment by using Amazon SageMaker Neo. Orchestrate the FMs by using AWS Lambda to support hybrid deployment."
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Bedrock with auto-scaling to handle unpredictable traffic surges."
+      },
+      {
+        "key": "E",
+        "text": "Use Amazon SageMaker JumpStart to host and invoke the FMs."
+      }
+    ],
+    "correct_answers": [
+      "B",
+      "C"
+    ],
+    "explanation": "Provisioned throughput in Bedrock gives consistent high-throughput capacity for batch workloads, and SageMaker endpoints with edge deployment through SageMaker Neo, orchestrated by Lambda, support hybrid and on-premises patterns for data-residency needs. Asynchronous SageMaker endpoints (A) are not low-latency, Bedrock auto-scaling (D) is not hybrid, and JumpStart hosting alone (E) does not address hybrid deployment.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 63
+  },
+  {
+    "id": "d2-q0918",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Converse API for consistent multi-turn integration",
+    "difficulty": "medium",
+    "question_text": "A company is building a generative AI (GenAI) application that processes financial reports and provides summaries for analysts. The application must run two compute environments. In one environment, AWS Lambda function must use the Python SDK to analyze reports on demand. In the second environment, Amazon EKS containers must use the JavaScript SDK to batch process multiple reports on a schedule. The application must maintain conversational context throughout multi-tum interactions, use the same foundation model (FM) across environments, and ensure consistent authentication. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use the Amazon Bedrock InvokeModel API with a separate authentication method for each environment. Store conversation states in Amazon DynamoDB. Use custom I/O formatting logic for each programming language."
+      },
+      {
+        "key": "B",
+        "text": "Use the Amazon Bedrock Converse API directly in both environments with a common authentication mechanism that uses IAM roles. Store conversation states in Amazon ElastiCache. Creating programming language-specific wrappers for model parameters."
+      },
+      {
+        "key": "C",
+        "text": "Create a centralized Amazon API Gateway REST API endpoint that handles all model interactions by using the InvokeModel API. Store interaction history in application process memory in each Lambda function or EKS container. Use environment variables to configure model parameters."
+      },
+      {
+        "key": "D",
+        "text": "Use the Amazon Bedrock Converse API and IAM roles for authentication. Pass previous messages in the request messages array to maintain conversational context. Use programming language-specific SDKs to establish consistent API interfaces."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "The Converse API provides one consistent interface across models and SDKs, IAM roles give consistent authentication in Lambda and EKS, and passing previous messages in the messages array maintains multi-turn context. InvokeModel with separate authentication and custom formatting (A, C) is inconsistent, per-language wrappers with ElastiCache state (B) add overhead, and in-process memory (C) loses state between invocations.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 69
+  },
+  {
+    "id": "d2-q0919",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "MCP transport for remote servers",
+    "difficulty": "medium",
+    "question_text": "A company is developing a new AI-powered application that needs to integrate with various specialized tools. These tools currently run as Model Context Protocol (MCP) servers on the local machines of developers and do not maintain states between invocations. The company plans to deploy each MCP server as an AWS Lambda function to support the company's production application. The solution must be accessible to both internal applications and authorized third-party partners. The solution must use strict authentication and authorization controls. Which additional steps will meet these requirements with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a custom Lambda invocation transport by using the Lambda Invoke API. Implement IAM authentication and grant InvokeFunction permissions to authorized users and roles."
+      },
+      {
+        "key": "B",
+        "text": "Expose the Lambda functions through Amazon API Gateway REST API endpoints. Implement API keys for authentication. Configure the applications that need to access the MCP servers to use standard HTTP requests instead of the MCP protocol."
+      },
+      {
+        "key": "C",
+        "text": "Create Lambda function URLs and enable a custom Streamable HTTP transport and SigV4. Implement AWS IAM authentication. Grant InvokeFunctionUrl permissions to authorized users and roles."
+      },
+      {
+        "key": "D",
+        "text": "Expose the Lambda function through Amazon API Gateway HTTP API endpoints with the Streamable HTTP transport. Use Amazon Cognito to implement OAuth authentication. Configure API Gateway to validate OAuth tokens."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "An API Gateway HTTP API exposing the Lambda MCP server with the Streamable HTTP transport, with Cognito-issued OAuth tokens validated by API Gateway, serves internal applications and third-party partners with strict authentication and little operational work. A custom Lambda invoke transport with IAM (A), API keys with plain HTTP instead of MCP (B), and function URLs with SigV4 (C) require a custom transport or IAM identities for partners.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 71,
+    "review_note": "Yellow and Wayground say C; CertyIQ says D. Changed to D: third-party partners need OAuth (the MCP authorization model) via API Gateway HTTP API and Cognito; C needs a custom transport and IAM principals for partners. Yellow, Wayground and Final Doc say C; CertyIQ says D. Kept D: authorized third-party partners need OAuth token validation (API Gateway HTTP API with Cognito) rather than IAM principals and a custom SigV4 transport. Low confidence, I am in the minority here."
+  },
+  {
+    "id": "d2-q0920",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Exponential backoff and retry",
+    "difficulty": "medium",
+    "question_text": "A company has a generative AI (GenAI) application that uses Amazon Bedrock to provide real-time responses to customer queries. The company has noticed intermittent failures with API calls to foundation models (FMs) during peak traffic periods. The company needs a solution to handle transient errors and provide detailed observability into FM performance. The solution must prevent cascading failures during throttling events and provide distributed tracing across service boundaries to identify latency contributors. The solution must also enable correlation of performance issues with specific FM characteristics. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Implement a custom retry mechanism with a fixed delay of 1 second between retries. Configure Amazon CloudWatch alarms to monitor the application's error rates and latency metrics."
+      },
+      {
+        "key": "B",
+        "text": "Configure the AWS SDK with standard retry mode and exponential backoff with jitter. Use AWS X-Ray tracing with annotations to identify and filter service components."
+      },
+      {
+        "key": "C",
+        "text": "Implement client-side caching of all FM responses. Add custom logging statements in the application code to record API call durations."
+      },
+      {
+        "key": "D",
+        "text": "Configure the AWS SDK with adaptive retry mode. Use AWS CloudTrail distributed tracing to monitor throttling events."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "The SDK's standard retry mode with exponential backoff and jitter handles transient errors and avoids synchronised retry storms during throttling, while X-Ray tracing with annotations gives distributed tracing and lets you filter and correlate latency by FM characteristics. A fixed 1-second retry delay (A) synchronises retries, caching and custom logs (C) give no tracing, and CloudTrail (D) is not a distributed tracing tool.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 72
+  },
+  {
+    "id": "d2-q0921",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Automated retraining and redeployment with SageMaker Pipelines",
+    "difficulty": "medium",
+    "question_text": "An insurance company uses existing Amazon SageMaker AI infrastructure to support a web-based application that allows customers to predict what their insurance premiums will be. The company stores customer data that is used to train the SageMaker AI model in an Amazon S3 bucket. The dataset is growing rapidly. The company wants a solution to continuously re-train the model. The solution must automatically re-train and re-deploy the model to the application when an employee uploads a new customer data file to the S3 bucket. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use AWS Glue to run an ETL job on each uploaded file. Configure the ETL job to use the AWS SDK to invoke the Sage Maker AI model endpoint. Use real-time inference with the endpoint to re-deploy the model after it is re-trained on the updated customer dataset."
+      },
+      {
+        "key": "B",
+        "text": "Create an AWS Lambda function and webhook handlers to generate an event when an employee uploads a new file. Configure SageMaker Pipelines to re-deploy the model after it is re-trained on the updated customer dataset. Use Amazon EventBridge to create an event bus. Set the Lambda function event as the source and SageMaker Pipelines as the target."
+      },
+      {
+        "key": "C",
+        "text": "Create an AWS Step Functions Express workflow with AWS SDK integrations to retrieve the customer data from the S3 bucket when an employee uploads a new file to the S3 bucket. Use a SageMaker Data Wrangler flow to export the data from the S3 bucket to SageMaker Autopilot. Use SageMaker Autopilot to re-deploy the model after it has been re-trained on the updated customer dataset."
+      },
+      {
+        "key": "D",
+        "text": "Create an AWS Step Functions Standard workflow. Configure the first state to call an AWS Lambda function to respond when an employee uploads a new file to the S3 bucket. Use a pipeline in SageMaker Pipelines to re-deploy the model after it has been re-trained on the updated customer dataset. Use the next state in the workflow to run the pipeline when the first state receives a response."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "A Standard Step Functions workflow started by the S3 upload calls Lambda and runs a SageMaker Pipeline that retrains and redeploys the model, and Standard workflows can run as long as training takes. Invoking the endpoint from Glue (A) does not retrain anything, Autopilot behind an Express workflow (C) is limited by Express duration limits, and B misuses an EventBridge event bus with Lambda as the event source.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 74,
+    "review_note": "CertyIQ key is B. Kept D (low confidence)."
+  },
+  {
+    "id": "d2-q0922",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Streaming API responses",
+    "difficulty": "medium",
+    "question_text": "A company is designing an API for a generative AI (GenAI) application that uses a foundation model (FM) that is hosted on a managed model service. The API must stream responses to reduce latency, enforce token limits to manage compute resource usage, and implement retry logic to handle model timeouts and partial responses. Which solution will meet these requirements with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Integrate an Amazon API Gateway HTTP API with an AWS Lambda function to invoke Amazon Bedrock. Use Lambda response streaming to stream responses. Enforce token limits within the Lambda function. Implement retry logic for model timeouts by using Lambda and API Gateway timeout configurations."
+      },
+      {
+        "key": "B",
+        "text": "Connect an Amazon API Gateway HTTP API directly to Amazon Bedrock. Simulate streaming by using client-side polling. Enforce token limits on the frontend. Configure retry behavior by using API Gateway integration settings."
+      },
+      {
+        "key": "C",
+        "text": "Connect an Amazon API Gateway WebSocket API to an Amazon ECS service that hosts a containerized inference server. Stream responses by using the WebSocket protocol. Enforce token limits within Amazon ECS. Handle model timeouts by using ECS task lifecycle hooks and restart policies."
+      },
+      {
+        "key": "D",
+        "text": "Integrate an Amazon API Gateway REST API with an AWS Lambda function that invokes Amazon Bedrock. Use Lambda response streaming to stream responses. Enforce token limits within the Lambda function. Implement retry logic by using Lambda and API Gateway timeout configurations."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "API Gateway REST APIs support Lambda response streaming, so a REST API with a Lambda function that invokes Bedrock, token limits enforced in the Lambda function, and retries through Lambda and API Gateway timeout settings meets the requirements with managed services. A uses an HTTP API, which does not support Lambda response streaming, client-side polling with frontend token limits (B) is not enforceable, and an ECS inference server behind WebSocket (C) is far more to operate.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 78,
+    "review_note": "Low confidence. Lambda response streaming behind an API Gateway HTTP API is questionable; REST API (D) gained response streaming in late 2025. Source says A. Yellow and earlier sources say A; Final Doc says D. Changed to D: API Gateway HTTP APIs do not support Lambda response streaming, while REST APIs gained it in late 2025. The exam key may still be A. Mondal key is A. Kept D: the AWS API Gateway documentation states response streaming is supported for REST APIs only, not HTTP APIs."
+  },
+  {
+    "id": "d2-q0923",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "Amazon Q Developer for productivity",
+    "difficulty": "easy",
+    "question_text": "A software company builds tools for customers. The company wants to use AI to increase software development productivity. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use a binary classification model to generate code reviews."
+      },
+      {
+        "key": "B",
+        "text": "Install code recommendation software in the company's developer tools."
+      },
+      {
+        "key": "C",
+        "text": "Install a code forecasting tool to predict potential code issues."
+      },
+      {
+        "key": "D",
+        "text": "Use a natural language processing (NLP) tool to generate code."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Installing code recommendation software such as Amazon Q Developer in the developers' tools directly raises productivity by suggesting and generating code. A binary classification model for code reviews (A), a forecasting tool for issues (C), and a generic NLP tool (D) are not the integrated assistant the company needs.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 87
+  },
+  {
+    "id": "d2-q0924",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "MCP transport for remote servers",
+    "difficulty": "medium",
+    "question_text": "A company uses AWS Lambda functions to build an AI agent solution. A GenAI developer must set up a Model Context Protocol (MCP) server that accesses user information. The GenAI developer must also configure the AI agent to use the new MCP server. The GenAI developer must ensure that only authorized users can access the MCP server. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use a Lambda function to host the MCP server. Grant the AI agent Lambda functions permission to invoke the Lambda function that hosts the MCP server. Configure the AI agent's MCP client to invoke the MCP server asynchronously."
+      },
+      {
+        "key": "B",
+        "text": "Use a Lambda function to host the MCP server. Grant the AI agent Lambda functions permission to invoke the Lambda function that hosts the MCP server. Configure the AI agent to use the STDIO transport with the MCP server."
+      },
+      {
+        "key": "C",
+        "text": "Use a Lambda function to host the MCP server. Create an Amazon API Gateway HTTP API that proxies requests to the Lambda function. Configure the AI agent solution to use the Streamable HTTP transport to make requests through the HTTP API. Use Amazon Cognito to enforce OAuth 2.1."
+      },
+      {
+        "key": "D",
+        "text": "Use a Lambda layer to host the MCP server. Add the Lambda layer to the AI agent Lambda functions. Configure the agentic AI solution to use the STDIO transport to send requests to the MCP server. In the AI agent's MCP configuration, specify the Lambda layer ARN as the command. Specify the user credentials as environment variables."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Hosting the MCP server in Lambda behind an API Gateway HTTP API, using the Streamable HTTP transport, with Cognito enforcing OAuth 2.1, supports remote access with proper authorisation of users. Direct Lambda invocation with asynchronous calls or the STDIO transport (A, B) does not provide remote MCP transport or user authorisation, and a Lambda layer launched as a command with credentials in environment variables (D) is insecure.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 95
+  },
+  {
+    "id": "d2-q0925",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Exponential backoff and retry",
+    "difficulty": "hard",
+    "question_text": "A company is building a generative AI (GenAI) application that uses Amazon Bedrock APIs to process complex customer inquiries. During peak usage periods, the application experiences intermittent API timeouts that cause issues such as broken response chunks and delayed data delivery. The application struggles to ensure that prompts remain within token limits when handling complex customer inquiries of varying lengths. Users have reported truncated inputs and incomplete responses. The company has also observed foundation model (FM) invocation failures. The company needs a retry strategy that automatically handles transient service errors and prevents overwhelming Amazon Bedrock during peak usage periods. The strategy must also adapt to changing service availability and support response streaming and token-aware request handling. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Implement a standard retry strategy that uses a 1-second fixed delay between attempts and a 3-retry maximum for all errors. Handle streaming response timeouts by restarting streams. Cap token usage for each session."
+      },
+      {
+        "key": "B",
+        "text": "Implement an adaptive retry strategy that uses exponential backoff with jitter and a circuit breaker pattern that temporarily disables retries when error rates exceed a predefined threshold. Implement a streaming response handler that monitors for chunk delivery timeouts. Configure the handler to buffer successfully received chunks and intelligently resume streaming from the last received chunk when connections are re-established."
+      },
+      {
+        "key": "C",
+        "text": "Use the AWS SDK to configure a retry strategy in standard mode. Wrap Amazon Bedrock API calls in try-catch blocks that handle timeout exceptions. Return cached completions for failed streaming requests. Enforce a global token limit for all users. Add jitter-based retry logic and lightweight token trimming for each request. Resume broken streams by requesting only the missing chunks from the point of failure. Maintain a small in-memory buffer of the most recent chunks to minimize redundant dat"
+      },
+      {
+        "key": "D",
+        "text": "Set Amazon Bedrock client request timeouts to 30 seconds. Implement client-side load shedding. Buffer partial results and stop new requests when the application performance begins to degrade. Set static token usage caps for all requests. Configure exponential backoff retries, dynamic chunk sizing, and context-aware token limits."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "An adaptive retry strategy with exponential backoff and jitter, plus a circuit breaker that stops retries when error rates exceed a threshold, protects Bedrock during peaks, and a streaming handler that buffers received chunks and resumes from the last chunk recovers broken streams. Fixed delays and restarting streams (A), standard mode with cached completions (C), and static caps with load shedding (D) are less adaptive.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 96
+  },
+  {
+    "id": "d2-q0926",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Event-driven audio processing pipeline",
+    "difficulty": "hard",
+    "question_text": "A financial services company wants to use Amazon Bedrock foundation models (FMs) to analyze call center recordings. When calls end, the call center stores recordings as MP3 files in an Amazon S3 bucket. The company needs to generate summaries and sentiment analysis for the recordings in a structured format as soon as new files are created. The recordings average 20 MB in size. Which combination of solutions will meet these requirements? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use AWS Step Functions to orchestrate a workflow to process the recordings. Configure steps to invoke Amazon Transcribe to convert audio to text, validate job completion, and to invoke an AWS Lambda function to process the text by using Amazon Bedrock FMs to generate structured analysis output."
+      },
+      {
+        "key": "B",
+        "text": "Use AWS Step Functions to orchestrate a workflow to process the recordings. Configure steps to invoke Amazon Transcribe to convert audio to text, validate job completion, and to directly invoke Amazon Bedrock FMs to generate summaries and sentiment analysis in JSON format."
+      },
+      {
+        "key": "C",
+        "text": "Use AWS Step Functions to orchestrate a workflow to process the recordings. Configure steps to invoke Amazon Transcribe to convert audio to text, validate job completion, and to invoke an AWS Lambda function to create a prompt to invoke Amazon Bedrock FMs to generate structured analysis output."
+      },
+      {
+        "key": "D",
+        "text": "Configure the source S3 bucket to send events to Amazon EventBridge. Create an EventBridge rule to invoke the Step Functions workflow when an object is created in the bucket."
+      },
+      {
+        "key": "E",
+        "text": "Configure the source S3 bucket to send notifications to the Step Functions workflow when an object is created in the bucket."
+      }
+    ],
+    "correct_answers": [
+      "B",
+      "D"
+    ],
+    "explanation": "S3 events routed through EventBridge start the Step Functions workflow when a recording is created (S3 cannot send notifications directly to Step Functions, E). The workflow runs Transcribe, validates job completion, and invokes Bedrock directly to produce summaries and sentiment analysis as JSON; the extra Lambda function to build prompts (A, C) is unnecessary.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 108,
+    "review_note": "Wayground key is B,D; Final Doc key is C,D. Kept B,D; B versus C is a coin flip because B has Step Functions invoke Bedrock directly and C uses a Lambda function to build the prompt. Low confidence."
+  },
+  {
+    "id": "d2-q0927",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Training vs inference",
+    "difficulty": "easy",
+    "question_text": "A company built a deep learning model for object detection and deployed the model to production. Which AI process occurs when the model analyzes a new image to identfy objects?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Training"
+      },
+      {
+        "key": "B",
+        "text": "Inference"
+      },
+      {
+        "key": "C",
+        "text": "Model deployment"
+      },
+      {
+        "key": "D",
+        "text": "Bias correction"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Inference is when a trained model analyses new input, such as identifying objects in a new image. Training (A) is the learning phase, model deployment (C) is releasing the model to production, and bias correction (D) is an adjustment to data or models.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 115,
+    "review_note": "Foundational AI Practitioner (AIF-C01) level question; key agrees with my own judgment."
+  },
+  {
+    "id": "d2-q0928",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Multi-agent orchestration with Step Functions",
+    "difficulty": "hard",
+    "question_text": "A company is building a multicloud generative AI (GenAI)-powered secret resolution application that uses Amazon Bedrock and Agent Squad. The application resolves secrets from multiple sources, including key stores and hardware security modules (HSMs). The application uses AWS Lambda functions to retrieve secrets from the sources. The application uses AWS AppConfig to implement dynamic feature gating. The application supports secret chaining and detects secret drift. The application handles short-lived and expiring secrets. The application also supports prompt flows for templated instructions. The application uses AWS Step Functions to orchestrate agents to resolve the secrets and to manage secret validation and drift detection. The company finds multiple issues during application testing. The application does not refresh expired secrets in time for agents to use. The application sends alerts for secret drift, but agents still use stale data. Prompt flows within the application reuse outdated templates, which cause cascading failures. The company must resolve the performance issues. Which solution will meet this requirement?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Step Functions Map states to run agent workflows in parallel. Pass updated secret metadata through Lambda function outputs. Use AWS AppConfig to version all prompt flows to gate and roll back faulty templates."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Bedrock Agents only. Configure Amazon Bedrock guardrails to restrict prompt variation. Use an inline JSON schema for a single agent's workflow definition to chain tool calls."
+      },
+      {
+        "key": "C",
+        "text": "Use a centralized Amazon EventBridge pipeline to invoke each agent. Store intermediate prompts in Amazon DynamoDB. Resolve agent ordering by using TTL-based backoff and retries."
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon EventBridge Pipes to invoke resolvers based on Amazon CloudWatch log patterns. Store response metadata in DynamoDB with TTL and versioned writes. Use Amazon Q Developer to dynamically generate fallback prompts."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Step Functions Map states run agent workflows in parallel, Lambda outputs pass updated secret metadata to the agents so they stop using stale data, and AppConfig versions the prompt flows so faulty templates can be gated and rolled back, which ends the cascading failures. Bedrock Agents only with guardrails (B), EventBridge pipelines with DynamoDB TTL (C), and Q Developer-generated fallback prompts (D) do not fix stale secrets or template versioning.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 124
+  }
+]

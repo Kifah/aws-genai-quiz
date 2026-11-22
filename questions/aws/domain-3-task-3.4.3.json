@@ -1,0 +1,136 @@
+[
+  {
+    "id": "d3-q0483",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Guardrails content filtering + VPC endpoint isolation for regulated medical GenAI",
+    "difficulty": "hard",
+    "question_text": "A hospital network is deploying a GenAI clinical decision support system using Amazon Bedrock. The system must (1) block any model output that could be interpreted as a definitive diagnosis (only suggest differentials), (2) prevent prompt injection attacks that attempt to bypass safety instructions, and (3) ensure all API traffic stays within the hospital's private network — never traversing the public internet. Which combination of controls satisfies all three requirements?",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure Amazon Bedrock Guardrails with a denied-topics policy blocking definitive diagnostic language and content filters for harmful medical advice."
+      },
+      {
+        "key": "B",
+        "text": "Add a system prompt instructing the model to never provide definitive diagnoses. Rely on the model's instruction-following capability."
+      },
+      {
+        "key": "C",
+        "text": "Configure Bedrock Guardrails with input validation to detect and block prompt injection patterns in user messages."
+      },
+      {
+        "key": "D",
+        "text": "Access Amazon Bedrock through an interface VPC endpoint (AWS PrivateLink) with a VPC endpoint policy restricting access to the clinical application's security group."
+      },
+      {
+        "key": "E",
+        "text": "Deploy a NAT Gateway in a private subnet and route Bedrock traffic through it with restrictive security group rules."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "C",
+      "D"
+    ],
+    "explanation": "Guardrails denied-topics (A) provides deterministic blocking of definitive diagnostic language — unlike system prompts, guardrails cannot be overridden by prompt manipulation. Guardrails input validation (C) detects prompt injection patterns (jailbreak attempts, role-playing attacks) before they reach the model. A VPC interface endpoint via PrivateLink (D) keeps all Bedrock API traffic within the AWS private network, satisfying the no-public-internet requirement. System prompts alone (B) are vulnerable to prompt injection — the exact attack vector the question requires defending against. NAT Gateway (E) still routes through the public internet, just from a fixed IP — it does not keep traffic private.",
+    "source_topic": "Bedrock Guardrails denied topics + prompt injection defence, VPC PrivateLink isolation, clinical AI safety"
+  },
+  {
+    "id": "d3-q0484",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Insurance claims — model access governance with IAM + tagging for multi-team isolation",
+    "difficulty": "medium",
+    "question_text": "An insurance company has three teams (Claims, Underwriting, Marketing) each building GenAI applications using Amazon Bedrock. The security team requires that each team can only invoke specific foundation models — Claims may use Claude, Underwriting may use Claude and Titan, and Marketing may use only Titan. Model access must be enforced centrally and auditable. Which approach enforces these restrictions with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create IAM policies for each team's role that use Condition keys to restrict bedrock:InvokeModel to specific model ARNs. Attach the policies via permission boundaries. Enable CloudTrail for Bedrock API logging."
+      },
+      {
+        "key": "B",
+        "text": "Create separate AWS accounts per team. Enable only the permitted models in each account's Bedrock model access settings."
+      },
+      {
+        "key": "C",
+        "text": "Deploy an API Gateway proxy in front of Bedrock. Use Lambda authorizers to check the caller's team tag against an allowed-models DynamoDB table."
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Bedrock custom model import to create team-specific copies of each foundation model. Grant access only to the team's copy."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "IAM policies with Condition keys on the model resource ARN provide native, centrally managed, auditable access control — the standard AWS mechanism for restricting which Bedrock models a principal can invoke. Permission boundaries ensure teams cannot escalate their own access. CloudTrail provides the audit trail. Separate accounts (B) adds massive operational overhead for a simple access control requirement. API Gateway proxy (C) introduces custom infrastructure and latency for something IAM handles natively. Custom model import (D) is for bringing external model weights into Bedrock, not for access control — foundation models cannot be 'copied' per team.",
+    "source_topic": "IAM model-level access control, permission boundaries, CloudTrail audit, multi-team Bedrock governance"
+  },
+  {
+    "id": "d3-q0485",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Banking — data residency compliance + encryption for cross-border GenAI",
+    "difficulty": "hard",
+    "question_text": "A European bank is deploying a GenAI document summarisation service using Amazon Bedrock. EU regulations require that (1) customer financial data never leaves the eu-west-1 region, (2) all data at rest and in transit is encrypted with customer-managed keys, and (3) the bank can prove to auditors that no data was processed outside the EU. Which architecture satisfies all three compliance requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy in eu-west-1. Use AWS KMS customer-managed keys (CMKs) for Bedrock model customisation jobs and S3 encryption. Configure a VPC endpoint for Bedrock with an endpoint policy restricting the bedrock:InvokeModel action to eu-west-1 resources. Enable CloudTrail in eu-west-1 with a KMS-encrypted trail stored in an eu-west-1 S3 bucket."
+      },
+      {
+        "key": "B",
+        "text": "Deploy in eu-west-1. Use cross-region inference profiles to ensure low latency. Enable AWS Config rules to detect non-compliant resources. Use AWS-managed encryption keys."
+      },
+      {
+        "key": "C",
+        "text": "Deploy in eu-west-1. Use AWS KMS CMKs. Configure an S3 bucket policy denying PutObject from non-EU IP ranges. Enable CloudTrail in all regions for completeness."
+      },
+      {
+        "key": "D",
+        "text": "Deploy in eu-west-1 with SCP policies restricting all services to EU regions. Use default SSE-S3 encryption. Generate compliance reports from AWS Artifact."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "This architecture addresses all three requirements: regional deployment with VPC endpoint policy (prevents any API call from routing data to non-EU regions), KMS CMKs (customer-managed encryption at rest and in transit for both S3 data and model customisation), and CloudTrail in eu-west-1 with encrypted storage provides auditable proof of data processing locality. Cross-region inference profiles (B) explicitly route requests to OTHER regions for capacity — directly violating data residency. IP-range bucket policies (C) don't prevent Bedrock from processing data — they only control S3 uploads. SCPs (D) with default SSE-S3 use AWS-managed keys (not customer-managed) and AWS Artifact provides compliance certifications, not proof of where specific data was processed.",
+    "source_topic": "Data residency compliance, KMS CMK encryption, VPC endpoint policies, CloudTrail audit proof, EU banking regulation"
+  },
+  {
+    "id": "d3-q0486",
+    "domain": 3,
+    "task_statement": "3.4",
+    "topic": "Journalism — responsible AI disclosure + content provenance tracking",
+    "difficulty": "medium",
+    "question_text": "A news organisation uses Amazon Bedrock to help journalists draft articles. Editorial policy requires that every published article must disclose the percentage of AI-generated content and maintain a provenance trail showing which paragraphs were human-written versus AI-generated. The solution must integrate into the existing CMS workflow without requiring journalists to manually tag each paragraph. Which approach meets these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Log every Bedrock InvokeModel call with CloudTrail, capturing input and output in the event payload. Cross-reference CloudTrail timestamps with CMS edit history to identify AI-generated paragraphs. Calculate the AI percentage from character counts."
+      },
+      {
+        "key": "B",
+        "text": "Instrument the CMS editor to record the source of each text block (human keystroke vs. Bedrock API response) at insertion time. Store provenance metadata alongside the article in DynamoDB. Compute AI percentage from the metadata at publish time."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Comprehend custom classification to detect AI-generated text in the final article. Report the confidence score as the AI percentage."
+      },
+      {
+        "key": "D",
+        "text": "Enable Amazon Bedrock model invocation logging to S3. Use Athena to query logs and match outputs to published articles by text similarity."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Instrumenting the CMS editor to tag text blocks at insertion time provides ground-truth provenance — it captures exactly which content came from Bedrock API responses versus human typing, with no ambiguity. DynamoDB metadata enables automated percentage calculation at publish time. CloudTrail (A) does not capture full model outputs by default (limited payload size), and timestamp correlation is brittle when journalists edit AI output. Comprehend classification (C) is probabilistic and unreliable — AI-generated text that a journalist lightly edits becomes indistinguishable from human text. Model invocation logging (D) requires fuzzy text matching which fails when journalists modify AI suggestions before publishing.",
+    "source_topic": "AI content provenance, CMS integration, responsible AI disclosure, editorial workflow"
+  }
+]

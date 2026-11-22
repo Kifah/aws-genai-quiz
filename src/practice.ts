@@ -1,31 +1,35 @@
+import * as path     from 'path';
 import * as readline from 'readline';
-import { loadQuestions, shuffle } from './loader';
-import { DOMAINS } from './config';
+import { loadQuestions, shuffle, prioritizeFirst } from './loader';
+import { ExamDefinition } from './exams';
 import * as display from './display';
 import { parseAnswer, answersCorrect } from './utils/answers';
-import { recordAttempts, newSessionId } from './store';
+import { recordAttempts, newSessionId, readHistoryForExam } from './store';
 import { AttemptRecord } from './history';
 
-export async function runPractice(rl: readline.Interface): Promise<void> {
+export async function runPractice(rl: readline.Interface, exam: ExamDefinition): Promise<void> {
   display.clearScreen();
-  display.printHeader('AIP-C01 Practice Mode');
+  display.printHeader(exam.shortName + ' Practice Mode');
 
   // Domain selection
   console.log('\n  Select domains to practice:');
   console.log('  ' + display.color('0', 'cyan') + ' = All domains');
-  for (const [num, d] of Object.entries(DOMAINS)) {
-    console.log(`  ${display.color(num, 'cyan')} = Domain ${num}: ${d.name} (${Math.round(d.weight * 100)}%)`);
+  const domainKeys = Object.keys(exam.domains).map(Number);
+  for (const num of domainKeys) {
+    const d = exam.domains[num];
+    console.log(`  ${display.color(String(num), 'cyan')} = Domain ${num}: ${d.name} (${Math.round(d.weight * 100)}%)`);
   }
   console.log('');
 
   const domainInput = await ask(rl, '  Enter domain numbers (e.g. "1 3") or 0 for all: ');
   let domainFilter: number[] | null = null;
   if (domainInput.trim() !== '0' && domainInput.trim() !== '') {
-    domainFilter = domainInput.split(/[\s,]+/).map(Number).filter(n => n >= 1 && n <= 5);
+    const maxDomain = Math.max(...domainKeys);
+    domainFilter = domainInput.split(/[\s,]+/).map(Number).filter(n => n >= 1 && n <= maxDomain);
     if (domainFilter.length === 0) domainFilter = null;
   }
 
-  const allQuestions = loadQuestions(domainFilter);
+  const allQuestions = loadQuestions(path.join(__dirname, '..', exam.questionsDir), domainFilter);
   if (allQuestions.length === 0) {
     console.log(display.color('\n  No questions found for selected domains.\n', 'red'));
     rl.close();
@@ -35,7 +39,9 @@ export async function runPractice(rl: readline.Interface): Promise<void> {
   const countInput = await ask(rl, `  How many questions? (1-${allQuestions.length}, or press Enter for 20): `);
   const count = Math.min(parseInt(countInput, 10) || 20, allQuestions.length);
 
-  const selected = shuffle(allQuestions.slice()).slice(0, count);
+  // Unattempted priority questions come first; the rest is shuffled.
+  const attemptedIds = new Set(readHistoryForExam(exam.exam_id).map(a => a.question_id));
+  const selected = prioritizeFirst(shuffle(allQuestions.slice()), attemptedIds).slice(0, count);
 
   const sessionId = newSessionId();
   const attempts: AttemptRecord[] = [];
@@ -46,7 +52,7 @@ export async function runPractice(rl: readline.Interface): Promise<void> {
     const q = selected[i];
     display.clearScreen();
     display.printHeader('Practice Mode');
-    display.printQuestion(q, i + 1, selected.length);
+    display.printQuestion(q, i + 1, selected.length, true, exam.domains);
 
     const answer = await ask(rl, '  Your answer: ');
     const parsed = parseAnswer(answer);
@@ -57,6 +63,7 @@ export async function runPractice(rl: readline.Interface): Promise<void> {
       answered++;
       const isCorrect = answersCorrect(parsed, q.correct_answers);
       attempts.push({
+        exam_id:     exam.exam_id,
         question_id: q.id,
         timestamp:   new Date().toISOString(),
         was_correct: isCorrect,

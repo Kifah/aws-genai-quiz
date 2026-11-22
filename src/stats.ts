@@ -1,9 +1,10 @@
+import * as path     from 'path';
 import * as readline from 'readline';
-import { loadQuestions } from './loader';
-import { DOMAINS } from './config';
+import { loadQuestions, priorityOf, DEFAULT_PRIORITY } from './loader';
+import { ExamDefinition } from './exams';
 import * as display from './display';
 import { color, progressBar } from './utils/format';
-import { readHistory, historyPath } from './store';
+import { readHistoryForExam, historyPath } from './store';
 import {
   computeQuestionStats,
   rollUpByDomain,
@@ -11,12 +12,12 @@ import {
   weakestGroups,
 } from './history';
 
-export async function runStats(rl: readline.Interface): Promise<void> {
+export async function runStats(rl: readline.Interface, exam: ExamDefinition): Promise<void> {
   display.clearScreen();
-  display.printHeader('AIP-C01 Progress & Statistics');
+  display.printHeader(exam.shortName + ' Progress & Statistics');
 
-  const allQuestions = loadQuestions();
-  const history = readHistory();
+  const allQuestions = loadQuestions(path.join(__dirname, '..', exam.questionsDir));
+  const history = readHistoryForExam(exam.exam_id);
 
   if (history.length === 0) {
     console.log(color(
@@ -41,15 +42,21 @@ export async function runStats(rl: readline.Interface): Promise<void> {
   console.log('');
 
   renderTrend(history);
-  renderDomainAccuracy(allQuestions, qStats);
+  renderDomainAccuracy(allQuestions, qStats, exam);
   renderWeakestTopics(allQuestions, qStats);
 
+  const priorityQs = allQuestions.filter(q => priorityOf(q) > DEFAULT_PRIORITY);
+  if (priorityQs.length > 0) {
+    const covered = priorityQs.filter(q => qStats.has(q.id)).length;
+    console.log(`  ${color('★ Priority questions covered:', 'bold', 'yellow')} ${color(`${covered}/${priorityQs.length}`, 'bold')}`);
+    console.log('  ' + progressBar(covered, priorityQs.length, 40));
+  }
   const neverAttempted = allQuestions.filter(q => !qStats.has(q.id)).length;
   console.log(`  Never-attempted questions: ${color(String(neverAttempted), 'bold')} of ${allQuestions.length}`);
   console.log(color(`\n  History file: ${historyPath()}\n`, 'dim'));
 }
 
-function renderTrend(history: ReturnType<typeof readHistory>): void {
+function renderTrend(history: ReturnType<typeof readHistoryForExam>): void {
   const chrono = [...history].sort((a, b) => a.timestamp.localeCompare(b.timestamp));
   const half = Math.floor(chrono.length / 2);
   if (half === 0) return;
@@ -70,12 +77,14 @@ function renderTrend(history: ReturnType<typeof readHistory>): void {
 function renderDomainAccuracy(
   allQuestions: ReturnType<typeof loadQuestions>,
   qStats: ReturnType<typeof computeQuestionStats>,
+  exam: ExamDefinition,
 ): void {
   const byDomain = rollUpByDomain(allQuestions, qStats);
+  const domainKeys = Object.keys(exam.domains).map(Number);
   console.log(color('  Per-domain accuracy:', 'bold', 'yellow'));
-  for (let d = 1; d <= 5; d++) {
+  for (const d of domainKeys) {
     const g = byDomain.get(String(d));
-    const name = DOMAINS[d]?.name ?? `Domain ${d}`;
+    const name = exam.domains[d]?.name ?? `Domain ${d}`;
     if (!g || g.times_seen === 0) {
       console.log(`    D${d} ${color(name, 'cyan')}: ${color('no attempts', 'dim')}`);
       continue;

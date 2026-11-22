@@ -1,0 +1,104 @@
+[
+  {
+    "id": "c3-q0007",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "RAG pipeline design and chunking strategies",
+    "difficulty": "medium",
+    "question_text": "A team is designing a RAG pipeline for a technical documentation corpus. Documents range from 500 to 20,000 words. Which chunking strategy is most appropriate?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Always chunk documents into exactly 100-token blocks with no overlap." },
+      { "key": "B", "text": "Use semantic chunking: split on natural boundaries (sections, paragraphs) and add overlap between adjacent chunks to preserve cross-boundary context." },
+      { "key": "C", "text": "Keep each entire document as a single chunk regardless of length." },
+      { "key": "D", "text": "Randomly sample sentences from each document and index those." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Semantic chunking splits on natural language boundaries (section headers, paragraph breaks) rather than arbitrary token counts, preserving semantic coherence within each chunk. Overlap between adjacent chunks ensures that sentences spanning a boundary are not lost. Fixed 100-token blocks (A) break sentences mid-thought. Keeping full documents (C) retrieves too much irrelevant context. Random sentence sampling (D) destroys document structure and context."
+  },
+  {
+    "id": "c3-q0008",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Retrieval strategies matched to data shape and query pattern",
+    "difficulty": "hard",
+    "question_text": "A RAG system suddenly returns confident but incorrect answers after a document refresh, while latency and model version are unchanged. What is the most likely first place to investigate?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "The model weights have silently changed." },
+      { "key": "B", "text": "The retrieval/indexing step is returning irrelevant or stale chunks." },
+      { "key": "C", "text": "The temperature setting is too low." },
+      { "key": "D", "text": "The context window has shrunk." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "When accuracy degrades immediately after a document refresh and no other system component changed, the retrieval/indexing pipeline is the first suspect. Common issues include: re-indexing failures leaving stale embeddings, chunking changes that break retrieval relevance, or embedding drift from a different embedding model version. Model weights (A) do not change silently. Temperature (C) and context window size (D) are unrelated to a document refresh event."
+  },
+  {
+    "id": "c3-q0009",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Indexing strategies for RAG",
+    "difficulty": "medium",
+    "question_text": "A RAG system serves queries about both structured product specifications (with exact numbers and model codes) and unstructured user reviews (conversational text). Which retrieval strategy best handles both data types?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Use dense vector embeddings alone for all queries." },
+      { "key": "B", "text": "Use keyword (BM25) search alone for all queries." },
+      { "key": "C", "text": "Use hybrid retrieval: combine dense vector search for semantic similarity with keyword search for exact-match terms (model codes, numbers)." },
+      { "key": "D", "text": "Store everything in a single flat text file and use Claude's context window." }
+    ],
+    "correct_answers": ["C"],
+    "explanation": "Hybrid retrieval combines the strengths of both approaches: dense vector search captures semantic similarity for conversational and conceptual queries (reviews, intent), while keyword (BM25) search provides precise matching for structured terms like model codes and specification numbers. Pure dense retrieval (A) struggles with exact-match queries. Pure keyword search (B) misses semantic similarity. Flat text storage (D) is not scalable and does not support selective retrieval."
+  },
+  {
+    "id": "c3-q0010",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "RAG pipeline evaluation",
+    "difficulty": "hard",
+    "question_text": "During RAG evaluation, a team finds that Claude generates correct-looking answers even when the retrieved chunks do not contain the relevant information. What is this failure mode called and how should it be addressed?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Retrieval failure. Addressed by switching to a larger embedding model." },
+      { "key": "B", "text": "Context grounding failure / hallucination: Claude generates plausible answers from its parametric knowledge rather than the retrieved context. Addressed by instructing Claude to cite sources and decline to answer when context is insufficient." },
+      { "key": "C", "text": "Chunking failure. Addressed by reducing chunk size." },
+      { "key": "D", "text": "Temperature failure. Addressed by setting temperature to 0." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "When a model generates plausible answers not grounded in the retrieved context, it is relying on parametric (training-time) knowledge — a form of hallucination specific to RAG systems. The mitigation is to instruct Claude explicitly: 'Answer only based on the provided context. If the context does not contain the answer, say so.' Citation requirements further enforce grounding. Embedding model size (A) affects retrieval quality but not the model's tendency to hallucinate from parametric knowledge."
+  },
+  {
+    "id": "c3-q0011",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Progressive discovery vs. monolithic context strategy",
+    "difficulty": "hard",
+    "question_text": "An agent must answer questions from a corpus of 500 documents. The team debates two approaches: (A) always load all 500 documents into the context window; (B) retrieve only the top-3 most relevant documents per query. When is approach B (progressive discovery) preferable?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "When the corpus is small enough that loading everything is cheap and latency is not a concern." },
+      { "key": "B", "text": "When the corpus is large, queries are specific, and loading everything would exceed context limits or produce cost and latency overhead that outweighs the completeness benefit." },
+      { "key": "C", "text": "When the team has no access to a vector store or search index." },
+      { "key": "D", "text": "When all queries require information from all 500 documents simultaneously." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Progressive discovery (RAG retrieval of relevant subsets) is preferable when corpora are large because: context windows have limits, cost scales with token count, and latency increases with context size. Retrieving only the most relevant chunks provides most of the benefit at a fraction of the cost. Monolithic context (loading everything) is only practical for small corpora where selective retrieval overhead exceeds the cost of loading all content. Option D describes a case where monolithic loading is needed."
+  },
+  {
+    "id": "c3-q0012",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Re-ranking in RAG pipelines",
+    "difficulty": "medium",
+    "question_text": "A RAG pipeline retrieves 20 candidate chunks via vector search, then passes all 20 to Claude. Query latency is high and Claude sometimes focuses on less-relevant chunks. What architectural addition would most directly address both issues?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Add a re-ranker between retrieval and generation: score and select only the top-3 to top-5 most relevant chunks before passing context to Claude." },
+      { "key": "B", "text": "Increase the number of retrieved chunks from 20 to 50." },
+      { "key": "C", "text": "Switch to a larger Claude model to handle more context." },
+      { "key": "D", "text": "Remove the vector search step and use keyword search only." }
+    ],
+    "correct_answers": ["A"],
+    "explanation": "A re-ranker (cross-encoder or LLM-based relevance scorer) filters the candidate pool from 20 chunks down to the most relevant 3–5 before generation. This reduces context size (lowering latency and cost) and improves answer quality by ensuring Claude focuses on the highest-relevance content. Increasing the pool (B) worsens both issues. A larger model (C) handles more context but does not fix the relevance problem and increases cost. Keyword-only search (D) sacrifices semantic retrieval quality."
+  }
+]

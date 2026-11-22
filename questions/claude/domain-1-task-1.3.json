@@ -1,0 +1,87 @@
+[
+  {
+    "id": "c1-q0013",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Business value pillars: efficiency and productivity",
+    "difficulty": "medium",
+    "question_text": "A company is evaluating a Claude-based solution for automating internal report generation. The primary business value pillar they cite is 'analyst productivity.' Which metric most directly measures success against this pillar?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Reduction in API cost per report generated." },
+      { "key": "B", "text": "Hours saved per analyst per week on report drafting tasks." },
+      { "key": "C", "text": "Improvement in report accuracy scores from peer review." },
+      { "key": "D", "text": "Reduction in infrastructure costs for the reporting pipeline." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "The 'productivity' business value pillar is measured by time saved for human workers — hours per week reclaimed from manual tasks directly reflects analyst productivity gains. Cost reduction (A, D) maps to the 'cost' pillar. Accuracy improvement (C) maps to the 'performance' pillar. Aligning metrics to the stated value pillar ensures stakeholders can evaluate ROI on their terms."
+  },
+  {
+    "id": "c1-q0014",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Business value pillars: cost and performance SLAs",
+    "difficulty": "medium",
+    "question_text": "A CTO wants to justify a Claude integration by demonstrating cost efficiency. The system processes 500,000 documents per month. Which combination of metrics best makes the cost-efficiency case?",
+    "question_type": "multi",
+    "options": [
+      { "key": "A", "text": "Cost per document processed (API cost + infrastructure) compared to the previous manual cost per document." },
+      { "key": "B", "text": "Total number of features in the Claude API used." },
+      { "key": "C", "text": "FTE hours eliminated (or redeployed) multiplied by average hourly cost." },
+      { "key": "D", "text": "The model's benchmark score on public leaderboards." }
+    ],
+    "correct_answers": ["A", "C"],
+    "explanation": "A cost-efficiency justification requires showing that the AI solution costs less than the alternative. Option A (unit economics: cost per document) and option C (labor cost elimination or redeployment) are the two components of a standard ROI calculation. API feature usage (B) is irrelevant to cost justification. Public benchmarks (D) measure capability, not business cost efficiency."
+  },
+  {
+    "id": "c1-q0015",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Business value pillars: transformation",
+    "difficulty": "hard",
+    "question_text": "A consulting firm describes their Claude use case as 'business transformation' rather than just efficiency. What distinguishes a transformation value claim from an efficiency claim?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Transformation claims require a larger Claude model than efficiency claims." },
+      { "key": "B", "text": "Transformation means performing the same tasks faster, while efficiency means doing entirely new tasks." },
+      { "key": "C", "text": "Transformation refers to enabling capabilities or business models that were previously impossible or impractical, not just doing existing work faster." },
+      { "key": "D", "text": "Transformation requires full automation with no human involvement." }
+    ],
+    "correct_answers": ["C"],
+    "explanation": "Business transformation value means the AI creates genuinely new capabilities — entering new markets, offering new services, or enabling processes that could not exist before. Efficiency value means doing the same work faster or cheaper. A sales team using Claude to offer personalized proposals at a scale of one-to-one engagement (previously impossible) is transformation. A team using Claude to draft emails 50% faster is efficiency. The distinction matters for executive framing and investment justification."
+  },
+  {
+    "id": "c1-q0016",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Aligning solutions to performance SLAs",
+    "difficulty": "hard",
+    "question_text": "A customer-facing application has a response latency SLA of under 2 seconds. The proposed Claude solution uses a large model with RAG retrieval. During testing, p95 latency is 3.5 seconds. Which changes should be considered to meet the SLA? (Select TWO)",
+    "question_type": "multi",
+    "options": [
+      { "key": "A", "text": "Switch to a faster, smaller Claude model for queries that do not require complex reasoning." },
+      { "key": "B", "text": "Add more features and tools to the agent to increase its capability." },
+      { "key": "C", "text": "Implement prompt caching for the static portions of the system prompt and retrieval context." },
+      { "key": "D", "text": "Increase the maximum token output length to allow more detailed answers." }
+    ],
+    "correct_answers": ["A", "C"],
+    "explanation": "To reduce p95 latency from 3.5 to under 2 seconds, the most effective levers are: (A) switching to a lower-latency model for queries that don't need the large model's capacity, and (C) enabling prompt caching to avoid reprocessing static content on every request. Adding more tools (B) increases complexity and latency. Increasing output length (D) would increase, not decrease, latency."
+  },
+  {
+    "id": "c1-q0017",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Aligning solutions to business value pillars",
+    "difficulty": "easy",
+    "question_text": "A solutions architect is designing a Claude deployment. The stakeholder's primary stated goal is 'freeing up engineers to work on higher-value problems.' Which business value pillar does this align with?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Cost reduction." },
+      { "key": "B", "text": "Developer productivity." },
+      { "key": "C", "text": "Business transformation." },
+      { "key": "D", "text": "Performance SLA improvement." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Freeing engineers to focus on higher-value work is the core definition of the developer productivity business value pillar — AI handles routine or low-complexity tasks so skilled humans can invest their time more strategically. Cost reduction (A) is a downstream benefit but not the primary framing. Transformation (C) implies entirely new capabilities. Performance SLA (D) is about response time or accuracy targets."
+  }
+]

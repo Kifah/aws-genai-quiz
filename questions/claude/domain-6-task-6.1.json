@@ -1,0 +1,749 @@
+[
+  {
+    "id": "c6-q0001",
+    "domain": 6,
+    "task_statement": "6.1",
+    "topic": "Structured discovery and requirement gathering",
+    "difficulty": "medium",
+    "question_text": "A solutions architect is beginning a discovery engagement for a Claude-based customer service automation project. Which activities are essential in the discovery phase? (Select TWO)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Identify the current process being replaced: who does it, how long it takes, what data sources are involved, and what the failure modes are."
+      },
+      {
+        "key": "B",
+        "text": "Immediately begin writing code for the production system."
+      },
+      {
+        "key": "C",
+        "text": "Define success criteria upfront: what metrics will determine whether the solution has delivered value."
+      },
+      {
+        "key": "D",
+        "text": "Select the final technology stack before understanding the requirements."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "C"
+    ],
+    "explanation": "Structured discovery requires understanding the current state (A) — the process, stakeholders, data sources, and failure modes that the solution must address — and defining success criteria upfront (C) so all parties agree on what success looks like before design begins. Coding before requirements (B) and locking in technology before understanding needs (D) both risk building the wrong solution."
+  },
+  {
+    "id": "c6-q0002",
+    "domain": 6,
+    "task_statement": "6.1",
+    "topic": "Communicating architectural decisions and trade-offs",
+    "difficulty": "medium",
+    "question_text": "A solutions architect recommends using RAG over fine-tuning for a knowledge base application. How should this decision be communicated to stakeholders?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Simply announce the decision without explanation — stakeholders do not need technical rationale."
+      },
+      {
+        "key": "B",
+        "text": "Explain the trade-offs: RAG provides real-time knowledge updates without retraining, lower cost, and explainable retrieval, while fine-tuning provides faster inference but requires expensive retraining when knowledge changes — and articulate why RAG better fits the specific requirements."
+      },
+      {
+        "key": "C",
+        "text": "Present only the benefits of the chosen approach and omit the trade-offs to avoid stakeholder concern."
+      },
+      {
+        "key": "D",
+        "text": "Defer the decision to the development team without stakeholder input."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Communicating architectural decisions requires presenting the trade-offs of each option, the specific requirements that drove the decision, and why the chosen approach best fits those requirements. This builds stakeholder trust and enables informed consent. Omitting trade-offs (C) or simply announcing decisions (A) undermine trust when unexpected limitations emerge later. Deferring without stakeholder involvement (D) skips the alignment step."
+  },
+  {
+    "id": "c6-q0003",
+    "domain": 6,
+    "task_statement": "6.1",
+    "topic": "Managing stakeholder expectations and SLAs",
+    "difficulty": "medium",
+    "question_text": "A stakeholder expects 100% accuracy from a Claude-based document classification system. How should the architect address this expectation?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Agree to 100% accuracy to close the deal, then address the gap later."
+      },
+      {
+        "key": "B",
+        "text": "Explain that LLM-based systems have inherent accuracy distributions; set a realistic accuracy target (e.g., 95%+), define edge cases requiring human review, and agree on escalation criteria — aligning expectations with achievable outcomes."
+      },
+      {
+        "key": "C",
+        "text": "Cancel the project because 100% accuracy is impossible."
+      },
+      {
+        "key": "D",
+        "text": "Avoid discussing accuracy until after deployment."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Stakeholder expectation alignment requires honest, proactive communication about what AI systems can and cannot achieve. LLMs operate probabilistically and will produce errors below a 100% accuracy guarantee. The correct response is to negotiate a realistic SLA with explicit handling of low-confidence cases (human review) and agreed escalation criteria. Agreeing to impossible targets (A) creates downstream trust failures. Avoiding the topic (D) defers the conflict to production."
+  },
+  {
+    "id": "c6-q0004",
+    "domain": 6,
+    "task_statement": "6.1",
+    "topic": "Documenting architectures",
+    "difficulty": "easy",
+    "question_text": "Which documentation artifacts are most valuable at the handoff from solutions architecture to the development team?",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Architecture diagram showing components, data flows, and integration points."
+      },
+      {
+        "key": "B",
+        "text": "A list of the architect's personal preferences for programming languages."
+      },
+      {
+        "key": "C",
+        "text": "System prompt templates, example inputs/outputs, and evaluation criteria for assessing quality."
+      },
+      {
+        "key": "D",
+        "text": "The minutes from the most recent vendor sales call."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "C"
+    ],
+    "explanation": "Development handoff documentation must include: (A) architecture diagrams that give developers a clear view of components, data flows, and integration points; and (C) system prompt templates, example I/O, and evaluation criteria that define what 'done' looks like from a quality perspective. Personal preferences (B) and sales call notes (D) are not actionable implementation guidance."
+  },
+  {
+    "id": "c6-q0005",
+    "domain": 6,
+    "task_statement": "6.2",
+    "topic": "Lifecycle management: discovery to monitoring",
+    "difficulty": "medium",
+    "question_text": "Which lifecycle phase comes after a successful Claude solution deployment and is most often neglected?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Discovery — re-gather requirements after deployment."
+      },
+      {
+        "key": "B",
+        "text": "Monitoring and iteration — continuously tracking system performance, collecting feedback, and iterating on prompts and architecture based on production signals."
+      },
+      {
+        "key": "C",
+        "text": "Design — re-design the architecture after deployment."
+      },
+      {
+        "key": "D",
+        "text": "Procurement — re-negotiate vendor contracts."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Monitoring and iteration is the post-deployment phase most often neglected in AI projects. Unlike traditional software, LLM-based systems require ongoing attention: model provider updates can change behavior, user needs evolve, and prompt drift requires periodic tuning. Treating deployment as 'done' without structured monitoring leads to quality degradation over time. Discovery (A) and design (C) precede deployment."
+  },
+  {
+    "id": "c6-q0006",
+    "domain": 6,
+    "task_statement": "6.2",
+    "topic": "Stakeholder feedback loops",
+    "difficulty": "medium",
+    "question_text": "A production Claude deployment shows declining user satisfaction over 3 months, but the technical metrics (latency, error rate) are unchanged. What feedback loop process should the team initiate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Roll back to the previous model version immediately."
+      },
+      {
+        "key": "B",
+        "text": "Conduct structured user research (interviews, session analysis, feedback categorization) to identify whether the satisfaction decline is due to output quality, scope gaps, or changed user expectations — then prioritize fixes."
+      },
+      {
+        "key": "C",
+        "text": "Increase model size to improve output quality."
+      },
+      {
+        "key": "D",
+        "text": "Ignore the satisfaction decline since technical metrics are healthy."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Technical metrics (latency, error rate) measure system health, not user value. Declining satisfaction despite healthy tech metrics indicates a quality or scope issue invisible to standard monitoring. The correct response is structured user research: understanding what users are dissatisfied with, categorizing feedback themes, and prioritizing fixes based on impact. Rolling back (A) or switching models (C) without understanding the root cause may not address the real issue."
+  },
+  {
+    "id": "c6-q0007",
+    "domain": 6,
+    "task_statement": "6.2",
+    "topic": "SLA management and expectation alignment",
+    "difficulty": "hard",
+    "question_text": "A team's Claude deployment has a contractual SLA of 99.5% uptime and sub-2-second p95 latency. During a model provider incident, latency spikes to 8 seconds for 2 hours. What should the team do?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Say nothing to stakeholders and hope they don't notice."
+      },
+      {
+        "key": "B",
+        "text": "Proactively communicate the incident to stakeholders, document the root cause (provider-side), and review the SLA to determine whether it includes provider incident carve-outs, then take corrective actions (fallback routing, retry logic) to mitigate future impact."
+      },
+      {
+        "key": "C",
+        "text": "Immediately terminate the provider contract."
+      },
+      {
+        "key": "D",
+        "text": "Blame the provider publicly without investigation."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "SLA incident management requires proactive stakeholder communication, transparent root-cause documentation, and contractual review. Many SLAs include provider incident carve-outs. The team should also use the incident to improve resilience (fallback models, retry logic, circuit breakers). Silent non-disclosure (A) damages trust when discovered. Immediate contract termination (C) is disproportionate. Public blame without investigation (D) is unprofessional and premature."
+  },
+  {
+    "id": "c6-q0008",
+    "domain": 6,
+    "task_statement": "6.2",
+    "topic": "Implementation guidance and handoff",
+    "difficulty": "medium",
+    "question_text": "A solutions architect completes the design phase and is handing off to a development team unfamiliar with Claude. What is the most important element to include in implementation guidance?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "A list of the architect's favorite Claude features."
+      },
+      {
+        "key": "B",
+        "text": "A working prototype or reference implementation demonstrating the key integration patterns, prompt templates, and evaluation harness, with clear documentation of design decisions and their rationale."
+      },
+      {
+        "key": "C",
+        "text": "Only the high-level architecture diagram without specifics."
+      },
+      {
+        "key": "D",
+        "text": "A link to the Claude API documentation and nothing else."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A working prototype is the most effective handoff artifact for teams new to Claude because it demonstrates rather than describes the key patterns. Including the evaluation harness ensures the team has the tools to verify quality from day one. Documenting design decisions prevents the team from second-guessing and re-litigating choices. A high-level diagram without implementation specifics (C) leaves too many open questions. Linking to docs without context (D) offers no project-specific guidance."
+  },
+  {
+    "id": "c6-q0009",
+    "domain": 6,
+    "task_statement": "6.1",
+    "topic": "Requirement gathering: identifying non-functional requirements",
+    "difficulty": "hard",
+    "question_text": "During discovery for a Claude deployment, a stakeholder says 'the system should be fast and secure.' What is the architect's responsibility at this stage?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Accept the requirement as stated and begin designing."
+      },
+      {
+        "key": "B",
+        "text": "Probe for specifics: 'fast' needs a measurable latency target (e.g., p95 < 2 seconds); 'secure' needs defined threat model (data classification, access control requirements, compliance frameworks) — convert qualitative statements into testable requirements."
+      },
+      {
+        "key": "C",
+        "text": "Ignore non-functional requirements and focus only on functional features."
+      },
+      {
+        "key": "D",
+        "text": "Define 'fast' and 'secure' unilaterally based on past projects without stakeholder alignment."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Non-functional requirements stated as qualitative adjectives ('fast,' 'secure') are not testable. The architect's responsibility in discovery is to convert these into measurable, verifiable criteria: specific latency percentiles, defined compliance frameworks, access control patterns, and encryption requirements. Accepting vague requirements (A) leads to misaligned expectations at delivery. Ignoring non-functional requirements (C) creates production risks. Unilateral definition (D) skips the alignment step."
+  },
+  {
+    "id": "c6-q0010",
+    "domain": 6,
+    "task_statement": "6.2",
+    "topic": "Lifecycle phase: iteration after production feedback",
+    "difficulty": "medium",
+    "question_text": "After 60 days in production, a Claude-based assistant receives consistent user feedback that responses are too long and formal. The team wants to address this. What is the correct sequence of actions?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Immediately update the system prompt in production with new brevity/tone instructions."
+      },
+      {
+        "key": "B",
+        "text": "Create a modified prompt variant, evaluate it against the existing baseline using a sample of real user queries, validate improvement, then deploy the update through the standard change process."
+      },
+      {
+        "key": "C",
+        "text": "Switch to a different model that naturally produces shorter responses."
+      },
+      {
+        "key": "D",
+        "text": "Close the feedback tickets without acting because the technical metrics are healthy."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Iteration based on production feedback must follow a structured change process: create a modified variant, test it against a representative sample with defined metrics, validate that it improves the target issue without degrading other dimensions, then deploy through the change management process. Directly updating production prompts without testing (A) risks introducing regressions. Switching models without testing (C) may change more than intended. Ignoring user feedback (D) degrades adoption over time."
+  },
+  {
+    "id": "c6-q0011",
+    "domain": 6,
+    "task_statement": "6.1",
+    "topic": "Communicating trade-offs: build vs. buy",
+    "difficulty": "hard",
+    "question_text": "A stakeholder asks: 'Should we build our own Claude integration from scratch or use a pre-built AI application framework?' What is the most complete way to frame this trade-off?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Always recommend building from scratch for maximum control."
+      },
+      {
+        "key": "B",
+        "text": "Always recommend a pre-built framework to minimize development time."
+      },
+      {
+        "key": "C",
+        "text": "Frame the decision across: time-to-value (framework = faster), customization flexibility (scratch = more flexible), maintenance burden (framework = vendor manages updates), and team capability (framework = lower Claude expertise required initially)."
+      },
+      {
+        "key": "D",
+        "text": "Recommend the approach that is cheapest regardless of requirements."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Build vs. buy decisions in AI involve multiple dimensions that must be weighed against specific project context: speed to value, customization needs, maintenance overhead, vendor lock-in, and team expertise. Framing all these dimensions gives stakeholders an informed basis for decision-making. Blanket recommendations for either approach (A, B) ignore context. Cost-only optimization (D) misses capability, speed, and risk dimensions."
+  },
+  {
+    "id": "c6-q0012",
+    "domain": 6,
+    "task_statement": "6.2",
+    "topic": "Managing lifecycle: model provider updates",
+    "difficulty": "medium",
+    "question_text": "Anthropic releases a new Claude model version that may change behavior from the previous version. What lifecycle management process should a production team follow?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Automatically upgrade to the new model version in production on release day to stay current."
+      },
+      {
+        "key": "B",
+        "text": "Run the new model version against the existing evaluation suite in a staging environment, compare outputs to the baseline, and promote to production only after confirming no regressions — then communicate the upgrade to stakeholders."
+      },
+      {
+        "key": "C",
+        "text": "Never upgrade Claude models in production to avoid any behavioral changes."
+      },
+      {
+        "key": "D",
+        "text": "Upgrade only after multiple users report problems with the old version."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Model upgrades should follow a structured promotion process: test in staging against the existing evaluation suite, compare to the current production baseline for regressions, and communicate the change to stakeholders who depend on consistent behavior. Automatic same-day upgrades (A) risk behavioral regressions reaching users without validation. Refusing all upgrades (C) prevents accessing improvements and eventually results in deprecated model versions. Waiting for user complaints (D) is purely reactive."
+  },
+  {
+    "id": "c6-q0013",
+    "domain": 6,
+    "task_statement": "6.1",
+    "topic": "Providing implementation guidance",
+    "difficulty": "easy",
+    "question_text": "A solutions architect provides implementation guidance to a team building their first Claude application. Which guidance element directly prevents the most common early-stage mistakes?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "A general overview of AI history and large language model research."
+      },
+      {
+        "key": "B",
+        "text": "Concrete prompt templates with annotated examples, an evaluation harness with representative test cases, and documented anti-patterns (what not to do)."
+      },
+      {
+        "key": "C",
+        "text": "A list of all Claude API parameters without context for when to use them."
+      },
+      {
+        "key": "D",
+        "text": "A bibliography of academic papers on transformer architecture."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Teams new to Claude commonly struggle with: prompt engineering basics, output consistency, and knowing when their implementation is 'good enough.' Providing annotated prompt templates, an evaluation harness, and documented anti-patterns directly addresses these gaps. AI history (A) and academic papers (D) have no practical value for teams building a first application. A raw parameter list (C) without context for when and why to use each parameter is similarly unhelpful."
+  },
+  {
+    "id": "c6-q0014",
+    "domain": 6,
+    "task_statement": "6.2",
+    "topic": "Stakeholder communication during incidents",
+    "difficulty": "medium",
+    "question_text": "A production Claude system returns incorrect information for 3 hours before the team detects the issue and deploys a fix. What communication is required post-incident?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "No communication is needed if the fix has been deployed."
+      },
+      {
+        "key": "B",
+        "text": "Send a post-incident report to affected stakeholders: describe what happened, the impact scope (which queries were affected, for how long), root cause, the fix applied, and steps taken to prevent recurrence."
+      },
+      {
+        "key": "C",
+        "text": "Delete logs of the incident to avoid accountability."
+      },
+      {
+        "key": "D",
+        "text": "Communicate only with the technical team, not business stakeholders."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Post-incident communication is a non-negotiable part of stakeholder lifecycle management. Business stakeholders need to understand: what data/actions were affected, how long the impact lasted, the root cause, and what prevents recurrence — so they can make informed decisions about risk and trust. Silencing the incident after fixing (A, C) erodes trust when discovered. Limiting communication to technical teams (D) leaves business owners unable to assess customer impact or reputational risk."
+  },
+  {
+    "id": "c6-q0015",
+    "domain": 6,
+    "task_statement": "6.2",
+    "topic": "Change management and stakeholder alignment",
+    "difficulty": "medium",
+    "question_text": "A team wants to expand the scope of a Claude deployment from internal use to customer-facing use. What stakeholder communication steps are required before this transition? (Select TWO)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Conduct a risk review with legal, compliance, and security teams to assess new exposure from customer-facing deployment."
+      },
+      {
+        "key": "B",
+        "text": "Deploy immediately to customers without review since the system already works internally."
+      },
+      {
+        "key": "C",
+        "text": "Update the SLA and customer-facing documentation to accurately describe the AI-assisted features and their limitations."
+      },
+      {
+        "key": "D",
+        "text": "Avoid notifying customers that AI is involved in the product to prevent concerns."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "C"
+    ],
+    "explanation": "Expanding a Claude deployment to customer-facing use introduces new regulatory, legal, and trust dimensions. A risk review with legal, compliance, and security (A) ensures the deployment meets customer data protection obligations. Updated SLA and documentation (C) sets accurate customer expectations about AI involvement and capabilities. Deploying without review (B) bypasses necessary due diligence. Concealing AI involvement (D) violates transparency obligations and may breach regulations in some jurisdictions."
+  },
+  {
+    "id": "c6-q0025",
+    "domain": 6,
+    "task_statement": "6B2 Document architectures and provide implementation guidance",
+    "topic": "settings scope hierarchy",
+    "difficulty": "medium",
+    "question_text": "A team wants a security policy enforced in Claude Code for every developer on a shared repository. One engineer places the configuration in the personal, uncommitted local override file and reports it works for them, but colleagues never receive the policy. Which correction addresses the root cause of the inconsistency?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Ask each colleague to copy the same settings into their own personal local override file."
+      },
+      {
+        "key": "b",
+        "text": "Move the policy into the user-level home-directory settings on the lead's machine only."
+      },
+      {
+        "key": "c",
+        "text": "Accept per-developer configuration as normal, since local override settings always take precedence anyway."
+      },
+      {
+        "key": "d",
+        "text": "Commit the policy to the project-level settings file so every developer on the repository inherits it."
+      }
+    ],
+    "correct_answers": [
+      "d"
+    ],
+    "explanation": "Domain: Stakeholder Communication & Lifecycle Management | Subdomain: 6B2 Document architectures and provide implementation guidance | Key Concept: settings scope hierarchy. Configuration resolves across user, project, and local scopes; only the committed project settings reach the whole team. Placing team policy in a personal, uncommitted override is why colleagues never received it."
+  },
+  {
+    "id": "c6-q0026",
+    "domain": 6,
+    "task_statement": "6C1 Lifecycle Phases",
+    "topic": "architecture decision records form an append-only log",
+    "difficulty": "medium",
+    "question_text": "A prior architecture decision to use a single-prompt pattern is being replaced by a routing workflow. A new engineer wants to edit the original decision record in place to reflect the change. How should the decision history be handled?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Overwrite the original record so only the current decision remains"
+      },
+      {
+        "key": "b",
+        "text": "Add a new record for the decision, mark the original superseded"
+      },
+      {
+        "key": "c",
+        "text": "Delete the original record since it no longer reflects reality"
+      },
+      {
+        "key": "d",
+        "text": "Leave both records active with no status indicating which applies"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Stakeholder Communication & Lifecycle Management | Subdomain: 6C1 Lifecycle Phases | Key Concept: architecture decision records form an append-only log. Replacing a decision means adding a new record and marking the original superseded via its status field, not editing or deleting the original, which preserves the historical context of why each choice was made."
+  },
+  {
+    "id": "c6-q0027",
+    "domain": 6,
+    "task_statement": "6A1 Conduct structured discovery and requirement gathering",
+    "topic": "defensible success criteria are specific, measurable, and multi-dimensional, set",
+    "difficulty": "hard",
+    "question_text": "An architect is closing discovery for a contract-review assistant. The sponsor offers 'summarize contracts accurately' as the goal. To make this a defensible target that the design and evaluation phases can be held to, the success criteria should be:",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "A single overall accuracy percentage measured on whichever contract documents happen to be easiest to grade"
+      },
+      {
+        "key": "b",
+        "text": "Left qualitative, so the delivery team retains flexibility to interpret what 'accurate' means during the build"
+      },
+      {
+        "key": "c",
+        "text": "Multi-dimensional and quantified on a representative held-out set, numeric thresholds, partial-credit grading"
+      },
+      {
+        "key": "d",
+        "text": "Deferred to production monitoring, where live traffic is expected to reveal the appropriate accuracy thresholds"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Stakeholder Communication & Lifecycle Management | Subdomain: 6A1 Conduct structured discovery and requirement gathering | Key Concept: defensible success criteria are specific, measurable, and multi-dimensional, set as numeric thresholds on a representative held-out set with graders that allow valid variation and partial credit. Vague single-dimension goals graded on convenient samples are the weak pattern, and deferring thresholds to production leaves design and evaluation with no target to satisfy."
+  },
+  {
+    "id": "c6-q0028",
+    "domain": 6,
+    "task_statement": "6A1 Functional vs Non-Functional Requirements",
+    "topic": "quality attributes are non-functional requirements",
+    "difficulty": "hard",
+    "question_text": "A stakeholder states that chat responses must return under 300 milliseconds for 95 percent of requests. This stated latency target is BEST classified as:",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "a functional requirement describing a specific behavior the system performs"
+      },
+      {
+        "key": "b",
+        "text": "a non-functional requirement that later becomes a service-level objective"
+      },
+      {
+        "key": "c",
+        "text": "an acceptance test case drawn directly from the golden dataset"
+      },
+      {
+        "key": "d",
+        "text": "an architecture decision record documenting an accepted tradeoff"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Stakeholder Communication & Lifecycle Management | Subdomain: 6A1 Functional vs Non-Functional Requirements | Key Concept: quality attributes are non-functional requirements. A percentile latency target describes how well the system must perform, not a feature, and it later drives the service-level objective and any contractual SLA. Capturing only functional behavior misses these quality attributes."
+  },
+  {
+    "id": "c6-q0029",
+    "domain": 6,
+    "task_statement": "6B1 Manage stakeholder feedback loops and expectation alignment (including SLAs)",
+    "topic": "error budget source",
+    "difficulty": "hard",
+    "question_text": "An operations team wants to compute how much unreliability it can tolerate this quarter before slowing feature work. The service has a 99 percent contractual SLA and a stricter 99.9 percent internal SLO. An architect must tell them which figure to base the error budget on and why. Which guidance is correct?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Derive the error budget from the 99.9 percent SLO, the internal target"
+      },
+      {
+        "key": "b",
+        "text": "Derive the error budget from the 99 percent SLA since it is contractual"
+      },
+      {
+        "key": "c",
+        "text": "Average the SLA and SLO figures to set a balanced error budget"
+      },
+      {
+        "key": "d",
+        "text": "Use raw measured availability as the error budget with no target applied"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Stakeholder Communication & Lifecycle Management | Subdomain: 6B1 Manage stakeholder feedback loops and expectation alignment (including SLAs) | Key Concept: error budget source. An error budget is the allowable unreliability derived directly from the SLO target, not from the contractual SLA and not from the raw SLI. Basing it on the stricter internal SLO gives the team room to detect and correct drift before a contractual breach."
+  },
+  {
+    "id": "c6-q0030",
+    "domain": 6,
+    "task_statement": "6C1 Support lifecycle phases",
+    "topic": "monitoring is continuous production observation against defined targets",
+    "difficulty": "hard",
+    "question_text": "A solution launches with no instrumentation, on the assumption that pre-deployment evaluation already proved it meets its targets. Which correction best reflects the purpose of the monitoring phase?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Re-run the offline evaluation suite weekly to confirm continued quality"
+      },
+      {
+        "key": "b",
+        "text": "Add logging so incidents can be reconstructed after users complain"
+      },
+      {
+        "key": "c",
+        "text": "Instrument indicators backing objectives and observe in production"
+      },
+      {
+        "key": "d",
+        "text": "Schedule a quarterly manual review of a sampled set of outputs"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Stakeholder Communication & Lifecycle Management | Subdomain: 6C1 Support lifecycle phases | Key Concept: monitoring is continuous production observation against defined targets. Pre-deployment evaluation cannot catch traffic drift or live regressions, so the monitoring phase instruments the service level indicators behind the system's objectives and watches them continuously. Logging, periodic re-evals, and sampled reviews are weaker substitutes that detect problems late or not at all."
+  },
+  {
+    "id": "c6-q0031",
+    "domain": 6,
+    "task_statement": "6B2 Document architectures and provide implementation guidance",
+    "topic": "architecture documentation as a durable artifact",
+    "difficulty": "hard",
+    "question_text": "After a solution ships, the architect who designed it leaves the company. Six months later the operating team must change a retrieval component but cannot safely do so. Which documentation gap most likely caused this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "The meeting notes from the original design discussions were not archived anywhere"
+      },
+      {
+        "key": "b",
+        "text": "The source code lacked inline comments explaining what each function does"
+      },
+      {
+        "key": "c",
+        "text": "The system's structure, interfaces, and design rationale went undocumented"
+      },
+      {
+        "key": "d",
+        "text": "The project's marketing one-pager was never updated after the launch date"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Stakeholder Communication & Lifecycle Management | Subdomain: 6B2 Document architectures and provide implementation guidance | Key Concept: architecture documentation as a durable artifact. Documentation of structure, interfaces, and the reasoning behind key choices is a lifecycle artifact that outlives the author. Without it, handoff, monitoring, and iteration become unreliable because the operating team lacks the context to change the system safely."
+  },
+  {
+    "id": "c6-q0032",
+    "domain": 6,
+    "task_statement": "6B1 Manage stakeholder feedback loops and expectation alignment",
+    "topic": "continuous feedback",
+    "difficulty": "hard",
+    "question_text": "A team gathered stakeholder requirements at kickoff, secured sign-off, and has not revisited them in six months of iteration. Users now report the deployed Claude assistant solves a problem that has since shifted. What practice would have surfaced this drift earlier?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "A stricter one-time acceptance gate requiring every stakeholder to sign before build began"
+      },
+      {
+        "key": "b",
+        "text": "A continuous stakeholder feedback loop revalidating assumptions across the lifecycle"
+      },
+      {
+        "key": "c",
+        "text": "More detailed logging of assistant outputs to capture every production interaction"
+      },
+      {
+        "key": "d",
+        "text": "A larger model to better handle the evolving problem without requirement changes"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Stakeholder Communication & Lifecycle Management | Subdomain: 6B1 Manage stakeholder feedback loops and expectation alignment | Key Concept: continuous feedback. A stakeholder feedback loop recurs across the lifecycle, revalidating assumptions against changing reality. Gathering requirements once and never rechecking them is the failure mode that lets the problem drift away from the solution unnoticed."
+  },
+  {
+    "id": "c6-q0033",
+    "domain": 6,
+    "task_statement": "6A2 Communicate architectural decisions and trade-offs",
+    "topic": "ADR status field",
+    "difficulty": "hard",
+    "question_text": "Six months ago an ADR accepted a monolithic-context integration. The team now adopts progressive tool disclosure to fix capability bloat, directly reversing that choice. A new engineer asks how to keep the decision history honest. Which action BEST preserves the record?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Overwrite the old ADR's Decision field with the new approach"
+      },
+      {
+        "key": "b",
+        "text": "Write a new ADR and set the old one's status to superseded"
+      },
+      {
+        "key": "c",
+        "text": "Delete the outdated ADR so no one follows the reversed decision"
+      },
+      {
+        "key": "d",
+        "text": "Append the reversal as a comment inside the original ADR's Context"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Stakeholder Communication & Lifecycle Management | Subdomain: 6A2 Communicate architectural decisions and trade-offs | Key Concept: ADR status field. When a later decision reverses an earlier one, you add a new record and mark the original superseded rather than editing or deleting it. Retaining the superseded record keeps the historical reasoning intact while the status makes the current decision unambiguous."
+  }
+]

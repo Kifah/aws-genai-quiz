@@ -1,0 +1,250 @@
+[
+  {
+    "id": "c2-q0016",
+    "domain": 2,
+    "task_statement": "2A1 Select appropriate Claude models based on trade-offs",
+    "topic": "durable reasoning standard",
+    "difficulty": "medium",
+    "question_text": "An architect is hardening a production standard covering reasoning control across several services that target different Claude model generations. Some services need deep reasoning, others tight latency under peak load. The goal is one durable standard that stays correct as models are upgraded and new generations ship. Which principle should anchor the standard?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Fix a single token-budget value and apply it identically to every service"
+      },
+      {
+        "key": "b",
+        "text": "Name the model per service; tune adaptive-thinking effort to its SLA"
+      },
+      {
+        "key": "c",
+        "text": "Set the most capable model everywhere so reasoning depth is never insufficient"
+      },
+      {
+        "key": "d",
+        "text": "Control reasoning through temperature, which behaves the same across generations"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Claude Models, Prompting & Context Engineering | Subdomain: 2A1 Select appropriate Claude models based on trade-offs | Key Concept: durable reasoning standard. Because reasoning-control mechanisms differ by generation, a durable standard names each service's model and applies its supported lever, adaptive thinking with effort tuned to the SLA. A hardcoded token budget, a temperature scheme, or top capability everywhere all fail across generations or constraints. | (A) A single token budget is rejected on the newest models, so a hardcoded value cannot stay correct across generations. | (B) Reasoning control differs by generation, so the standard names each service's model and uses the supported mechanism, adaptive thinking with effort, tuned to that service's latency and depth needs. This stays correct through upgrades. | (C) Top capability everywhere over-provisions the latency-sensitive services and ignores their peak-load SLA. | (D) Temperature governs sampling randomness, not reasoning depth, so it is the wrong control lever regardless of generation."
+  },
+  {
+    "id": "c2-q0017",
+    "domain": 2,
+    "task_statement": "2C1 Optimize context windows and manage token usage",
+    "topic": "prefix ordering",
+    "difficulty": "medium",
+    "question_text": "A long-running assistant places the user's per-request question at the top of the prompt, followed by a large static policy document. Cache hit rates are near zero and token cost is high. What change fixes this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Put the stable policy document first and the per-request question last"
+      },
+      {
+        "key": "b",
+        "text": "Shorten the policy document until the whole prompt fits the cache"
+      },
+      {
+        "key": "c",
+        "text": "Move both blocks into the system prompt without reordering them at all"
+      },
+      {
+        "key": "d",
+        "text": "Add more cache breakpoints wrapped around the changing question text block"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Claude Models, Prompting & Context Engineering | Subdomain: 2C1 Optimize context windows and manage token usage | Key Concept: prefix ordering. A cache hit requires a byte-identical prefix, so stable content must come first and per-request data last. Leading with the changing question invalidates the prefix every call, which is why hit rates collapse. | (A) Caching reuses a byte-identical prefix. Placing stable content first and the changing question last keeps the prefix constant across calls, so it caches and cost drops. | (B) Size is not the issue; the changing question at the front invalidates the prefix every call regardless of document length. | (C) Relocating the blocks without fixing order still leaves variable content ahead of stable content, so the prefix keeps changing. | (D) Breakpoints cannot cache content that changes every call; the fix is ordering stable content first, not marking the variable part."
+  },
+  {
+    "id": "c2-q0018",
+    "domain": 2,
+    "task_statement": "2B1 Design system prompts, templates, and guardrails",
+    "topic": "prompt vs programmatic guardrail",
+    "difficulty": "medium",
+    "question_text": "A payment-automation agent must never issue a refund above a policy limit. The team drafts a firm system-prompt instruction forbidding it, and stakeholders ask whether that is sufficient given the financial exposure. What is the BEST guardrail design?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Strengthen the system-prompt wording and add examples so the model reliably complies every time"
+      },
+      {
+        "key": "b",
+        "text": "Rely on the instruction but log violations for later review and correction"
+      },
+      {
+        "key": "c",
+        "text": "Enforce the limit programmatically in code, since a prompt instruction can be overridden"
+      },
+      {
+        "key": "d",
+        "text": "Raise the model's reasoning effort so it weighs the policy more carefully"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Claude Models, Prompting & Context Engineering | Subdomain: 2B1 Design system prompts, templates, and guardrails | Key Concept: prompt vs programmatic guardrail. A prompt-based guardrail asks the model to comply and is probabilistic; a programmatic guardrail enforces the rule in code regardless of output. When financial, legal, or safety consequences apply, enforcement must be programmatic, because a prompt instruction can be overridden by unusual or adversarial input. | (A) A prompt-based guardrail is probabilistic and can be overridden by adversarial or unusual input; better wording lowers but does not eliminate the failure, which is unacceptable for financial exposure. | (B) Logging catches a breach only after the money has moved; it does not prevent an over-limit refund from executing. | (C) A programmatic guardrail enforces the constraint in code regardless of model output and cannot be overridden. When financial consequences apply, enforcement must not depend on the model choosing to comply. | (D) More reasoning effort still leaves compliance probabilistic; it is not enforcement and cannot guarantee the hard limit under all inputs."
+  },
+  {
+    "id": "c2-q0019",
+    "domain": 2,
+    "task_statement": "2B2 Apply prompt engineering techniques",
+    "topic": "chain-of-thought vs extended thinking",
+    "difficulty": "medium",
+    "question_text": "An architect must document the difference between two reasoning approaches for a team. Which of the following correctly distinguishes chain-of-thought prompting from the extended-thinking API capability?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Both are API features that emit separate structured reasoning blocks"
+      },
+      {
+        "key": "b",
+        "text": "Extended thinking is prompt text while chain-of-thought is an API parameter"
+      },
+      {
+        "key": "c",
+        "text": "They are interchangeable names for one identical reasoning mechanism"
+      },
+      {
+        "key": "d",
+        "text": "Chain-of-thought is prompt text; extended thinking is an API feature"
+      }
+    ],
+    "correct_answers": [
+      "d"
+    ],
+    "explanation": "Domain: Claude Models, Prompting & Context Engineering | Subdomain: 2B2 Apply prompt engineering techniques | Key Concept: chain-of-thought vs extended thinking. Chain-of-thought is reasoning elicited as text within the prompt, whereas extended thinking is an API feature that produces separate reasoning blocks. Treating them as identical is the common trap; keep the in-prompt technique distinct from the API capability. | (A) Only extended thinking is an API feature; chain-of-thought is ordinary prompt text, not an emitted reasoning block. | (B) This reverses the two: chain-of-thought is the prompt text and extended thinking is the API feature. | (C) They are different mechanisms; conflating them is the classic misconception the distinction is meant to catch. | (D) Chain-of-thought is reasoning written into the prompt, while extended thinking is an API feature producing separate reasoning blocks. Keeping the two straight is a core prompt-engineering distinction."
+  },
+  {
+    "id": "c2-q0020",
+    "domain": 2,
+    "task_statement": "2C2 Implement prompt reuse strategies",
+    "topic": "up to four cache breakpoints per request",
+    "difficulty": "medium",
+    "question_text": "A long-lived prompt has four stable sections that change on different schedules: tool definitions rarely, a policy block weekly, a style guide monthly, and a knowledge doc daily. The team wants a section's change to invalidate only that section's cache onward. Which of the following describes the constraint they must respect?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Only one breakpoint is allowed, so they must merge all four sections"
+      },
+      {
+        "key": "b",
+        "text": "Breakpoints are unlimited, so section count never constrains the design"
+      },
+      {
+        "key": "c",
+        "text": "Four cache_control breakpoints per request, matching four sections"
+      },
+      {
+        "key": "d",
+        "text": "Breakpoints apply only to the system block, not to tools or messages"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Claude Models, Prompting & Context Engineering | Subdomain: 2C2 Implement prompt reuse strategies | Key Concept: up to four cache breakpoints per request. Four independently scheduled stable sections map to the four available breakpoints, but they must be ordered by change frequency so editing one does not invalidate the cached content after it. | (A) More than one breakpoint is supported; merging the sections is unnecessary and loses granularity. | (B) Breakpoints are not unlimited; a request supports up to four. | (C) A request supports up to four cache_control breakpoints, matching the four sections so each caches independently. Sections must still be ordered most-stable first so an early change does not invalidate later ones. | (D) Breakpoints are not restricted to the system block; the cached prefix spans tools, system, and messages."
+  },
+  {
+    "id": "c2-q0021",
+    "domain": 2,
+    "task_statement": "2A1 Select appropriate Claude models based on trade-offs",
+    "topic": "Batch API economics",
+    "difficulty": "medium",
+    "question_text": "A nightly batch job enriches millions of stored documents with no real-time requirement. Which single lever cuts cost MOST for this workload?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Prompt caching by itself, since the same documents tend to repeat every night"
+      },
+      {
+        "key": "b",
+        "text": "The most capable model, to reduce retries and later rework"
+      },
+      {
+        "key": "c",
+        "text": "Maximum effort, so each document is processed only once"
+      },
+      {
+        "key": "d",
+        "text": "The Batch API discount for asynchronous, non-latency-sensitive processing"
+      }
+    ],
+    "correct_answers": [
+      "d"
+    ],
+    "explanation": "Domain: Claude Models, Prompting & Context Engineering | Subdomain: 2A1 Select appropriate Claude models based on trade-offs | Key Concept: Batch API economics. The Batch API delivers about a 50 percent discount on asynchronous, non-latency-sensitive processing. A nightly job over millions of documents tolerates turnaround, making the batch discount the largest single cost lever. | (A) Each document differs, so a shared cached prefix gives limited reuse; caching helps some workloads but is not the dominant lever here. | (B) Upgrading capability raises per-token cost; it does not target the spend on a well-defined, non-latency-sensitive batch job. | (C) Maximum effort increases reasoning cost and latency per item and does not reduce total spend on this workload. | (D) The Batch API offers roughly a 50 percent cost reduction for asynchronous workloads that tolerate turnaround. A nightly enrichment job with no real-time need is the textbook fit."
+  },
+  {
+    "id": "c2-q0022",
+    "domain": 2,
+    "task_statement": "2B2 Apply prompt engineering techniques",
+    "topic": "CoT prompting versus extended thinking",
+    "difficulty": "medium",
+    "question_text": "A developer enabled extended thinking on a current Claude model and describes it as 'adding chain-of-thought.' A teammate insists these are different mechanisms. Which statement correctly distinguishes chain-of-thought prompting from extended thinking?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Both are identical API features; the naming difference is purely historical with no behavioral effect"
+      },
+      {
+        "key": "b",
+        "text": "Chain-of-thought is an API toggle while extended thinking is instruction text in the user turn"
+      },
+      {
+        "key": "c",
+        "text": "Chain-of-thought is prompt text; extended thinking is an API feature returning reasoning blocks"
+      },
+      {
+        "key": "d",
+        "text": "Both are prompt-only techniques that never change the request configuration or billing"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Claude Models, Prompting & Context Engineering | Subdomain: 2B2 Apply prompt engineering techniques | Key Concept: CoT prompting versus extended thinking. Chain-of-thought is reasoning instructions written into the prompt, while extended thinking is an API feature that generates separate reasoning blocks. Keeping the two distinct matters, since they involve different mechanisms, configuration, and output structure. | (A) They are not identical. One is prompt text, the other an API feature with distinct output structure and configuration. | (B) This reverses the two. Chain-of-thought is prompt text; extended thinking is the API feature, not the other way around. | (C) Chain-of-thought prompting is text in the prompt instructing step-by-step reasoning; extended thinking is an API feature that emits separate reasoning blocks. Conflating the two is a common mistake this distinction guards against. | (D) Extended thinking is an API feature, not prompt-only. It changes request configuration and produces distinct reasoning output."
+  },
+  {
+    "id": "c2-q0023",
+    "domain": 2,
+    "task_statement": "2C1 Optimize context windows and manage token usage",
+    "topic": "adopt retrieval when the corpus outgrows context",
+    "difficulty": "hard",
+    "question_text": "A knowledge assistant loaded its entire corpus into a cached prompt, which worked well at 120k tokens. The corpus has since grown to roughly 900k tokens, latency has climbed, and cost per call is rising. The team wants the lowest-complexity fix that restores performance. Which approach is BEST?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Keep loading the whole corpus and rely on prompt caching to absorb the ongoing growth"
+      },
+      {
+        "key": "b",
+        "text": "Split the corpus across multiple subagents that each hold and search one part"
+      },
+      {
+        "key": "c",
+        "text": "Introduce a retrieval pipeline so only the most relevant chunks enter each prompt"
+      },
+      {
+        "key": "d",
+        "text": "Fine-tune a model on the corpus to remove the knowledge from context entirely"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Claude Models, Prompting & Context Engineering | Subdomain: 2C1 Optimize context windows and manage token usage | Key Concept: adopt retrieval when the corpus outgrows context. Whole-KB-in-prompt with caching is simplest below roughly 200k tokens; once a corpus grows well past that, latency and cost climb and retrieval, injecting only relevant chunks, is the lowest-complexity fix that restores performance. | (A) Caching reuses a prefix but still processes a huge corpus each call; it cannot make a 900k-token prompt cheap or fast. | (B) Subagent splitting adds coordination overhead and is more complex than adding retrieval for a grown corpus. | (C) Below roughly 200k tokens whole-KB-in-prompt works, but a 900k-token corpus exceeds that; retrieving only relevant chunks restores latency and cost. It is the standard fix when a corpus outgrows the context budget. | (D) Fine-tuning is costly, hard to update, and heavier than introducing retrieval for a changing knowledge base."
+  }
+]

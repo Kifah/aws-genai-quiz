@@ -1,0 +1,1345 @@
+[
+  {
+    "id": "d1-q0901",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Dynamic model switching",
+    "difficulty": "hard",
+    "question_text": "An ecommerce company operates a global product recommendation system that needs to switch between multiple foundation models (FM) in Amazon Bedrock based on regulations, cost optimization, and performance requirements. The company must apply custom controls based on proprietary business logic, including dynamic cost thresholds, AWS Region-specific compliance rules, and real-time A/B testing across multiple FMs. The system must be able to switch between FMs without deploying new code. The system must route user requests based on complex rules including user tier, transaction value, regulatory zone, and real-time cost metrics that change hourly and require immediate propagation across thousands of concurrent requests. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy an AWS Lambda function that uses environment variables to store routing rules and Amazon Bedrock FM IDs. Use the Lambda console to update the environment variables when business requirements change. Configure an Amazon API Gateway REST API to read request parameters to make routing decisions."
+      },
+      {
+        "key": "B",
+        "text": "Deploy Amazon API Gateway REST API request transformation templates to implement routing logic based on request attributes. Store Amazon Bedrock FM endpoints as REST API stage variables. Update the variables when the system switches between models."
+      },
+      {
+        "key": "C",
+        "text": "Configure an AWS Lambda function to fetch routing configurations from the AWS AppConfig Agent for each user request. Run business logic in the Lambda function to select the appropriate FM for each request. Expose the FM through a single Amazon API Gateway REST API endpoint."
+      },
+      {
+        "key": "D",
+        "text": "Use AWS Lambda authorizers for an Amazon API Gateway REST API to evaluate routing rules that are stored in AWS AppConfig. Return authorization contexts based on business logic. Route requests to model-specific Lambda functions for each Amazon Bedrock FM."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "The AppConfig Agent fetches centrally managed routing configuration with local caching, so changed rules propagate across thousands of concurrent requests without redeploying code, while Lambda applies the proprietary business logic to pick the FM. Lambda environment variables (A) and API Gateway stage variables (B) need manual updates or redeployments and cannot express complex rules, and a Lambda authorizer (D) is meant for authentication, not model routing.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 4
+  },
+  {
+    "id": "d1-q0902",
+    "domain": 1,
+    "task_statement": "1.6",
+    "topic": "Bedrock Prompt Management for governance",
+    "difficulty": "hard",
+    "question_text": "A company is developing an internal generative AI (GenAI) assistant that uses Amazon Bedrock to summarize corporate documents for multiple business units. The GenAI assistant must generate responses in a consistent format that includes a document summary, classification of business risks, and terms that are flagged for review. The GenAI assistant must adapt the tone of responses for each user's business unit, such as legal, human resources, or finance. The GenAI assistant must block hate speech, inappropriate topics, and sensitive information such as personal health information. The company needs a solution to centrally manage prompt variants across business units and teams. The company wants to minimize ongoing orchestration efforts and maintenance for post-processing logic. The company also wants to have the ability to adjust content moderation criteria for the GenAI assistant over time. Which solution will meet these requirements with the LEAST maintenance overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Bedrock Prompt Management to configure reusable templates and business unit-specific prompt variants. Apply Amazon Bedrock guardrails that have category filters and sensitive term lists to block prohibited content."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Bedrock Prompt Management to define base templates. Enforce business unit-specific tone by using system prompt variables. Configure Amazon Bedrock guardrails to apply audience-based threshold tuning. Manage the guardrails by using an internal administration API."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Bedrock with business unit-based instruction injection in API calls. Store response formatting rules in Amazon DynamoDB. Use AWS Step functions to validate responses. Use Amazon Comprehend to apply content filters after the GenAI assistant generates responses."
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Bedrock with custom prompt templates that are stored in Amazon DynamoDB. Create one AWS Lambda function to select business unit-specific prompts. Create a second Lambda function to call Amazon Comprehend to filter prohibited content from responses."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Prompt Management gives reusable templates with business-unit-specific variants managed centrally, and Bedrock Guardrails provide managed category filters and sensitive-term lists that can be adjusted over time, with no post-processing code. B invents audience-based threshold tuning and an internal administration API; C and D require DynamoDB, Step Functions or Lambda, and Comprehend post-processing that must be built and maintained.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 5
+  },
+  {
+    "id": "d1-q0903",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "Vector store backends for Bedrock KB",
+    "difficulty": "hard",
+    "question_text": "A financial services company is building a customer support application that retrieves relevant financial regulation documents from a database based on semantic similarities to user queries. The application must integrate with Amazon Bedrock to generate responses. The application must be able to search documents that are in English, Spanish, and Portuguese. The application must filter documents by metadata such as publication date, regulatory agency, and document type. The database stores approximately 10 million document embeddings. To minimize operational overhead, the company wants a solution that minimizes management and maintenance effort. The application must provide low-latency responses for real-time customer interactions. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon OpenSearch Serverless to provide vector search capabilities and metadata filtering. Connect to Amazon Bedrock Knowledge Bases to enable Retrieval Augmented Generation (RAG) capabilities that use an Anthropic Claude foundation model (FM)."
+      },
+      {
+        "key": "B",
+        "text": "Deploy an Amazon Aurora PostgreSQL database with the pgvector extension. Define tables to store embeddings and metadata. Use SQL queries to perform similarity searches. Send retrieved documents to Amazon Bedrock to generate responses."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon S3 Vectors to configure a vector index and non-filterable metadata fields. Integrate S3 Vectors with Amazon Bedrock to enable Retrieval Augmented Generation (RAG) capabilities."
+      },
+      {
+        "key": "D",
+        "text": "Set up an Amazon Neptune Analytics graph database. Configure a vector index that has appropriate dimensionality to store document embeddings. Use Amazon Bedrock to perform graph-based retrieval and to generate responses."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "OpenSearch Serverless is a managed vector engine that scales to tens of millions of embeddings, supports metadata filtering with low latency, and integrates natively with Bedrock Knowledge Bases for RAG, so operations stay minimal. Aurora pgvector (B) means managing the database and writing retrieval code yourself, and S3 Vectors as configured in C uses non-filterable metadata, which breaks the date, agency and type filtering requirement.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 6
+  },
+  {
+    "id": "d1-q0904",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Hybrid search",
+    "difficulty": "medium",
+    "question_text": "A medical company is building a generative AI (GenAI) application that uses RAG to provide evidence-based medical information. The application uses Amazon OpenSearch Service to retrieve vector embeddings. Users report that searches frequently miss results that contain exact medical terms and acronyms and return too many semantically similar but irrelevant documents. The company needs to improve retrieval quality and maintain low end user latency, even as the document collection grows to millions of documents. Which solution will meet these requirements with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure hybrid search by combining vector similarity with keyword matching to improve semantic understanding and exact term and acronym matching."
+      },
+      {
+        "key": "B",
+        "text": "Increase the dimensions of the vector embeddings from 384 to 1536. Use a post-processing AWS Lambda function to filter out irrelevant results after retrieval."
+      },
+      {
+        "key": "C",
+        "text": "Replace OpenSearch Service with Amazon Kendra. Use query expansion to handle medical acronyms and terminology variants during pre-processing."
+      },
+      {
+        "key": "D",
+        "text": "Implement a two-stage retrieval architecture in which initial vector search results are re-ranked by an ML model that is hosted on Amazon SageMaker AI."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Hybrid search combines vector similarity with keyword matching, recovering the exact medical terms and acronyms that pure semantic search misses while keeping semantic recall, and it is a configuration change on the existing OpenSearch domain. Larger embeddings plus Lambda filtering (B) add cost and latency without exact matching, and replacing OpenSearch with Kendra (C) or adding a SageMaker-hosted reranker (D) introduces new components to operate.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 7
+  },
+  {
+    "id": "d1-q0905",
+    "domain": 1,
+    "task_statement": "1.6",
+    "topic": "Prompt management and governance",
+    "difficulty": "medium",
+    "question_text": "A media company must use Amazon Bedrock to implement a robust governance process for AI-generated content. The company needs to manage hundreds of prompt templates. Multiple teams use the templates across multiple AWS Regions to generate content. The solution must provide version control with approval workflows that include notifications for pending reviews. The solution must also provide detailed audit trails that document prompt activities and consistent prompt parameterization to enforce quality standards. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure Amazon Bedrock Studio prompt templates. Use Amazon CloudWatch to create dashboards that display prompt usage metrics. Store the approval status of content in Amazon DynamoDB. Use AWS Lambda functions to enforce approvals."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Bedrock Prompt Management to implement version control. Configure AWS CloudTrail for audit logging. Use IAM policies to control approval permissions. Create parameterized prompt templates by specifying variables."
+      },
+      {
+        "key": "C",
+        "text": "Use AWS Step Functions to create an approval workflow. Store prompts as documents in Amazon S3. Use tags to implement version control. Use Amazon EventBridge to send notifications."
+      },
+      {
+        "key": "D",
+        "text": "Deploy Amazon SageMaker Canvas with prompt templates that are stored in Amazon S3. Use AWS CloudFormation to implement version control. Use AWS Config to enforce approval policies."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock Prompt Management provides version control and parameterised templates (variables), CloudTrail provides the audit trail of prompt activity, and IAM policies control who can approve. Bedrock Studio templates with DynamoDB and Lambda (A), Step Functions with S3 tags (C), and SageMaker Canvas with CloudFormation (D) are build-it-yourself substitutes that lack native prompt versioning and parameterisation.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 9
+  },
+  {
+    "id": "d1-q0906",
+    "domain": 1,
+    "task_statement": "1.6",
+    "topic": "Amazon Bedrock Flows components",
+    "difficulty": "hard",
+    "question_text": "A company is using Amazon Bedrock to design an application to help researchers apply for grants. The application is based on an Amazon Nova Pro foundation model (FM). The application contains four required inputs and must provide responses in a consistent text format. The company wants to receive a notification in Amazon Bedrock if a response contains bullying language. However, the company does not want to block all flagged responses. The company creates an Amazon Bedrock flow that takes an input prompt and sends it to the Amazon Nova Pro FM. The Amazon Nova Pro FM provides a response. Which additional steps must the company take to meet these requirements? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Bedrock Prompt Management to specify the required inputs as variables. Select an Amazon Nova Pro FM. Specify the output format for the response. Add the prompt to the prompts node of the flow."
+      },
+      {
+        "key": "B",
+        "text": "Create an Amazon Bedrock guardrail that applies the hate content filter. Set the filter response to block. Add the guardrail to the prompts node of the flow."
+      },
+      {
+        "key": "C",
+        "text": "Create an Amazon Bedrock prompt router. Specify an Amazon Nova Pro FM. Add the required inputs as variables to the input node of the flow. Add the prompt router to the prompts node. Add the output format to the output node."
+      },
+      {
+        "key": "D",
+        "text": "Create an Amazon Bedrock guardrail that applies the insults content filter. Set the filter response to detect. Add the guardrail to the prompts node of the flow."
+      },
+      {
+        "key": "E",
+        "text": "Create an Amazon Bedrock application inference profile that specifies an Amazon Nova Pro FM. Specify the output format for the response in the description. Include a tag for each of the input variables. Add the profile to the prompts node of the flow."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "D"
+    ],
+    "explanation": "A: Prompt Management stores the four required inputs as variables, binds the Nova Pro model and the output format, and plugs into the flow's prompts node. D: a guardrail with the insults content filter in detect mode reports bullying language without blocking the response. A block-mode filter (B) would stop responses the company wants to keep, and a prompt router or application inference profile (C, E) cannot define input variables or a response format.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 11,
+    "review_note": "Yellow marks D,E. E (application inference profile) cannot define output format; A (Prompt Management with variables and output format) can. D (insults filter in detect mode) is right."
+  },
+  {
+    "id": "d1-q0907",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "RAG grounding with Knowledge Bases",
+    "difficulty": "hard",
+    "question_text": "An ecommerce company is developing a generative AI (GenAI) solution that uses Amazon Bedrock with Anthropic Claude to recommend products to customers. Customers report that some of the recommended products are not available for sale on the website or are not relevant to the customer. Customers also report that the solutions takes a long time to generate some recommendations. The company investigates the issues and finds that most interactions between customers and the product recommendation solution are unique. The company confirms that the solutions recommends products that are not in the company's product catalog. The company must resolve these issues. Which solution will meet this requirement?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase grounding within Amazon Bedrock Guardrails. Enable Automated Reasoning checks. Set up provisioned throughput."
+      },
+      {
+        "key": "B",
+        "text": "Use prompt engineering to restrict the model responses to relevant products. Use streaming techniques such as the InvokeModelWithResponseStream action to reduce perceived latency for the customers."
+      },
+      {
+        "key": "C",
+        "text": "Create an Amazon Bedrock knowledge base. Implement Retrieval Augmented Generation (RAG). Set the PerformanceConfigLatency parameter to optimized."
+      },
+      {
+        "key": "D",
+        "text": "Store product catalog data in Amazon OpenSearch Service. Validate the model's product recommendations against the product catalog. Use Amazon DynamoDB to implement response caching."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Because most interactions are unique, response caching will not help. A Knowledge Base with RAG grounds recommendations in the real product catalog, which stops invented products, and setting PerformanceConfigLatency to optimized lowers generation latency. Prompt restrictions plus streaming (B) do not prevent fabricated products, and guardrail grounding with provisioned throughput (A) does not retrieve catalog data.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 14
+  },
+  {
+    "id": "d1-q0908",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "Neptune Analytics for graph-based RAG",
+    "difficulty": "medium",
+    "question_text": "A financial services company is developing a Retrieval Augmented Generation (RAG) application to help investment analysts query complex financial relationships across multiple investment vehicles, market sectors, and regulatory environments. The dataset contains highly interconnected entities that have multi-hop relationships. The analysts must be able to examine the relationships holistically to provide accurate investment guidance. The application must deliver comprehensive answers that capture indirect relationships between financial entities. The application must produce responses in less than 3 seconds. Which solution will meet these requirements with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Bedrock Knowledge Bases with Graph RAG and Amazon Neptune Analytics to store the financial data. Analyze the multi-hop relationships between entities and automatically identify related information across documents."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Bedrock Knowledge Bases and an Amazon OpenSearch Service vector store to implement custom relationship identification logic that uses AWS Lambda functions to query multiple vector embeddings in sequence."
+      },
+      {
+        "key": "C",
+        "text": "Use an Amazon OpenSearch Serverless vector database with k-nearest neighbor (k-NN) searches. Implement manual relationship mapping in an application layer that runs in an Amazon EC2 Auto Scaling group."
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon DynamoDB to store financial data in a custom indexing system. Use an AWS Lambda function to query relevant records based on input questions. Use Amazon SageMaker AI to generate responses."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Graph RAG in Bedrock Knowledge Bases with Neptune Analytics models entities and their multi-hop relationships natively and is fully managed, which fits interconnected financial data and a sub-3-second target with the least overhead. Chaining vector queries with Lambda (B), hand-built relationship mapping on EC2 (C), and a custom DynamoDB index (D) all require custom logic to build and maintain.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 16
+  },
+  {
+    "id": "d1-q0909",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "Semantic search with OpenSearch k-NN",
+    "difficulty": "hard",
+    "question_text": "A company provides a service that helps users from around the world discover new restaurants. The service has 50 million monthly active users. The company wants to implement a semantic search solution across a database that contains 20 million restaurants and 200 million reviews. The company currently stores the data in a PostgresQL database. The solution must support complex natural language queries and return results for at least 95% of queries within 500 ms. The solution must maintain data freshness for restaurant details that update hourly. The solution must also scale cost-effectively during peak usage periods. Which solution will meet these requirements with the LEAST development effort?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Migrate the restaurant data to Amazon OpenSearch Service. Implement keyword-based search rules that use custom analyzers and relevance tuning to find restaurants based on attributes such as cuisine type, feature, and location. Create Amazon API Gateway HTTP API endpoints to transform user queries into structured search parameters."
+      },
+      {
+        "key": "B",
+        "text": "Migrate the restaurant data to Amazon OpenSearch Service. Use a foundation model (FM) in Amazon Bedrock to generate vector embeddings from restaurant descriptions, reviews, and menu items. When users submit natural language queries, convert the queries to embeddings by using the same FM. Perform k-nearest neighbors (k-NN) searches to find semantically similar results."
+      },
+      {
+        "key": "C",
+        "text": "Keep the restaurant data in PostgresQL and implement a pgvector extension. Use a foundation model (FM) in Amazon Bedrock to generate vector embeddings from restaurant data. Store the vector embeddings directly in PostgreSQL. Create an AWS Lambda function to convert natural language queries to vector representations by using the same FM. Configure the Lambda function to perform similarity searches within the database."
+      },
+      {
+        "key": "D",
+        "text": "Migrate restaurant data to an Amazon Bedrock knowledge base by using a custom ingestion pipeline. Configure the knowledge base to automatically generate embeddings from restaurant information. Use the Amazon Bedrock Retrieve API with built-in vector search capabilities to query the knowledge base directly by using natural language input."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Embeddings generated by a Bedrock FM from restaurant text, stored in OpenSearch Service and searched with k-NN, support natural-language semantic queries at this scale within the latency target, and the index can be refreshed hourly. Keyword rules (A) cannot answer complex natural-language queries, pgvector in the primary PostgreSQL database (C) loads the operational database and scales less cost-effectively, and a Knowledge Base with a custom ingestion pipeline (D) adds pipeline work.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 26
+  },
+  {
+    "id": "d1-q0910",
+    "domain": 1,
+    "task_statement": "1.6",
+    "topic": "Prompt regression testing",
+    "difficulty": "medium",
+    "question_text": "A medical company uses Amazon Bedrock to power a clinical documentation summarization system. The system produces inconsistent summaries when handling complex clinical documents. The system performed well on simple clinical documents. The company needs a solution that diagnoses inconsistencies, compares prompt performance against established metrics, and maintains historical records of prompt versions. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create multiple prompt variants by using Prompt management in Amazon Bedrock. Manually test the prompts with simple clinical documents. Deploy the highest performing version by using the Amazon Bedrock console."
+      },
+      {
+        "key": "B",
+        "text": "Implement version control for prompts in a code repository with a test suite that contains complex clinical documents and quantifiable evaluation metrics. Use an automated testing framework to compare prompt versions and document performance patterns."
+      },
+      {
+        "key": "C",
+        "text": "Deploy each new prompt version to separate Amazon Bedrock API endpoints. Split production traffic between the endpoints. Configure Amazon CloudWatch to capture response metrics and user feedback for automatic version selection."
+      },
+      {
+        "key": "D",
+        "text": "Create a custom prompt evaluation flow in Amazon Bedrock Flows that applies the same clinical document inputs to different prompt variants. Use Amazon Comprehend Medical to analyze and score the factual accuracy of each version."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "The prompts need version control plus a test suite built from complex clinical documents with quantifiable metrics, so versions can be compared automatically, the failure pattern diagnosed, and history retained. Testing only on simple documents (A) hides the problem, splitting production traffic (C) experiments on live users, and Comprehend Medical (D) extracts medical entities rather than scoring the factual accuracy of summaries.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 27,
+    "review_note": "Final Doc key is D (its explanation is AI-written). Kept B: Comprehend Medical extracts medical entities and does not score summary factual accuracy; version control plus a test suite of complex documents with quantifiable metrics covers diagnose, compare and history."
+  },
+  {
+    "id": "d1-q0911",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Chunking strategies",
+    "difficulty": "medium",
+    "question_text": "An enterprise application uses an Amazon Bedrock foundation model (FM) to process and analyze 50 to 200 pages of technical documents. Users are experiencing inconsistent responses and receiving truncated outputs when processing documents that exceed the FM's context window limits. Which solution will resolve this problem?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure fixed-size chunking at 4,000 tokens for each chunk with 20% overlap. Use application-level logic to link multiple chunks sequentially until the FM's maximum context window of 200,000 tokens is reached before making inference calls."
+      },
+      {
+        "key": "B",
+        "text": "Use hierarchical chunking with parent chunks of 8,000 tokens and child chunks of 2,000 tokens. Use Amazon Bedrock Knowledge Bases built-in retrieval to automatically select relevant parent chunks based on query context. Configure overlap tokens to maintain semantic continuity."
+      },
+      {
+        "key": "C",
+        "text": "Use semantic chunking with a breakpoint percentile threshold of 95% and a buffer size of 3 sentences. Use the Amazon Bedrock RetrieveAndGenerate API call to dynamically select the most relevant chunks based on embedding similarity scores."
+      },
+      {
+        "key": "D",
+        "text": "Create a pre-processing AWS Lambda function that analyzes document token count by using the FM's tokenizer. Configure the lambda function to split documents into equal segments that fit within 80% of the context window. Configure the Lambda function to process each segment independently before aggregating the results."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Semantic chunking splits text at meaning boundaries, and RetrieveAndGenerate retrieves only the most relevant chunks by embedding similarity, so the prompt stays within the context window and nothing is truncated. Chaining fixed chunks up to the full 200,000-token window (A) still risks overflow, and splitting documents into segments processed independently (D) loses cross-segment context.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 30
+  },
+  {
+    "id": "d1-q0912",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Bedrock Knowledge Base RetrieveAndGenerate vs Retrieve API",
+    "difficulty": "medium",
+    "question_text": "A healthcare company is using Amazon Bedrock to build a system to help practitioners make clinical decisions. The system must provide treatment recommendations to physicians based only on approved medical documentation and must cite specific sources. The system must not hallucinate or produce factually incorrect information. Which solution will meet these requirements with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Integrate Amazon Bedrock with Amazon Kendra to retrieve approved documents. Implement custom post-processing to compare generated responses against source documents and to include citations."
+      },
+      {
+        "key": "B",
+        "text": "Deploy an Amazon Bedrock knowledge base and connect it to approved clinical source documents. Use the Amazon Bedrock RetrieveAndGenerate API to return citations from the knowledge base."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Bedrock and Amazon Comprehend Medical to extract medical entities. Implement verification logic against a medical terminology database."
+      },
+      {
+        "key": "D",
+        "text": "Use an Amazon Bedrock knowledge base with Retrieve API calls and InvokeModel API calls to retrieve approved clinical source documents. Implement verification logic to compare against retrieved sources and to cite sources."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A Bedrock knowledge base over the approved documents with the RetrieveAndGenerate API grounds answers only in those sources and returns citations natively, with the least operational overhead. Kendra with custom post-processing (A), Comprehend Medical entity checks (C), and hand-built verification on Retrieve plus InvokeModel (D) all require custom comparison and citation logic.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 36
+  },
+  {
+    "id": "d1-q0913",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Chunking strategies",
+    "difficulty": "hard",
+    "question_text": "A legal research company has a Retrieval Augmented Generation (RAG) application that uses Amazon Bedrock and Amazon OpenSearch Service. The application stores 768-dimensional vector embeddings for 15 million legal documents, including statutes, court rulings, and case summaries. The company's current chunking strategy segments text into fixed-length blocks of 500 tokens. The current chunking strategy often splits contextually linked information such as legal arguments, court opinions, or statute references across separate chunks. Researchers report that generated outputs frequently omit key context or cite outdated legal information. Recent application logs show a 40% increase in response times. The p95 latency metric exceeds 2 seconds. The company expects storage needs for the application to grow from 90 GB to 360 GB within a year. The company needs a solution to improve retrieval relevance and system performance at scale. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the embedding vector dimensionality from 768 to 4,096 without changing the existing chunking or pre-processing strategy."
+      },
+      {
+        "key": "B",
+        "text": "Replace dynamic retrieval with static, pre-written summaries that are stored in Amazon S3. Use Amazon CloudFront to serve the summaries to reduce compute demand and improve predictability."
+      },
+      {
+        "key": "C",
+        "text": "Update the chunking strategy to use semantic boundaries such as complete legal arguments, clauses, or sections rather than fixed token limits. Regenerate vector embeddings to align with the new chunk structure."
+      },
+      {
+        "key": "D",
+        "text": "Migrate from OpenSearch Service to Amazon DynamoDB. Implement keyword-based indexes to enable faster lookups for legal concepts."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Fixed 500-token blocks split related legal arguments. Re-chunking on semantic boundaries such as complete arguments, clauses and sections, then regenerating embeddings, preserves context and improves relevance and performance. Increasing dimensionality while keeping the same chunks (A) does not fix the splitting, and static summaries (B) or DynamoDB keyword lookups (D) abandon semantic retrieval.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 41
+  },
+  {
+    "id": "d1-q0914",
+    "domain": 1,
+    "task_statement": "1.6",
+    "topic": "Clarification workflows",
+    "difficulty": "medium",
+    "question_text": "A company is developing a generative AI (GenAI)-powered customer support application that uses Amazon Bedrock foundation models (FMs). The application must maintain conversational context across multiple interactions with the same user. The application must run clarification workflows to handle ambiguous user queries. The company must store encrypted records of each user conversation to use for personalization. The application must be able to handle thousands of concurrent users while responding to each user quickly. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use an AWS Step Functions Express workflow to orchestrate conversation flow. Invoke AWS Lambda functions to run clarification logic. Store conversation history in Amazon RDS and use session IDs as the primary key."
+      },
+      {
+        "key": "B",
+        "text": "Use an AWS Step Functions Standard workflow to orchestrate clarification workflows. Include Wait for a Callback patterns to manage the workflows. Store conversation history in Amazon DynamoDPurchase on-demand capacity and configure server-side encryption."
+      },
+      {
+        "key": "C",
+        "text": "Deploy the application by using an Amazon API Gateway REST API to route user requests to an AWS Lambda function to update and retrieve conversation context. Store conversation history in Amazon S3 and configure server-side encryption. Save each interaction as a separate JSON file."
+      },
+      {
+        "key": "D",
+        "text": "Use AWS Lambda functions to call Amazon Bedrock inference APIs. Use Amazon SQS queues to orchestrate clarification steps. Store conversation history in an Amazon ElastiCache (Redis OSS) cluster. Configure encryption at rest."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A Standard Step Functions workflow with a wait-for-callback pattern manages long-running clarification dialogues, and DynamoDB on-demand with server-side encryption stores conversation history for thousands of concurrent users with fast access. Express workflows (A) are short-lived and RDS keyed by session scales less well, one S3 JSON file per interaction (C) is slow to retrieve, and ElastiCache (D) is not durable storage for records kept for personalisation.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 42
+  },
+  {
+    "id": "d1-q0915",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Glue Data Quality for FM pipelines",
+    "difficulty": "medium",
+    "question_text": "A financial services company needs to pre-process unstructured data such as customer transcripts, financial reports, and documentation. The company stores the unstructured data in Amazon S3 to support an Amazon Bedrock application. The company must validate data quality, create auditable metadata, monitor data metrics, and customize text chunking to optimize foundation model (FM) performance. Which solution will meet these requirements with the LEAST development effort?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon SageMaker Data Wrangler to create a data flow. Configure Amazon CloudWatch metrics and alarms to monitor data quality. Use a custom AWS Lambda function to pre-process the data. Load processed data into Amazon Bedrock."
+      },
+      {
+        "key": "B",
+        "text": "Set up an AWS Glue crawler to catalog data sources. Create AWS Glue ETL jobs to run custom transformation scripts. Use AWS Glue Data Quality to validate and monitor data quality. Load processed data into Amazon Bedrock."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Comprehend to extract entities. Create an AWS Lambda function to chunk text. Run Amazon Athena to query and validate data quality. Load processed data into Amazon Bedrock."
+      },
+      {
+        "key": "D",
+        "text": "Create an AWS Step Functions workflow to orchestrate data pre-processing tasks. Run custom code on Amazon EC2 instances to process the data. Use Amazon SageMaker Model Monitor to monitor data quality. Load processed data into Amazon Bedrock."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A Glue crawler catalogs the sources (auditable metadata), Glue ETL jobs run custom chunking and transformations, and Glue Data Quality validates and monitors data quality metrics, covering every requirement with managed services. Data Wrangler with a custom Lambda (A), Comprehend with Athena (C), and Step Functions with EC2 and Model Monitor (D) lean on custom code or on services not meant for data validation.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 43
+  },
+  {
+    "id": "d1-q0916",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Metadata filtering in Knowledge Bases",
+    "difficulty": "hard",
+    "question_text": "A company uses Amazon Bedrock to build a Retrieval Augmented Generation (RAG) system. The RAG system uses an Amazon Bedrock knowledge base that is based on an Amazon S3 bucket as the data source for emergency news video content. The system retrieves transcripts, archived reports, and related documents from the S3 bucket. The RAG system uses state-of-the-art embedding models and a high-performing retrieval setup. However, users report slow responses and irrelevant results, which cause decreased user satisfaction. The company notices that vector searches are evaluating too many documents across too many content types and over long periods of time. The company determines that the underlying models will not benefit from additional fine tuning. The company must improve retrieval accuracy by applying smarter constraints. The company wants a solution that requires minimal changes to the existing architecture. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enhance embeddings by using a domain-adapted model that is specifically trained on emergency news content for improved vector similarity."
+      },
+      {
+        "key": "B",
+        "text": "Migrate to Amazon OpenSearch Service. Use vector fields and metadata filters to define the scope of results retrieval."
+      },
+      {
+        "key": "C",
+        "text": "Enable metadata-aware filtering within the Amazon Bedrock knowledge base by indexing S3 object metadata."
+      },
+      {
+        "key": "D",
+        "text": "Migrate to an Amazon Q Business index to perform structured metadata filtering and document categorization during retrieval."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Metadata-aware filtering in the Knowledge Base restricts vector search to the relevant content types and time ranges by indexing S3 object metadata, with no architecture change. A domain-adapted embedding model (A) does not narrow the search scope, and migrating to OpenSearch or Q Business (B, D) is a large change when the requirement is minimal change.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 44
+  },
+  {
+    "id": "d1-q0917",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "Amazon MemoryDB as in-memory vector store",
+    "difficulty": "medium",
+    "question_text": "A financial services company is creating a Retrieval Augmented Generation (RAG) application that uses Amazon Bedrock to generate summaries of market activities. The application relies on a vector database that stores a small proprietary dataset that has a low index count. The application must perform similarity searches. The Amazon Bedrock model's responses must maximize accuracy and maintain high performance. The company needs to configure the vector database and integrate it with the application. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Launch an Amazon MemoryDB cluster and configure the index by using the Flat algorithm. Configure a horizontal scaling policy based on performance metrics."
+      },
+      {
+        "key": "B",
+        "text": "Launch an Amazon MemoryDB cluster and configure the index by using the Hierarchical Navigable Small World (HNSW) algorithm. Configure a vertical policy based on performance metrics."
+      },
+      {
+        "key": "C",
+        "text": "Launch an Amazon Aurora PostgresSQL cluster and configure the index by using the Inverted File with Flat Compression (IVFFlat) algorithm. Configure the instance class to scale to a larger size when the load increases."
+      },
+      {
+        "key": "D",
+        "text": "Launch an Amazon DocumentDB cluster that has an Inverted File with Flat Compression (IVFFlat) index and a high probe value. Configure connections to the cluster as a replica set Distribute reads to replica instances."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "For a small dataset with a low index count where accuracy matters most, a Flat index performs exact brute-force search, giving maximum accuracy with acceptable performance, and MemoryDB adds in-memory speed. HNSW and IVFFlat (B, C, D) are approximate indexes that trade accuracy for speed at larger scale, which is not needed here.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 45,
+    "review_note": "Mondal key is B (HNSW). Kept A: the dataset is small and the requirement is maximum accuracy, so exact Flat search fits; four other sources agree."
+  },
+  {
+    "id": "d1-q0918",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "PII removal and embedding generation pipeline",
+    "difficulty": "hard",
+    "question_text": "A GenAI developer is building a Retrieval Augmented Generation (RAG)-based customer support application that uses Amazon Bedrock foundation models (FMs). The application needs to process 50 GB of historical customer conversations that are stored in an Amazon S3 bucket as JSON files. The application must use the processed data as its retrieval corpus. The application's data processing workflow must extract relevant data from customer support documents, remove customer personally identifiable information (PII), and generate embeddings for vector storage. The processing workflow must be cost-effective and must finish within 4 hours. Which solution will meet these requirements with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use AWS Lambda and Amazon Comprehend to process files in parallel, remove PII, and call Amazon Bedrock APIs to generate vectors. Configure Lambda concurrency limits and memory settings to optimize throughput."
+      },
+      {
+        "key": "B",
+        "text": "Create an AWS Glue ETL job to run PII detection scripts on the data. Use Amazon SageMaker Processing to run the HuggingFaceProcessor to generate embeddings by using a pre-trained model. Store the embeddings in Amazon OpenSearch Service."
+      },
+      {
+        "key": "C",
+        "text": "Deploy an Amazon EMR cluster that runs Apache Spark with user-defined functions (UDFs) that call Amazon Comprehend to detect PII. Use Amazon Bedrock APIs to generate vectors. Store outputs in Amazon Aurora PostgreSQL with the pgvector extension."
+      },
+      {
+        "key": "D",
+        "text": "Implement a data processing pipeline that uses AWS Step Functions to orchestrate a workload that uses Amazon Comprehend to detect PII and Amazon Bedrock to generate embeddings. Directly integrate the workflow with Amazon OpenSearch Serverless to store vectors and provide similarity search capabilities."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Step Functions orchestrates Comprehend PII detection and Bedrock embedding generation, with direct integration to OpenSearch Serverless, which stores the vectors and serves similarity search without cluster management. Lambda with concurrency tuning (A) needs custom throughput work and has no managed vector store, and Glue with SageMaker Processing (B) or EMR with Spark UDFs (C) add heavy infrastructure to run inside the 4-hour window.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 46
+  },
+  {
+    "id": "d1-q0919",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Dynamic model configuration",
+    "difficulty": "medium",
+    "question_text": "A financial services company is developing a generative AI (GenAI) application that serves both premium customers and standard customers. The application uses AWS Lambda functions behind an Amazon API Gateway REST API to process requests. The company needs to dynamically switch between AI models based on which customer tier each user belongs to. The company also wants to perform A/B testing for new features without redeploying code. The company needs to validate model parameters like temperature and maximum token limits before applying changes. Which solution will meet these requirements with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create an AWS Systems Manager Parameter Store parameters for each configuration. Use Lambda functions to poll for parameter updates. Use Amazon EventBridge events to trigger redeployments when configurations change."
+      },
+      {
+        "key": "B",
+        "text": "Store model configurations in Amazon DynamoDB tables. Optimize access patterns to retrieve configurations according to customer tier. Configure Lambda functions to query DynamoDB at the beginning of each request to determine which model to use."
+      },
+      {
+        "key": "C",
+        "text": "Use AWS AppConfig to manage model configurations. Use feature flags to perform A/B testing. Define JSON schema validation rules for model parameters. Configure Lambda functions to retrieve configurations by using the AWS AppConfig Agent."
+      },
+      {
+        "key": "D",
+        "text": "Create an Amazon ElastiCache (Redis OSS) cluster to store model configurations. Set short TTL values. Run custom validation logic in Lambda functions. Use Amazon CloudWatch metrics to monitor configuration usage."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "AppConfig manages model configurations centrally, feature flags handle A/B tests without redeploying, JSON schema validation checks temperature and maximum-token values before they go live, and the AppConfig Agent serves them to Lambda with caching. Parameter Store with redeployments (A), DynamoDB (B), and ElastiCache (D) have no built-in validation or feature-flag rollout.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 47
+  },
+  {
+    "id": "d1-q0920",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "Multi-tenant vector store isolation",
+    "difficulty": "medium",
+    "question_text": "A hotel company wants to enhance a legacy Java-based property management system (PMS) by adding AI capabilities. The company wants to use Amazon Bedrock Knowledge Bases to provide staff with room availability information and hotel-specific details. The solution must maintain separate access controls for each hotel that the company manages. The solution must provide room availability information in near real time and must maintain consistent performance during peak usage periods. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy a single Amazon Bedrock knowledge base that contains combined data for all hotels. Configure AWS Lambda functions to synchronize data from each hotel's PMS database through direct API connections. Implement AWS CloudTrail logging with hotel-specific filters to audit access logs for each hotel's data."
+      },
+      {
+        "key": "B",
+        "text": "Create an Amazon EventBridge rule for each hotel that is invoked by changes to the PMS database for each hotel. Configure the rule to send updates to a centralized Amazon Bedrock knowledge base in a management AWS account. Configure resource-based policies to enforce hotel-specific access controls for hotel staff."
+      },
+      {
+        "key": "C",
+        "text": "Implement one Amazon Bedrock knowledge base for each hotel in a multi-account structure. Use direct data ingestion to provide real-time room availability information. Schedule regular synchronization for less critical information."
+      },
+      {
+        "key": "D",
+        "text": "Build a centralized Amazon Bedrock agent that uses multiple knowledge bases. Implement AWS IAM Identity Center with hotel-specific permission sets to control hotel staff data access."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "One knowledge base per hotel in a multi-account structure gives separate access controls per hotel, direct ingestion keeps room availability near real time, and scheduled synchronisation handles less critical information while performance stays consistent. A single combined or centralised knowledge base (A, B, D) cannot cleanly enforce per-hotel access control.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 55
+  },
+  {
+    "id": "d1-q0921",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Dynamic model switching",
+    "difficulty": "medium",
+    "question_text": "A company is implementing a serverless inference API by using AWS Lambda. The API will dynamically invoke multiple AI models hosted on Amazon Bedrock. The company needs to design a solution that can switch between model providers without modifying or redeploying Lambda code in real time. The design must include safe rollout of configuration changes and validation and rollback capabilities. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Store the active model provider in AWS Systems Manager Parameter Store. Configure a Lambda function to read the parameter at runtime to determine which model to invoke."
+      },
+      {
+        "key": "B",
+        "text": "Store the active model provider in AWS AppConfig. Configure a Lambda function to read the configuration at runtime to determine which model to invoke."
+      },
+      {
+        "key": "C",
+        "text": "Configure an Amazon API Gateway REST API to route requests to separate Lambda functions. Hardcode each Lambda function to a specific model provider. Switch the integration target manually."
+      },
+      {
+        "key": "D",
+        "text": "Store the active model provider in a JSON file hosted on Amazon S3. Use AWS AppConfig to reference the S3 file as a hosted configuration source. Configure a Lambda function to read the file through AppConfig at runtime to determine which model to invoke."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "AppConfig holds the active model provider and supports validated, gradual configuration rollout with automatic rollback, which Lambda reads at runtime, so providers switch without code changes or redeployment. Parameter Store (A) lacks controlled rollout and validation, hardcoded Lambda functions with manual switching (C) require changes, and an S3-hosted JSON file behind AppConfig (D) adds an unnecessary extra moving part.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 56
+  },
+  {
+    "id": "d1-q0922",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "Embeddings fundamentals",
+    "difficulty": "easy",
+    "question_text": "Which term describes the numerical representations of real-world objects and concepts that AI and natural language processing (NLP) models use to improve understanding of textual information?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Embeddings"
+      },
+      {
+        "key": "B",
+        "text": "Tokens"
+      },
+      {
+        "key": "C",
+        "text": "Models"
+      },
+      {
+        "key": "D",
+        "text": "Binaries"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Embeddings are numerical (vector) representations of text and other objects that capture meaning for NLP models. Tokens (B) are units of text, not semantic representations, models (C) produce embeddings, and binaries (D) are unrelated.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 59
+  },
+  {
+    "id": "d1-q0923",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Hybrid search with reranking",
+    "difficulty": "medium",
+    "question_text": "A company is building a legal research AI assistant that uses Amazon Bedrock with an Anthropic Claude foundation model (FM). The AI assistant must retrieve highly relevant case law documents to augment the FM's responses. The AI assistant must identify semantic relationships between legal concepts, specific legal terminology, and citations. The AI assistant must perform quickly and return precise results. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure an Amazon Bedrock knowledge base to use a default vector search configuration. Use Amazon Bedrock to expand queries to improve retrieval for legal documents based on specific terminology and citations."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon OpenSearch service to deploy a hybrid search architecture that combines vector search with keyword search. Apply an Amazon Bedrock reranker model to optimize result relevance."
+      },
+      {
+        "key": "C",
+        "text": "Enable the Amazon Kendra query suggestion feature for end users. Use Amazon Bedrock to perform post-processing of search results to identify semantic similarity in the documents and to produce precise results."
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon OpenSearch Service with vector search and Amazon Bedrock Titan embeddings to index and search legal documents. Use custom AWS Lambda functions to merge results with keyword-based filters that are stored in an Amazon RDS database."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Hybrid search on OpenSearch combines vector search for semantic relationships with keyword search for terminology and citations, and a Bedrock reranker model optimises relevance, giving fast, precise results. Default vector search with query expansion (A) lacks exact-match strength, Kendra query suggestions (C) do not improve retrieval precision, and merging results through Lambda and RDS filters (D) is custom and slower.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 61
+  },
+  {
+    "id": "d1-q0924",
+    "domain": 1,
+    "task_statement": "1.1",
+    "topic": "Standardised component reuse",
+    "difficulty": "medium",
+    "question_text": "A company is planning to deploy multiple generative AI (GenAI) applications to five independent business units that operate in multiple countries in Europe and the Americas. Each application uses Amazon Bedrock Retrieval Augmented Generation (RAG) patterns with business unit-specific knowledge bases that store terabytes of unstructured data. The company must establish well-architected, standardized components for security controls, observability practices, and deployment patterns across all the GenAI applications. The components must be reusable, versioned, and governed consistently. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure Amazon API Gateway REST API endpoints for the GenAI applications. Deploy common security, observability, and RAG patterns based on the AWS Well-Architected Generative AI Lens in standardized AWS CloudFormation templates. Use CloudFormation Guard after the deployment to validate policy compliance in each business unit."
+      },
+      {
+        "key": "B",
+        "text": "Create standardized AWS CloudFormation templates to implement security, observability, and RAG patterns based on the AWS Well-Architected Generative AI Lens. Establish a centralized repository that performs version control. Integrate a CI/CD pipeline with CloudFormation Guard to enforce consistent and repeatable deployments across business units."
+      },
+      {
+        "key": "C",
+        "text": "Use AWS Service Catalog to define standardized portfolios and versioned products for each business unit. Use the portfolios to enforce security, observability, and RAG patterns based on the AWS Well-Architected Generative AI Lens. Require the business units to use the Service Catalog console to deploy resources."
+      },
+      {
+        "key": "D",
+        "text": "Document security controls, observability requirements, and RAG patterns based on the AWS Well-Architected Generative AI Lens in a shared design document. Use Amazon Macie to enforce deployment. Delegate implementation responsibility to each business unit."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Service Catalog portfolios with versioned products provide reusable, governed, standardised components built on the Well-Architected Generative AI Lens that every business unit deploys consistently. CloudFormation templates with Guard validation after deployment (A) or in a pipeline the units must adopt (B) leave governance to each unit, and a design document with Macie (D) enforces nothing.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 64,
+    "review_note": "Yellow says B; Wayground key is C. Changed to C: reusable, versioned, governed components is the Service Catalog portfolio/product model; B leaves governance to a pipeline each unit must adopt. Yellow and Final Doc say B; Wayground and CertyIQ say C. Kept C: Service Catalog is the versioned, governed product model, but this is a close call. Mondal also keys B and explains it with CloudFormation Guard in a pipeline; no new technical argument, so C is kept."
+  },
+  {
+    "id": "d1-q0925",
+    "domain": 1,
+    "task_statement": "1.6",
+    "topic": "System prompt best practices",
+    "difficulty": "medium",
+    "question_text": "An education provider is building a question and answer application that uses a generative AI model to explain complex concepts. The education provider wants to automatically change the style of the model response depending on who is asking the question. The education provider will give the model the age range of the user who has asked the question. Which solution meets these requirements with the LEAST implementation effort?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Fine-tune the model by using additional training data that is representative of the various age ranges that the application will support."
+      },
+      {
+        "key": "B",
+        "text": "Add a role description to the prompt context that instructs the model of the age range that the response should target."
+      },
+      {
+        "key": "C",
+        "text": "Use chain-of-thought reasoning to deduce the correct style and complexity for a response suitable for that user."
+      },
+      {
+        "key": "D",
+        "text": "Summarize the response text depending on the age of the user so that younger users receive shorter responses."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Adding a role description with the target age range to the prompt context is the lowest-effort way to change style and complexity per user. Fine-tuning (A) is heavy, chain-of-thought (C) improves reasoning rather than audience style, and summarising by age (D) only shortens the output.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 65
+  },
+  {
+    "id": "d1-q0926",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Cross-region inference",
+    "difficulty": "medium",
+    "question_text": "A company is using Amazon Bedrock to develop an AI-powered application that uses a foundation model (FM) that supports cross-Region inference and provisioned throughput. The application must serve users in Europe and North America with consistently low latency. The application must comply with data residency regulations that require European user data to remain within Europe-based AWS Regions. During testing, the application experiences service degradation when Regional traffic spikes reach service quotas. The company needs a solution that maintains application resilience and minimizes operational complexity. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy separate Amazon Bedrock instances in North American and European Regions. Use a custom routing layer that directs traffic based on user location. Configure Amazon CloudWatch alarms to monitor Regional service usage. Use Amazon SNS to send email alerts to the company when usage approaches specified thresholds."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Bedrock cross-Region inference profiles by specifying geographical codes in profile IDs when the application calls the InvokeModel API. Configure separate Amazon API Gateway HTTP APIs to direct European and North American users to the appropriate Regional endpoints."
+      },
+      {
+        "key": "C",
+        "text": "Deploy a multi-Region Amazon API Gateway HTTP API and AWS Lambda functions that implement retry logic to handle throttling. Configure the Lambda functions to call the FM in the nearest secondary Region when the application reaches service quotas in the primary Region. Use intelligent routing to ensure compliance with data residency requirements."
+      },
+      {
+        "key": "D",
+        "text": "Configure provisioned throughput for Amazon Bedrock in multiple Regions. Implement failover logic in the application code to switch between Regions when throttling occurs. Use AWS Global Accelerator to route traffic to the appropriate endpoints based on user location."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Cross-Region inference profiles with geographic codes (such as an EU profile) route traffic across Regions inside one geography, absorbing quota spikes while keeping European data in Europe with minimal operations, and separate API Gateway endpoints send each user group to the right Regional endpoint. Custom routing with email alerts (A), retry and failover to the nearest Region (C) that may leave Europe, and multi-Region provisioned throughput with custom failover (D) add complexity or residency risk.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 67
+  },
+  {
+    "id": "d1-q0927",
+    "domain": 1,
+    "task_statement": "1.6",
+    "topic": "Prompt chaining reliability and safety",
+    "difficulty": "hard",
+    "question_text": "A specialty coffee company has a mobile app that generates personalized coffee roast profiles by using Amazon Bedrock with a three-stage prompt chain. The prompt chain converts user inputs into structured metadata, retrieves relevant logs for coffee roasts, and generates a personalized roast recommendation for each customer. Users in multiple AWS Regions report inconsistent roast recommendations for identical inputs, slow inference during the retrieval step, and unsafe recommendations such as brewing at excessively high temperatures. The company must improve the stability of outputs for repeated inputs. The company must also improve app performance and the safety of the app's outputs. The updated solution must ensure 99.5% output consistency for identical inputs and achieve inference latency of less than 1 second. The solution must also block unsafe or hallucinated recommendations by using validated safety controls. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy Amazon Bedrock with provisioned throughput to stabilize inference latency. Apply Amazon Bedrock guardrails that have semantic denial rules to block unsafe outputs. Use Amazon Bedrock Prompt Management to manage prompts by using approval workflows."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Bedrock Agents to manage chaining. Log model inputs and outputs to Amazon CloudWatch Logs. Use logs from Amazon CloudWatch to perform A/B testing for prompt versions."
+      },
+      {
+        "key": "C",
+        "text": "Cache prompt results in Amazon ElastiCache. Use AWS Lambda functions to pre-process metadata and to trace end-to-end latency. Use AWS X-Ray to identify and remediate performance bottlenecks."
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Kendra to improve roast log retrieval accuracy. Store normalized prompt metadata within Amazon DynamoDB. Use AWS Step Functions to orchestrate multistep prompts."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Provisioned throughput stabilises latency, guardrails with semantic denial rules block unsafe and hallucinated recommendations through validated safety controls, and Prompt Management with approval workflows keeps prompts consistent across Regions. Agents with CloudWatch-based A/B testing (B), ElastiCache with X-Ray (C), and Kendra with DynamoDB and Step Functions (D) do not provide validated safety blocking.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 80
+  },
+  {
+    "id": "d1-q0928",
+    "domain": 1,
+    "task_statement": "1.1",
+    "topic": "FM vs traditional ML decision",
+    "difficulty": "easy",
+    "question_text": "A retail store wants to predict the demand for a specific product for the next few weeks by using the Amazon SageMaker DeepAR forecasting algorithm. Which type of data will meet this requirement?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Text data"
+      },
+      {
+        "key": "B",
+        "text": "Image data"
+      },
+      {
+        "key": "C",
+        "text": "Time series data"
+      },
+      {
+        "key": "D",
+        "text": "Binary data"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "DeepAR forecasts future values from historical time series data, such as past demand for a product. Text, image and binary data (A, B, D) are not suitable inputs for a forecasting algorithm.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 88
+  },
+  {
+    "id": "d1-q0929",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Image generation FM selection",
+    "difficulty": "medium",
+    "question_text": "A company is using Retrieval Augmented Generation (RAG) with Amazon Bedrock and Stable Diffusion to generate product images based on text descriptions. The results are often random and lack specific details. The company wants to increase the specificity of the generated images. Which solution meets these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the number of generation steps."
+      },
+      {
+        "key": "B",
+        "text": "Use the MASK_IMAGE_BLACK mask source option."
+      },
+      {
+        "key": "C",
+        "text": "Increase the classifier-free guidance (CFG) scale."
+      },
+      {
+        "key": "D",
+        "text": "Increase the prompt strength."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Raising the classifier-free guidance (CFG) scale makes Stable Diffusion follow the text prompt more closely, which produces more specific images. More generation steps (A) refine quality rather than prompt adherence, MASK_IMAGE_BLACK (B) is a mask source option for editing, and prompt strength (D) relates to image-to-image influence rather than text adherence.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 91
+  },
+  {
+    "id": "d1-q0930",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "Metadata for search precision",
+    "difficulty": "medium",
+    "question_text": "A healthcare company is developing a document management system that stores medical research papers in an Amazon S3 bucket. The company needs to build a comprehensive metadata framework that will improve search precision for a generative AI (GenAI) application that analyzes the research papers. The metadata framework must include document timestamps, author information, and research domain classifications. The solution must maintain a consistent metadata structure across all uploaded documents. The solution must give foundation models (FMs) the ability to understand document context without accessing the full content. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Store document timestamps in Amazon S3 system metadata. Use S3 object tags to implement domain classification. Implement custom user-defined metadata to store author information."
+      },
+      {
+        "key": "B",
+        "text": "Set up S3 Object Lock with legal holds to track document timestamps. Use S3 object tags to store author information. Implement S3 access points for domain classification."
+      },
+      {
+        "key": "C",
+        "text": "Use S3 Inventory reports to track document timestamps. Create S3 access points to implement domain classification. Store author information in S3 Storage Lens dashboards."
+      },
+      {
+        "key": "D",
+        "text": "Use custom user-defined metadata to store author information. Use S3 Object Lock retention periods to track document timestamps. Use S3 Event Notifications to implement domain classification."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "S3 system metadata supplies timestamps, object tags carry the research-domain classification, and custom user-defined metadata stores author information, giving a consistent structure that FMs can read without opening the full content. Object Lock, access points, Inventory, Storage Lens and Event Notifications (B, C, D) are not metadata mechanisms for these attributes.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 99
+  },
+  {
+    "id": "d1-q0931",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Reranking",
+    "difficulty": "hard",
+    "question_text": "A company runs a Retrieval Augmented Generation (RAG) application that uses Amazon Bedrock Knowledge Bases to perform regulatory compliance queries. The application uses the RetrieveAndGenerateStream API. The application retrieves relevant documents from a knowledge base that contains more than 50,000 regulatory documents, legal precedents, and policy updates. The RAG application is producing suboptimal responses because the initial retrieval often returns semantically similar but contextually irrelevant documents. The poor responses are causing model hallucinations and incorrect regulatory guidance. The company needs to improve the performance of the RAG application so it returns more relevant documents. Which solution will meet this requirement with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy an Amazon SageMaker endpoint to run a fine- tuned ranking model. Use an Amazon API Gateway REST API to route requests. Configure the application to make requests through the REST API to rerank the results."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Comprehend to classify documents and apply relevance scores. Integrate the RAG application’s reranking process with Amazon Textract to run document analysis. Use Amazon Neptune to perform graph-based relevance calculations."
+      },
+      {
+        "key": "C",
+        "text": "Implement a retrieval pipeline that uses the Amazon Bedrock Knowledge Bases Retrieve API to perform initial document retrieval. Call the Amazon Bedrock Rerank API to rerank the results. Invoke the InvokeModelWithResponseStream operation to generate responses."
+      },
+      {
+        "key": "D",
+        "text": "Use the latest Amazon reranker model through the reranking configuration within Amazon Bedrock Knowledge Bases. Use the model to improve document relevance scoring and to reorder results based on contextual assessments."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Bedrock Knowledge Bases supports reranking natively: configuring the latest Amazon reranker model in the knowledge base's reranking configuration reorders retrieved passages by contextual relevance with minimal setup. A custom SageMaker ranking endpoint (A), Comprehend, Textract and Neptune scoring (B), and a separate Retrieve plus Rerank API pipeline (C) all require more custom components.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 103
+  },
+  {
+    "id": "d1-q0932",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Text-to-SQL for structured data retrieval",
+    "difficulty": "hard",
+    "question_text": "A software as a service (SaaS) company is building a recommendation model that uses Amazon SageMaker AI to support an application that recommends airline cabin upgrades to customers. The company will host SageMaker AI models on Amazon Bedrock by using Amazon Bedrock Custom Model Import. Airline companies will use the application to send customized offers to customers. The model must examine the travel history of customers to help make more relevant recommendations. The company stores customer travel history data in an Amazon RDS database. The company must ensure that the application delivers consistent, relevant, and accurate results across multiple airlines and customer populations. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Bedrock Knowledge Bases to implement a RAG architecture to analyze customer travel history data to give the application semantic search capabilities. Use the semantic search capabilities to retrieve relevant booking patterns, preferences, and loyalty information to generate personalized cabin upgrade recommendations. Apply Amazon Bedrock guardrails to filter content. Use AWS Step Functions and AWS Lambda functions to orchestrate validation workflows to reduce hallucinations."
+      },
+      {
+        "key": "B",
+        "text": "Implement text-to-SQL transformations with SQL validations to accurately retrieve relevant booking patterns, preferences, and loyalty information from the RDS database. Use the results to generate personalized cabin upgrade recommendations. Apply Amazon Bedrock guardrails to filter content. Use AWS Step Functions and AWS Lambda functions to orchestrate validation workflows to reduce hallucinations."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon OpenSearch Service to implement vector searches of customer travel history embeddings. Use the vector searches to give the application the ability to perform similarity-based retrieval of booking patterns, preferences, and loyalty information to generate personalized cabin upgrade recommendations. Apply Amazon Bedrock guardrails to filter responses. Use confidence scoring and semantic similarity searches to reduce hallucinations."
+      },
+      {
+        "key": "D",
+        "text": "Implement text-to-SQL transformations with SQL validations to accurately retrieve relevant booking patterns, preferences, and loyalty information from the RDS database. Use the results to generate personalized cabin upgrade recommendations. Apply Amazon Bedrock guardrails to filter responses. Use confidence scoring and semantic similarity searches to reduce hallucinations."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Text-to-SQL with SQL validation retrieves accurate structured travel history directly from the RDS database, guardrails filter outputs, and Step Functions and Lambda validation workflows reduce hallucinations, giving consistent results across airlines. RAG semantic search or vector search over structured booking records (A, C) loses precision on exact attributes, and D differs from B only in its validation approach.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 105,
+    "review_note": "CertyIQ key is D. Kept B (low confidence): the options differ only in the validation text."
+  },
+  {
+    "id": "d1-q0933",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "pgvector vs OpenSearch selection",
+    "difficulty": "hard",
+    "question_text": "A university recently digitized a collection of archival documents, academic journals, and manuscripts. The university stores the digital files in an AWS Lake Formation data lake. The university hires a GenAI developer to build a solution to allow users to search the digital files by using text queries. The solution must return journal abstracts that are semantically similar to a user's query. Users must be able to search the digitized collection based on text and metadata that is associated with the journal abstracts. The metadata of the digitized files does not contain keywords. The solution must match similar abstracts to one another based on the similarity of their text. The data lake contains fewer than 1 million files. Which solution will meet these requirements with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Titan Embeddings in Amazon Bedrock to create vector representations of the digitized files. Store embeddings in the OpenSearch Neural Plugin for Amazon OpenSearch Service."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Comprehend to extract topics from the digitized files. Store the topics and file metadata in an Amazon Aurora PostgreSQL database. Query the abstract metadata against the data in the Aurora database."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon SageMaker AI to deploy a sentence- transformer model. Use the model to create vector representations of the digitized files. Store embeddings in an Amazon Aurora PostgreSQL database that has the pgvector extension."
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Titan Embeddings in Amazon Bedrock to create vector representations of the digitized files. Store embeddings in an Amazon Aurora PostgreSQL Serverless database that has the pgvector extension."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Titan Embeddings in Bedrock create semantic vectors for the abstracts, and Aurora PostgreSQL Serverless with pgvector stores and searches them alongside metadata with little operational overhead at under 1 million files. OpenSearch with the neural plugin (A) means running a search cluster, Comprehend topics in Aurora (B) cannot match abstracts by semantic similarity, and a SageMaker-hosted sentence-transformer (C) adds model hosting.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 107
+  },
+  {
+    "id": "d1-q0934",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Query decomposition",
+    "difficulty": "medium",
+    "question_text": "A healthcare company is developing an application to process medical queries. The application must answer complex queries with high accuracy by reducing semantic dilution. The application must refer to domain-specific terminology in medical documents to reduce ambiguity in medical terminology. The application must be able to respond to 1,000 queries each minute with response times less than 2 seconds. Which solution will meet these requirements with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon API Gateway to route incoming queries to an Amazon Bedrock agent. Configure the agent to use an Anthropic Claude model to decompose queries and an Amazon Titan model to expand queries. Create an Amazon Bedrock knowledge base to store the reference medical documents."
+      },
+      {
+        "key": "B",
+        "text": "Configure an Amazon Bedrock knowledge base to store the reference medical documents. Enable query decomposition in the knowledge base. Configure an Amazon Bedrock flow that uses a foundation model (FM) and the knowledge base to support the application."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon SageMaker Al to host custom ML models for both query decomposition and query expansion. Configure Amazon Bedrock knowledge bases to store the reference medical documents. Encrypt the documents in the knowledge base."
+      },
+      {
+        "key": "D",
+        "text": "Create an Amazon Bedrock agent to orchestrate multiple AWS Lambda functions to decompose queries. Create an Amazon Bedrock knowledge base to store the reference medical documents. Use the agent's built-in knowledge base capabilities. Add deep research and reasoning capabilities to the agent to reduce ambiguity in the medical terminology."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Query decomposition in the Bedrock Knowledge Base splits complex questions into sub-queries to reduce semantic dilution, and a Bedrock flow that combines the FM and the knowledge base orchestrates it with the least operational overhead and fast responses. Agents with Lambda functions or two separate FMs (A, D) and SageMaker-hosted models (C) add components and latency.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 112
+  },
+  {
+    "id": "d1-q0935",
+    "domain": 1,
+    "task_statement": "1.1",
+    "topic": "FM vs traditional ML decision",
+    "difficulty": "medium",
+    "question_text": "A company has terabytes of data in a database for business analysis. It wants to build an AI-based application that can build a SQL query from input text provided by employees with minimal technology experience. Which soluton meets these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Generative pre-trained transformers (GPT)"
+      },
+      {
+        "key": "B",
+        "text": "Residual neural network"
+      },
+      {
+        "key": "C",
+        "text": "Support vector machine"
+      },
+      {
+        "key": "D",
+        "text": "WaveNet"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "GPT-style generative transformers can translate natural-language questions into SQL, so employees with minimal technical experience can query the data. ResNet (B) is an image model, SVM (C) is a classical classifier, and WaveNet (D) generates audio.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 114,
+    "review_note": "Foundational AI Practitioner (AIF-C01) level question; key agrees with my own judgment."
+  },
+  {
+    "id": "d1-q0936",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Knowledge Bases for private data augmentation",
+    "difficulty": "medium",
+    "question_text": "A company is implementing the Amazon Titan foundation model using Amazon Bedrock. The company needs to supplement the model by using relevant data from the company's private data sources. Which soluton will meet this requirement?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use a different FM."
+      },
+      {
+        "key": "B",
+        "text": "Choose a lower temperature value."
+      },
+      {
+        "key": "C",
+        "text": "Create an Amazon Bedrock knowledge base."
+      },
+      {
+        "key": "D",
+        "text": "Enable model invocation logging."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "An Amazon Bedrock knowledge base supplements the Titan model with relevant data from the company's private sources through RAG. Switching to a different FM (A) or lowering the temperature (B) does not add private data, and invocation logging (D) only records requests.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 117,
+    "review_note": "Foundational AI Practitioner (AIF-C01) level question; key agrees with my own judgment."
+  },
+  {
+    "id": "d1-q0937",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "RAG vs fine-tuning for private policy data",
+    "difficulty": "medium",
+    "question_text": "A company wants to implement an LLM-based chatbot to provide customer service agents with real-time contextual responses to customers' inquiries. The company will use the company's policies as the knowledge base. Which soluton will meet these requirements MOST cost- efiectvely?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Retrain the LLM on the company policy data."
+      },
+      {
+        "key": "B",
+        "text": "Fine-tune the LLM on the company policy data."
+      },
+      {
+        "key": "C",
+        "text": "Implement Retrieval Augmented Generation (RAG) for in- context responses."
+      },
+      {
+        "key": "D",
+        "text": "Use pre-training and data augmentation on the company policy data."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "RAG supplies the current company policies as context at request time, which is the most cost-effective option. Retraining, fine-tuning, or pre-training with data augmentation (A, B, D) are expensive and have to be repeated whenever the policies change.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 121,
+    "review_note": "Foundational AI Practitioner (AIF-C01) level question; key agrees with my own judgment."
+  },
+  {
+    "id": "d1-q0938",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Hierarchical chunking",
+    "difficulty": "medium",
+    "question_text": "A pharmaceutical company is developing a Retrieval Augmented Generation (RAG) application that uses an Amazon Bedrock knowledge base. The knowledge base uses Amazon OpenSearch Service as a data source for more than 25 million scientific papers. Users report that the application produces inconsistent answers that cite irrelevant sections of papers when queries span methodology, results, and discussion sections of the papers. The company needs to improve the knowledge base to preserve semantic context across related paragraphs on the scale of the entire corpus of data. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure the knowledge base to use fixed-size chunking. Set a 300-token maximum chunk size and a 10% overlap between chunks. Use an appropriate Amazon Bedrock embedding model."
+      },
+      {
+        "key": "B",
+        "text": "Configure the knowledge base to use hierarchical chunking. Use parent chunks that contain 1,000 tokens and child chunks that contain 200 tokens. Set a 50-token overlap between chunks."
+      },
+      {
+        "key": "C",
+        "text": "Configure the knowledge base to use semantic chunking. Use a buffer size of 1 and a breakpoint percentile threshold of 85% to determine chunk boundaries based on content meaning."
+      },
+      {
+        "key": "D",
+        "text": "Configure the knowledge base not to use chunking. Manually split each document into separate files before ingestion. Apply post-processing reranking during retrieval."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Hierarchical chunking uses small child chunks for retrieval and larger parent chunks for context, preserving relationships across paragraphs such as methodology, results and discussion at corpus scale. Fixed-size chunking (A) splits related content, semantic chunking with a buffer of 1 (C) is not designed to keep parent context, and no chunking with manual splitting (D) cannot scale to 25 million papers.",
+    "source_topic": "Seminar question bank (trusted)",
+    "priority": 5,
+    "source": "seminar",
+    "seminar_id": 123
+  }
+]

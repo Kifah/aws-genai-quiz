@@ -1,0 +1,281 @@
+[
+  {
+    "id": "c6-q0016",
+    "domain": 6,
+    "task_statement": "6B2 Document architectures and provide implementation guidance",
+    "topic": "settings scope hierarchy",
+    "difficulty": "medium",
+    "question_text": "A team wants a security policy enforced in Claude Code for every developer on a shared repository. One engineer places the configuration in the personal, uncommitted local override file and reports it works for them, but colleagues never receive the policy. Which correction addresses the root cause of the inconsistency?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Ask each colleague to copy the same settings into their own personal local override file."
+      },
+      {
+        "key": "b",
+        "text": "Move the policy into the user-level home-directory settings on the lead's machine only."
+      },
+      {
+        "key": "c",
+        "text": "Accept per-developer configuration as normal, since local override settings always take precedence anyway."
+      },
+      {
+        "key": "d",
+        "text": "Commit the policy to the project-level settings file so every developer on the repository inherits it."
+      }
+    ],
+    "correct_answers": [
+      "d"
+    ],
+    "explanation": "Domain: Stakeholder Communication & Lifecycle Management | Subdomain: 6B2 Document architectures and provide implementation guidance | Key Concept: settings scope hierarchy. Configuration resolves across user, project, and local scopes; only the committed project settings reach the whole team. Placing team policy in a personal, uncommitted override is why colleagues never received it. | (A) Copying into each local override reproduces per-user drift and depends on everyone remembering; team policy should not live in uncommitted files. | (B) User-level settings apply only to that one machine's user, not the team on the repository; it does not reach colleagues. | (C) Team-wide policy belongs in committed project settings, not scattered local files; accepting per-developer configuration is the drift to fix, not embrace. | (D) Claude Code settings resolve across scopes: user home directory, committed project settings, and a local uncommitted override. Team-wide policy belongs in the version-controlled project settings so every developer on the repository inherits it, not in a personal override that reaches no one else."
+  },
+  {
+    "id": "c6-q0017",
+    "domain": 6,
+    "task_statement": "6C1 Lifecycle Phases",
+    "topic": "architecture decision records form an append-only log",
+    "difficulty": "medium",
+    "question_text": "A prior architecture decision to use a single-prompt pattern is being replaced by a routing workflow. A new engineer wants to edit the original decision record in place to reflect the change. How should the decision history be handled?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Overwrite the original record so only the current decision remains"
+      },
+      {
+        "key": "b",
+        "text": "Add a new record for the decision, mark the original superseded"
+      },
+      {
+        "key": "c",
+        "text": "Delete the original record since it no longer reflects reality"
+      },
+      {
+        "key": "d",
+        "text": "Leave both records active with no status indicating which applies"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Stakeholder Communication & Lifecycle Management | Subdomain: 6C1 Lifecycle Phases | Key Concept: architecture decision records form an append-only log. Replacing a decision means adding a new record and marking the original superseded via its status field, not editing or deleting the original, which preserves the historical context of why each choice was made. | (A) Overwriting destroys the historical context of why the original choice was made. The decision log is append-only precisely to preserve that history. | (B) Decision records are an append-only log. Superseding means adding a new record for the routing decision and updating the original's status to superseded, keeping the original intact for its historical context. | (C) Deletion removes the rationale future readers need to understand how the design evolved. Superseded records are retained, not discarded. | (D) Without a status marker, readers cannot tell which decision is current. The status field is what disambiguates active from superseded."
+  },
+  {
+    "id": "c6-q0018",
+    "domain": 6,
+    "task_statement": "6A1 Conduct structured discovery and requirement gathering",
+    "topic": "defensible success criteria are specific, measurable, and multi-dimensional, set",
+    "difficulty": "hard",
+    "question_text": "An architect is closing discovery for a contract-review assistant. The sponsor offers 'summarize contracts accurately' as the goal. To make this a defensible target that the design and evaluation phases can be held to, the success criteria should be:",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "A single overall accuracy percentage measured on whichever contract documents happen to be easiest to grade"
+      },
+      {
+        "key": "b",
+        "text": "Left qualitative, so the delivery team retains flexibility to interpret what 'accurate' means during the build"
+      },
+      {
+        "key": "c",
+        "text": "Multi-dimensional and quantified on a representative held-out set, numeric thresholds, partial-credit grading"
+      },
+      {
+        "key": "d",
+        "text": "Deferred to production monitoring, where live traffic is expected to reveal the appropriate accuracy thresholds"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Stakeholder Communication & Lifecycle Management | Subdomain: 6A1 Conduct structured discovery and requirement gathering | Key Concept: defensible success criteria are specific, measurable, and multi-dimensional, set as numeric thresholds on a representative held-out set with graders that allow valid variation and partial credit. Vague single-dimension goals graded on convenient samples are the weak pattern, and deferring thresholds to production leaves design and evaluation with no target to satisfy. | (A) One dimension measured on a convenient sample is the weak-criteria signature; it is not multi-dimensional and does not reflect production distribution. | (B) Qualitative goals cannot be validated and invite disputes at acceptance. Defensible criteria must be quantified, not left to interpretation. | (C) Strong success criteria are specific, measurable, and multi-dimensional, expressed as numeric thresholds on a representative held-out set, with graders that reward valid variation and partial credit. | (D) Deferring targets to production leaves design and evaluation with nothing to aim at; the thresholds must be set before the build, not after."
+  },
+  {
+    "id": "c6-q0019",
+    "domain": 6,
+    "task_statement": "6A1 Functional vs Non-Functional Requirements",
+    "topic": "quality attributes are non-functional requirements",
+    "difficulty": "medium",
+    "question_text": "A stakeholder states that chat responses must return under 300 milliseconds for 95 percent of requests. This stated latency target is BEST classified as:",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "a functional requirement describing a specific behavior the system performs"
+      },
+      {
+        "key": "b",
+        "text": "a non-functional requirement that later becomes a service-level objective"
+      },
+      {
+        "key": "c",
+        "text": "an acceptance test case drawn directly from the golden dataset"
+      },
+      {
+        "key": "d",
+        "text": "an architecture decision record documenting an accepted tradeoff"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Stakeholder Communication & Lifecycle Management | Subdomain: 6A1 Functional vs Non-Functional Requirements | Key Concept: quality attributes are non-functional requirements. A percentile latency target describes how well the system must perform, not a feature, and it later drives the service-level objective and any contractual SLA. Capturing only functional behavior misses these quality attributes. | (A) Functional requirements state what the system does; a latency threshold states how well it must perform, a quality attribute rather than a behavior. | (B) Latency, availability, and cost targets are non-functional requirements. They quantify how well the system must perform and typically become the SLOs and SLA terms defined later. | (C) Acceptance test cases validate outputs against references; a percentile latency target is a performance requirement, not a graded dataset item. | (D) An ADR records an architecturally significant decision and its consequences, not a raw performance requirement gathered from a stakeholder."
+  },
+  {
+    "id": "c6-q0020",
+    "domain": 6,
+    "task_statement": "6B1 Manage stakeholder feedback loops and expectation alignment (including SLAs)",
+    "topic": "error budget source",
+    "difficulty": "medium",
+    "question_text": "An operations team wants to compute how much unreliability it can tolerate this quarter before slowing feature work. The service has a 99 percent contractual SLA and a stricter 99.9 percent internal SLO. An architect must tell them which figure to base the error budget on and why. Which guidance is correct?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Derive the error budget from the 99.9 percent SLO, the internal target"
+      },
+      {
+        "key": "b",
+        "text": "Derive the error budget from the 99 percent SLA since it is contractual"
+      },
+      {
+        "key": "c",
+        "text": "Average the SLA and SLO figures to set a balanced error budget"
+      },
+      {
+        "key": "d",
+        "text": "Use raw measured availability as the error budget with no target applied"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Stakeholder Communication & Lifecycle Management | Subdomain: 6B1 Manage stakeholder feedback loops and expectation alignment (including SLAs) | Key Concept: error budget source. An error budget is the allowable unreliability derived directly from the SLO target, not from the contractual SLA and not from the raw SLI. Basing it on the stricter internal SLO gives the team room to detect and correct drift before a contractual breach. | (A) The error budget is the failure allowance derived from the SLO, so the 99.9 percent internal target sets it. Using the SLO gives the team margin to react before the contractual SLA is breached. | (B) Error budgets derive from the SLO, not the SLA. Basing it on the looser contractual figure removes the early-warning margin. | (C) Averaging the two figures has no basis in how error budgets are defined. The budget comes from the SLO alone. | (D) Raw measured availability is the SLI, a metric with no target. An error budget requires the SLO target to define the allowance."
+  },
+  {
+    "id": "c6-q0021",
+    "domain": 6,
+    "task_statement": "6C1 Support lifecycle phases",
+    "topic": "monitoring is continuous production observation against defined targets",
+    "difficulty": "medium",
+    "question_text": "A solution launches with no instrumentation, on the assumption that pre-deployment evaluation already proved it meets its targets. Which correction best reflects the purpose of the monitoring phase?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Re-run the offline evaluation suite weekly to confirm continued quality"
+      },
+      {
+        "key": "b",
+        "text": "Add logging so incidents can be reconstructed after users complain"
+      },
+      {
+        "key": "c",
+        "text": "Instrument indicators backing objectives and observe in production"
+      },
+      {
+        "key": "d",
+        "text": "Schedule a quarterly manual review of a sampled set of outputs"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Stakeholder Communication & Lifecycle Management | Subdomain: 6C1 Support lifecycle phases | Key Concept: monitoring is continuous production observation against defined targets. Pre-deployment evaluation cannot catch traffic drift or live regressions, so the monitoring phase instruments the service level indicators behind the system's objectives and watches them continuously. Logging, periodic re-evals, and sampled reviews are weaker substitutes that detect problems late or not at all. | (A) Offline evals measure a fixed set, not live traffic. They miss production drift and regressions that only appear against real inputs between runs. | (B) Logging reconstructs events after the fact; it is not continuous measurement against targets. Waiting for complaints means drift is caught late. | (C) Monitoring is continuous observation against defined targets. Deploying without instrumented service level indicators means objective and contractual compliance can only be assumed, not known. Offline evals do not catch live drift. | (D) A quarterly sample is periodic spot-checking, not continuous monitoring. Degradation between reviews goes undetected against the objectives."
+  },
+  {
+    "id": "c6-q0022",
+    "domain": 6,
+    "task_statement": "6B2 Document architectures and provide implementation guidance",
+    "topic": "architecture documentation as a durable artifact",
+    "difficulty": "medium",
+    "question_text": "After a solution ships, the architect who designed it leaves the company. Six months later the operating team must change a retrieval component but cannot safely do so. Which documentation gap most likely caused this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "The meeting notes from the original design discussions were not archived anywhere"
+      },
+      {
+        "key": "b",
+        "text": "The source code lacked inline comments explaining what each function does"
+      },
+      {
+        "key": "c",
+        "text": "The system's structure, interfaces, and design rationale went undocumented"
+      },
+      {
+        "key": "d",
+        "text": "The project's marketing one-pager was never updated after the launch date"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Stakeholder Communication & Lifecycle Management | Subdomain: 6B2 Document architectures and provide implementation guidance | Key Concept: architecture documentation as a durable artifact. Documentation of structure, interfaces, and the reasoning behind key choices is a lifecycle artifact that outlives the author. Without it, handoff, monitoring, and iteration become unreliable because the operating team lacks the context to change the system safely. | (A) Archived discussion notes are not a substitute for structured architecture documentation; their absence is not what blocks safe change. | (B) Inline comments describe local code behavior, not system structure, interfaces, and the reasoning needed to change a component safely. | (C) Architecture documentation outlives its author and gives an operating team the structure, interfaces, and rationale needed to change the system safely. Its absence is exactly why the team is stuck. | (D) A marketing summary carries no technical context for operating or changing the system; it is irrelevant to the team's inability to make the change."
+  },
+  {
+    "id": "c6-q0023",
+    "domain": 6,
+    "task_statement": "6B1 Manage stakeholder feedback loops and expectation alignment",
+    "topic": "continuous feedback",
+    "difficulty": "medium",
+    "question_text": "A team gathered stakeholder requirements at kickoff, secured sign-off, and has not revisited them in six months of iteration. Users now report the deployed Claude assistant solves a problem that has since shifted. What practice would have surfaced this drift earlier?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "A stricter one-time acceptance gate requiring every stakeholder to sign before build began"
+      },
+      {
+        "key": "b",
+        "text": "A continuous stakeholder feedback loop revalidating assumptions across the lifecycle"
+      },
+      {
+        "key": "c",
+        "text": "More detailed logging of assistant outputs to capture every production interaction"
+      },
+      {
+        "key": "d",
+        "text": "A larger model to better handle the evolving problem without requirement changes"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Stakeholder Communication & Lifecycle Management | Subdomain: 6B1 Manage stakeholder feedback loops and expectation alignment | Key Concept: continuous feedback. A stakeholder feedback loop recurs across the lifecycle, revalidating assumptions against changing reality. Gathering requirements once and never rechecking them is the failure mode that lets the problem drift away from the solution unnoticed. | (A) A stronger one-time gate still captures requirements only at the start; it cannot detect a problem that shifts months into operation. | (B) A feedback loop is a recurring channel carrying stakeholder input back into the solution. Collecting requirements once and never revalidating them against shifting reality is the failure mode; continuous alignment catches drift. | (C) Logging records events but does not close the path from changed stakeholder needs back into the design; it is not a feedback loop. | (D) A more capable model does not address stale requirements; the system is solving a problem that no longer matches stakeholder reality."
+  },
+  {
+    "id": "c6-q0024",
+    "domain": 6,
+    "task_statement": "6A2 Communicate architectural decisions and trade-offs",
+    "topic": "ADR status field",
+    "difficulty": "medium",
+    "question_text": "Six months ago an ADR accepted a monolithic-context integration. The team now adopts progressive tool disclosure to fix capability bloat, directly reversing that choice. A new engineer asks how to keep the decision history honest. Which action BEST preserves the record?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Overwrite the old ADR's Decision field with the new approach"
+      },
+      {
+        "key": "b",
+        "text": "Write a new ADR and set the old one's status to superseded"
+      },
+      {
+        "key": "c",
+        "text": "Delete the outdated ADR so no one follows the reversed decision"
+      },
+      {
+        "key": "d",
+        "text": "Append the reversal as a comment inside the original ADR's Context"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Stakeholder Communication & Lifecycle Management | Subdomain: 6A2 Communicate architectural decisions and trade-offs | Key Concept: ADR status field. When a later decision reverses an earlier one, you add a new record and mark the original superseded rather than editing or deleting it. Retaining the superseded record keeps the historical reasoning intact while the status makes the current decision unambiguous. | (A) Overwriting erases the original decision and its context. The append-only log is not edited in place. | (B) A new record captures the replacement decision while the original is marked superseded, preserving the reasoning behind both. This is how the append-only log stays honest through a reversal. | (C) Deletion removes valuable history about why the earlier choice was made. Superseded records are retained, not purged. | (D) Burying a reversal in an old record's Context obscures the current decision. The replacement belongs in its own new ADR."
+  }
+]

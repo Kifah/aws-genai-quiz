@@ -1,0 +1,126 @@
+[
+  {
+    "id": "c7-q0008",
+    "domain": 7,
+    "task_statement": "7A1 Configure Claude tools and environments for teams",
+    "topic": "version-controlled team configuration",
+    "difficulty": "medium",
+    "question_text": "A team wants every developer's Claude Code session to enforce the same command-blocking rule and inherit identical project context. Where should this shared configuration live?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "In each developer's local override file, uncommitted, so personal preferences apply"
+      },
+      {
+        "key": "b",
+        "text": "In committed project settings and CLAUDE.md checked into the repository"
+      },
+      {
+        "key": "c",
+        "text": "In the user-level settings at each developer's home directory"
+      },
+      {
+        "key": "d",
+        "text": "In a shared prompt each developer pastes at session start"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Developer Productivity & Operational Enablement | Subdomain: 7A1 Configure Claude tools and environments for teams | Key Concept: version-controlled team configuration. Committing project settings and CLAUDE.md into the repository makes every developer inherit the same guardrails and context automatically. Local override and user-level files apply only to one machine and drift per person, so shared policy must be checked in, not left to individual setup. | (A) The local override file is personal and uncommitted, so its rules never reach teammates. It is the wrong home for policy the whole team must share. | (B) Committing project settings and CLAUDE.md into the repository makes every developer inherit the same guardrails and context automatically. Version-controlled, project-scoped configuration is what keeps team tooling consistent and reproducible instead of drifting per person. | (C) User-level home-directory settings apply only to that one machine. Team-wide policy belongs in committed project configuration, not per-user home settings. | (D) A pasted prompt depends on each person remembering to include it and drifts easily. Durable shared context belongs in checked-in configuration, not manual paste."
+  },
+  {
+    "id": "c7-q0009",
+    "domain": 7,
+    "task_statement": "7A2 Improve developer workflows using AI-assisted tooling",
+    "topic": "progressive tool disclosure",
+    "difficulty": "medium",
+    "question_text": "An internal agent loads over 400 tool definitions at startup, consuming a large share of context before any request runs, and tool selection has grown unreliable. The team wants to keep the tools reachable while reducing upfront token load. What is the best structural fix?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Rewrite every tool description more concisely so all definitions still fit within context"
+      },
+      {
+        "key": "b",
+        "text": "Load tool definitions on demand via progressive disclosure so only needed tools enter"
+      },
+      {
+        "key": "c",
+        "text": "Move to a larger-context model so all 400 definitions load comfortably upfront"
+      },
+      {
+        "key": "d",
+        "text": "Cache the tool definitions so their repeated upfront loads are billed more cheaply"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Developer Productivity & Operational Enablement | Subdomain: 7A2 Improve developer workflows using AI-assisted tooling | Key Concept: progressive tool disclosure. Loading thousands of tool definitions upfront causes capability bloat that raises cost and confuses selection. The structural remedy is progressive disclosure, loading definitions on demand, rather than shorter descriptions, a bigger model, or caching the same upfront load. | (A) Trimming descriptions tunes around a context already saturated with definitions. It does not address the structural problem of loading them all upfront. | (B) Progressive disclosure loads definitions only when a tool is needed rather than all at once, directly countering capability bloat. It keeps every tool reachable while shrinking the tokens spent before a request is even processed. | (C) A bigger window still burns tokens on unused definitions and leaves tool selection confused. It scales the symptom instead of removing the upfront load. | (D) Caching lowers cost for identical prefixes but still front-loads every definition into context. The bloat and selection confusion remain."
+  },
+  {
+    "id": "c7-q0010",
+    "domain": 7,
+    "task_statement": "7B1 Support debugging and operational issue resolution",
+    "topic": "a PreToolUse hook has four decision values",
+    "difficulty": "medium",
+    "question_text": "A team builds a PreToolUse hook that should approve safe reads, block deletes, prompt the user for network calls, and pass judgment to normal flow for everything else. Which set of decision values supports all four behaviors?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "allow, deny, and ask, treating those three as the full set."
+      },
+      {
+        "key": "b",
+        "text": "allow, deny, ask, and defer, the four PreToolUse decisions."
+      },
+      {
+        "key": "c",
+        "text": "approve, reject, and escalate as the three available hook decisions."
+      },
+      {
+        "key": "d",
+        "text": "permit and block treated as the only two supported hook decisions."
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Developer Productivity & Operational Enablement | Subdomain: 7B1 Support debugging and operational issue resolution | Key Concept: a PreToolUse hook has four decision values. allow, deny, ask, and defer map to approving, blocking, prompting the user, and passing the decision to normal flow. A list of only allow, deny, and ask omits defer, the mechanism for passing judgment onward. | (A) Listing only three omits defer, the value that passes the decision to normal flow. | (B) A PreToolUse hook returns one of four values, allow, deny, ask, and defer, which map exactly to approving, blocking, prompting, and passing on the decision. | (C) These are not the actual decision values; the real set is allow, deny, ask, and defer. | (D) Two values cannot express prompt-the-user or pass-to-normal-flow behaviors."
+  },
+  {
+    "id": "c7-q0011",
+    "domain": 7,
+    "task_statement": "7A1 Configure Claude tools and environments for teams",
+    "topic": "authentication versus authorization",
+    "difficulty": "medium",
+    "question_text": "A team deploys a shared MCP server so Claude Code agents can act on an internal system. Every agent authenticates with a valid service credential. During review, the security lead notices any authenticated agent can reach administrative endpoints it never needs. Developers argue that requiring valid credentials already secures the integration. What is the correct assessment?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Valid credentials are sufficient; authentication proves identity and grants needed access"
+      },
+      {
+        "key": "b",
+        "text": "The gap is an authorization flaw; scope each agent to only needed endpoints"
+      },
+      {
+        "key": "c",
+        "text": "Rotate the service credential frequently to reduce the administrative-endpoint exposure"
+      },
+      {
+        "key": "d",
+        "text": "Add a prompt telling agents not to call administrative endpoints they do not need"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Developer Productivity & Operational Enablement | Subdomain: 7A1 Configure Claude tools and environments for teams | Key Concept: authentication versus authorization. A valid credential proves who an agent is, not what it may do. An authenticated agent reaching endpoints it never needs is an authorization gap, fixed by scoping permissions to least privilege, not by rotation or prompt guidance. | (A) Proving identity is authentication; it does not determine what the caller may do. A valid credential is not sufficient when permissions are too broad. | (B) This is an authorization gap: authenticated agents can reach endpoints they should not. Least privilege requires scoping each agent's permissions to only what its task needs, bounding the blast radius. | (C) Credential rotation addresses credential compromise, not the excessive permissions an authenticated agent already holds. | (D) A prompt instruction is a probabilistic guardrail, not enforced authorization; the administrative endpoints remain reachable."
+  }
+]

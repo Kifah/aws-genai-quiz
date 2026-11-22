@@ -1,0 +1,70 @@
+[
+  {
+    "id": "c2-q0010",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Context window optimization and token management",
+    "difficulty": "medium",
+    "question_text": "An application sends the same 8,000-token system prompt and policy document on every request, followed by a short, varying user message. Latency and cost are both concerns. Which optimization most directly addresses both?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Truncate the policy document to the first 1,000 tokens." },
+      { "key": "B", "text": "Switch to the smallest available model regardless of task fit." },
+      { "key": "C", "text": "Place the static system prompt and policy before the dynamic content and enable prompt caching." },
+      { "key": "D", "text": "Move the policy document into a few-shot example block." }
+    ],
+    "correct_answers": ["C"],
+    "explanation": "Prompt caching allows the static prefix (system prompt + policy document) to be processed once and reused across requests. This reduces both cost (fewer tokens billed for the cached portion) and latency (the cached portion does not need to be reprocessed). Truncating the policy (A) risks losing critical information. Switching models regardless of fit (B) is a blunt instrument. Moving content to a few-shot block (D) does not fundamentally change caching behavior and changes the semantic role of the content."
+  },
+  {
+    "id": "c2-q0011",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Prompt caching strategies",
+    "difficulty": "hard",
+    "question_text": "A developer wants to implement prompt caching. Which of the following are prerequisites or best practices for effective caching? (Select TWO)",
+    "question_type": "multi",
+    "options": [
+      { "key": "A", "text": "The cacheable portion of the prompt must be static — it must be identical across requests to hit the cache." },
+      { "key": "B", "text": "The variable, dynamic content must be placed before the static content to enable caching." },
+      { "key": "C", "text": "Static content (system prompt, documents, examples) should be placed at the beginning of the prompt, before dynamic user input." },
+      { "key": "D", "text": "Caching works best when prompts are randomly shuffled on each request." }
+    ],
+    "correct_answers": ["A", "C"],
+    "explanation": "Prompt caching requires: (A) the cached prefix to be byte-identical across requests — any change invalidates the cache; and (C) static content placed at the beginning so the cache can store the prefix up to the cache breakpoint. Variable content after the static prefix remains dynamic and is not cached. Options B and D directly contradict correct caching setup — dynamic content after static, and consistency across requests, are the keys."
+  },
+  {
+    "id": "c2-q0012",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Managing token usage in long conversations",
+    "difficulty": "medium",
+    "question_text": "A conversational assistant accumulates a long message history. After 30 turns the context window approaches its limit and costs increase sharply. What is the most appropriate strategy?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Discard the entire conversation history and start fresh every 30 turns." },
+      { "key": "B", "text": "Implement a rolling summary: periodically summarize older conversation turns and replace raw history with the compressed summary, preserving recent turns in full." },
+      { "key": "C", "text": "Increase the maximum token limit by switching to a model with a larger context window and make no other changes." },
+      { "key": "D", "text": "Never truncate — always send the full history regardless of cost." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "A rolling summary strategy compresses older conversation history into a dense summary while keeping recent turns verbatim. This maintains conversational coherence and important context while managing token consumption. Discarding all history (A) breaks continuity and confuses users. Simply switching to a larger context model (C) defers but does not solve the problem, and costs grow proportionally. Sending full history always (D) is not sustainable as conversations grow."
+  },
+  {
+    "id": "c2-q0013",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Modular prompts and Skills reuse",
+    "difficulty": "hard",
+    "question_text": "A team maintains multiple Claude-powered applications across different teams. Each application independently re-implements the same compliance disclaimer, tone guidelines, and safety instructions in their system prompts. What is the main risk and best mitigation?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Risk: token waste. Mitigation: remove all shared instructions to save costs." },
+      { "key": "B", "text": "Risk: drift and inconsistency — individual teams will update their copy independently, leading to divergent behavior. Mitigation: centralize shared instructions as modular prompt components (Skills or shared libraries) that are composed into each application's system prompt." },
+      { "key": "C", "text": "Risk: too much consistency. Mitigation: encourage each team to customize the instructions to their needs." },
+      { "key": "D", "text": "Risk: over-reliance on system prompts. Mitigation: move all instructions into user messages." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "When teams independently maintain copies of shared instructions, they inevitably diverge — one team updates the disclaimer, another doesn't, and behavior becomes inconsistent across the organization. Centralizing shared prompt components as modular, versioned artifacts (Skills or library modules) ensures all applications receive the same update simultaneously and behave consistently. Removing shared instructions (A) eliminates guardrails. Over-customization (C) is the exact risk being described. Moving instructions to user messages (D) makes them easy to override by users."
+  }
+]

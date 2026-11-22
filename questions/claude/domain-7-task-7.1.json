@@ -1,0 +1,344 @@
+[
+  {
+    "id": "c7-q0001",
+    "domain": 7,
+    "task_statement": "7.1",
+    "topic": "Configuring Claude tools and environments for teams",
+    "difficulty": "medium",
+    "question_text": "A software development team wants to adopt Claude Code as a developer productivity tool. What configuration steps are most important for a safe and effective team rollout? (Select TWO)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Define a policy for which files and directories Claude Code is permitted to modify, and which operations (git commits, deploys) require human approval."
+      },
+      {
+        "key": "B",
+        "text": "Grant Claude Code unrestricted access to all production systems from day one to maximize productivity."
+      },
+      {
+        "key": "C",
+        "text": "Establish shared prompt templates and guidelines for common developer tasks (code review, test generation, documentation) to ensure consistent usage across the team."
+      },
+      {
+        "key": "D",
+        "text": "Disable all safety features to increase output speed."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "C"
+    ],
+    "explanation": "A safe and effective team rollout requires: (A) defining access boundaries and approval gates for irreversible operations — preventing accidental production changes; and (C) shared templates and usage guidelines — ensuring consistent, high-quality use across the team and reducing the learning curve. Unrestricted production access (B) violates least-privilege principles. Disabling safety features (D) increases risk without meaningful productivity gains."
+  },
+  {
+    "id": "c7-q0002",
+    "domain": 7,
+    "task_statement": "7.1",
+    "topic": "Improving developer workflows with AI-assisted tooling",
+    "difficulty": "easy",
+    "question_text": "A developer uses Claude Code to write unit tests for a complex function. The generated tests cover the happy path but miss edge cases. What is the best workflow to address this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Accept the generated tests as complete and move on."
+      },
+      {
+        "key": "B",
+        "text": "Explicitly prompt Claude Code to add tests for boundary conditions, null inputs, and error scenarios, then review the additions before committing."
+      },
+      {
+        "key": "C",
+        "text": "Delete all AI-generated tests and write them manually from scratch."
+      },
+      {
+        "key": "D",
+        "text": "Submit the code for code review without tests and address feedback later."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "AI-assisted development works best as a collaboration, not a one-shot replacement. When generated tests miss edge cases, the developer should provide targeted follow-up prompts specifying the missing scenarios (boundaries, nulls, errors), review the additions, and commit only after verification. Accepting incomplete tests (A) creates coverage gaps. Starting over manually (C) discards the productivity gain. Submitting without tests (D) defers the problem."
+  },
+  {
+    "id": "c7-q0003",
+    "domain": 7,
+    "task_statement": "7.1",
+    "topic": "Supporting debugging with AI-assisted tooling",
+    "difficulty": "medium",
+    "question_text": "A developer encounters a cryptic error message and stack trace in a Node.js application. How should they best use Claude to diagnose the issue?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Paste only the error message without the stack trace and ask Claude for a fix."
+      },
+      {
+        "key": "B",
+        "text": "Provide Claude with the full stack trace, the relevant code around the error, any recent changes made, and the expected vs. actual behavior — asking for diagnosis and potential root causes."
+      },
+      {
+        "key": "C",
+        "text": "Ask Claude what might be wrong without providing any error information."
+      },
+      {
+        "key": "D",
+        "text": "Use Claude to rewrite the entire application from scratch to avoid the bug."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Effective AI-assisted debugging requires providing rich context: the full stack trace (not just the error message), the relevant code, recent changes, and the gap between expected and actual behavior. This enables Claude to distinguish between multiple possible root causes and provide targeted diagnosis. Minimal context (A, C) forces Claude to guess. Rewriting the application (D) is disproportionate and does not diagnose the actual cause."
+  },
+  {
+    "id": "c7-q0004",
+    "domain": 7,
+    "task_statement": "7.1",
+    "topic": "Operational issue resolution with Claude",
+    "difficulty": "hard",
+    "question_text": "A DevOps team wants to use Claude to help on-call engineers diagnose production incidents. Which configuration best balances speed of diagnosis with safety?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Allow Claude to automatically execute remediation commands in production without human approval."
+      },
+      {
+        "key": "B",
+        "text": "Configure Claude with read-only access to logs, metrics, and runbooks; allow it to suggest diagnoses and proposed remediation steps; require human approval before any write operation is executed."
+      },
+      {
+        "key": "C",
+        "text": "Give Claude full production write access but log all actions for audit."
+      },
+      {
+        "key": "D",
+        "text": "Use Claude only for post-incident analysis, not real-time incident response."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "The optimal on-call assistant configuration gives Claude the read access needed to synthesize signals quickly (logs, metrics, runbooks) while keeping humans in the decision loop for all remediation actions. Read-only access for diagnosis, human approval for execution is the correct balance. Auto-execution (A, C) risks compounding incidents with incorrect automated actions. Restricting to post-incident only (D) reduces the real-time value and leaves on-call engineers without AI assistance during the most stressful period."
+  },
+  {
+    "id": "c7-q0005",
+    "domain": 7,
+    "task_statement": "7.1",
+    "topic": "Developer workflow: code review assistance",
+    "difficulty": "medium",
+    "question_text": "A team wants to use Claude as a preliminary code reviewer before human peer review. Which approach most effectively integrates Claude into the code review workflow?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Replace all human code review with Claude to reduce review cycle time."
+      },
+      {
+        "key": "B",
+        "text": "Run Claude review as a CI step on pull requests: Claude checks for common issues (style, obvious bugs, security patterns, test coverage) and posts a summary comment; human reviewers focus on architecture and business logic."
+      },
+      {
+        "key": "C",
+        "text": "Have Claude review only the commit message, not the code."
+      },
+      {
+        "key": "D",
+        "text": "Send entire codebases to Claude for global review at the end of each sprint."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Claude-as-pre-reviewer works best when it handles the mechanical, pattern-based checks (style, obvious bugs, security anti-patterns, test coverage) automatically in CI, allowing human reviewers to focus their time on higher-order concerns (design, business logic, architecture). This is a force multiplier, not a replacement. Full automation of review (A) misses the human judgment needed for design and context. Reviewing only commit messages (C) is trivial. Sprint-end bulk review (D) provides feedback too late in the development cycle."
+  },
+  {
+    "id": "c7-q0006",
+    "domain": 7,
+    "task_statement": "7.1",
+    "topic": "Configuring Claude tools for team safety",
+    "difficulty": "hard",
+    "question_text": "A team is deploying Claude Code in a shared development environment where multiple engineers work on the same repository. Which safety configuration is most important?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Disable all file-write permissions to prevent any code changes."
+      },
+      {
+        "key": "B",
+        "text": "Configure branch protection rules: Claude Code can create feature branches but cannot push directly to main/production branches; all changes require a pull request and human approval before merge."
+      },
+      {
+        "key": "C",
+        "text": "Give all engineers the same administrative Claude Code permissions to simplify management."
+      },
+      {
+        "key": "D",
+        "text": "Allow Claude to merge pull requests automatically if it rates them highly."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Branch protection rules prevent Claude Code (or any automated tooling) from directly modifying production branches. Requiring pull requests and human approval for merges maintains human oversight over all production code changes while still enabling Claude to create branches and write code productively. Disabling write permissions (A) prevents Claude from being useful as a coding assistant. Uniform admin permissions (C) violates least-privilege. Auto-merging based on Claude's self-rating (D) removes the human oversight that protects code quality."
+  },
+  {
+    "id": "c7-q0007",
+    "domain": 7,
+    "task_statement": "7.1",
+    "topic": "Improving developer productivity with AI tooling",
+    "difficulty": "easy",
+    "question_text": "A development team tracks that engineers spend 30% of their time writing boilerplate code (tests, documentation, configuration files). How should Claude tooling be configured to address this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Claude to generate all boilerplate automatically without engineer review."
+      },
+      {
+        "key": "B",
+        "text": "Create targeted Claude prompts or templates for each boilerplate type; engineers trigger generation and review before committing — transforming 30-minute manual tasks into 5-minute review tasks."
+      },
+      {
+        "key": "C",
+        "text": "Eliminate all boilerplate code from the project to avoid the cost."
+      },
+      {
+        "key": "D",
+        "text": "Hire additional engineers to write the boilerplate faster."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Targeted generation templates for each boilerplate type (test scaffolding, docstring generation, config file generation) allow engineers to generate first drafts in seconds and spend their time reviewing and adjusting, rather than writing from blank. This transforms the 30% time investment into a review task — a direct productivity gain. Fully automated generation without review (A) risks committing incorrect boilerplate. Eliminating necessary boilerplate (C) creates technical debt. Hiring more engineers (D) scales cost rather than efficiency."
+  },
+  {
+    "id": "c7-q0012",
+    "domain": 7,
+    "task_statement": "7A1 Configure Claude tools and environments for teams",
+    "topic": "version-controlled team configuration",
+    "difficulty": "hard",
+    "question_text": "A team wants every developer's Claude Code session to enforce the same command-blocking rule and inherit identical project context. Where should this shared configuration live?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "In each developer's local override file, uncommitted, so personal preferences apply"
+      },
+      {
+        "key": "b",
+        "text": "In committed project settings and CLAUDE.md checked into the repository"
+      },
+      {
+        "key": "c",
+        "text": "In the user-level settings at each developer's home directory"
+      },
+      {
+        "key": "d",
+        "text": "In a shared prompt each developer pastes at session start"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Developer Productivity & Operational Enablement | Subdomain: 7A1 Configure Claude tools and environments for teams | Key Concept: version-controlled team configuration. Committing project settings and CLAUDE.md into the repository makes every developer inherit the same guardrails and context automatically. Local override and user-level files apply only to one machine and drift per person, so shared policy must be checked in, not left to individual setup."
+  },
+  {
+    "id": "c7-q0013",
+    "domain": 7,
+    "task_statement": "7A2 Improve developer workflows using AI-assisted tooling",
+    "topic": "progressive tool disclosure",
+    "difficulty": "hard",
+    "question_text": "An internal agent loads over 400 tool definitions at startup, consuming a large share of context before any request runs, and tool selection has grown unreliable. The team wants to keep the tools reachable while reducing upfront token load. What is the best structural fix?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Rewrite every tool description more concisely so all definitions still fit within context"
+      },
+      {
+        "key": "b",
+        "text": "Load tool definitions on demand via progressive disclosure so only needed tools enter"
+      },
+      {
+        "key": "c",
+        "text": "Move to a larger-context model so all 400 definitions load comfortably upfront"
+      },
+      {
+        "key": "d",
+        "text": "Cache the tool definitions so their repeated upfront loads are billed more cheaply"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Developer Productivity & Operational Enablement | Subdomain: 7A2 Improve developer workflows using AI-assisted tooling | Key Concept: progressive tool disclosure. Loading thousands of tool definitions upfront causes capability bloat that raises cost and confuses selection. The structural remedy is progressive disclosure, loading definitions on demand, rather than shorter descriptions, a bigger model, or caching the same upfront load."
+  },
+  {
+    "id": "c7-q0014",
+    "domain": 7,
+    "task_statement": "7B1 Support debugging and operational issue resolution",
+    "topic": "a PreToolUse hook has four decision values",
+    "difficulty": "medium",
+    "question_text": "A team builds a PreToolUse hook that should approve safe reads, block deletes, prompt the user for network calls, and pass judgment to normal flow for everything else. Which set of decision values supports all four behaviors?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "allow, deny, and ask, treating those three as the full set."
+      },
+      {
+        "key": "b",
+        "text": "allow, deny, ask, and defer, the four PreToolUse decisions."
+      },
+      {
+        "key": "c",
+        "text": "approve, reject, and escalate as the three available hook decisions."
+      },
+      {
+        "key": "d",
+        "text": "permit and block treated as the only two supported hook decisions."
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Developer Productivity & Operational Enablement | Subdomain: 7B1 Support debugging and operational issue resolution | Key Concept: a PreToolUse hook has four decision values. allow, deny, ask, and defer map to approving, blocking, prompting the user, and passing the decision to normal flow. A list of only allow, deny, and ask omits defer, the mechanism for passing judgment onward."
+  },
+  {
+    "id": "c7-q0015",
+    "domain": 7,
+    "task_statement": "7A1 Configure Claude tools and environments for teams",
+    "topic": "authentication versus authorization",
+    "difficulty": "hard",
+    "question_text": "A team deploys a shared MCP server so Claude Code agents can act on an internal system. Every agent authenticates with a valid service credential. During review, the security lead notices any authenticated agent can reach administrative endpoints it never needs. Developers argue that requiring valid credentials already secures the integration. What is the correct assessment?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Valid credentials are sufficient; authentication proves identity and grants needed access"
+      },
+      {
+        "key": "b",
+        "text": "The gap is an authorization flaw; scope each agent to only needed endpoints"
+      },
+      {
+        "key": "c",
+        "text": "Rotate the service credential frequently to reduce the administrative-endpoint exposure"
+      },
+      {
+        "key": "d",
+        "text": "Add a prompt telling agents not to call administrative endpoints they do not need"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Developer Productivity & Operational Enablement | Subdomain: 7A1 Configure Claude tools and environments for teams | Key Concept: authentication versus authorization. A valid credential proves who an agent is, not what it may do. An authenticated agent reaching endpoints it never needs is an authorization gap, fixed by scoping permissions to least privilege, not by rotation or prompt guidance."
+  }
+]

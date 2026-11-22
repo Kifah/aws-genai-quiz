@@ -1,0 +1,348 @@
+[
+  {
+    "id": "d1-q0643", "domain": 1, "task_statement": "1.6", "topic": "DynamoDB conversation context schema",
+    "difficulty": "medium",
+    "question_text": "A multi-turn support assistant stores each conversation turn in Amazon DynamoDB. On every request the application must fetch the 10 most recent turns of one session in reverse chronological order, with the lowest possible read cost and latency. Which table design supports this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Partition key = timestamp, sort key = session_id; Scan with a filter on session_id"},
+      {"key": "B", "text": "Partition key = constant value \"chat\", sort key = session_id#timestamp"},
+      {"key": "C", "text": "Partition key = session_id, sort key = turn timestamp (or turn number); Query with ScanIndexForward=false and Limit=10"},
+      {"key": "D", "text": "One item per session holding an ever-growing list of turns; read, append and trim the whole item on each request"}
+    ],
+    "correct_answers": ["C"],
+    "explanation": "A Query on the partition key reads only that session's items, the sort key keeps them in chronological order, ScanIndexForward=false returns newest first, and Limit=10 stops after ten items, so you pay only for what you read. A Scan reads the whole table regardless of the filter. A constant partition key funnels all traffic into one partition (hot partition). A single growing item hits DynamoDB's 400 KB item limit and forces a full read and rewrite on every turn.",
+    "source_topic": "DynamoDB partition/sort key design for conversation turns (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0644", "domain": 1, "task_statement": "1.6", "topic": "DynamoDB hot partition",
+    "difficulty": "hard",
+    "question_text": "A chatbot stores turns in a DynamoDB table whose partition key is the constant string \"support-bot\" and whose sort key is session_id#timestamp. At peak, writes are throttled even though total consumed capacity is far below the table's provisioned capacity. What is the root cause and the correct fix?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Add a DynamoDB Accelerator (DAX) cluster in front of the table"},
+      {"key": "B", "text": "Enable TTL so older turns are removed and free up partition capacity"},
+      {"key": "C", "text": "Increase the table's provisioned write capacity units"},
+      {"key": "D", "text": "All writes hit a single partition key value (a hot partition); use a high-cardinality partition key such as user_id or session_id so load spreads evenly"}
+    ],
+    "correct_answers": ["D"],
+    "explanation": "Throughput limits apply per partition, and every item with the same partition key value lives in the same partition, so one constant key becomes a bottleneck regardless of total table capacity. The fix is a high-cardinality partition key (session_id or user_id) with the timestamp as the sort key. Raising table-level capacity does not lift the per-partition limit. DAX caches reads and does not absorb writes. TTL removes expired items and does not redistribute write load.",
+    "source_topic": "Avoiding hot partitions in DynamoDB conversation storage (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0645", "domain": 1, "task_statement": "1.6", "topic": "DynamoDB GSI for alternate access patterns",
+    "difficulty": "hard",
+    "question_text": "A conversation table has partition key user_id and sort key timestamp. A new analytics feature must retrieve all turns classified with intent = \"refund_request\" across all users within the last 7 days, efficiently and without scanning the table. Which approach is correct?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Add a local secondary index (LSI) with intent as the sort key"},
+      {"key": "B", "text": "Run a Scan with a filter expression on intent and timestamp"},
+      {"key": "C", "text": "Write every turn to a second table from the application, keeping both in sync manually"},
+      {"key": "D", "text": "Add a global secondary index (GSI) with intent as the partition key and timestamp as the sort key, then Query it"}
+    ],
+    "correct_answers": ["D"],
+    "explanation": "A GSI can use a different partition key from the base table, so a Query on intent = refund_request with a timestamp range reads only matching items across all users. An LSI must share the base table's partition key (and can only be created with the table), so it cannot query across users. A Scan with a filter still reads every item and bills for it. Maintaining a second table by hand duplicates what GSIs provide and risks drift.",
+    "source_topic": "DynamoDB GSIs for intent-based and date-range queries (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0646", "domain": 1, "task_statement": "1.6", "topic": "Context selection strategies",
+    "difficulty": "medium",
+    "question_text": "A banking assistant's conversations regularly exceed the token budget for the model's context window. Users usually ask follow-ups that depend on the last few turns, but they also refer back to earlier topics (\"about the card dispute we discussed earlier\"). Which context-selection approach best balances the token limit with coherence?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Always send the full history and let the model invocation truncate it when the limit is exceeded"},
+      {"key": "B", "text": "Send only the last N turns (pure recency)"},
+      {"key": "C", "text": "A hybrid: keep recent turns through a sliding window and add earlier turns retrieved by relevance to the current message (optionally intent-aware)"},
+      {"key": "D", "text": "Send a random sample of past turns to stay under the limit"}
+    ],
+    "correct_answers": ["C"],
+    "explanation": "A hybrid strategy combines recency, which preserves conversational flow, with relevance (semantic similarity or intent matching), which brings back earlier turns the user is referring to. Pure recency loses references to earlier topics. Relying on automatic truncation drops content arbitrarily and may discard the turns that matter. Random sampling ignores both recency and relevance.",
+    "source_topic": "Context window management: recency, relevance, intent-aware and hybrid selection (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0647", "domain": 1, "task_statement": "1.6", "topic": "DynamoDB TTL with archiving",
+    "difficulty": "medium",
+    "question_text": "Compliance requires chat transcripts to be retained for 7 years, but the DynamoDB conversation table should only hold the last 30 days to keep storage cost and latency low. Which design meets both requirements?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Set a 30-day TTL attribute and nothing else"},
+      {"key": "B", "text": "Set a 30-day TTL attribute, and use DynamoDB Streams with a consumer (for example Lambda or Firehose) to write items to Amazon S3 with a lifecycle rule to Glacier, so records are archived before and as TTL removes them"},
+      {"key": "C", "text": "Run a daily Scan of the whole table and copy everything to S3"},
+      {"key": "D", "text": "Set the TTL to 7 years so no data is ever lost"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "TTL deletes items in the background at no write cost, but on its own the data is gone. Streaming changes (including TTL removals) to S3 gives a durable, cheap archive that satisfies retention while the table stays small. A daily full Scan is slow, costly and can miss items that expire between runs. A 7-year TTL keeps all data in the expensive low-latency store, defeating the goal.",
+    "source_topic": "DynamoDB TTL and archival to S3 before expiry (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0648", "domain": 1, "task_statement": "1.6", "topic": "User data export and deletion",
+    "difficulty": "medium",
+    "question_text": "Under GDPR a user asks for all of their stored chat history to be exported and then deleted. The conversation table is keyed by session_id only, and sessions from many users are mixed together. Which change best supports fulfilling these requests efficiently?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Run a full-table Scan with a filter for each request"},
+      {"key": "B", "text": "Store user_id as the partition key (or add a GSI keyed by user_id) so a user's items can be queried, exported and deleted without scanning, and include the S3 archive in the deletion process"},
+      {"key": "C", "text": "Rely on TTL so the data eventually expires on its own"},
+      {"key": "D", "text": "Stop storing conversation history for all users"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Privacy requests are an access pattern that must be designed for: indexing by user_id lets you find, export and delete only that user's data efficiently, and any archived copies must be covered too. A Scan per request is slow and expensive and does not scale. TTL gives no way to honour an immediate, specific request. Dropping all history removes functionality the product needs.",
+    "source_topic": "User-controlled data management and compliance-aware retention for conversation context (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0649", "domain": 1, "task_statement": "1.6", "topic": "Step Functions test orchestration",
+    "difficulty": "medium",
+    "question_text": "A team validates each new prompt version with three independent suites: output-format validation, edge-case inputs and prompt-injection attempts. The suites do not depend on each other, and their results must be combined into a single pass/fail report. Which Step Functions design is most appropriate?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "A Parallel state with one branch per suite, followed by a task that aggregates the results"},
+      {"key": "B", "text": "Run the three suites one after another in a single Lambda function"},
+      {"key": "C", "text": "A Choice state that randomly selects one of the suites per run"},
+      {"key": "D", "text": "A Wait state between the suites to avoid throttling, then a final report task"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "A Parallel state runs independent branches concurrently and waits for all of them, and a following task can aggregate outcomes into one report. This shortens total test time and keeps each suite isolated. Sequential execution in one Lambda wastes time and risks the Lambda timeout. A Choice state routes to one path, so it would skip suites. A Wait state only adds delay. (A Map state fits the case where the same logic runs over many items, not distinct suites.)",
+    "source_topic": "Step Functions Parallel state for FM test workflows (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0650", "domain": 1, "task_statement": "1.6", "topic": "Synchronous vs asynchronous validation",
+    "difficulty": "hard",
+    "question_text": "A customer-facing assistant wraps FM responses with validation. Which checks should run synchronously, before the response is returned to the user? (Choose TWO)",
+    "question_type": "multi",
+    "options": [
+      {"key": "A", "text": "JSON schema and format validation of the response"},
+      {"key": "B", "text": "Content-safety and PII screening of the response"},
+      {"key": "C", "text": "Full LLM-as-a-judge scoring across accuracy, tone and completeness rubrics"},
+      {"key": "D", "text": "Weekly trend analysis of quality scores"},
+      {"key": "E", "text": "Cost-per-interaction reporting"}
+    ],
+    "correct_answers": ["A", "B"],
+    "explanation": "Checks that protect users or downstream systems and cannot be deferred (format that other systems will parse, safety and privacy screening) belong in the synchronous path. Deep rubric scoring, trend analysis and cost reporting are analysis activities that can run asynchronously (for example in a Step Functions workflow) after delivery, so they do not add user-facing latency.",
+    "source_topic": "Synchronous vs asynchronous validation patterns for FM outputs (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0651", "domain": 1, "task_statement": "1.6", "topic": "Deterministic vs probabilistic validation",
+    "difficulty": "medium",
+    "question_text": "A pipeline has two FM outputs to validate: (1) extracted order IDs returned as JSON for a downstream API, and (2) free-text customer-facing summaries. Which validation pairing is most appropriate?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Semantic-similarity validation for the JSON fields; exact matching for the summaries"},
+      {"key": "B", "text": "Exact-match validation for everything"},
+      {"key": "C", "text": "Semantic-similarity validation for everything"},
+      {"key": "D", "text": "Deterministic validation (schema and exact-match rules) for the JSON fields; probabilistic validation (semantic similarity or quality scores against a threshold) for the summaries"}
+    ],
+    "correct_answers": ["D"],
+    "explanation": "Structured outputs consumed by systems must conform exactly, so deterministic rules (schema, required fields, exact values) fit. Free text has many valid phrasings, so exact matching would reject correct outputs and a similarity or quality-score threshold fits better. Using one approach for both either lets malformed structured data through or rejects acceptable summaries.",
+    "source_topic": "Deterministic vs probabilistic validation of foundation model outputs (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0652", "domain": 1, "task_statement": "1.6", "topic": "Error prioritisation in feedback loops",
+    "difficulty": "hard",
+    "question_text": "Error analysis of an assistant's responses shows two groups: (a) frequent tone inconsistencies that users rarely notice, and (b) infrequent responses in a regulated workflow that omit a mandatory compliance disclosure. Engineering time is limited. How should the team prioritise refinements?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Fix whichever error type is most frequent first"},
+      {"key": "B", "text": "Prioritise using severity and business or user impact together with frequency and implementation effort, so the compliance omission is addressed first"},
+      {"key": "C", "text": "Fix errors in the order they were first reported"},
+      {"key": "D", "text": "Defer all fixes until the error count grows large enough to show a trend"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Systematic refinement ranks opportunities by error severity, user and business impact, frequency and implementation complexity, rather than by volume alone. A rare but critical compliance failure outranks a frequent cosmetic one. Frequency-only ranking ignores severity, report order is arbitrary, and waiting for a larger trend leaves a known compliance risk in production.",
+    "source_topic": "Error taxonomy, severity assessment and refinement prioritisation (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0653", "domain": 1, "task_statement": "1.6", "topic": "Incremental prompt refinement",
+    "difficulty": "medium",
+    "question_text": "Monitoring shows an assistant sometimes omits a required disclaimer. A developer proposes rewriting the whole prompt. What is the better approach?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Make a targeted change that addresses the identified root cause, test it against the regression dataset and an A/B or staged rollout, and confirm other quality dimensions do not degrade"},
+      {"key": "B", "text": "Rewrite the prompt completely and deploy it to all users to save time"},
+      {"key": "C", "text": "Increase the temperature so the model is more likely to include the disclaimer"},
+      {"key": "D", "text": "Add the disclaimer to every response in application code and stop tuning the prompt"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Refinement should be targeted, incremental and validated: change what addresses the root cause, then verify against a golden set and with controlled exposure that the fix works and nothing else regresses. A full rewrite changes many variables at once, so you cannot attribute improvements or regressions. Temperature adds randomness and does not enforce content. Hard-coding the disclaimer may be acceptable for fixed legal text, but it is not a prompt-quality improvement process.",
+    "source_topic": "Systematic, incremental prompt refinement with validation (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0654", "domain": 1, "task_statement": "1.6", "topic": "Context framing in structured prompts",
+    "difficulty": "medium",
+    "question_text": "An internal assistant gives generic, off-target answers to questions about the company's HIPAA-compliant cloud migration. The current prompt is just the user's question. Which improvement best follows structured-input guidance?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Add a domain context (healthcare, HIPAA), relevant background, the scenario and audience, and explicit constraints before the question"},
+      {"key": "B", "text": "Increase top-K so the model considers more candidate tokens"},
+      {"key": "C", "text": "Repeat the question three times in the prompt"},
+      {"key": "D", "text": "Switch to a larger model without changing the prompt"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Context framing supplies the domain, background knowledge, scenario (audience, purpose) and constraints (length, format, exclusions) so the model can apply the right terminology and scope. Sampling parameters change randomness, not relevance. Repetition adds tokens without information. A larger model still lacks the organisation-specific context.",
+    "source_topic": "Context framing: domain, background, scenario and constraint specification (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0655", "domain": 1, "task_statement": "1.6", "topic": "Parallel multi-part prompt structure",
+    "difficulty": "medium",
+    "question_text": "A prompt must produce an assessment of a proposed architecture covering technical feasibility, business impact, risk and implementation timeline. Each aspect is analysed independently from the same input. Which multi-part prompt structure fits best?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Conditional structure with if/then branches by budget"},
+      {"key": "B", "text": "Parallel information categories, with a separate labelled section per aspect"},
+      {"key": "C", "text": "A single unstructured paragraph asking for everything"},
+      {"key": "D", "text": "Sequential steps where each section depends on the previous one's conclusions"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "When aspects are independent views of the same topic, parallel labelled sections keep each analysis focused and make the output easy to review. Sequential structure is for steps that build on each other. Conditional structure is for adapting the approach to circumstances such as budget tiers. An unstructured request invites uneven coverage.",
+    "source_topic": "Multi-part prompt structures: parallel information categories (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0656", "domain": 1, "task_statement": "1.6", "topic": "Conditional multi-part prompt structure",
+    "difficulty": "medium",
+    "question_text": "A prompt-based advisor should recommend different approaches depending on a customer's budget: cost-optimised options under $10,000, managed services and automation from $10,000 to $50,000, and enterprise options above $50,000. Which prompt structure expresses this most directly?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Sequential task breakdown with four dependent parts"},
+      {"key": "B", "text": "Hierarchical levels from business objective down to configuration parameters"},
+      {"key": "C", "text": "Parallel sections covering technical, business and risk views"},
+      {"key": "D", "text": "Conditional logic: explicit if/then instructions keyed to each budget range"}
+    ],
+    "correct_answers": ["D"],
+    "explanation": "Conditional structures tell the model to adapt its approach to specific circumstances, with a defined branch per condition. Sequential structures order dependent steps, hierarchical structures move from general to specific, and parallel structures separate independent perspectives; none of those encode the budget-dependent behaviour.",
+    "source_topic": "Multi-part prompt structures: conditional logic integration (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0657", "domain": 1, "task_statement": "1.6", "topic": "Output format validation and retry",
+    "difficulty": "hard",
+    "question_text": "A downstream service parses the model's JSON response. Occasionally the model wraps the JSON in explanatory prose and parsing fails. Which design handles this most reliably in production?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Validate every response against the schema in a validation step; on failure retry with a bounded number of attempts (feeding back the error), then fall back to a safe error response or human review"},
+      {"key": "B", "text": "Retry the invocation indefinitely until the output parses"},
+      {"key": "C", "text": "Strip text with a regular expression and assume the result is valid"},
+      {"key": "D", "text": "Lower max tokens so the model has no room to add prose"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "Format specifications improve consistency but are not guarantees, so production systems add output validation with error handling: bounded retries (optionally giving the model the validation error), then a defined fallback. Unbounded retries risk cost and latency spirals. A regex hides structural problems and can pass invalid data. Reducing max tokens can truncate valid JSON, causing more failures.",
+    "source_topic": "Format validation, error handling and recovery for structured outputs (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0658", "domain": 1, "task_statement": "1.6", "topic": "Chain-of-thought trade-offs",
+    "difficulty": "medium",
+    "question_text": "A high-volume endpoint classifies short support tickets into five categories under a strict latency and token budget. A teammate suggests enabling chain-of-thought reasoning to improve accuracy. What is the best guidance?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Chain-of-thought is always beneficial and reduces latency because the model reasons faster"},
+      {"key": "B", "text": "Always enable it; reasoning tokens are free on Amazon Bedrock"},
+      {"key": "C", "text": "Avoid it for simple direct tasks because it adds latency and token cost; reserve it (and models with configurable reasoning budgets) for multi-step analysis where explainability matters"},
+      {"key": "D", "text": "Use a model whose reasoning is always on, since the extra tokens do not affect cost"}
+    ],
+    "correct_answers": ["C"],
+    "explanation": "Chain-of-thought improves multi-step maths, logic and decisions, but increases token consumption and latency, so it is a poor fit for simple classification under tight budgets. Some models let you turn reasoning on or off and set a token budget (for example Claude models), while others reason by default (for example DeepSeek-R1), so model choice matters when cost and latency are constrained.",
+    "source_topic": "When to use and when not to use chain-of-thought; reasoning configuration by model (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0659", "domain": 1, "task_statement": "1.6", "topic": "Bedrock Flows versions and aliases",
+    "difficulty": "hard",
+    "question_text": "Applications invoke an Amazon Bedrock Flow in production. The team wants to promote a new, tested flow version and be able to roll back instantly, without redeploying application code. Which approach is best?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Edit the working draft of the flow in place and let applications pick up the changes"},
+      {"key": "B", "text": "Hard-code each flow version ID in the application and redeploy to switch versions"},
+      {"key": "C", "text": "Create an immutable flow version, have applications invoke an alias, and repoint the alias to the new version (and back to roll back)"},
+      {"key": "D", "text": "Clone the flow to a new flow for every release and update the application configuration"}
+    ],
+    "correct_answers": ["C"],
+    "explanation": "Flow versions are immutable snapshots, and an alias is a stable pointer applications invoke. Promoting or rolling back is just moving the alias, with no application redeployment. Editing the draft in place has no version control or safe rollback. Hard-coding IDs couples deployments to releases. Cloning flows fragments governance and history.",
+    "source_topic": "Bedrock Flows lifecycle: versions and aliases for deployment (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0660", "domain": 1, "task_statement": "1.6", "topic": "Governance model for prompt operations",
+    "difficulty": "medium",
+    "question_text": "A conglomerate has twelve business units that each build prompts for their own domains. The central risk team must enforce baseline policies (guardrails, audit logging, approval standards) while units keep autonomy over prompt content and day-to-day operations. Which governance model fits?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Fully centralized: the central team writes and approves every prompt"},
+      {"key": "B", "text": "Fully federated: each unit defines its own policies with no central oversight"},
+      {"key": "C", "text": "No formal model; rely on each team's judgement and review logs annually"},
+      {"key": "D", "text": "Hybrid: central policy management and oversight, with distributed implementation and monitoring by each unit"}
+    ],
+    "correct_answers": ["D"],
+    "explanation": "A hybrid framework pairs centrally defined policy and visibility with local implementation, balancing control and flexibility. A fully centralized model tends to become an operational bottleneck. A fully federated model gives up consistent policy enforcement. Having no model, with only periodic log review, provides no preventive control.",
+    "source_topic": "Governance architecture patterns: centralized, federated and hybrid (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0661", "domain": 1, "task_statement": "1.6", "topic": "CloudTrail log integrity for prompt audit",
+    "difficulty": "medium",
+    "question_text": "Auditors require evidence that the CloudTrail records of prompt-management changes were not altered or deleted after delivery. Which CloudTrail capability addresses this?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Create a CloudWatch metric filter on prompt-update events"},
+      {"key": "B", "text": "Enable CloudTrail log file integrity validation, which produces signed digest files that can be used to verify the logs were not modified"},
+      {"key": "C", "text": "Turn on S3 versioning only for the log bucket"},
+      {"key": "D", "text": "Increase the trail's log retention period"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Log file integrity validation creates hashed, signed digest files so you can prove that delivered log files are unchanged, which supports audit and compliance. A metric filter detects events but does not prove integrity. Versioning keeps prior object versions but does not prove the content is authentic. Longer retention helps availability, not tamper evidence.",
+    "source_topic": "CloudTrail configuration for prompt governance and audit trails (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0662", "domain": 1, "task_statement": "1.6", "topic": "Risk-proportional approval workflows",
+    "difficulty": "medium",
+    "question_text": "A company wants prompt change approvals to be proportional to risk: minor wording tweaks should move quickly, while changes to high-risk templates (for example those that handle regulated content) need stronger review. Which design is best?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Require governance board approval and security review for every change, regardless of size"},
+      {"key": "B", "text": "Tier approvals by change significance: automated validation plus developer review for minor changes, application-owner or domain-expert approval for moderate changes, and governance and security approval with staged rollout for major or high-risk changes"},
+      {"key": "C", "text": "Allow any developer to publish directly to production if tests pass"},
+      {"key": "D", "text": "Skip approvals and rely on after-the-fact audit logs"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Tiered approvals combine automated checks with human review sized to the change's risk, keeping oversight without creating a bottleneck for low-risk edits. Uniform heavy approval slows everything down. Unreviewed direct publishing and audit-only control leave high-risk changes without preventive oversight.",
+    "source_topic": "Approval workflows and gates by change significance (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0663", "domain": 1, "task_statement": "1.6", "topic": "AgentCore Evaluations",
+    "difficulty": "medium",
+    "question_text": "A team building agents on Amazon Bedrock AgentCore wants built-in, automated quality scoring of agent behavior (for example accuracy, relevance and adherence to specified behaviors) that runs in their pre-deployment checks and also monitors quality after release. Which capability should they use?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Amazon Bedrock AgentCore Evaluations"},
+      {"key": "B", "text": "Amazon Bedrock Guardrails content filters"},
+      {"key": "C", "text": "AWS CloudTrail data events"},
+      {"key": "D", "text": "Amazon Bedrock AgentCore Policy"}
+    ],
+    "correct_answers": ["A"],
+    "explanation": "AgentCore Evaluations provides automated, configurable quality scoring and behavioral testing for agent workflows and supports continuous assessment, including as part of deployment pipelines. Guardrails filter and block content at inference time rather than score agent quality. CloudTrail records API activity for audit. AgentCore Policy enforces what agents are allowed to do; it does not measure output quality.",
+    "source_topic": "AgentCore Evaluations for quality assurance of agent workflows (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0664", "domain": 1, "task_statement": "1.6", "topic": "Consistent human evaluation",
+    "difficulty": "hard",
+    "question_text": "Human reviewers rate assistant responses for tone on a 1-5 scale, but two reviewers frequently give very different scores to the same response, making the data unreliable for decisions. What should the team do?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Replace all human review with a single automated keyword check"},
+      {"key": "B", "text": "Average all scores and ignore the disagreement"},
+      {"key": "C", "text": "Remove the scale and let reviewers write free-form comments only"},
+      {"key": "D", "text": "Define clear criteria for each scale point with guidelines and examples, measure inter-rater reliability, and calibrate reviewers until agreement is acceptable"}
+    ],
+    "correct_answers": ["D"],
+    "explanation": "Evaluation frameworks need consistent measurement scales, with explicit criteria for each score, and human evaluation processes include evaluation guidelines and inter-rater reliability measures. Averaging hides the inconsistency, free-form comments cannot be compared or tracked at scale, and a keyword check cannot capture nuanced qualities such as tone.",
+    "source_topic": "Quality dimensions, measurement scales and human evaluation reliability (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  },
+  {
+    "id": "d1-q0665", "domain": 1, "task_statement": "1.6", "topic": "Prompt engineering before model customisation",
+    "difficulty": "medium",
+    "question_text": "A team's domain assistant gives mediocre answers. Prompt iterations have not been tried systematically and no evaluation baseline exists. A colleague proposes starting a model customisation project immediately. What is the recommended approach?",
+    "question_type": "single",
+    "options": [
+      {"key": "A", "text": "Start customisation immediately because it always gives the largest improvement"},
+      {"key": "B", "text": "Optimise prompts first with systematic testing and a baseline, since this is faster and cheaper, then consider customisation if gains reach diminishing returns and gaps remain; keep prompt management and governance in place either way"},
+      {"key": "C", "text": "Avoid ever customising models; prompt engineering is always sufficient"},
+      {"key": "D", "text": "Customise the model and discard prompt versioning, since the model now knows the domain"}
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Prompt improvements are faster and less resource-intensive, so they come first. Customisation becomes appropriate when domain terminology or behaviour needs model-level change, or prompting hits diminishing returns. Even customised models still benefit from prompt management, version control and governance. Starting with customisation without a baseline cannot show whether it helped, and ruling it out entirely ignores cases where it is justified.",
+    "source_topic": "Model customisation decision: prompt engineering first, then customise (AWS Skill Builder: Implement prompt engineering strategies and governance)"
+  }
+]

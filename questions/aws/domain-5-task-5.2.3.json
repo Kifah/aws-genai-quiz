@@ -1,0 +1,98 @@
+[
+  {
+    "id": "d5-q0250",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Medical - RAG evaluation metrics for retrieval quality",
+    "difficulty": "hard",
+    "question_text": "A medical research platform uses a Retrieval Augmented Generation (RAG) system to answer clinician questions from a corpus of peer-reviewed studies. Clinicians report that answers are often fluent but cite the wrong studies or omit the most relevant one. Before changing the model, the team wants to isolate whether the problem is in retrieval or in generation. Which evaluation approach will most directly diagnose the retrieval stage?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Measure context precision and context recall against a labeled set of question-to-relevant-document mappings, independent of the final generated answer."
+      },
+      {
+        "key": "B",
+        "text": "Measure only the answer's BLEU score against reference answers written by clinicians."
+      },
+      {
+        "key": "C",
+        "text": "Increase the foundation model's temperature and re-run the same questions to see if answers improve."
+      },
+      {
+        "key": "D",
+        "text": "Count the total number of tokens returned per answer and flag any answer shorter than the average."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Context precision (are the retrieved documents relevant?) and context recall (were all the relevant documents retrieved?) evaluate the retrieval stage in isolation, using a labeled ground-truth mapping of questions to relevant documents — directly diagnosing whether retrieval is surfacing the correct studies. BLEU on the final answer (B) measures generation surface overlap and conflates retrieval and generation errors. Changing temperature (C) alters generation randomness, not retrieval quality. Token counts (D) measure length, which is unrelated to citation correctness.",
+    "source_topic": "RAG evaluation, context precision/recall, retrieval-vs-generation diagnosis, medical"
+  },
+  {
+    "id": "d5-q0251",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Insurance - LLM-as-judge for automated quality gates",
+    "difficulty": "medium",
+    "question_text": "An insurance company wants an automated, repeatable way to score whether its policy-explanation chatbot gives factually accurate and appropriately cautious answers before each new model version is promoted to production. Human review of thousands of test prompts is too slow. Which approach provides a scalable automated quality gate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use an LLM-as-a-judge evaluation: run the candidate model against a curated test set and have a stronger reference model score each response for factual accuracy and appropriate caution using a defined rubric."
+      },
+      {
+        "key": "B",
+        "text": "Deploy the new version directly to production and monitor customer complaint volume for one week."
+      },
+      {
+        "key": "C",
+        "text": "Compare the byte size of the new model's responses to the previous version's responses."
+      },
+      {
+        "key": "D",
+        "text": "Ask the candidate model to grade its own outputs and approve the version if it reports high confidence."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "LLM-as-a-judge with a stronger reference model and a defined rubric provides scalable, repeatable, automated scoring of qualitative attributes like factual accuracy and caution — suitable as a pre-promotion quality gate. Deploying to production first (B) exposes customers to regressions and is not a pre-promotion gate. Response byte size (C) is unrelated to accuracy. Self-grading (D) is unreliable because a model that is wrong is often confidently wrong, so it cannot serve as an independent judge of its own errors.",
+    "source_topic": "LLM-as-judge, automated evaluation, quality gates, insurance"
+  },
+  {
+    "id": "d5-q0252",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Journalism - troubleshooting hallucination via grounding",
+    "difficulty": "medium",
+    "question_text": "A news wire service's summarization assistant occasionally invents quotes and attributes them to real people, even when the source article contains no such quote. The foundation model and prompt are otherwise performing well. What is the most effective way to reduce these fabricated attributions?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Ground the model with Retrieval Augmented Generation over the source article and instruct it to answer only from provided context, plus enable a Bedrock Guardrails contextual grounding check to filter responses not supported by the source."
+      },
+      {
+        "key": "B",
+        "text": "Raise the model's temperature so it produces more creative and varied summaries."
+      },
+      {
+        "key": "C",
+        "text": "Reduce the max_tokens limit so the model has less room to add fabricated content."
+      },
+      {
+        "key": "D",
+        "text": "Switch the output format from prose to JSON without changing the grounding strategy."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Fabricated quotes are a hallucination/grounding failure. RAG grounding over the source article plus an explicit instruction to use only provided context constrains the model to the actual text, and a Bedrock Guardrails contextual grounding check filters out responses not supported by the source — directly targeting fabricated attributions. Raising temperature (B) increases hallucination. Lowering max_tokens (C) truncates output but does not prevent fabrication within the allowed length. Changing to JSON (D) alters structure, not factual grounding.",
+    "source_topic": "Hallucination troubleshooting, contextual grounding, Guardrails grounding check, journalism"
+  }
+]

@@ -13,7 +13,7 @@ export const REQUIRED_FIELDS: ReadonlyArray<string> = [
 
 const VALID_DIFFICULTIES = new Set(['easy', 'medium', 'hard']);
 const VALID_TYPES        = new Set(['single', 'multi']);
-export const FILE_PATTERN = /^domain-\d+(?:-task-[\d.]+)?\.json$/;
+export const FILE_PATTERN = /^domain-\d+(?:-task-[\d.]+|-seminar)?\.json$/;
 
 export interface QuestionResult {
   errors:   string[];
@@ -67,9 +67,10 @@ export function validateQuestion(
 
   // ID format and uniqueness
   if (typeof q['id'] === 'string') {
-    const expectedPrefix = `d${domainNum}-q`;
-    if (!q['id'].startsWith(expectedPrefix)) {
-      warnings.push(`${prefix}: id should start with "${expectedPrefix}"`);
+    const awsPrefix    = `d${domainNum}-q`;
+    const claudePrefix = `c${domainNum}-q`;
+    if (!q['id'].startsWith(awsPrefix) && !q['id'].startsWith(claudePrefix)) {
+      warnings.push(`${prefix}: id should start with "${awsPrefix}" or "${claudePrefix}"`);
     }
     if (seenIds.has(q['id'])) {
       errors.push(`${prefix}: duplicate id "${q['id']}" across files`);
@@ -90,6 +91,12 @@ export function validateQuestion(
   // Question type
   if (typeof q['question_type'] === 'string' && !VALID_TYPES.has(q['question_type'])) {
     errors.push(`${prefix}: invalid question_type "${q['question_type']}" (must be single|multi)`);
+  }
+
+  // Priority (optional; 1 = default, 5 = highest)
+  const priority = q['priority'];
+  if (priority !== undefined && (!Number.isInteger(priority) || (priority as number) < 1 || (priority as number) > 5)) {
+    errors.push(`${prefix}: invalid priority "${String(priority)}" (must be an integer 1-5)`);
   }
 
   // Options

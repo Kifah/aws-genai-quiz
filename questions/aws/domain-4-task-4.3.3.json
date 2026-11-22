@@ -1,0 +1,103 @@
+[
+  {
+    "id": "d4-q0346",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Banking - prompt caching + batch inference for cost optimization",
+    "difficulty": "hard",
+    "question_text": "A retail bank runs a GenAI application that generates personalized financial summaries for 2 million customers nightly. Each request shares a large, identical system prompt (~4,000 tokens of regulatory disclaimers and formatting rules) but has customer-specific data appended. The batch job runs overnight and is not latency-sensitive, but the bank wants to minimize Amazon Bedrock inference costs. Which combination of techniques will reduce cost the most?",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable Amazon Bedrock prompt caching so the shared system prompt tokens are cached and billed at a reduced rate across requests."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Bedrock batch inference (CreateModelInvocationJob) to process the 2 million requests as an asynchronous batch at a lower per-token price than on-demand."
+      },
+      {
+        "key": "C",
+        "text": "Provision the maximum Provisioned Throughput commitment to guarantee capacity for the nightly spike."
+      },
+      {
+        "key": "D",
+        "text": "Route every request through Amazon Bedrock intelligent prompt routing to always select the largest available model."
+      },
+      {
+        "key": "E",
+        "text": "Send all 2 million requests concurrently through the synchronous InvokeModel API to finish as fast as possible."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "Prompt caching (A) reduces the cost of the repeated 4,000-token system prompt by billing cached input tokens at a lower rate — ideal when a large prefix is identical across many requests. Batch inference (B) is designed for exactly this use case: large-volume, non-latency-sensitive workloads processed asynchronously at a discounted per-token price versus on-demand. Provisioned Throughput (C) is a fixed hourly commitment that is cost-effective only for sustained high-volume traffic, not a single nightly batch. Intelligent prompt routing to the largest model (D) increases cost. Synchronous concurrent InvokeModel (E) uses the most expensive pricing tier and risks throttling.",
+    "source_topic": "Bedrock prompt caching, batch inference cost optimization, banking batch workloads"
+  },
+  {
+    "id": "d4-q0347",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Insurance - Provisioned Throughput vs on-demand scaling",
+    "difficulty": "medium",
+    "question_text": "An insurance company's claims chatbot uses Amazon Bedrock. Traffic is highly predictable: a steady, high volume of requests every business day from 08:00 to 18:00, and almost no traffic overnight or on weekends. During business hours the team frequently hits on-demand throttling limits. Which approach best balances reliable throughput and cost?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Purchase Provisioned Throughput with a scheduled commitment aligned to business hours, and fall back to on-demand for any overflow."
+      },
+      {
+        "key": "B",
+        "text": "Purchase a 6-month no-commitment Provisioned Throughput block and keep it running 24/7."
+      },
+      {
+        "key": "C",
+        "text": "Stay entirely on-demand and implement client-side exponential backoff with retries to absorb all throttling."
+      },
+      {
+        "key": "D",
+        "text": "Request a service quota increase to the maximum on-demand limit and disable all retry logic."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Provisioned Throughput guarantees a fixed inference capacity, eliminating on-demand throttling during the predictable business-hours peak, while scheduling the commitment to business hours (and using on-demand overflow) avoids paying for idle overnight/weekend capacity. Running Provisioned Throughput 24/7 (B) wastes money during the ~14 idle hours plus weekends. Pure on-demand with backoff (C) does not solve the throttling — it only delays requests, hurting the chatbot's responsiveness during peak. Maxing on-demand quota and disabling retries (D) still leaves requests subject to model-level throttling and removes resilience.",
+    "source_topic": "Provisioned Throughput scheduling, on-demand throttling, predictable traffic cost optimization"
+  },
+  {
+    "id": "d4-q0348",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Journalism - model distillation for latency and cost",
+    "difficulty": "medium",
+    "question_text": "A news organization uses a large foundation model on Amazon Bedrock to auto-generate short headline suggestions. The quality is excellent, but per-headline latency and cost are too high for the real-time newsroom workflow. The team has thousands of high-quality headline examples produced by the large model. Which approach reduces latency and cost while preserving most of the quality?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Bedrock Model Distillation to fine-tune a smaller, faster model using the large model as the teacher and the collected examples as training data."
+      },
+      {
+        "key": "B",
+        "text": "Increase the max_tokens parameter on the large model so fewer follow-up calls are needed."
+      },
+      {
+        "key": "C",
+        "text": "Cache every generated headline in Amazon ElastiCache and serve identical cached headlines for all future articles."
+      },
+      {
+        "key": "D",
+        "text": "Switch to Provisioned Throughput on the large model to lower the per-token price."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Amazon Bedrock Model Distillation transfers the capabilities of a large teacher model into a smaller, cheaper, lower-latency student model using teacher-generated training data — precisely matching this scenario (large model quality, need for speed/cost, abundant example data). Raising max_tokens (B) increases cost and latency. Caching (C) fails because headlines are article-specific and rarely repeat, so cache hit rate is near zero. Provisioned Throughput (D) may reduce per-token price but does not reduce the model's inherent per-request latency, which is the core problem.",
+    "source_topic": "Bedrock Model Distillation, teacher-student, latency/cost optimization, journalism"
+  }
+]

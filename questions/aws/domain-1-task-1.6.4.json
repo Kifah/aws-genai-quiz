@@ -1,0 +1,135 @@
+[
+  {
+    "id": "d1-q0639",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Streaming responses + Guardrails PII filtering in real-time",
+    "difficulty": "hard",
+    "question_text": "A healthcare company is building a patient-facing GenAI chatbot using Amazon Bedrock. The application must stream responses in real-time to minimise perceived latency AND ensure that no personally identifiable information (PII) such as patient names or medical record numbers ever reaches the client — even in partial streaming chunks. The solution must not add operational overhead. Which approach satisfies both requirements simultaneously?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use the InvokeModelWithResponseStream API with Amazon Bedrock Guardrails configured for PII detection using ApplyGuardrail in STREAMING mode. The guardrail inspects each output chunk and masks PII before delivering it to the client."
+      },
+      {
+        "key": "B",
+        "text": "Use the InvokeModelWithResponseStream API. Add a post-processing Lambda function that buffers the entire stream, calls Amazon Comprehend to detect PII, redacts it, then re-streams to the client."
+      },
+      {
+        "key": "C",
+        "text": "Use the synchronous InvokeModel API with Bedrock Guardrails PII filtering. Cache the sanitised response in ElastiCache, then stream it from cache to the client using API Gateway WebSocket."
+      },
+      {
+        "key": "D",
+        "text": "Use the InvokeModelWithResponseStream API. Configure an AWS WAF rule with a custom regex pattern to detect and block responses containing PII patterns before they reach the client."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Amazon Bedrock Guardrails supports STREAMING mode through the ApplyGuardrail API, which evaluates content in chunks as it is generated and can mask or block PII in real-time without buffering the entire response. This combines streaming latency benefits with inline content safety — zero additional infrastructure. A Lambda buffer (B) defeats the purpose of streaming by introducing full-response latency. Synchronous + cache (C) adds two infrastructure components (ElastiCache + WebSocket API) and does not actually stream from the model. WAF (D) operates at the HTTP layer and cannot inspect model output content — it filters request/response headers and bodies at the network edge, not semantic PII.",
+    "source_topic": "Bedrock streaming + Guardrails STREAMING mode PII filtering"
+  },
+  {
+    "id": "d1-q0640",
+    "domain": 1,
+    "task_statement": "1.3",
+    "topic": "Knowledge Base chunking strategy + metadata filtering for multi-tenant RAG",
+    "difficulty": "hard",
+    "question_text": "A SaaS company operates a multi-tenant legal research platform. Each tenant's documents are stored in a shared Amazon S3 bucket with tenant-specific prefixes. The RAG application uses Amazon Bedrock Knowledge Bases. The company needs to ensure that retrieval queries only return documents belonging to the requesting tenant AND that large legal documents (50+ pages) are chunked to preserve section-level context for accurate citation. Which combination meets both requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use hierarchical chunking to preserve parent-child section relationships. Add a tenant_id metadata field to each document during ingestion. Apply a metadata filter on tenant_id in every Retrieve API call."
+      },
+      {
+        "key": "B",
+        "text": "Create a separate Knowledge Base per tenant. Use fixed-size chunking with 512-token chunks and 50-token overlap."
+      },
+      {
+        "key": "C",
+        "text": "Use semantic chunking based on embedding similarity breakpoints. Implement row-level security in OpenSearch Serverless to restrict access by tenant."
+      },
+      {
+        "key": "D",
+        "text": "Use fixed-size chunking with a large chunk size of 2000 tokens. Create separate S3 data sources per tenant within the same Knowledge Base."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Hierarchical chunking preserves the parent-child relationships between document sections (e.g., Chapter > Section > Paragraph), enabling the model to cite specific sections while retaining broader context — critical for legal documents. Metadata filtering at query time is the native Bedrock Knowledge Bases mechanism for multi-tenant isolation without duplicating infrastructure. Separate KBs per tenant (B) creates operational overhead that scales linearly with tenants. Semantic chunking (C) doesn't preserve explicit section boundaries needed for citations, and OpenSearch row-level security requires custom index management outside KB's native features. Large fixed chunks (D) reduce retrieval precision and separate data sources don't prevent cross-tenant retrieval without additional filtering.",
+    "source_topic": "Hierarchical chunking, metadata filtering, multi-tenant RAG isolation"
+  },
+  {
+    "id": "d1-q0641",
+    "domain": 1,
+    "task_statement": "1.4",
+    "topic": "Cross-region inference profiles + model evaluation for cost-optimised global deployment",
+    "difficulty": "hard",
+    "question_text": "A global media company is deploying a content generation application that serves users across North America, Europe, and Asia-Pacific. The application must minimise response latency for all regions, maintain consistent output quality regardless of which region serves the request, and optimise costs by leveraging spare capacity across regions. The team also needs to evaluate whether Claude 3.5 Sonnet or Llama 3.1 70B produces better headlines for their use case. Which combination of Amazon Bedrock features addresses all requirements?",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use cross-region inference profiles to route requests to the region with available capacity, reducing latency and cost."
+      },
+      {
+        "key": "B",
+        "text": "Deploy the application in each region independently and use Route 53 latency-based routing to direct users to the nearest deployment."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Bedrock Model Evaluation to compare Claude 3.5 Sonnet and Llama 3.1 70B using custom metrics relevant to headline generation quality."
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Bedrock Provisioned Throughput in each region to guarantee consistent latency regardless of load."
+      },
+      {
+        "key": "E",
+        "text": "Use Amazon Bedrock intelligent prompt routing to automatically select the cheaper model when the prompt is simple."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "C"
+    ],
+    "explanation": "Cross-region inference profiles (A) allow a single API call to be routed to whichever region has spare capacity, providing lower latency for global users while optimising costs — without deploying separate infrastructure per region. Model Evaluation (C) enables systematic comparison of different FMs using custom metrics (headline quality, tone, engagement scoring) to make a data-driven model selection. Independent regional deployments (B) require duplicated infrastructure and don't leverage cross-region spare capacity. Provisioned Throughput (D) guarantees capacity but at significant fixed cost — the opposite of cost optimisation. Intelligent prompt routing (E) selects between models based on prompt complexity, not headline quality comparison.",
+    "source_topic": "Cross-region inference profiles, Bedrock Model Evaluation, global GenAI deployment"
+  },
+  {
+    "id": "d1-q0642",
+    "domain": 1,
+    "task_statement": "1.5",
+    "topic": "Embedding model selection + hybrid search for domain-specific vocabulary",
+    "difficulty": "hard",
+    "question_text": "A pharmaceutical company is building a RAG system for drug interaction research. The corpus contains highly specialised terminology (chemical compound names, gene identifiers, dosage protocols) that general-purpose embedding models frequently misrepresent. Researchers also need to find documents by exact compound identifiers (e.g., 'CAS-50-78-2') alongside semantic meaning queries. Which approach optimises retrieval accuracy for this use case?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Titan Embeddings V2 with configurable dimensions set to maximum (1024). Rely solely on cosine similarity search in OpenSearch Serverless."
+      },
+      {
+        "key": "B",
+        "text": "Fine-tune a Cohere Embed model on the pharmaceutical corpus via Amazon Bedrock. Configure Amazon OpenSearch Serverless to use hybrid search combining BM25 keyword matching with k-NN vector similarity."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Titan Embeddings V2 with a pre-processing step that expands chemical abbreviations to full names. Store embeddings in Amazon Aurora PostgreSQL with pgvector using L2 distance."
+      },
+      {
+        "key": "D",
+        "text": "Use a SageMaker-hosted BioBERT model for domain-specific embeddings. Store in Amazon Neptune as a knowledge graph with vector similarity as edge weights."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Fine-tuning an embedding model on domain-specific pharmaceutical text ensures that specialised terminology is properly represented in the vector space — compound names that are semantically meaningless to general models gain correct proximity. Hybrid search (BM25 + k-NN) in OpenSearch Serverless addresses the dual need: exact identifier lookup (BM25 excels at exact string matching like CAS numbers) combined with semantic similarity for natural language queries. Titan V2 without fine-tuning (A) will misrepresent domain vocabulary regardless of dimension count. Abbreviation expansion (C) helps but doesn't address the fundamental embedding quality issue for thousands of specialised terms. BioBERT + Neptune (D) adds significant operational overhead — Neptune is a graph database, not optimised for vector similarity search.",
+    "source_topic": "Embedding fine-tuning, hybrid search BM25+kNN, domain-specific RAG"
+  }
+]

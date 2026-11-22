@@ -1,41 +1,45 @@
+import * as path     from 'path';
 import * as readline from 'readline';
 import { loadQuestions, sampleProportional, Question } from './loader';
-import { DOMAINS, EXAM_CONFIG } from './config';
+import { ExamDefinition } from './exams';
 import * as display from './display';
 import { DomainStat } from './display';
 import { parseAnswer, answersCorrect } from './utils/answers';
-import { recordAttempts, newSessionId } from './store';
+import { recordAttempts, newSessionId, readHistoryForExam } from './store';
 import { AttemptRecord } from './history';
 import { runFocus } from './focus';
 
-export async function runExam(rl: readline.Interface): Promise<void> {
+export async function runExam(rl: readline.Interface, exam: ExamDefinition): Promise<void> {
   display.clearScreen();
-  display.printHeader('AIP-C01 Exam Simulation Mode');
+  display.printHeader(exam.shortName + ' Exam Simulation Mode');
 
+  const examConfig = exam.examConfig;
   console.log(`\n  ${display.color('Exam Rules:', 'bold', 'yellow')}`);
-  console.log(`  • ${EXAM_CONFIG.totalScoredQuestions} questions, ${EXAM_CONFIG.durationMinutes} minutes`);
+  console.log(`  • ${examConfig.totalScoredQuestions} questions, ${examConfig.durationMinutes} minutes`);
   console.log(`  • No answer reveal until the exam ends`);
-  console.log(`  • Pass = ${Math.round(EXAM_CONFIG.passingThreshold * 100)}%+ correct (scaled 750/1000)`);
+  console.log(`  • Pass = ${Math.round(examConfig.passingThreshold * 100)}%+ correct (scaled ${examConfig.passingScore}/${examConfig.scoreScale[1]})`);
   console.log(`  • Questions sampled proportionally by domain weight\n`);
 
   const durationInput = await ask(
     rl,
-    `  Timer in minutes? (Enter for ${EXAM_CONFIG.durationMinutes} min, or e.g. "60" for quick run): `,
+    `  Timer in minutes? (Enter for ${examConfig.durationMinutes} min, or e.g. "60" for quick run): `,
   );
-  const durationMin = parseInt(durationInput, 10) || EXAM_CONFIG.durationMinutes;
+  const durationMin = parseInt(durationInput, 10) || examConfig.durationMinutes;
 
-  const allQuestions = loadQuestions();
-  if (allQuestions.length < EXAM_CONFIG.totalScoredQuestions) {
+  const allQuestions = loadQuestions(path.join(__dirname, '..', exam.questionsDir));
+  if (allQuestions.length < examConfig.totalScoredQuestions) {
     console.log(display.color(
-      `\n  Warning: only ${allQuestions.length} questions in the pool (need ${EXAM_CONFIG.totalScoredQuestions}). Using all available.\n`,
+      `\n  Warning: only ${allQuestions.length} questions in the pool (need ${examConfig.totalScoredQuestions}). Using all available.\n`,
       'yellow',
     ));
   }
 
+  const attemptedIds = new Set(readHistoryForExam(exam.exam_id).map(a => a.question_id));
   const examQuestions = sampleProportional(
     allQuestions,
-    Math.min(EXAM_CONFIG.totalScoredQuestions, allQuestions.length),
-    DOMAINS,
+    Math.min(examConfig.totalScoredQuestions, allQuestions.length),
+    exam.domains,
+    attemptedIds,
   );
 
   const userAnswers: (string[] | null)[] = new Array(examQuestions.length).fill(null);
@@ -99,8 +103,9 @@ export async function runExam(rl: readline.Interface): Promise<void> {
 
   // ── Score ──────────────────────────────────────────────────────────────────
 
+  const domainKeys = Object.keys(exam.domains).map(Number);
   const domainStats: Record<number, DomainStat> = {};
-  for (let d = 1; d <= 5; d++) {
+  for (const d of domainKeys) {
     domainStats[d] = { correct: 0, total: 0, questions: [] };
   }
 
@@ -113,6 +118,9 @@ export async function runExam(rl: readline.Interface): Promise<void> {
     const q  = examQuestions[i];
     const ua = userAnswers[i];
     const d  = q.domain;
+    if (!domainStats[d]) {
+      domainStats[d] = { correct: 0, total: 0, questions: [] };
+    }
     domainStats[d].total++;
     domainStats[d].questions.push({ q, userAnswer: ua });
 
@@ -125,6 +133,7 @@ export async function runExam(rl: readline.Interface): Promise<void> {
     // not "attempts" for mastery purposes).
     if (ua !== null) {
       attempts.push({
+        exam_id:     exam.exam_id,
         question_id: q.id,
         timestamp:   new Date().toISOString(),
         was_correct: isCorrect,
@@ -142,7 +151,7 @@ export async function runExam(rl: readline.Interface): Promise<void> {
 
   display.clearScreen();
   display.printScore(totalCorrect, examQuestions.length, 'exam');
-  display.printDomainBreakdown(domainStats);
+  display.printDomainBreakdown(domainStats, exam.domains);
 
   const showReview = await ask(rl, '  Would you like to review answers with explanations? (y/n): ');
   if (showReview.trim().toLowerCase() === 'y') {
@@ -150,7 +159,7 @@ export async function runExam(rl: readline.Interface): Promise<void> {
       const { q, userAnswer, correct } = reviewItems[i];
       display.clearScreen();
       display.printHeader(`Review: Question ${i + 1}/${reviewItems.length}`);
-      display.printQuestion(q, i + 1, reviewItems.length);
+      display.printQuestion(q, i + 1, reviewItems.length, true, exam.domains);
 
       if (correct) {
         console.log(display.color('\n  ✓ You answered correctly!\n', 'green', 'bold'));
@@ -179,7 +188,7 @@ export async function runExam(rl: readline.Interface): Promise<void> {
     console.log('');
     const launch = await ask(rl, display.color('  Launch a Focus session on these missed questions? (y/n): ', 'yellow'));
     if (launch.trim().toLowerCase() === 'y') {
-      await runFocus(rl, missed.map(r => r.q.id));
+      await runFocus(rl, exam, missed.map(r => r.q.id));
       return;
     }
   }

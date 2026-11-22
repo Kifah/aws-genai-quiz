@@ -2,8 +2,6 @@ import * as fs   from 'fs';
 import * as path from 'path';
 import { DomainConfig } from './config';
 
-const QUESTIONS_DIR = path.join(__dirname, '..', 'questions');
-
 export interface QuestionOption {
   key: string;
   text: string;
@@ -21,17 +19,50 @@ export interface Question {
   correct_answers: string[];
   explanation:    string;
   source_topic?:  string;
+  /** 1 (default) to 5. Unattempted questions with priority > 1 are served first. */
+  priority?:      number;
+  source?:        string;
+  seminar_id?:    number;
+}
+
+export const DEFAULT_PRIORITY = 1;
+
+export function priorityOf(q: Question): number {
+  return q.priority ?? DEFAULT_PRIORITY;
+}
+
+/** True for a priority question the user has not attempted yet. */
+export function isPendingPriority(q: Question, attemptedIds: ReadonlySet<string>): boolean {
+  return priorityOf(q) > DEFAULT_PRIORITY && !attemptedIds.has(q.id);
+}
+
+/**
+ * Unattempted priority questions, highest priority first. The sort is stable,
+ * so callers shuffle beforehand to randomise order within a priority level.
+ */
+export function pendingPriority(questions: Question[], attemptedIds: ReadonlySet<string>): Question[] {
+  return questions
+    .filter(q => isPendingPriority(q, attemptedIds))
+    .sort((a, b) => priorityOf(b) - priorityOf(a));
+}
+
+/** Pending priority questions first, then everything else in its given order. */
+export function prioritizeFirst(questions: Question[], attemptedIds: ReadonlySet<string>): Question[] {
+  const pending = pendingPriority(questions, attemptedIds);
+  const pendingIds = new Set(pending.map(q => q.id));
+  return [...pending, ...questions.filter(q => !pendingIds.has(q.id))];
 }
 
 /**
  * Load questions for one or more domains.
+ * @param questionsDir - path to the directory containing question JSON files
  * @param domainFilter - array of domain numbers to include, or null for all
  */
-export function loadQuestions(domainFilter: number[] | null = null): Question[] {
+export function loadQuestions(questionsDir: string, domainFilter: number[] | null = null): Question[] {
   const allQuestions: Question[] = [];
   // Accept both legacy domain-N.json and split domain-N-task-X.Y.json files
-  const files = fs.readdirSync(QUESTIONS_DIR)
-    .filter(f => /^domain-\d+(?:-task-[\d.]+)?\.json$/.test(f))
+  const files = fs.readdirSync(questionsDir)
+    .filter(f => /^domain-\d+(?:-task-[\d.]+|-seminar)?\.json$/.test(f))
     .sort();
 
   for (const file of files) {
@@ -40,7 +71,7 @@ export function loadQuestions(domainFilter: number[] | null = null): Question[] 
     const domainNum = parseInt(match[1], 10);
     if (domainFilter && !domainFilter.includes(domainNum)) continue;
 
-    const raw       = fs.readFileSync(path.join(QUESTIONS_DIR, file), 'utf8');
+    const raw       = fs.readFileSync(path.join(questionsDir, file), 'utf8');
     const questions = JSON.parse(raw) as Question[];
     allQuestions.push(...questions);
   }
@@ -55,11 +86,13 @@ interface DomainEntry {
 
 /**
  * Sample questions proportional to domain weights for exam mode.
+ * Within each domain, unattempted priority questions are picked before the rest.
  */
 export function sampleProportional(
   allQuestions: Question[],
   total: number,
   domains: Record<number, DomainConfig>,
+  attemptedIds: ReadonlySet<string> = new Set(),
 ): Question[] {
   const byDomain: Record<number, Question[]> = {};
   for (const q of allQuestions) {
@@ -86,13 +119,12 @@ export function sampleProportional(
 
   const selected: Question[] = [];
   for (const { domain, count } of targets) {
-    const pool = (byDomain[domain] ?? []).slice();
-    shuffle(pool);
+    const pool = prioritizeFirst(shuffle((byDomain[domain] ?? []).slice()), attemptedIds);
     selected.push(...pool.slice(0, count));
   }
 
   shuffle(selected);
-  return selected;
+  return prioritizeFirst(selected, attemptedIds);
 }
 
 /** Fisher-Yates in-place shuffle. Returns the same array. */

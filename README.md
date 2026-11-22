@@ -265,6 +265,10 @@ Each question file is a JSON array. File naming: `domain-{N}-task-{X.Y}.json`.
 }
 ```
 
+### Priority questions
+
+An optional `"priority"` (1-5, default 1) puts a question at the front of the queue until you have attempted it once. The 126 trusted seminar questions (`questions/aws/domain-N-seminar.json`, priority 5) are served first in Practice, Exam and Focus; Focus and Stats show how many are still uncovered. After you have answered them, they behave like any other question.
+
 ### Field rules
 
 | Field | Type | Rules |

@@ -1,0 +1,844 @@
+[
+  {
+    "id": "d2-q0624",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Strands Graph pattern",
+    "difficulty": "medium",
+    "question_text": "A support assistant must route each conversation by detected intent (order question, address update, request for a human), and a validation step must send bad data to a predefined error-handling node. The team wants the possible paths defined in advance, with the model deciding which edge to take at each step. Which Strands Agents multi-agent pattern fits?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Workflow: a fixed DAG with no runtime decisions about which path to take"
+      },
+      {
+        "key": "B",
+        "text": "Swarm: a pool of agents that decide among themselves who handles each task, with no predefined path"
+      },
+      {
+        "key": "C",
+        "text": "A single agent with no orchestration pattern, relying on one long system prompt"
+      },
+      {
+        "key": "D",
+        "text": "Graph: developer-defined nodes and edges, where the LLM's decision at each node selects the next path"
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "The Graph pattern gives a structured, developer-defined flowchart: you define all nodes (agents) and edges (transitions) up front, and the model's output at each node picks the path, which suits branching, loops and explicit error handling. Swarm leaves the execution path emergent. Workflow is deterministic with no runtime path decisions. One agent with one prompt gives no controlled branching or error paths.",
+    "source_topic": "Orchestration using Graph (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0625",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Strands Swarm pattern",
+    "difficulty": "medium",
+    "question_text": "In an incident-response system a monitoring agent detects a problem, a network specialist diagnoses it as a database issue, and a database administrator agent takes over. The team does not know the path in advance and wants specialists to hand work to each other while sharing context and working memory. Which pattern fits best?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Separate unconnected agents, each answering the user independently"
+      },
+      {
+        "key": "B",
+        "text": "Graph with every possible handoff pre-wired as an edge and a fixed route per incident type"
+      },
+      {
+        "key": "C",
+        "text": "Swarm: agents autonomously hand off tasks to each other using shared context and working memory"
+      },
+      {
+        "key": "D",
+        "text": "Workflow: a pre-defined acyclic task graph executed as a single tool"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Swarm is meant for problems that benefit from different specialised perspectives where the path is emergent: agents see the task history and which agents contributed, and decide who should act next. Workflow is fixed and acyclic. A pre-wired Graph needs the paths known up front. Unconnected agents cannot build on each other's work.",
+    "source_topic": "Orchestration using Swarm (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0626",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Strands Workflow pattern",
+    "difficulty": "medium",
+    "question_text": "An onboarding process must always create accounts, assign training and send a welcome email, where the account and training-assignment tasks are independent and can run concurrently. The team wants this encapsulated as one reliable, reusable action that a higher-level agent can call. Which pattern fits?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Swarm, so the agents negotiate who does each step each time"
+      },
+      {
+        "key": "B",
+        "text": "A free-form single agent that decides every time whether to create accounts at all"
+      },
+      {
+        "key": "C",
+        "text": "Graph with loops, so the model can retry steps until it is satisfied"
+      },
+      {
+        "key": "D",
+        "text": "Workflow: a deterministic task graph (DAG) with dependencies, run as a single non-conversational tool with independent tasks executed in parallel"
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Workflow defines all tasks and dependencies in code, executes independent tasks in parallel, allows no cycles and makes no runtime path decisions, which makes repeatable processes reliable and reusable as one tool. Swarm and Graph introduce runtime decisions and, for Graph, loops. A free-form agent gives no guarantee that the required steps always happen.",
+    "source_topic": "Orchestration using Workflow (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0627",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Choosing between Graph, Swarm and Workflow",
+    "difficulty": "hard",
+    "question_text": "Which TWO statements about Strands Agents multi-agent patterns are correct?",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "A Workflow is a directed acyclic task graph with a fully deterministic path where independent tasks run in parallel"
+      },
+      {
+        "key": "B",
+        "text": "A Swarm requires the developer to predefine every edge between agents"
+      },
+      {
+        "key": "C",
+        "text": "In a Graph, the developer defines nodes and edges in advance, and the LLM's decision at each node chooses which path to follow"
+      },
+      {
+        "key": "D",
+        "text": "A Graph cannot contain loops"
+      },
+      {
+        "key": "E",
+        "text": "In a Workflow, agents decide at runtime which agent should handle the next task"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "C"
+    ],
+    "explanation": "Graph: predetermined structure, model-chosen paths at nodes, supports branching, loops and explicit error handling. Workflow: DAG, no cycles, no runtime path decisions, automatic parallelism for independent tasks. Swarm does not predefine the path (agents hand off dynamically), Graphs can loop, and runtime handoff decisions belong to Swarm, not Workflow.",
+    "source_topic": "Graph vs Swarm vs Workflow orchestration patterns (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0628",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Debugging multi-agent systems",
+    "difficulty": "medium",
+    "question_text": "A multi-agent system has several specialised agents. When a user request produces a wrong answer, engineers cannot tell which agent or handoff caused it. What should the team implement?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Collapse the system into a single agent regardless of the requirements"
+      },
+      {
+        "key": "B",
+        "text": "Disable per-agent logging to reduce cost and rely on the final answer only"
+      },
+      {
+        "key": "C",
+        "text": "Add more agents so one of them can review the others without any traces"
+      },
+      {
+        "key": "D",
+        "text": "Comprehensive logging and distributed tracing (for example CloudWatch and AWS X-Ray) that correlates activity across all agents for each request"
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Multi-agent systems need monitoring that tracks individual agent performance and system health, and logging and observability that correlate activity across agents, because failures span several agents. Removing agents or logs does not help locate faults, and adding unobserved reviewers adds more places for failure.",
+    "source_topic": "Monitoring and maintenance requirements for multi-agent systems (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0629",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Hosting MCP servers on AgentCore Runtime",
+    "difficulty": "medium",
+    "question_text": "A team has built an MCP server that exposes document-analysis tools. They want a managed place to run it that scales automatically, includes built-in monitoring, and only requires them to provide a container image. Which option fits?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Bedrock Guardrails"
+      },
+      {
+        "key": "B",
+        "text": "An Amazon SageMaker batch transform job"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Bedrock Knowledge Bases"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Bedrock AgentCore Runtime"
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "AgentCore Runtime is a serverless execution environment for agent workloads and can host MCP servers, handling infrastructure, automatic scaling and monitoring so you focus on tool implementation. Guardrails filter content, Knowledge Bases provide retrieval, and batch transform is for offline inference, none of which host an MCP server.",
+    "source_topic": "Hosting MCP servers on AgentCore Runtime (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0630",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "MCP transport for remote servers",
+    "difficulty": "hard",
+    "question_text": "A developer tests an MCP server locally by launching it as a subprocess of the agent application. For the production deployment on AWS, the MCP server must be reachable over the network. Which transport choice is correct?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "A raw TCP socket protocol defined by each team"
+      },
+      {
+        "key": "B",
+        "text": "stdio for both, because it is the only transport MCP supports"
+      },
+      {
+        "key": "C",
+        "text": "stdio for local subprocess servers, and an HTTP-based transport such as streamable-http for servers deployed on AWS"
+      },
+      {
+        "key": "D",
+        "text": "A direct IAM-signed call to the foundation model instead of MCP"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "MCP clients connect over a transport: stdio launches a local server process, while SSE or streamable-http reach remote servers. AWS-hosted MCP servers use streamable-http (listening on 0.0.0.0:8000 on AgentCore Runtime). Stdio cannot reach a remote service, and custom sockets give up the standard protocol.",
+    "source_topic": "MCP transports: stdio, SSE and streamable-http (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0631",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "AgentCore Browser",
+    "difficulty": "medium",
+    "question_text": "An agent must open vendor websites, fill in forms and extract content from pages that rely on JavaScript, running securely at scale. The team does not want to operate a fleet of browsers. Which AgentCore primitive provides this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AgentCore Code Interpreter"
+      },
+      {
+        "key": "B",
+        "text": "AgentCore Identity"
+      },
+      {
+        "key": "C",
+        "text": "AgentCore Browser, a fully managed cloud browser runtime for agents"
+      },
+      {
+        "key": "D",
+        "text": "AgentCore Memory"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "AgentCore Browser gives agents a managed browser runtime with JavaScript execution, form interaction, content extraction and screenshots. Code Interpreter runs code in a sandbox, Memory stores context, and Identity manages agent credentials and access.",
+    "source_topic": "AgentCore Browser primitive (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0632",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "AgentCore Code Interpreter",
+    "difficulty": "medium",
+    "question_text": "An analytics agent generates Python to compute statistics over uploaded data. The team needs the generated code to run in an isolated sandbox rather than in their application environment. Which AgentCore primitive should they use?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AgentCore Code Interpreter, which securely executes code in isolated sandbox environments"
+      },
+      {
+        "key": "B",
+        "text": "AgentCore Observability, which only traces agent behaviour"
+      },
+      {
+        "key": "C",
+        "text": "AgentCore Gateway, which only converts APIs into tools"
+      },
+      {
+        "key": "D",
+        "text": "AgentCore Browser, which is meant for web interaction"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Code Interpreter lets agents execute code (Python, TypeScript, JavaScript) in isolated sandboxes, expanding what they can solve without exposing your own environment. Gateway exposes tools and APIs, Observability monitors, and Browser automates websites.",
+    "source_topic": "AgentCore Code Interpreter primitive (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0633",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "AgentCore Identity",
+    "difficulty": "hard",
+    "question_text": "An enterprise agent must call internal APIs and third-party services on behalf of different users. Security requires per-agent identities, delegated access following least privilege, and integration with existing identity providers, not shared long-lived credentials in prompts. Which AgentCore primitive addresses this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Give every agent one shared administrator role to avoid permission errors"
+      },
+      {
+        "key": "B",
+        "text": "AgentCore Observability, which controls who may call which API"
+      },
+      {
+        "key": "C",
+        "text": "AgentCore Identity"
+      },
+      {
+        "key": "D",
+        "text": "Embed API keys in the system prompt so the agent can authenticate on its own"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "AgentCore Identity manages secure agent identities and delegated, least-privilege access integrated with identity providers. Secrets in prompts can be leaked or extracted, shared admin roles violate least privilege, and Observability only monitors and traces.",
+    "source_topic": "AgentCore Identity primitive (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0634",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "AgentCore Observability",
+    "difficulty": "medium",
+    "question_text": "Operations needs end-to-end traces of an agent's decision process, plus metrics such as token usage, latency, session duration and error rates, to debug a production agent. Which AgentCore primitive provides this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AgentCore Memory"
+      },
+      {
+        "key": "B",
+        "text": "AWS CloudTrail alone, since it records model reasoning steps"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Bedrock Guardrails"
+      },
+      {
+        "key": "D",
+        "text": "AgentCore Observability"
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "AgentCore Observability offers end-to-end tracing of agent decisions, performance monitoring and error detection. CloudTrail records API calls for audit, not reasoning traces. Memory stores context and Guardrails apply content policy.",
+    "source_topic": "AgentCore Observability primitive (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0635",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "AgentCore core primitives",
+    "difficulty": "easy",
+    "question_text": "Which TWO are core primitives of Amazon Bedrock AgentCore?",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Batch transform"
+      },
+      {
+        "key": "B",
+        "text": "Vector index builder"
+      },
+      {
+        "key": "C",
+        "text": "Gateway"
+      },
+      {
+        "key": "D",
+        "text": "Model fine-tuning"
+      },
+      {
+        "key": "E",
+        "text": "Runtime"
+      }
+    ],
+    "correct_answers": [
+      "C",
+      "E"
+    ],
+    "explanation": "AgentCore's seven primitives are Runtime, Gateway, Memory, Identity, Browser, Code Interpreter and Observability. Fine-tuning, vector indexing and batch transform are not AgentCore primitives.",
+    "source_topic": "Seven core primitives of AgentCore (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0636",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "MCP tool discovery",
+    "difficulty": "medium",
+    "question_text": "An agent connects to an MCP server for the first time. How does it learn which tools exist and what parameters each accepts before deciding to call any of them?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "The foundation model's training data already contains every MCP server's tools"
+      },
+      {
+        "key": "B",
+        "text": "The developer must hard-code every tool signature into the agent prompt"
+      },
+      {
+        "key": "C",
+        "text": "The agent guesses tool names and retries until one works"
+      },
+      {
+        "key": "D",
+        "text": "It calls the server's tool listing (list_tools), which returns each tool's name, description and input schema"
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "MCP defines a discovery step: the client lists the server's tools and receives names, descriptions and input schemas, which the agent's model then uses to decide when and how to call them. Hard-coding drifts from the server, guessing is unreliable, and training data cannot know custom servers.",
+    "source_topic": "MCP workflow: tool discovery (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0637",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "MCP servers are stateless",
+    "difficulty": "hard",
+    "question_text": "An agent uses an MCP server for documentation search. The user asks a follow-up question that depends on the previous answer. Where is the conversation context maintained?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "By the transport layer, which replays all earlier tool calls"
+      },
+      {
+        "key": "B",
+        "text": "Nowhere; follow-up questions are not possible with MCP"
+      },
+      {
+        "key": "C",
+        "text": "By the MCP server, which stores each user's conversation between calls"
+      },
+      {
+        "key": "D",
+        "text": "By the agent; the MCP server executes each tool call statelessly"
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "MCP tool servers are stateless functions: each call is independent and the agent keeps the conversation context (platforms may add a session header for isolation, but the server remains stateless). This keeps tool servers simple to scale. Keeping state in the server or transport couples tools to sessions.",
+    "source_topic": "MCP workflow: stateless server, agent holds context (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0638",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "MCP client resilience",
+    "difficulty": "hard",
+    "question_text": "One backend tool behind an MCP server fails intermittently. The team wants the overall agent system to stay functional rather than stall or hammer the failing service. Which client-side behaviour is appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Retries with limits and backoff, a circuit breaker that stops calling the failing tool, and graceful degradation or a fallback"
+      },
+      {
+        "key": "B",
+        "text": "Retry immediately and indefinitely until the tool responds"
+      },
+      {
+        "key": "C",
+        "text": "Remove error handling so failures surface immediately to the user"
+      },
+      {
+        "key": "D",
+        "text": "Restart the whole agent for every tool error"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "MCP client libraries should provide error handling and resilience: bounded retry, circuit-breaker patterns and graceful degradation so the system remains useful when one service fails. Unbounded retries overload the service, restarting the agent loses progress, and having no error handling makes every transient fault visible.",
+    "source_topic": "MCP client library error handling and resilience (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0639",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Agent vs fixed pipeline",
+    "difficulty": "medium",
+    "question_text": "A summarisation service always runs spelling correction, structure analysis, summarisation and formatting on every document, although most documents need only some of these steps. Which change reduces cost while keeping quality?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run every step twice and keep the longer result"
+      },
+      {
+        "key": "B",
+        "text": "Use an agent with MCP tools that analyses each document and calls only the tools it needs"
+      },
+      {
+        "key": "C",
+        "text": "Remove the analysis step entirely so every document is only summarised"
+      },
+      {
+        "key": "D",
+        "text": "Keep the fixed pipeline and add a larger model to every step"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A fixed pipeline applies the same steps to every input. An agent that inspects the document and its requirements can choose only the preprocessing, analysis and formatting tools that matter, making the workflow dynamic, more efficient and cheaper. A bigger model per step raises cost, and removing steps hurts quality.",
+    "source_topic": "Traditional workflow vs AI agent approach (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0640",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Feedback loop with Step Functions",
+    "difficulty": "hard",
+    "question_text": "A content workflow generates a draft, scores it with an evaluator, and should regenerate with the evaluator's feedback until the score passes a threshold. How should this be built with AWS Step Functions?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "A Parallel state that runs the generator and evaluator once and always accepts the result"
+      },
+      {
+        "key": "B",
+        "text": "A Wait state that pauses the workflow for a fixed time and then ends"
+      },
+      {
+        "key": "C",
+        "text": "An unbounded loop that continues until the score passes, however long it takes"
+      },
+      {
+        "key": "D",
+        "text": "A Choice state that routes low scores back to the generation step, with an iteration counter or maximum attempts so the loop ends"
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "The Feedback Loop pattern feeds one stage's output back for refinement; in Step Functions a Choice state evaluates the score and loops back or exits, and a bounded attempt count prevents runaway cost. Parallel does not loop, unbounded loops can run forever, and Wait only delays.",
+    "source_topic": "Agent design pattern: feedback loop (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0641",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Problem decomposition and dependencies",
+    "difficulty": "medium",
+    "question_text": "An agentic workflow splits a problem into sub-problems. Two of them are independent of each other, and a third needs both of their results. Which Step Functions structure expresses this best?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run all three steps in a Parallel state so the dependent step starts immediately"
+      },
+      {
+        "key": "B",
+        "text": "Run only the first sub-problem and ignore the rest"
+      },
+      {
+        "key": "C",
+        "text": "Run the two independent sub-problems in a Parallel state, then run the dependent step afterwards"
+      },
+      {
+        "key": "D",
+        "text": "Run the dependent step first and feed its guesses to the others"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Problem decomposition maps component dependencies to workflow structure: independent components run concurrently, and a dependent step waits for the results it needs. Starting the dependent step in parallel would use incomplete inputs, and the other options skip required work.",
+    "source_topic": "Problem decomposition with Step Functions (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0642",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Model-in-the-loop vs human-in-the-loop",
+    "difficulty": "medium",
+    "question_text": "Which statement correctly distinguishes the Model-in-the-Loop (MIL) and Human-in-the-Loop (HITL) patterns?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "In HITL no human is involved after deployment; in MIL humans decide every step"
+      },
+      {
+        "key": "B",
+        "text": "They are identical and differ only in naming"
+      },
+      {
+        "key": "C",
+        "text": "In MIL humans do all the work and the model only logs results; in HITL the model works alone"
+      },
+      {
+        "key": "D",
+        "text": "In MIL the model is the primary engine and humans review, validate and enhance its output; in HITL human decisions are integrated at key points inside the processing workflow"
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "MIL positions foundation models as the primary processing engine, with humans reviewing and refining outputs. HITL integrates human validation, corrective input and guidance at critical points in the flow. They differ in where the human sits, and neither removes humans entirely.",
+    "source_topic": "Human augmentation patterns: MIL and HITL (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0643",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Hybrid human augmentation",
+    "difficulty": "hard",
+    "question_text": "A document-processing system should auto-approve routine, high-confidence results but send sensitive or business-critical cases to human experts, and adjust the split as risk changes. Which approach fits?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "A hybrid augmentation approach that dynamically sets the level of human involvement based on model confidence, content sensitivity and business criticality, for example with Step Functions branching"
+      },
+      {
+        "key": "B",
+        "text": "Send every item to human review regardless of confidence or sensitivity"
+      },
+      {
+        "key": "C",
+        "text": "Never involve humans and rely on model confidence alone"
+      },
+      {
+        "key": "D",
+        "text": "Randomly send half of the items to human review"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Hybrid approaches combine MIL and HITL and adapt human involvement to confidence, sensitivity and criticality. Reviewing everything wastes reviewer time, removing humans ignores risk, and random sampling does not target risky cases.",
+    "source_topic": "Hybrid augmentation approaches (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0644",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Human override rate monitoring",
+    "difficulty": "hard",
+    "question_text": "In a human-review workflow, monitoring shows reviewers override the model's output in a large and rising share of cases. What does this signal and what should the team do?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "It indicates an opportunity to improve the model or adjust review criteria; capture reviewer decisions as feedback and investigate the override patterns"
+      },
+      {
+        "key": "B",
+        "text": "It is irrelevant to model quality and should not be tracked"
+      },
+      {
+        "key": "C",
+        "text": "It means the API Gateway endpoints are misconfigured"
+      },
+      {
+        "key": "D",
+        "text": "It proves the reviewers are wrong, so the review step should be removed"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Tracking AI confidence levels and human override rates helps identify where models need improvement or where review criteria should change, and feedback from reviewers drives continuous learning. High overrides are not proof that reviewers are wrong, and the metric is directly relevant to quality.",
+    "source_topic": "Performance monitoring of collaborative workflows: override rates (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0645",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Reviewer timeouts and escalation",
+    "difficulty": "hard",
+    "question_text": "A Step Functions workflow pauses for a human reviewer, but some tasks sit unreviewed for days. The business requires tasks to be completed within a set time. What should the design include?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Timeout settings on the waiting task, with a catch path that escalates or reassigns the task to another reviewer"
+      },
+      {
+        "key": "B",
+        "text": "Delete the task and discard the AI output when the reviewer is unavailable"
+      },
+      {
+        "key": "C",
+        "text": "Auto-approve every task after the first request to avoid delays"
+      },
+      {
+        "key": "D",
+        "text": "No timeout, so the workflow waits indefinitely for the reviewer"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Collaborative workflows need timeout mechanisms and escalation procedures for cases where reviewers are unavailable or tasks run too long, so tasks complete within required timeframes. Waiting forever stalls the business, auto-approving removes review, and deleting the task loses work.",
+    "source_topic": "Step Functions review and approval: timeouts and escalation (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0646",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Securing reviewer access",
+    "difficulty": "medium",
+    "question_text": "Reviewers use web and mobile apps to fetch AI outputs and submit feedback through an API. Only qualified reviewers may access specific task types. Which design element satisfies this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Public endpoints with no authentication, protected only by an unguessable URL"
+      },
+      {
+        "key": "B",
+        "text": "Sending all tasks to every reviewer and asking them to ignore tasks outside their expertise"
+      },
+      {
+        "key": "C",
+        "text": "A shared password distributed to all reviewers for all task types"
+      },
+      {
+        "key": "D",
+        "text": "API Gateway endpoints protected by authentication and authorization (for example a Cognito or Lambda authorizer) that restrict access by reviewer qualification"
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "API Gateway can handle authentication and authorization so only qualified reviewers reach specific tasks, with monitoring and logging of access. Obscure URLs, shared passwords and exposing every task fail least-privilege and audit needs.",
+    "source_topic": "API Gateway for feedback collection: authentication and authorization (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0647",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Strands Agents considerations",
+    "difficulty": "medium",
+    "question_text": "A team is deciding between the open-source Strands Agents SDK and a managed agent service. Which is a real consideration for choosing Strands?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Strands removes the need for any security or performance work"
+      },
+      {
+        "key": "B",
+        "text": "Strands can only be used with a single foundation model"
+      },
+      {
+        "key": "C",
+        "text": "You are responsible for hosting, scaling, securing and keeping the agent implementation up to date, for example on Lambda or AgentCore Runtime"
+      },
+      {
+        "key": "D",
+        "text": "Strands is proprietary, so you cannot inspect or modify the agent code"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Strands is open source, giving full visibility and control, at the price of more technical responsibility: infrastructure for hosting and scaling, security and performance tuning, integration work and keeping current with the evolving framework. It works with various foundation models through a unified interface.",
+    "source_topic": "Strands Agents advantages and considerations (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0648",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Strands modular architecture",
+    "difficulty": "medium",
+    "question_text": "A team built an agent with Strands and now wants to replace its in-process memory with a persistent store without rewriting the prompts or tools. Which property of the framework makes this practical?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "It stores everything in the model's weights"
+      },
+      {
+        "key": "B",
+        "text": "Its modular architecture with separated concerns, so components such as memory and prompting strategies can be swapped without changing the whole system"
+      },
+      {
+        "key": "C",
+        "text": "Its closed design, which fixes memory behaviour at deployment"
+      },
+      {
+        "key": "D",
+        "text": "It requires rebuilding the agent from scratch for each component change"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Strands separates configuration, prompts, tools, memory, reasoning and evaluation, so each can be developed, tested and replaced independently. This is its main architectural benefit; it is not closed, and memory is not stored in model weights.",
+    "source_topic": "Strands Agent architecture and modularity (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  },
+  {
+    "id": "d2-q0649",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Strands agents with MCP tools",
+    "difficulty": "medium",
+    "question_text": "A developer wants a Strands agent to use existing capabilities such as documentation search without writing custom tool code for each. Which approach does the framework support?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Copy each external service's code into the agent prompt"
+      },
+      {
+        "key": "B",
+        "text": "Disable tool use so the agent answers from its training data"
+      },
+      {
+        "key": "C",
+        "text": "Connect to published Model Context Protocol servers and expose their tools to the agent through the MCP client"
+      },
+      {
+        "key": "D",
+        "text": "Fine-tune the foundation model on each service's API documentation"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Strands tools can come from published MCP servers: the client discovers a server's tools and the agent's model decides when to call them. Pasting code into prompts, fine-tuning on API docs or removing tools does not provide live, reliable tool calls.",
+    "source_topic": "Strands tool integration with MCP servers (AWS Skill Builder: Implement agentic AI solutions and tool integrations)"
+  }
+]

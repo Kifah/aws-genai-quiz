@@ -5,6 +5,8 @@ import * as path from 'path';
 // Point loader at the real questions directory
 process.chdir(path.join(__dirname, '..'));
 
+const AWS_DIR = path.join(__dirname, '..', 'questions', 'aws');
+
 import { loadQuestions, sampleProportional, shuffle } from '../src/loader';
 import { DOMAINS } from '../src/config';
 
@@ -17,29 +19,29 @@ const REQUIRED = [
 
 describe('loadQuestions', () => {
   it('loads all questions when no filter is applied', () => {
-    const qs = loadQuestions();
+    const qs = loadQuestions(AWS_DIR);
     assert.ok(qs.length > 0, 'should return at least one question');
   });
 
   it('loads only domain-1 questions when filtered', () => {
-    const qs = loadQuestions([1]);
+    const qs = loadQuestions(AWS_DIR, [1]);
     assert.ok(qs.length > 0, 'should return questions');
     assert.ok(qs.every(q => q.domain === 1), 'all questions should be domain 1');
   });
 
   it('loads only domain-3 and domain-5 questions when filtered', () => {
-    const qs = loadQuestions([3, 5]);
+    const qs = loadQuestions(AWS_DIR, [3, 5]);
     assert.ok(qs.length > 0);
     assert.ok(qs.every(q => q.domain === 3 || q.domain === 5));
   });
 
   it('returns empty array for a domain filter with no matching files', () => {
-    const qs = loadQuestions([99]);
+    const qs = loadQuestions(AWS_DIR, [99]);
     assert.equal(qs.length, 0);
   });
 
   it('every question has required fields', () => {
-    const qs = loadQuestions();
+    const qs = loadQuestions(AWS_DIR);
     for (const q of qs) {
       for (const field of REQUIRED) {
         assert.ok(
@@ -51,7 +53,7 @@ describe('loadQuestions', () => {
   });
 
   it('correct_answers keys exist in options for every question', () => {
-    const qs = loadQuestions();
+    const qs = loadQuestions(AWS_DIR);
     for (const q of qs) {
       const optionKeys = new Set(q.options.map(o => o.key));
       for (const key of q.correct_answers) {
@@ -62,7 +64,7 @@ describe('loadQuestions', () => {
   });
 
   it('single questions have exactly 1 correct answer', () => {
-    const qs = loadQuestions().filter(q => q.question_type === 'single');
+    const qs = loadQuestions(AWS_DIR).filter(q => q.question_type === 'single');
     for (const q of qs) {
       assert.equal(q.correct_answers.length, 1,
         `Single question ${q.id} must have exactly 1 correct answer`);
@@ -70,7 +72,7 @@ describe('loadQuestions', () => {
   });
 
   it('multi questions have 2 or more correct answers', () => {
-    const qs = loadQuestions().filter(q => q.question_type === 'multi');
+    const qs = loadQuestions(AWS_DIR).filter(q => q.question_type === 'multi');
     for (const q of qs) {
       assert.ok(q.correct_answers.length >= 2,
         `Multi question ${q.id} must have at least 2 correct answers`);
@@ -78,7 +80,7 @@ describe('loadQuestions', () => {
   });
 
   it('all question IDs are unique', () => {
-    const qs = loadQuestions();
+    const qs = loadQuestions(AWS_DIR);
     const ids = qs.map(q => q.id);
     const uniqueIds = new Set(ids);
     assert.equal(uniqueIds.size, ids.length, 'Duplicate question IDs found');
@@ -89,26 +91,26 @@ describe('loadQuestions', () => {
 
 describe('sampleProportional', () => {
   it('returns exactly the requested number of questions', () => {
-    const qs      = loadQuestions();
+    const qs      = loadQuestions(AWS_DIR);
     const sampled = sampleProportional(qs, 65, DOMAINS);
     assert.equal(sampled.length, 65);
   });
 
   it('includes questions from all 5 domains', () => {
-    const qs      = loadQuestions();
+    const qs      = loadQuestions(AWS_DIR);
     const sampled = sampleProportional(qs, 65, DOMAINS);
     const domains = new Set(sampled.map(q => q.domain));
     assert.ok(domains.size === 5, `Expected 5 domains, got ${domains.size}`);
   });
 
   it('does not return more questions per domain than are available', () => {
-    const qs      = loadQuestions();
+    const qs      = loadQuestions(AWS_DIR);
     const sampled = sampleProportional(qs, 10, DOMAINS);
     assert.ok(sampled.length <= 10);
   });
 
   it('handles small pool gracefully — fewer questions than requested', () => {
-    const tiny    = loadQuestions([5]); // smallest domain
+    const tiny    = loadQuestions(AWS_DIR, [5]); // smallest domain
     const sampled = sampleProportional(tiny, 65, DOMAINS);
     assert.ok(sampled.length <= 65);
   });

@@ -1,0 +1,375 @@
+[
+  {
+    "id": "c2-q0001",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Claude model selection based on trade-offs",
+    "difficulty": "medium",
+    "question_text": "A developer is building a mobile app feature that classifies short user messages (under 50 tokens) into one of five support categories. The application needs sub-500ms responses and handles millions of calls per day. Which Claude model selection approach is most appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Claude's most capable (largest) model to maximize classification accuracy."
+      },
+      {
+        "key": "B",
+        "text": "Use Claude Haiku or an equivalent lightweight model — the task is simple and benefits from lower cost and latency."
+      },
+      {
+        "key": "C",
+        "text": "Use Claude Opus and increase the temperature to improve diversity of classifications."
+      },
+      {
+        "key": "D",
+        "text": "Use whichever model was most recently released regardless of task complexity."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Short message classification with a fixed taxonomy is a low-complexity task that does not require a large model's reasoning capacity. Lighter models (Haiku-class) deliver lower latency and dramatically lower per-token costs at scale, making them the correct choice for this high-volume, simple-classification use case. Using the largest model (A, C) adds cost and latency without meaningfully improving accuracy on a simple classification."
+  },
+  {
+    "id": "c2-q0002",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Model selection: capability vs. cost trade-offs",
+    "difficulty": "hard",
+    "question_text": "A legal technology company runs two workloads: (1) drafting complex multi-party contract clauses requiring deep legal reasoning, and (2) extracting party names and dates from signed contracts. How should they allocate models?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use the most capable model for both workloads to ensure quality."
+      },
+      {
+        "key": "B",
+        "text": "Use the least expensive model for both workloads to minimize cost."
+      },
+      {
+        "key": "C",
+        "text": "Use the most capable model for clause drafting and a lightweight model for entity extraction — match model capability to task complexity."
+      },
+      {
+        "key": "D",
+        "text": "Use the same model for both but adjust temperature: high for drafting, low for extraction."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Model selection should match capability to requirement. Complex legal drafting requires deep reasoning, nuanced language, and high accuracy — warranting a high-capability model. Entity extraction from signed contracts is a well-structured, low-ambiguity task suitable for a lightweight model. This tiered approach optimizes both quality (where needed) and cost (where quality is already sufficient with a smaller model)."
+  },
+  {
+    "id": "c2-q0003",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Model capability trade-offs",
+    "difficulty": "medium",
+    "question_text": "Which of the following are valid dimensions for selecting between Claude model tiers? (Select TWO)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Task complexity and required reasoning depth."
+      },
+      {
+        "key": "B",
+        "text": "The color theme of the application's UI."
+      },
+      {
+        "key": "C",
+        "text": "Cost per token and expected request volume."
+      },
+      {
+        "key": "D",
+        "text": "The geographic location of the development team."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "C"
+    ],
+    "explanation": "Model tier selection is driven by task complexity (does the task require extended reasoning, nuanced writing, or complex instruction following?) and economics (cost per token × volume determines the budget impact). UI theme (B) and team geography (D) have no bearing on model selection. These two dimensions — capability need and cost at scale — are the primary trade-offs in model selection decisions."
+  },
+  {
+    "id": "c2-q0004",
+    "domain": 2,
+    "task_statement": "2.1",
+    "topic": "Model selection for agentic tasks",
+    "difficulty": "hard",
+    "question_text": "An agentic system uses Claude to autonomously plan and execute a 10-step research workflow with tool calls at each step. The task takes approximately 3 minutes to complete. Which consideration is most important when selecting a model for the orchestration layer?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Choose the cheapest model to minimize the cost of long runs."
+      },
+      {
+        "key": "B",
+        "text": "Choose a model with strong instruction-following and reasoning capability, since errors in the orchestration layer cascade through all downstream steps."
+      },
+      {
+        "key": "C",
+        "text": "Choose a model with the fastest response time to reduce the 3-minute runtime."
+      },
+      {
+        "key": "D",
+        "text": "Choose a model based on its score on academic benchmarks unrelated to the task domain."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "In multi-step agentic workflows, the orchestration layer's model quality is disproportionately important — a reasoning error or missed instruction at step 2 corrupts all subsequent steps, wasting time and cost. Strong instruction-following and planning capability in the orchestrator prevents cascading failures. Optimizing purely for cost (A) or speed (C) at the orchestration layer risks expensive failures. Unrelated benchmarks (D) are not a valid selection criterion."
+  },
+  {
+    "id": "c2-q0024",
+    "domain": 2,
+    "task_statement": "2A1 Select appropriate Claude models based on trade-offs",
+    "topic": "durable reasoning standard",
+    "difficulty": "hard",
+    "question_text": "An architect is hardening a production standard covering reasoning control across several services that target different Claude model generations. Some services need deep reasoning, others tight latency under peak load. The goal is one durable standard that stays correct as models are upgraded and new generations ship. Which principle should anchor the standard?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Fix a single token-budget value and apply it identically to every service"
+      },
+      {
+        "key": "b",
+        "text": "Name the model per service; tune adaptive-thinking effort to its SLA"
+      },
+      {
+        "key": "c",
+        "text": "Set the most capable model everywhere so reasoning depth is never insufficient"
+      },
+      {
+        "key": "d",
+        "text": "Control reasoning through temperature, which behaves the same across generations"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Claude Models, Prompting & Context Engineering | Subdomain: 2A1 Select appropriate Claude models based on trade-offs | Key Concept: durable reasoning standard. Because reasoning-control mechanisms differ by generation, a durable standard names each service's model and applies its supported lever, adaptive thinking with effort tuned to the SLA. A hardcoded token budget, a temperature scheme, or top capability everywhere all fail across generations or constraints."
+  },
+  {
+    "id": "c2-q0025",
+    "domain": 2,
+    "task_statement": "2C1 Optimize context windows and manage token usage",
+    "topic": "prefix ordering",
+    "difficulty": "medium",
+    "question_text": "A long-running assistant places the user's per-request question at the top of the prompt, followed by a large static policy document. Cache hit rates are near zero and token cost is high. What change fixes this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Put the stable policy document first and the per-request question last"
+      },
+      {
+        "key": "b",
+        "text": "Shorten the policy document until the whole prompt fits the cache"
+      },
+      {
+        "key": "c",
+        "text": "Move both blocks into the system prompt without reordering them at all"
+      },
+      {
+        "key": "d",
+        "text": "Add more cache breakpoints wrapped around the changing question text block"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Claude Models, Prompting & Context Engineering | Subdomain: 2C1 Optimize context windows and manage token usage | Key Concept: prefix ordering. A cache hit requires a byte-identical prefix, so stable content must come first and per-request data last. Leading with the changing question invalidates the prefix every call, which is why hit rates collapse."
+  },
+  {
+    "id": "c2-q0026",
+    "domain": 2,
+    "task_statement": "2B1 Design system prompts, templates, and guardrails",
+    "topic": "prompt vs programmatic guardrail",
+    "difficulty": "hard",
+    "question_text": "A payment-automation agent must never issue a refund above a policy limit. The team drafts a firm system-prompt instruction forbidding it, and stakeholders ask whether that is sufficient given the financial exposure. What is the BEST guardrail design?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Strengthen the system-prompt wording and add examples so the model reliably complies every time"
+      },
+      {
+        "key": "b",
+        "text": "Rely on the instruction but log violations for later review and correction"
+      },
+      {
+        "key": "c",
+        "text": "Enforce the limit programmatically in code, since a prompt instruction can be overridden"
+      },
+      {
+        "key": "d",
+        "text": "Raise the model's reasoning effort so it weighs the policy more carefully"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Claude Models, Prompting & Context Engineering | Subdomain: 2B1 Design system prompts, templates, and guardrails | Key Concept: prompt vs programmatic guardrail. A prompt-based guardrail asks the model to comply and is probabilistic; a programmatic guardrail enforces the rule in code regardless of output. When financial, legal, or safety consequences apply, enforcement must be programmatic, because a prompt instruction can be overridden by unusual or adversarial input."
+  },
+  {
+    "id": "c2-q0027",
+    "domain": 2,
+    "task_statement": "2B2 Apply prompt engineering techniques",
+    "topic": "chain-of-thought vs extended thinking",
+    "difficulty": "hard",
+    "question_text": "An architect must document the difference between two reasoning approaches for a team. Which of the following correctly distinguishes chain-of-thought prompting from the extended-thinking API capability?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Both are API features that emit separate structured reasoning blocks"
+      },
+      {
+        "key": "b",
+        "text": "Extended thinking is prompt text while chain-of-thought is an API parameter"
+      },
+      {
+        "key": "c",
+        "text": "They are interchangeable names for one identical reasoning mechanism"
+      },
+      {
+        "key": "d",
+        "text": "Chain-of-thought is prompt text; extended thinking is an API feature"
+      }
+    ],
+    "correct_answers": [
+      "d"
+    ],
+    "explanation": "Domain: Claude Models, Prompting & Context Engineering | Subdomain: 2B2 Apply prompt engineering techniques | Key Concept: chain-of-thought vs extended thinking. Chain-of-thought is reasoning elicited as text within the prompt, whereas extended thinking is an API feature that produces separate reasoning blocks. Treating them as identical is the common trap; keep the in-prompt technique distinct from the API capability."
+  },
+  {
+    "id": "c2-q0028",
+    "domain": 2,
+    "task_statement": "2C2 Implement prompt reuse strategies",
+    "topic": "up to four cache breakpoints per request",
+    "difficulty": "medium",
+    "question_text": "A long-lived prompt has four stable sections that change on different schedules: tool definitions rarely, a policy block weekly, a style guide monthly, and a knowledge doc daily. The team wants a section's change to invalidate only that section's cache onward. Which of the following describes the constraint they must respect?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Only one breakpoint is allowed, so they must merge all four sections"
+      },
+      {
+        "key": "b",
+        "text": "Breakpoints are unlimited, so section count never constrains the design"
+      },
+      {
+        "key": "c",
+        "text": "Four cache_control breakpoints per request, matching four sections"
+      },
+      {
+        "key": "d",
+        "text": "Breakpoints apply only to the system block, not to tools or messages"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Claude Models, Prompting & Context Engineering | Subdomain: 2C2 Implement prompt reuse strategies | Key Concept: up to four cache breakpoints per request. Four independently scheduled stable sections map to the four available breakpoints, but they must be ordered by change frequency so editing one does not invalidate the cached content after it."
+  },
+  {
+    "id": "c2-q0029",
+    "domain": 2,
+    "task_statement": "2A1 Select appropriate Claude models based on trade-offs",
+    "topic": "Batch API economics",
+    "difficulty": "medium",
+    "question_text": "A nightly batch job enriches millions of stored documents with no real-time requirement. Which single lever cuts cost MOST for this workload?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Prompt caching by itself, since the same documents tend to repeat every night"
+      },
+      {
+        "key": "b",
+        "text": "The most capable model, to reduce retries and later rework"
+      },
+      {
+        "key": "c",
+        "text": "Maximum effort, so each document is processed only once"
+      },
+      {
+        "key": "d",
+        "text": "The Batch API discount for asynchronous, non-latency-sensitive processing"
+      }
+    ],
+    "correct_answers": [
+      "d"
+    ],
+    "explanation": "Domain: Claude Models, Prompting & Context Engineering | Subdomain: 2A1 Select appropriate Claude models based on trade-offs | Key Concept: Batch API economics. The Batch API delivers about a 50 percent discount on asynchronous, non-latency-sensitive processing. A nightly job over millions of documents tolerates turnaround, making the batch discount the largest single cost lever."
+  },
+  {
+    "id": "c2-q0030",
+    "domain": 2,
+    "task_statement": "2B2 Apply prompt engineering techniques",
+    "topic": "CoT prompting versus extended thinking",
+    "difficulty": "hard",
+    "question_text": "A developer enabled extended thinking on a current Claude model and describes it as 'adding chain-of-thought.' A teammate insists these are different mechanisms. Which statement correctly distinguishes chain-of-thought prompting from extended thinking?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Both are identical API features; the naming difference is purely historical with no behavioral effect"
+      },
+      {
+        "key": "b",
+        "text": "Chain-of-thought is an API toggle while extended thinking is instruction text in the user turn"
+      },
+      {
+        "key": "c",
+        "text": "Chain-of-thought is prompt text; extended thinking is an API feature returning reasoning blocks"
+      },
+      {
+        "key": "d",
+        "text": "Both are prompt-only techniques that never change the request configuration or billing"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Claude Models, Prompting & Context Engineering | Subdomain: 2B2 Apply prompt engineering techniques | Key Concept: CoT prompting versus extended thinking. Chain-of-thought is reasoning instructions written into the prompt, while extended thinking is an API feature that generates separate reasoning blocks. Keeping the two distinct matters, since they involve different mechanisms, configuration, and output structure."
+  },
+  {
+    "id": "c2-q0031",
+    "domain": 2,
+    "task_statement": "2C1 Optimize context windows and manage token usage",
+    "topic": "adopt retrieval when the corpus outgrows context",
+    "difficulty": "hard",
+    "question_text": "A knowledge assistant loaded its entire corpus into a cached prompt, which worked well at 120k tokens. The corpus has since grown to roughly 900k tokens, latency has climbed, and cost per call is rising. The team wants the lowest-complexity fix that restores performance. Which approach is BEST?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Keep loading the whole corpus and rely on prompt caching to absorb the ongoing growth"
+      },
+      {
+        "key": "b",
+        "text": "Split the corpus across multiple subagents that each hold and search one part"
+      },
+      {
+        "key": "c",
+        "text": "Introduce a retrieval pipeline so only the most relevant chunks enter each prompt"
+      },
+      {
+        "key": "d",
+        "text": "Fine-tune a model on the corpus to remove the knowledge from context entirely"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Claude Models, Prompting & Context Engineering | Subdomain: 2C1 Optimize context windows and manage token usage | Key Concept: adopt retrieval when the corpus outgrows context. Whole-KB-in-prompt with caching is simplest below roughly 200k tokens; once a corpus grows well past that, latency and cost climb and retrieval, injecting only relevant chunks, is the lowest-complexity fix that restores performance."
+  }
+]

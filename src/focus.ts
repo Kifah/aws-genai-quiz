@@ -1,9 +1,10 @@
+import * as path     from 'path';
 import * as readline from 'readline';
-import { loadQuestions, Question } from './loader';
-import { DOMAINS } from './config';
+import { loadQuestions, Question, pendingPriority, shuffle } from './loader';
+import { ExamDefinition } from './exams';
 import * as display from './display';
 import { parseAnswer, answersCorrect } from './utils/answers';
-import { readHistory, recordAttempts, newSessionId } from './store';
+import { readHistoryForExam, recordAttempts, newSessionId } from './store';
 import {
   AttemptRecord,
   computeQuestionStats,
@@ -23,13 +24,14 @@ import { buildCandidates, sampleFocus } from './sampler';
  */
 export async function runFocus(
   rl: readline.Interface,
+  exam: ExamDefinition,
   seedWrongIds: string[] = [],
 ): Promise<void> {
   display.clearScreen();
-  display.printHeader('AIP-C01 Focus Mode · Adaptive Review');
+  display.printHeader(exam.shortName + ' Focus Mode · Adaptive Review');
 
-  const allQuestions = loadQuestions();
-  const history = readHistory();
+  const allQuestions = loadQuestions(path.join(__dirname, '..', exam.questionsDir));
+  const history = readHistoryForExam(exam.exam_id);
   const qStats = computeQuestionStats(history);
 
   // Determine weak topics (include never-attempted so brand-new topics surface).
@@ -38,7 +40,9 @@ export async function runFocus(
   const weakTopicSet = new Set(weakest.map(g => g.key));
 
   // Pre-session summary.
+  const attemptedIds = new Set(qStats.keys());
   const neverAttempted = allQuestions.filter(q => !qStats.has(q.id)).length;
+  const pendingPriorityCount = pendingPriority(allQuestions, attemptedIds).length;
   const missedTwicePlus = [...qStats.values()].filter(s => s.times_wrong >= 2).length;
 
   console.log('');
@@ -62,6 +66,9 @@ export async function runFocus(
     }
   }
   console.log('');
+  if (pendingPriorityCount > 0) {
+    console.log(`  ${display.color('★ Priority questions still to cover:', 'yellow', 'bold')} ${display.color(String(pendingPriorityCount), 'bold', 'yellow')} (served first)`);
+  }
   console.log(`  Never-attempted questions: ${display.color(String(neverAttempted), 'bold')}`);
   console.log(`  Questions missed 2+ times:  ${display.color(String(missedTwicePlus), 'bold', missedTwicePlus > 0 ? 'red' : 'green')}`);
   console.log('');
@@ -73,13 +80,13 @@ export async function runFocus(
   const candidates = buildCandidates(allQuestions, qStats, weakTopicSet);
   let selected = sampleFocus(candidates, count);
 
-  // If seeded with exam misses, hoist those to the front (deduped, capped).
-  if (seedWrongIds.length > 0) {
-    const seedSet = new Set(seedWrongIds);
-    const seedQs = allQuestions.filter(q => seedSet.has(q.id));
-    const rest = selected.filter(q => !seedSet.has(q.id));
-    selected = [...seedQs, ...rest].slice(0, count);
-  }
+  // Order: unattempted priority questions, then exam misses, then the adaptive sample.
+  const seedSet   = new Set(seedWrongIds);
+  const priorityQs = pendingPriority(shuffle(allQuestions.slice()), attemptedIds);
+  const priorityIds = new Set(priorityQs.map(q => q.id));
+  const seedQs    = allQuestions.filter(q => seedSet.has(q.id) && !priorityIds.has(q.id));
+  const taken     = new Set([...priorityIds, ...seedQs.map(q => q.id)]);
+  selected = [...priorityQs, ...seedQs, ...selected.filter(q => !taken.has(q.id))].slice(0, count);
 
   if (selected.length === 0) {
     console.log(display.color('\n  No questions available.\n', 'red'));
@@ -95,7 +102,7 @@ export async function runFocus(
     const q = selected[i];
     display.clearScreen();
     display.printHeader('Focus Mode · Adaptive Review');
-    display.printQuestion(q, i + 1, selected.length);
+    display.printQuestion(q, i + 1, selected.length, true, exam.domains);
 
     const answer = await ask(rl, '  Your answer: ');
     const parsed = parseAnswer(answer);
@@ -106,6 +113,7 @@ export async function runFocus(
       answered++;
       const isCorrect = answersCorrect(parsed, q.correct_answers);
       attempts.push({
+        exam_id:     exam.exam_id,
         question_id: q.id,
         timestamp:   new Date().toISOString(),
         was_correct: isCorrect,

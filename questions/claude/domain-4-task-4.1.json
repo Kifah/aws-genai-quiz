@@ -1,0 +1,531 @@
+[
+  {
+    "id": "c4-q0001",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Defining evaluation metrics: accuracy, safety, cost",
+    "difficulty": "medium",
+    "question_text": "A team deploying a Claude-based medical information assistant wants to define evaluation metrics. Which set of metrics is most complete for this use case?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Tokens per second and API error rate only."
+      },
+      {
+        "key": "B",
+        "text": "Factual accuracy against medical references, safety (refusal of harmful requests, appropriate escalation), latency, cost per query, and user satisfaction scores."
+      },
+      {
+        "key": "C",
+        "text": "User engagement time and session length only."
+      },
+      {
+        "key": "D",
+        "text": "Model parameter count and training data size."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A medical information assistant requires a multi-dimensional evaluation framework: factual accuracy (medical correctness), safety (harmful content refusal and escalation), latency (user experience), cost (operational sustainability), and satisfaction (adoption). Focusing only on technical metrics (A, D) misses quality and safety. Engagement time (C) is a proxy metric that does not directly measure correctness or safety."
+  },
+  {
+    "id": "c4-q0002",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Designing evaluation datasets",
+    "difficulty": "medium",
+    "question_text": "A team is building an evaluation dataset for a code generation assistant. Which two types of test cases are most essential for comprehensive evaluation?",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Standard, well-formed requests representing typical usage — to establish a baseline performance benchmark."
+      },
+      {
+        "key": "B",
+        "text": "Only the 10 easiest test cases to report the highest pass rate to stakeholders."
+      },
+      {
+        "key": "C",
+        "text": "Adversarial cases: requests for insecure code, prompt injection attempts, and requests to generate malware — to measure safety."
+      },
+      {
+        "key": "D",
+        "text": "Test cases copied from unrelated image-classification benchmarks."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "C"
+    ],
+    "explanation": "Comprehensive evaluation requires representative standard cases (A) to measure baseline performance and adversarial safety cases (C) to verify the system refuses harmful requests. Cherry-picking easy tests (B) produces misleading metrics that inflate reported quality. Unrelated benchmarks (D) do not assess code generation capability or safety."
+  },
+  {
+    "id": "c4-q0003",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Designing evaluation datasets with mixed methodologies",
+    "difficulty": "hard",
+    "question_text": "A team evaluates a summarization assistant. They want to measure both factual correctness and readability. What evaluation methodology mix is most appropriate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Automated metric only: ROUGE score for all aspects of quality."
+      },
+      {
+        "key": "B",
+        "text": "Automated factual verification (compare extracted claims against source documents) combined with human or LLM-as-judge evaluation for readability and coherence."
+      },
+      {
+        "key": "C",
+        "text": "Human evaluation only for all aspects, regardless of scale."
+      },
+      {
+        "key": "D",
+        "text": "Deploy to production immediately and use user complaints as the evaluation signal."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A mixed methodology is appropriate because different quality dimensions are best measured by different methods. Automated fact verification can systematically check claim accuracy against source material at scale. Readability and coherence are subjective qualities better measured by human evaluators or LLM-as-judge scoring. ROUGE alone (A) measures lexical overlap, not factual accuracy or readability. Human-only evaluation (C) is expensive and slow at scale. Production complaints (D) are too late and miss many silent failures."
+  },
+  {
+    "id": "c4-q0004",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "A/B testing for iterative improvement",
+    "difficulty": "medium",
+    "question_text": "A team wants to determine whether a new system prompt improves customer satisfaction compared to the current prompt. What is the correct A/B testing design?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy the new prompt to all users for one week, then compare metrics to the previous week's metrics."
+      },
+      {
+        "key": "B",
+        "text": "Randomly split incoming requests between the current prompt (control) and the new prompt (treatment) simultaneously, then compare satisfaction metrics between groups."
+      },
+      {
+        "key": "C",
+        "text": "Ask 10 users which prompt they prefer based on a description."
+      },
+      {
+        "key": "D",
+        "text": "Use the new prompt only on weekdays and the old prompt on weekends."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A valid A/B test requires simultaneous random assignment to control and treatment groups to eliminate time-based confounds. Option B correctly implements this. Option A (sequential before/after) conflates prompt changes with other factors that changed over the week (day of week patterns, news events, etc.). Option C asks about descriptions, not actual experience. Option D (time-split) introduces day-of-week confounds."
+  },
+  {
+    "id": "c4-q0005",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "LLM-as-judge evaluation",
+    "difficulty": "hard",
+    "question_text": "A team uses Claude to evaluate the outputs of another Claude instance (LLM-as-judge). What is a key risk of this approach and how should it be mitigated?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Risk: LLM judges are too strict. Mitigation: lower the evaluation threshold."
+      },
+      {
+        "key": "B",
+        "text": "Risk: the judge model may share the same biases or blind spots as the evaluated model, inflating quality scores. Mitigation: calibrate the judge against human-labeled ground truth and periodically re-validate judge accuracy."
+      },
+      {
+        "key": "C",
+        "text": "Risk: LLM judges are always more accurate than humans. Mitigation: remove human evaluation entirely."
+      },
+      {
+        "key": "D",
+        "text": "Risk: using a Claude judge makes the system more expensive but otherwise identical to human eval. No mitigation needed."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "LLM-as-judge approaches risk systematic bias — if the judge and the evaluated model share training characteristics or blind spots, the judge may consistently rate poor outputs highly. Calibration against human-labeled samples measures the judge's accuracy and reveals systematic biases. Regular re-validation ensures the judge remains aligned as prompts and models evolve. Judges are not always more accurate than humans on subtle quality dimensions."
+  },
+  {
+    "id": "c4-q0006",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Diagnosing hallucinations and prompt failures",
+    "difficulty": "medium",
+    "question_text": "Users report that a Claude-based research assistant frequently states incorrect facts with high confidence. What is the most systematic approach to diagnose and address this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the temperature to reduce repetition."
+      },
+      {
+        "key": "B",
+        "text": "Identify a sample of hallucinated outputs, trace whether the facts were absent from retrieved context or present but ignored, and then fix the root cause: improve retrieval, add grounding instructions, or add fact-checking steps."
+      },
+      {
+        "key": "C",
+        "text": "Switch to a smaller model to reduce overconfidence."
+      },
+      {
+        "key": "D",
+        "text": "Add a disclaimer to all outputs without investigating the cause."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Systematic diagnosis of hallucinations requires distinguishing between two failure modes: (1) retrieval failure — the correct information was not in the context; (2) grounding failure — the information was present but ignored. Each requires a different fix: better retrieval for (1), stronger grounding instructions or citations for (2). Temperature (A) affects variability, not factual accuracy. Smaller models (C) are generally less accurate. Disclaimers (D) are a band-aid that does not address the underlying failure."
+  },
+  {
+    "id": "c4-q0007",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Token optimization and cost-performance trade-offs",
+    "difficulty": "medium",
+    "question_text": "A production system spends 60% of its token budget on the system prompt and retrieved context, while the actual user question is typically only 30 tokens. Which optimization approach is most impactful?",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable prompt caching for the static system prompt to avoid reprocessing it on every request."
+      },
+      {
+        "key": "B",
+        "text": "Improve retrieval precision to return fewer, more relevant chunks, reducing context padding."
+      },
+      {
+        "key": "C",
+        "text": "Increase the number of retrieved chunks to give Claude more context."
+      },
+      {
+        "key": "D",
+        "text": "Switch to streaming output to reduce perceived latency without changing token usage."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "When the system prompt and context dominate the token budget, two optimizations directly address the cost: (A) prompt caching amortizes the cost of the static system prompt across requests; (B) improving retrieval precision reduces the number of chunks needed, cutting context tokens. Increasing chunk count (C) increases the problem. Streaming (D) changes perceived latency but not actual token consumption or cost."
+  },
+  {
+    "id": "c4-q0008",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Diagnosing model mismatch issues",
+    "difficulty": "hard",
+    "question_text": "A team uses a lightweight model for a complex legal contract analysis task. Users report frequent misinterpretations and missed nuances. What diagnosis is most likely and what is the fix?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "The prompt is too short. Fix: add more words to the prompt."
+      },
+      {
+        "key": "B",
+        "text": "Model mismatch — the task requires complex multi-step reasoning and legal domain knowledge that exceeds the lightweight model's capability. Fix: upgrade to a higher-capability model appropriate for complex reasoning tasks."
+      },
+      {
+        "key": "C",
+        "text": "The temperature is too high. Fix: set temperature to 0."
+      },
+      {
+        "key": "D",
+        "text": "The context window is too small. Fix: truncate the contract to fit."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Model mismatch occurs when a task's required reasoning complexity exceeds the chosen model's capability. Legal contract analysis involves multi-step legal reasoning, interpreting ambiguous language, and applying domain-specific knowledge — characteristics of a high-complexity task. The diagnostic signal (frequent misinterpretation, missed nuance) points to capability limits, not prompt length or temperature. The fix is to use a higher-capability model. Truncating the contract (D) would further reduce accuracy."
+  },
+  {
+    "id": "c4-q0027",
+    "domain": 4,
+    "task_statement": "4C1 Optimize token usage, latency, and cost-performance trade-offs",
+    "topic": "skip RAG below ~200k tokens",
+    "difficulty": "hard",
+    "question_text": "A team is about to build a full retrieval pipeline for a 120-page internal handbook that rarely changes. Queries need the whole handbook's context. Given the size, which approach is simpler and avoids retrieval failure modes?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Build the RAG pipeline anyway, assuming retrieval always scales better than in-context loading"
+      },
+      {
+        "key": "b",
+        "text": "Load the whole handbook into the prompt with caching, skipping retrieval"
+      },
+      {
+        "key": "c",
+        "text": "Fine-tune a model on the handbook so its content lives in weights"
+      },
+      {
+        "key": "d",
+        "text": "Chunk and embed the handbook using semantic chunking for accuracy"
+      }
+    ],
+    "correct_answers": [
+      "b"
+    ],
+    "explanation": "Domain: Evaluation, Testing & Optimization | Subdomain: 4C1 Optimize token usage, latency, and cost-performance trade-offs | Key Concept: skip RAG below ~200k tokens. When a knowledge base fits within roughly 200k tokens, loading it whole into the prompt with caching is simpler than a retrieval pipeline and sidesteps retrieval failure modes. Building RAG or fine-tuning for a small, static handbook adds machinery without payoff."
+  },
+  {
+    "id": "c4-q0028",
+    "domain": 4,
+    "task_statement": "4B2 Diagnose System Issues",
+    "topic": "silent failures evade error codes",
+    "difficulty": "medium",
+    "question_text": "A pipeline emits plausible but incorrect outputs with no error code, so retry logic never fires. Which control catches this?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Semantic output validation gates that check correctness beyond error codes"
+      },
+      {
+        "key": "b",
+        "text": "More aggressive retry-on-error logic with exponential backoff between attempts"
+      },
+      {
+        "key": "c",
+        "text": "A larger context window so the model retains more supporting detail"
+      },
+      {
+        "key": "d",
+        "text": "Higher reasoning effort applied uniformly to every request in the pipeline"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Evaluation | Subdomain: 4B2 Diagnose System Issues | Key Concept: silent failures evade error codes. Plausible-but-wrong output emits no error, so retry and error-code handling never fire. Only semantic validation of the output content catches this failure class."
+  },
+  {
+    "id": "c4-q0029",
+    "domain": 4,
+    "task_statement": "4B1 A/B testing and iterative improvements",
+    "topic": "cost-performance trade-off",
+    "difficulty": "hard",
+    "question_text": "A classification task already meets its SMART accuracy threshold on the largest Claude model, but cost and latency are over budget. During iteration, the move that BEST reduces spend while preserving the met criteria is:",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Try the smallest model that clears the held-out accuracy threshold"
+      },
+      {
+        "key": "b",
+        "text": "Keep the largest model to be safe and simply accept the budget overrun"
+      },
+      {
+        "key": "c",
+        "text": "Raise the accuracy threshold so the large model looks better justified"
+      },
+      {
+        "key": "d",
+        "text": "Add a reranking step to squeeze out even more accuracy headroom"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Evaluation, Testing & Optimization | Subdomain: 4B1 A/B testing and iterative improvements | Key Concept: cost-performance trade-off. When SMART accuracy criteria are already met, the cheapest configuration that still clears them wins. Selecting the smallest sufficient model, confirmed on a held-out set, cuts cost and latency without sacrificing the target, whereas defaulting to the largest model is over-provisioning."
+  },
+  {
+    "id": "c4-q0030",
+    "domain": 4,
+    "task_statement": "4A1 Define evaluation metrics (accuracy, latency, cost, safety, security)",
+    "topic": "caching cost model",
+    "difficulty": "medium",
+    "question_text": "A team wants a defensible cost metric for a workload that reuses a large, stable document prefix across many calls. Someone claims cache writes are cheaper than cache reads. Which statement about the caching cost model is accurate?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Cache reads bill near 0.1x base input; writes cost more than reads"
+      },
+      {
+        "key": "b",
+        "text": "Reads and writes bill identically, so ordering the prefix does not matter"
+      },
+      {
+        "key": "c",
+        "text": "Cache writes bill at 0.1x base input while reads bill at full price"
+      },
+      {
+        "key": "d",
+        "text": "Caching lowers cost only when the variable content precedes the prefix"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Evaluation, Testing & Optimization | Subdomain: 4A1 Define evaluation metrics (accuracy, latency, cost, safety, security) | Key Concept: caching cost model. A cache read bills at roughly 0.1x base input while a write costs more than base input, so reuse pays off through cheap reads on a stable prefix ordered first. Claiming writes are cheaper than reads reverses the pricing."
+  },
+  {
+    "id": "c4-q0031",
+    "domain": 4,
+    "task_statement": "4A2 Design evaluation datasets and test frameworks using mixed methodologies",
+    "topic": "measure numeric criteria on data untouched by tuning",
+    "difficulty": "hard",
+    "question_text": "SMART numeric thresholds must be measured on a dataset that reflects true generalization. Which dataset qualifies?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "The same labeled examples the prompts were iteratively tuned and optimized against"
+      },
+      {
+        "key": "b",
+        "text": "The full production log, including cases previously optimized during tuning"
+      },
+      {
+        "key": "c",
+        "text": "A held-out set reserved entirely from all prompt and system tuning"
+      },
+      {
+        "key": "d",
+        "text": "A fresh random sample redrawn anew on each separate evaluation run"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Evaluation, Testing & Optimization | Subdomain: 4A2 Design evaluation datasets and test frameworks using mixed methodologies | Key Concept: measure numeric criteria on data untouched by tuning. A held-out set is reserved from all prompt and system tuning, so scores are not inflated by having been optimized against, which is precisely what proves the system generalizes rather than memorizes."
+  },
+  {
+    "id": "c4-q0032",
+    "domain": 4,
+    "task_statement": "4B2 Diagnose System Issues",
+    "topic": "no single toggle removes hallucination",
+    "difficulty": "medium",
+    "question_text": "An architect must reduce fabrication in a customer-facing assistant that answers from a large knowledge base. Fabrication appears in three situations: when retrieval misses the relevant chunk, when the chunk is present but the model over-elaborates, and when the question is genuinely out of scope. A stakeholder asks for the one setting that eliminates hallucination. How should the architect respond?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Set temperature to zero; deterministic decoding removes fabrication across all three situations at once"
+      },
+      {
+        "key": "b",
+        "text": "Adopt the largest model; greater capability eliminates hallucination regardless of retrieval or scope"
+      },
+      {
+        "key": "c",
+        "text": "No single toggle works; pair better retrieval, grounded generation, and an out-of-scope refusal path"
+      },
+      {
+        "key": "d",
+        "text": "Add unlimited retries; regenerating until answers agree converges on the non-fabricated response"
+      }
+    ],
+    "correct_answers": [
+      "c"
+    ],
+    "explanation": "Domain: Evaluation | Subdomain: 4B2 Diagnose System Issues | Key Concept: no single toggle removes hallucination. Missed retrieval, over-elaboration on present context, and out-of-scope questions are distinct origins that require better retrieval, citation-grounded generation, and a refusal path respectively, not one temperature, model, or retry setting."
+  },
+  {
+    "id": "c4-q0033",
+    "domain": 4,
+    "task_statement": "4C1 Optimize token usage, latency, and cost-performance trade-offs",
+    "topic": "latency optimization",
+    "difficulty": "hard",
+    "question_text": "A multi-step assistant runs three independent enrichment calls sequentially, then composes a final answer, missing its latency SLA. Accuracy is fine. The steps do not depend on each other's output, and cost headroom exists. As architect, which changes most reduce latency without hurting the accuracy bar?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Chain the calls more tightly so each one reuses the previous call's result"
+      },
+      {
+        "key": "b",
+        "text": "Switch to a single larger model, hoping it finishes the sequential steps sooner"
+      },
+      {
+        "key": "c",
+        "text": "Add extended thinking so the model can plan the enrichment call ordering itself first"
+      },
+      {
+        "key": "d",
+        "text": "Run the three independent enrichment calls in parallel, then stream the final answer"
+      }
+    ],
+    "correct_answers": [
+      "d"
+    ],
+    "explanation": "Domain: Evaluation, Testing & Optimization | Subdomain: 4C1 Optimize token usage, latency, and cost-performance trade-offs | Key Concept: latency optimization. Independent steps run sequentially are the classic latency waste; parallelizing them and streaming the result reduces end-to-end and perceived latency without changing accuracy. Tighter chaining, a larger model, or extra thinking all add time instead of removing it."
+  },
+  {
+    "id": "c4-q0034",
+    "domain": 4,
+    "task_statement": "4C2 Monitor system performance using logging and observability tools",
+    "topic": "a feedback loop closes the path from outcomes to changes",
+    "difficulty": "medium",
+    "question_text": "A system logs every request and response to durable storage and calls this its feedback loop. Over a year the logs grow, but the system never improves. An architect is asked why comprehensive logging alone failed to make the system any better. What is the accurate diagnosis?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Logging records events; a feedback loop must route outcomes back into system changes"
+      },
+      {
+        "key": "b",
+        "text": "The logs were simply not retained nearly long enough to drive real improvement"
+      },
+      {
+        "key": "c",
+        "text": "Log volume stayed far too low to reveal any actionable improvement patterns yet"
+      },
+      {
+        "key": "d",
+        "text": "Logging improves a system automatically once a large enough request history slowly accumulates over time"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Evaluation, Testing & Optimization | Subdomain: 4C2 Monitor system performance using logging and observability tools | Key Concept: a feedback loop closes the path from outcomes to changes. Logging only records events; what makes a system improvable is routing observed outcomes and corrections back into prompt, retrieval, or model changes, which mere storage never does."
+  },
+  {
+    "id": "c4-q0035",
+    "domain": 4,
+    "task_statement": "4C2 Monitor system performance using logging and observability tools",
+    "topic": "production monitoring is distinct from pre-deploy evaluation",
+    "difficulty": "hard",
+    "question_text": "A team passed a rigorous held-out evaluation before launch and considers monitoring optional. Two months in, accuracy has quietly degraded as user phrasing shifted. What principle did they overlook?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "a",
+        "text": "Offline evaluation misses live traffic drift; ongoing monitoring is required"
+      },
+      {
+        "key": "b",
+        "text": "Held-out test sets should simply be redrawn each week to keep pace with the traffic"
+      },
+      {
+        "key": "c",
+        "text": "The pre-launch evaluation was simply too small and needed many more graded questions"
+      },
+      {
+        "key": "d",
+        "text": "A larger, more capable model would have absorbed the phrasing shift automatically"
+      }
+    ],
+    "correct_answers": [
+      "a"
+    ],
+    "explanation": "Domain: Evaluation, Testing & Optimization | Subdomain: 4C2 Monitor system performance using logging and observability tools | Key Concept: production monitoring is distinct from pre-deploy evaluation. Offline evals validate a snapshot and cannot detect traffic drift or live regressions; continuously measuring accuracy, latency, cost, and safety against SLOs is a separate, ongoing obligation, not an optional add-on."
+  }
+]

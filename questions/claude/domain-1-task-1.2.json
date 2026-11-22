@@ -1,0 +1,138 @@
+[
+  {
+    "id": "c1-q0007",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Selecting architectural patterns: workflow vs. agentic vs. augmented LLM",
+    "difficulty": "medium",
+    "question_text": "A company needs to build a system that answers employee HR questions by looking up policy documents. The queries are independent and there is no need for multi-step reasoning or tool use. Which architectural pattern is most appropriate?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Full agentic system with autonomous tool use and planning." },
+      { "key": "B", "text": "Augmented LLM: Claude with RAG retrieval from a policy document store." },
+      { "key": "C", "text": "Multi-agent orchestration with specialized sub-agents per HR topic." },
+      { "key": "D", "text": "A directed acyclic workflow with five sequential processing steps." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "When queries are independent and only require retrieving relevant context before answering, an augmented LLM (RAG) pattern is the correct choice — it adds knowledge without the complexity of agents or orchestration. Agentic patterns (A, C) are for tasks requiring tool use, planning, or delegation. A rigid DAG workflow (D) is unnecessary overhead for simple Q&A."
+  },
+  {
+    "id": "c1-q0008",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Multi-agent design and orchestration strategies",
+    "difficulty": "hard",
+    "question_text": "A research platform needs to process user queries that require: (1) searching academic databases, (2) synthesizing findings across multiple papers, and (3) fact-checking claims against trusted sources. Which orchestration strategy best fits this scenario?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "A single Claude instance with all tools available, processing steps sequentially in one call." },
+      { "key": "B", "text": "An orchestrator Claude that decomposes the query and delegates to specialized sub-agents (search, synthesis, fact-check), then integrates their outputs." },
+      { "key": "C", "text": "Three independent Claude instances running in parallel with no coordination, outputs merged by the client." },
+      { "key": "D", "text": "A single RAG pipeline that retrieves papers and answers in one pass." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "This scenario involves distinct, specialized tasks (search, synthesis, fact-check) that benefit from dedicated sub-agents with appropriate tools and prompts. An orchestrator agent decomposes the problem and integrates results, which is a hallmark of multi-agent orchestration. Option A works but loses the specialization benefits. Option C lacks coordination to handle dependencies between steps. Option D cannot handle the multi-step synthesis and verification requirements."
+  },
+  {
+    "id": "c1-q0009",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Decomposition techniques for complex problem solving",
+    "difficulty": "medium",
+    "question_text": "A software team wants Claude to autonomously implement a new feature: reading requirements, writing code, running tests, and fixing failures. Which decomposition technique is most appropriate?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Single prompt decomposition: provide all requirements and ask Claude to output the final code directly." },
+      { "key": "B", "text": "Sequential task decomposition: requirements analysis → plan generation → code writing → test execution → error analysis → fix cycle." },
+      { "key": "C", "text": "Parallel decomposition: run all tasks simultaneously and merge outputs." },
+      { "key": "D", "text": "Random sampling: try multiple prompts and select the best output." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Software development has inherent sequential dependencies — you cannot test code that hasn't been written, and you cannot fix errors that haven't been observed. Sequential task decomposition respects these dependencies, allows for intermediate verification, and enables iterative correction loops. Single-prompt decomposition (A) lacks the error-correction cycle. Parallel decomposition (C) breaks on dependencies. Random sampling (D) is wasteful and non-deterministic."
+  },
+  {
+    "id": "c1-q0010",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Agentic architectural patterns",
+    "difficulty": "medium",
+    "question_text": "When should you prefer a workflow pattern over a fully agentic pattern?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "When the task requires dynamic decision-making and the sequence of steps cannot be predetermined." },
+      { "key": "B", "text": "When the task steps are well-defined, predictable, and the sequence is fixed, making deterministic execution preferable." },
+      { "key": "C", "text": "When the system needs to use external tools autonomously." },
+      { "key": "D", "text": "When the system must handle open-ended user conversations." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Workflow patterns are appropriate when steps are known in advance and the execution path is predictable — they provide determinism, auditability, and lower latency. Agentic patterns are warranted when the problem requires dynamic planning, branching, or tool selection that cannot be predetermined. Options A, C, and D all describe characteristics that justify agentic, not workflow, patterns."
+  },
+  {
+    "id": "c1-q0011",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Multi-agent design",
+    "difficulty": "hard",
+    "question_text": "In a multi-agent system, the orchestrator agent sends a sub-agent a task with broad permissions including write access to production databases. The sub-agent only needs read access for this task. What risk does this create and what is the correct mitigation?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Performance risk — broad permissions increase latency. Mitigate by caching permission checks." },
+      { "key": "B", "text": "Security risk — over-provisioned permissions expand the blast radius of a prompt injection or logic error. Mitigate by granting each sub-agent only the permissions its specific task requires." },
+      { "key": "C", "text": "Cost risk — more permissions mean more API calls. Mitigate by consolidating permissions into a single admin agent." },
+      { "key": "D", "text": "Reliability risk — unused permissions cause timeout errors. Mitigate by removing all permissions and using human approval for each step." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Over-provisioned permissions in agentic systems violate least-privilege principles and expand the blast radius if the agent makes an error or is manipulated via prompt injection. The correct mitigation is granting each sub-agent only the minimum permissions needed for its specific task. Consolidating into an admin agent (C) worsens the problem, and requiring human approval for each step (D) eliminates the benefit of automation."
+  },
+  {
+    "id": "c1-q0012",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Architectural pattern selection",
+    "difficulty": "easy",
+    "question_text": "A document-processing pipeline must extract data from invoices, validate it against business rules, and write approved records to a database. The steps are always the same and never vary. Which pattern is most appropriate?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Fully autonomous agentic system with dynamic tool selection." },
+      { "key": "B", "text": "Deterministic workflow: extraction step → validation step → write step, executed in sequence." },
+      { "key": "C", "text": "Multi-agent orchestration with specialized agents for each business rule." },
+      { "key": "D", "text": "RAG-augmented LLM that retrieves similar past invoices for context." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "A fixed, predictable three-step process maps directly to a workflow pattern. Workflows provide determinism, auditability, and efficiency when steps do not vary. The agentic and multi-agent patterns (A, C) add unnecessary complexity for a fixed pipeline. RAG (D) is irrelevant when the task is data extraction and validation, not knowledge retrieval."
+  },
+  {
+    "id": "c1-q0018",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Multi-agent trust and permission boundaries",
+    "difficulty": "hard",
+    "question_text": "In a multi-agent system, an orchestrator passes instructions to sub-agents. A sub-agent receives an instruction that would grant it elevated permissions beyond what the orchestrator is authorized to grant. What should the sub-agent do?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Execute the instruction because it came from the orchestrator, which is trusted." },
+      { "key": "B", "text": "Refuse the instruction and escalate to a human operator, because a legitimate orchestrator should never need to override established permission boundaries." },
+      { "key": "C", "text": "Execute the instruction once but log a warning." },
+      { "key": "D", "text": "Ask the user in the conversation whether to proceed." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "Sub-agents should be skeptical of claimed permissions that exceed what was established at system configuration time. A legitimate orchestrator operating within its design should never need to grant itself or sub-agents permissions that exceed the pre-configured boundaries. Requests to override permission structures are a hallmark of prompt injection attacks or orchestrator compromise. Escalation to a human operator is the correct response when trust boundaries are challenged."
+  },
+  {
+    "id": "c1-q0019",
+    "domain": 1,
+    "task_statement": "1.2",
+    "topic": "Choosing between parallel and sequential decomposition",
+    "difficulty": "medium",
+    "question_text": "A pipeline needs to: (1) translate a document into French, Spanish, and German; and (2) produce a summary of the original document. Steps 1 and 2 are independent. Which decomposition approach reduces total wall-clock time?",
+    "question_type": "single",
+    "options": [
+      { "key": "A", "text": "Sequential: translate to French, then Spanish, then German, then summarize." },
+      { "key": "B", "text": "Parallel: run all four tasks (three translations and the summary) concurrently, then collect results." },
+      { "key": "C", "text": "Always sequential — parallel execution is not supported in agentic systems." },
+      { "key": "D", "text": "Do the summary first, then use it as input for all three translations." }
+    ],
+    "correct_answers": ["B"],
+    "explanation": "When subtasks are independent (no output from one is needed as input to another), parallel execution reduces total wall-clock time from the sum of all task durations to approximately the duration of the longest individual task. All four tasks here are independent — parallel decomposition is the optimal approach. Sequential execution (A) is correct when tasks have dependencies. Using the summary as input for translations (D) introduces an unnecessary dependency that forces sequential execution."
+  }
+]
