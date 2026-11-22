@@ -1,0 +1,167 @@
+[
+  {
+    "id": "d2-q1034",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "BDA project with selective standard output",
+    "difficulty": "medium",
+    "question_text": "A media company uses Amazon Bedrock Data Automation (BDA) to process a large archive of audio and video recordings. Analysts need only a full-video summary for video files and a full-audio summary for audio files. They do not need full transcripts, scene-level summaries, or content-moderation results, and the company wants to minimize processing time and cost. No custom fields have to be extracted. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create blueprints for the audio and video files that define a summary field, and attach them to a BDA project"
+      },
+      {
+        "key": "B",
+        "text": "Invoke BDA without a project so the default standard output is returned, and discard unneeded fields in an AWS Lambda function"
+      },
+      {
+        "key": "C",
+        "text": "Create a BDA project that enables only the video summary and audio summary in its standard output configuration, and pass the project ARN when invoking BDA"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Transcribe to produce full transcripts and then call Amazon Bedrock to summarize each transcript"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "A BDA project stores standard-output configuration per data type, so enabling only the full video and audio summaries (and disabling transcripts, scene summaries, and moderation) limits what is generated, which reduces time and cost; the project ARN is passed on the invoke call. Custom output with blueprints is available only for documents, audio, and images (not video) and is meant for custom field extraction. Invoking without a project returns the default outputs, so you still pay to generate everything you discard. Transcribe plus a model call rebuilds a pipeline BDA already provides.",
+    "source_topic": "AWS Skill Builder tutorial 6: Application Integration Patterns and AI-Assisted Development Tools"
+  },
+  {
+    "id": "d2-q1035",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "BDA multiple blueprints and document splitting",
+    "difficulty": "hard",
+    "question_text": "A lender receives loan application packets as single PDFs. Each PDF is a bundle of different documents in no fixed order, such as pay stubs, bank statements, and identity documents. Each document type needs its own set of extracted fields, and the lender wants each document in the bundle to be identified and routed to the correct extraction automatically, with the least custom code. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a BDA project, attach a blueprint for each expected document type, and enable document splitting so BDA matches each document in the bundle to the appropriate blueprint"
+      },
+      {
+        "key": "B",
+        "text": "Create one BDA blueprint that contains every field for every document type and invoke BDA on the whole PDF"
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Textract AnalyzeDocument with FORMS and TABLES, then write a Lambda function that classifies each page and maps the fields"
+      },
+      {
+        "key": "D",
+        "text": "Use an AWS Step Functions Map state to send each page to Amazon Comprehend custom classification and then to a separate Amazon Bedrock prompt per document type"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "A BDA project can hold multiple document blueprints (up to 40), automatically matches each document to the appropriate blueprint, and with document splitting enabled handles files that contain several documents with automatic classification and routing. A single giant blueprint cannot tell document types apart, so unrelated fields would be returned or left empty. The Textract-plus-Lambda and Comprehend-plus-Step Functions options both require building and maintaining classification and per-type extraction logic, which violates the least-custom-code requirement.",
+    "source_topic": "AWS Skill Builder tutorial 6: Application Integration Patterns and AI-Assisted Development Tools"
+  },
+  {
+    "id": "d2-q1036",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "BDA synchronous vs asynchronous invocation",
+    "difficulty": "hard",
+    "question_text": "A retail company is building two features with Amazon Bedrock Data Automation. Feature 1 processes a nightly batch of thousands of PDFs and product videos stored in Amazon S3 and writes the results to an output S3 location. Feature 2 lets a shopper upload a single product photo in a mobile app and requires the extracted insights in the same API response, without polling. Which TWO approaches should the company use? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Call InvokeDataAutomationAsync for the S3 batch, then use the returned job ID to check status and retrieve results from the output S3 location"
+      },
+      {
+        "key": "B",
+        "text": "Call the synchronous InvokeDataAutomation operation for the uploaded image so the structured insights are returned directly in the response"
+      },
+      {
+        "key": "C",
+        "text": "Call the synchronous InvokeDataAutomation operation for the nightly batch, because it supports every content type including video"
+      },
+      {
+        "key": "D",
+        "text": "Call InvokeDataAutomationAsync for the uploaded image and keep the mobile connection open until the output file appears in Amazon S3"
+      },
+      {
+        "key": "E",
+        "text": "Wrap InvokeDataAutomationAsync for the shopper's photo in an AWS Step Functions workflow with a Wait state and return the result by email"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "InvokeDataAutomationAsync works for all content types, reads input from S3, writes output to S3, and returns a job ID that you use to track status, which suits large batches of documents and videos. The synchronous InvokeDataAutomation operation was designed for low-latency image processing and returns structured insights directly in the response, which fits the shopper-photo feature. The synchronous API does not support video, so it cannot handle the nightly batch. Using the asynchronous job flow for the single image (with an open connection or a Step Functions wait) brings back exactly the polling and delay that the requirement excludes.",
+    "source_topic": "AWS Skill Builder tutorial 6: Application Integration Patterns and AI-Assisted Development Tools"
+  },
+  {
+    "id": "d2-q1037",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "Kiro spec-driven development",
+    "difficulty": "medium",
+    "question_text": "A development team is building a large generative AI application. They want an agentic IDE that first turns natural-language requirements into a structured specification with design and task breakdown before generating code. The tool must also keep persistent project conventions (such as coding standards and architecture decisions) that guide every generation, and run automated actions when files are saved. The team also wants the code generation and refactoring features of Amazon Q Developer. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon CodeGuru Reviewer with custom detectors defined in the repository"
+      },
+      {
+        "key": "B",
+        "text": "AWS Cloud9 with the AWS Toolkit extension and AWS CodeCommit triggers"
+      },
+      {
+        "key": "C",
+        "text": "Amazon SageMaker Studio notebooks with a code-completion extension"
+      },
+      {
+        "key": "D",
+        "text": "Kiro, using spec-driven development, steering files, and agent hooks"
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Kiro is the evolution of Amazon Q Developer; it keeps the code generation and refactoring capabilities and adds agentic IDE features: spec-driven development (requirements to design to tasks), steering files that hold persistent project context, and agent hooks that trigger actions on events such as file saves. CodeGuru Reviewer performs static analysis and does not generate code from specs. Cloud9 with CodeCommit triggers and SageMaker Studio notebooks do not provide spec-driven agentic development, persistent steering context, or event-driven agent hooks.",
+    "source_topic": "AWS Skill Builder tutorial 6: Application Integration Patterns and AI-Assisted Development Tools"
+  },
+  {
+    "id": "d2-q1041",
+    "domain": 2,
+    "task_statement": "2.5",
+    "topic": "Amazon Quick Suite capabilities",
+    "difficulty": "medium",
+    "question_text": "A business operations team without machine learning expertise wants one generative AI-powered workspace in which analysts can build interactive dashboards on their data, ask questions of AI agents in natural language, automate recurring workflows, and run in-depth research across internal and external sources. The team also wants the AI assistance available inside browsers, Slack, and Microsoft Office applications. Which solution will meet these requirements with the LEAST development effort?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Quick Suite, which combines Quick Sight, Quick Flows, Quick Automate, Quick Index, and Quick Research"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Q Developer in the IDE, with custom dashboards built by the engineering team"
+      },
+      {
+        "key": "C",
+        "text": "Amazon SageMaker Canvas with a custom Slack integration"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Bedrock Agents with action groups backed by Lambda functions and a self-built front end"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Amazon Quick Suite is a generative AI-powered business intelligence platform with five integrated capabilities (Quick Sight for visualization, Quick Flows for workflow automation, Quick Automate for process optimization, Quick Index for data discovery, and Quick Research for comprehensive analysis) and extensions for browsers, Slack, and Microsoft Office, with no ML expertise required. Q Developer is a coding assistant, not a BI or workflow platform. SageMaker Canvas targets no-code ML model building rather than dashboards and research agents. A custom Bedrock Agents solution would require substantial development of the UI, dashboards, and integrations.",
+    "source_topic": "AWS Skill Builder tutorial 6: Application Integration Patterns and AI-Assisted Development Tools"
+  }
+]

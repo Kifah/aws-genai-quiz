@@ -1,0 +1,236 @@
+[
+  {
+    "id": "d3-q1022",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Organization trail with log file validation for GenAI audit",
+    "difficulty": "medium",
+    "question_text": "A financial services company runs generative AI workloads that use Amazon Bedrock and Amazon SageMaker AI across 40 AWS accounts in AWS Organizations and several AWS Regions. Auditors require a single, centrally managed record of who called which AI-related API and when, including activity in Regions that the teams do not normally use. The auditors must also be able to prove that delivered log files were not altered, and the logs must be stored encrypted under a retention policy. Which solution will meet these requirements with the LEAST operational effort?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a trail in each member account that logs only the Region where the workloads run. Have each team export its logs to its own S3 bucket every month."
+      },
+      {
+        "key": "B",
+        "text": "Enable Amazon CloudWatch Logs model invocation logging in each account and ask auditors to query the log groups. Set a retention period on every log group."
+      },
+      {
+        "key": "C",
+        "text": "Create an organization trail from the management account (or a delegated administrator) that logs all Regions. Enable log file integrity validation and deliver the logs to a dedicated, SSE-KMS encrypted S3 bucket in a log archive account that has a lifecycle retention policy."
+      },
+      {
+        "key": "D",
+        "text": "Enable AWS Config in every account with the Bedrock and SageMaker resource types recorded. Deliver configuration snapshots to a central S3 bucket."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "An organization trail with multi-Region logging records API activity for every member account and Region from one place, and log file integrity validation produces signed digest files that prove the logs were not modified. Storing the logs in an encrypted, lifecycle-managed bucket in a separate account satisfies the encryption and retention requirements. Per-account, single-Region trails miss other Regions and add operational work. Model invocation logs capture prompts and responses, not a who-called-which-API audit record, and cannot prove integrity. AWS Config records resource configuration state, not API callers.",
+    "source_topic": "AWS Skill Builder tutorial 9: Introduction to Compliance and Governance"
+  },
+  {
+    "id": "d3-q1023",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "CloudTrail Lake SQL queries for compliance validation",
+    "difficulty": "hard",
+    "question_text": "A healthcare company must regularly show regulators which principals changed Amazon Bedrock guardrails, model access settings, and SageMaker endpoints over the past several years. Compliance analysts know SQL but do not want to build ETL jobs, manage table partitions, or run a query engine. The solution must cover all accounts in the organization, allow the company to set the retention period of the audit data, and support saved and scheduled queries for recurring compliance reports. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deliver CloudTrail logs to Amazon S3 and have analysts query them with Amazon Athena. Create and maintain partition projection and table definitions for each account and Region."
+      },
+      {
+        "key": "B",
+        "text": "Create an AWS CloudTrail Lake event data store that collects events for the organization and has a retention period that matches the regulatory requirement. Have analysts run saved SQL queries and schedule recurring compliance queries."
+      },
+      {
+        "key": "C",
+        "text": "Send CloudTrail events to Amazon CloudWatch Logs and use CloudWatch Logs Insights. Set the log group retention to never expire."
+      },
+      {
+        "key": "D",
+        "text": "Stream CloudTrail events to Amazon OpenSearch Service with an AWS Lambda function. Build dashboards for the analysts."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "CloudTrail Lake provides a managed event data store with configurable retention, organization-level collection, and built-in SQL querying with saved queries, so no ETL, partitioning, or query engine is needed. Athena over S3 works but requires table and partition management, which the analysts want to avoid. CloudWatch Logs with indefinite retention is costly and is not a purpose-built SQL audit store. An OpenSearch pipeline requires building and operating custom ingestion and does not use SQL.",
+    "source_topic": "AWS Skill Builder tutorial 9: Introduction to Compliance and Governance"
+  },
+  {
+    "id": "d3-q1024",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "CloudTrail Insights and EventBridge for anomalous AI API activity",
+    "difficulty": "medium",
+    "question_text": "A company runs a regulated generative AI platform on Amazon Bedrock and Amazon SageMaker AI. The security team wants to be alerted when API activity on these services departs from normal patterns, such as a sudden burst of model-creation or endpoint-management calls or an unusual spike in API errors. The company also wants an automated response, such as notifying the compliance team and starting a remediation workflow, without polling logs. Which combination of steps will meet these requirements? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable CloudTrail Insights on the organization trail to detect unusual API call volume and error rates."
+      },
+      {
+        "key": "B",
+        "text": "Enable AWS Config rules on the Bedrock resource types and rely on configuration timeline views."
+      },
+      {
+        "key": "C",
+        "text": "Download the AWS Artifact SOC reports each month and compare the reported controls to the platform."
+      },
+      {
+        "key": "D",
+        "text": "Create an Amazon EventBridge rule that matches the CloudTrail Insights events and targets an Amazon SNS topic for the compliance team and an AWS Step Functions state machine for remediation."
+      },
+      {
+        "key": "E",
+        "text": "Add SageMaker Model Cards that describe the expected API usage of each model."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "D"
+    ],
+    "explanation": "CloudTrail Insights analyzes the baseline of management API call rates and error rates and emits Insights events when activity is unusual. An EventBridge rule on those events can notify the compliance team through SNS and start a remediation workflow automatically. AWS Config evaluates resource configuration, not API call patterns. AWS Artifact provides AWS's own compliance reports, which say nothing about your runtime behavior. Model Cards document models and do not monitor API activity.",
+    "source_topic": "AWS Skill Builder tutorial 9: Introduction to Compliance and Governance"
+  },
+  {
+    "id": "d3-q1025",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "AWS Security Hub for centralized AI workload security posture",
+    "difficulty": "medium",
+    "question_text": "A company operates generative AI applications in many AWS accounts. Findings about the workloads are produced separately by Amazon GuardDuty, Amazon Inspector, and Amazon Macie. The security operations team is overwhelmed by duplicate and low-priority alerts and cannot see which issues put the AI workloads at the greatest risk. The team wants one prioritized view of findings across all accounts, automated checks against compliance standards, and automated ticket creation in the company's ITSM tool. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use AWS Audit Manager to collect evidence for each service and review the evidence reports weekly."
+      },
+      {
+        "key": "B",
+        "text": "Use AWS CloudTrail Lake to query the events from each service and build a custom SQL dashboard for the findings."
+      },
+      {
+        "key": "C",
+        "text": "Use AWS Artifact to download the compliance reports of each service and distribute them to the security team."
+      },
+      {
+        "key": "D",
+        "text": "Use AWS Security Hub with a delegated administrator account to aggregate and correlate findings across accounts. Enable the compliance standards checks and use Amazon EventBridge rules to send findings to the ITSM tool."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Security Hub centralizes findings from GuardDuty, Inspector, Macie and partner tools across accounts, correlates and prioritizes them, runs automated compliance standards checks, and integrates with EventBridge so findings can drive ticketing and remediation workflows. Audit Manager collects audit evidence against frameworks but does not prioritize security findings or open tickets. CloudTrail Lake queries API events and does not aggregate or score findings. AWS Artifact provides AWS's compliance reports, not findings about your workloads.",
+    "source_topic": "AWS Skill Builder tutorial 9: Introduction to Compliance and Governance"
+  },
+  {
+    "id": "d3-q1026",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Glue crawlers and DataZone lineage for training data governance",
+    "difficulty": "hard",
+    "question_text": "A company continuously adds new data sources to the S3 data lake that feeds its foundation model customization and RAG pipelines. Data governance requires that every source is registered in a catalog with schema information as soon as it appears, that schema changes are detected automatically, and that auditors can visually trace how a source dataset was transformed and which assets were derived from it. The company wants to avoid manual registration. Which combination of steps will meet these requirements? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Maintain a spreadsheet of data sources and have data owners update it when they add a source."
+      },
+      {
+        "key": "B",
+        "text": "Run scheduled AWS Glue crawlers to discover new sources and schema changes and register them in the AWS Glue Data Catalog."
+      },
+      {
+        "key": "C",
+        "text": "Run Amazon Macie classification jobs on the buckets and use the findings as the data inventory."
+      },
+      {
+        "key": "D",
+        "text": "Enable CloudTrail data events on the S3 buckets and ask auditors to read the raw log files to reconstruct transformations."
+      },
+      {
+        "key": "E",
+        "text": "Use Amazon DataZone data lineage with the cataloged assets so auditors can view the origin of assets and the chain of transformations that produced them."
+      }
+    ],
+    "correct_answers": [
+      "B",
+      "E"
+    ],
+    "explanation": "Glue crawlers automatically discover new data sources and schema changes and keep the Glue Data Catalog current without manual registration. Amazon DataZone builds on the catalog to provide lineage visualization that shows the origin of an asset and its chain of connections for auditors. A spreadsheet is manual and drifts from reality. Macie finds sensitive data but does not catalog schemas or lineage. Raw CloudTrail S3 logs show access, not a transformation lineage, and are impractical to review.",
+    "source_topic": "AWS Skill Builder tutorial 9: Introduction to Compliance and Governance"
+  },
+  {
+    "id": "d3-q1027",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "SageMaker Projects custom templates with model cards and registry",
+    "difficulty": "hard",
+    "question_text": "A company customizes foundation models on Amazon SageMaker AI and now produces several new model variants every week. Compliance requires that every variant has a model card that records the customization technique, training dataset, and bias analysis. Each variant must also be registered with a version and require an approval before deployment, and every project must follow standard resource tagging and IAM policies. Manual documentation is falling behind. Which solution will meet these requirements with the LEAST manual effort?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Publish a custom Amazon SageMaker Projects template defined in AWS CloudFormation. The template provisions a pipeline that creates the model card, adds the SageMaker Clarify bias report, registers each variant in SageMaker Model Registry with a manual approval status, and applies the standard tags and IAM roles."
+      },
+      {
+        "key": "B",
+        "text": "Ask each data scientist to write a document in the corporate wiki after every training run and link it in the deployment ticket."
+      },
+      {
+        "key": "C",
+        "text": "Enable AWS CloudTrail on the SageMaker API and give auditors access to the logs as the documentation for each variant."
+      },
+      {
+        "key": "D",
+        "text": "Download the ISO and PCI reports from AWS Artifact and attach them to every model variant as its compliance documentation."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "A custom SageMaker Projects template lets administrators standardize MLOps: every project gets the same automated model card creation, Clarify bias reporting, Model Registry versioning with an approval gate, tagging, and IAM policies, so documentation keeps pace with rapid customization. Wiki documents are manual and inconsistent. CloudTrail logs show who called APIs but are not model documentation that records technique, data, and bias results. AWS Artifact reports describe AWS's controls, not your specific customized model.",
+    "source_topic": "AWS Skill Builder tutorial 9: Introduction to Compliance and Governance"
+  },
+  {
+    "id": "d3-q1029",
+    "domain": 3,
+    "task_statement": "3.3",
+    "topic": "Guardrail versions for controlled policy change management",
+    "difficulty": "medium",
+    "question_text": "A bank's compliance team maintains an Amazon Bedrock guardrail that production chat applications use. Recently an analyst tuned a content filter threshold in the console while testing, and the change immediately affected production behavior. The bank needs to keep testing changes without affecting production, promote approved policy changes deliberately, roll back quickly, and keep an auditable history of who changed the guardrail. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Keep the working draft of the guardrail for testing. Create a numbered guardrail version for each approved policy and have production applications reference a specific version. Promote or roll back by changing the version that the applications use, and track changes with AWS CloudTrail."
+      },
+      {
+        "key": "B",
+        "text": "Have production applications reference the guardrail working draft and ask analysts to notify the team before they edit it."
+      },
+      {
+        "key": "C",
+        "text": "Delete and re-create the guardrail with a new name for each change and update the application code each time."
+      },
+      {
+        "key": "D",
+        "text": "Move the content filter policies into the application prompt so that the policies are versioned with the application code."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Guardrails separate the editable working draft from immutable numbered versions. Production references a specific version, so testing edits to the draft cannot change production behavior, and promotion or rollback is just a version change. CloudTrail records who created or updated the guardrail. Referencing the draft leaves production exposed to every edit. Re-creating guardrails loses history and forces code changes. Moving filtering into prompts is not an enforceable control and weakens the policy.",
+    "source_topic": "AWS Skill Builder tutorial 9: Introduction to Compliance and Governance"
+  }
+]

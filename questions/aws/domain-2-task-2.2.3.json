@@ -1,0 +1,460 @@
+[
+  {
+    "id": "d2-q1001",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "ECS deployment circuit breaker for LLM containers",
+    "difficulty": "hard",
+    "question_text": "A company runs a containerized open-source LLM inference service on Amazon ECS with an Application Load Balancer. A recent deployment registered a new task definition with a larger model that exceeds the memory limit, so new tasks are repeatedly stopped during startup. ECS keeps launching replacement tasks and the rollout never completes. The operations team wants the failed deployment to be detected automatically and the service returned to the last working task definition, without writing custom code. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the ALB health check grace period so the new tasks have more time to load the model before they are checked"
+      },
+      {
+        "key": "B",
+        "text": "Build a Step Functions circuit breaker that tracks Amazon Bedrock endpoint health in Amazon DynamoDB and routes requests to a fallback model"
+      },
+      {
+        "key": "C",
+        "text": "Enable the Amazon ECS deployment circuit breaker with rollback on the service"
+      },
+      {
+        "key": "D",
+        "text": "Configure target tracking scaling on the ECS service to add tasks when average memory utilization exceeds 80 percent"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "The ECS deployment circuit breaker detects deployments whose tasks repeatedly fail to reach a steady state and, with rollback enabled, automatically returns the service to the last completed deployment with no custom code. A longer health check grace period only delays health checks and cannot fix tasks that fail at launch or roll back anything. A Step Functions and DynamoDB circuit breaker protects application calls to a model endpoint at runtime, not an ECS rollout. Target tracking scaling adds tasks of the same broken task definition and does not roll back a deployment.",
+    "source_topic": "AWS Skill Builder tutorial 3: Model deployment strategies for generative AI"
+  },
+  {
+    "id": "d2-q1002",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Circuit breaker half-open state",
+    "difficulty": "medium",
+    "question_text": "A generative AI application routes requests through an AWS Step Functions workflow that stores circuit state in Amazon DynamoDB. After repeated failures from the primary Amazon SageMaker AI endpoint, the circuit opens and requests are served by a cached-response fallback. The team must detect when the endpoint has recovered without sending full production traffic back to a component that may still be unhealthy. What should the circuit breaker do when the open-state timeout expires?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Move to the closed state automatically and send all traffic to the primary endpoint"
+      },
+      {
+        "key": "B",
+        "text": "Move to the half-open state, allow a limited number of trial requests to the primary endpoint, and close the circuit only if they succeed, otherwise reopen it"
+      },
+      {
+        "key": "C",
+        "text": "Stay open until an operator manually resets the circuit in the DynamoDB table"
+      },
+      {
+        "key": "D",
+        "text": "Stay open and add exponential backoff retries to every request that goes to the cached-response fallback"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A circuit breaker has three states. Closed passes requests normally, open blocks requests to the faulty component for a set period, and half-open lets a few trial requests through after the timeout to test recovery. Success closes the circuit and failure reopens it. Closing automatically without a probe risks flooding an unhealthy endpoint. Requiring a manual reset adds operational effort and delays recovery. Retrying the fallback with backoff does nothing to test the primary endpoint.",
+    "source_topic": "AWS Skill Builder tutorial 3: Model deployment strategies for generative AI"
+  },
+  {
+    "id": "d2-q1003",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Step Functions timeouts as stopping conditions",
+    "difficulty": "hard",
+    "question_text": "A model-chaining workflow in AWS Step Functions calls a SageMaker AI endpoint for classification, then a summarization model, and then writes results to Amazon S3. Occasionally the classification call hangs and the whole execution stays in the running state, consuming resources and cost. The company wants the hung step to fail fast and use a cheaper fallback state, and it wants a hard upper bound on the total duration of any execution. Which combination of steps will meet these requirements? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Set TimeoutSeconds on the classification Task state and add a Catch for States.Timeout that routes to a fallback state"
+      },
+      {
+        "key": "B",
+        "text": "Increase the Lambda function timeout of the downstream summarization step to 15 minutes"
+      },
+      {
+        "key": "C",
+        "text": "Create a CloudWatch alarm on the ExecutionsStarted metric and email the on-call engineer"
+      },
+      {
+        "key": "D",
+        "text": "Set TimeoutSeconds at the state machine level so executions are stopped when they exceed the maximum allowed duration"
+      },
+      {
+        "key": "E",
+        "text": "Add a Retry block with a high MaxAttempts value on the classification Task state"
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "D"
+    ],
+    "explanation": "Step Functions supports TimeoutSeconds on a Task state, which raises States.Timeout that a Catch can route to a fallback, and a top-level TimeoutSeconds that caps the whole execution. A Lambda timeout only affects that function, not a hung endpoint call in another state. An alarm and email notifies people but does not stop or reroute the execution. Raising MaxAttempts on Retry repeats the hanging call and makes the run longer and more expensive.",
+    "source_topic": "AWS Skill Builder tutorial 3: Model deployment strategies for generative AI"
+  },
+  {
+    "id": "d2-q1004",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Lambda timeout limit and graceful checkpointing",
+    "difficulty": "medium",
+    "question_text": "A Lambda function loops over a batch of several thousand records and calls Amazon Bedrock for each one. Large batches reach the Lambda timeout and fail, and all progress is lost. The team wants the function to stop safely before the timeout, keep the work already done, and have the remaining records processed without lengthening the timeout beyond what Lambda supports. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Raise the function timeout to 30 minutes and increase the memory allocation"
+      },
+      {
+        "key": "B",
+        "text": "Enable provisioned concurrency so the function has no cold start and finishes sooner"
+      },
+      {
+        "key": "C",
+        "text": "Move the loop into an Amazon API Gateway integration with a longer integration timeout"
+      },
+      {
+        "key": "D",
+        "text": "Check the remaining execution time through the Lambda context object in the loop, save results when time is nearly exhausted, and send the unprocessed records to an Amazon SQS queue for another invocation"
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Lambda timeouts can be set from 1 second to 15 minutes, so a longer timeout is impossible. Checking the context object's remaining time lets the function checkpoint its results and re-queue the remaining work in SQS, which keeps each invocation bounded and prevents lost progress. Provisioned concurrency removes cold starts but not the per-invocation time limit. An API Gateway integration timeout does not change the Lambda limit and is not an asynchronous batch design.",
+    "source_topic": "AWS Skill Builder tutorial 3: Model deployment strategies for generative AI"
+  },
+  {
+    "id": "d2-q1005",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "GPU container hosting for LLMs on ECS",
+    "difficulty": "medium",
+    "question_text": "A team packages an open-source LLM into a container image stored in Amazon ECR. The model needs GPU access for acceptable token throughput, and traffic varies during the day. The team wants to use Amazon ECS, scale the number of tasks with Application Auto Scaling, and avoid building its own orchestration layer. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run the service on an Amazon ECS cluster with the EC2 launch type using GPU-enabled instances, and attach target tracking scaling policies to the service"
+      },
+      {
+        "key": "B",
+        "text": "Run the service on AWS Fargate and request more vCPU and memory in the task definition to compensate for the missing GPU"
+      },
+      {
+        "key": "C",
+        "text": "Deploy the container image as an AWS Lambda function with 10 GB of memory and a 15-minute timeout"
+      },
+      {
+        "key": "D",
+        "text": "Run the service on AWS Fargate Spot and use step scaling to add tasks during peak hours"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "ECS with the EC2 launch type lets you place tasks on GPU instances and expose the GPU to containers, and Application Auto Scaling target tracking adjusts the number of tasks. Fargate, including Fargate Spot, does not provide GPU access, so adding vCPU and memory cannot match GPU token throughput. Lambda has no GPU support and is a poor fit for large model loading and a steady inference service.",
+    "source_topic": "AWS Skill Builder tutorial 3: Model deployment strategies for generative AI"
+  },
+  {
+    "id": "d2-q1006",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Amazon ECR lifecycle policies and image scanning",
+    "difficulty": "medium",
+    "question_text": "A company stores many large container images for its generative AI inference services in Amazon ECR. Storage costs are growing because every CI build pushes a new tagged image and untagged layers accumulate. The security team also requires that vulnerable images are identified before they are deployed to Amazon ECS. The solution must minimize operational effort. Which combination of steps will meet these requirements? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use an Amazon S3 Lifecycle rule to transition old images to S3 Glacier Deep Archive"
+      },
+      {
+        "key": "B",
+        "text": "Configure an ECR lifecycle policy that expires untagged images and keeps only the most recent tagged images"
+      },
+      {
+        "key": "C",
+        "text": "Enable image scanning on the ECR repository so images are scanned for vulnerabilities when pushed"
+      },
+      {
+        "key": "D",
+        "text": "Run a cron job on an Amazon EC2 instance that deletes images older than 30 days with the AWS CLI"
+      },
+      {
+        "key": "E",
+        "text": "Use Amazon Macie to scan the repository for software vulnerabilities in the image layers"
+      }
+    ],
+    "correct_answers": [
+      "B",
+      "C"
+    ],
+    "explanation": "ECR lifecycle policies automatically delete untagged or outdated images, which controls storage cost, and ECR image scanning reports vulnerabilities before deployment, both with no custom code. ECR images are not stored in an S3 bucket you manage, so S3 Lifecycle rules do not apply. A cron job on EC2 adds infrastructure and operational work that lifecycle policies already provide. Macie discovers sensitive data in S3, not software vulnerabilities in container images.",
+    "source_topic": "AWS Skill Builder tutorial 3: Model deployment strategies for generative AI"
+  },
+  {
+    "id": "d2-q1007",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Ensemble with weighted voting aggregation",
+    "difficulty": "hard",
+    "question_text": "A content moderation platform classifies user submissions as safe or unsafe by using a single foundation model. Accuracy varies by language and content type, and individual model biases cause inconsistent results. The team wants to improve accuracy and robustness by having several diverse models solve the same classification problem and combine their predictions, giving more influence to models with higher confidence or better historical accuracy for the task type. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Chain the models sequentially so each model refines the output of the previous one, and return the last output"
+      },
+      {
+        "key": "B",
+        "text": "Use a small model first and escalate to a larger model only when the small model's confidence is low"
+      },
+      {
+        "key": "C",
+        "text": "Invoke several diverse models in parallel from a Step Functions Parallel state and aggregate their predictions with a Lambda function that applies weighted voting"
+      },
+      {
+        "key": "D",
+        "text": "Fine-tune a single large model on the moderation dataset and remove the other models"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "A model collection (ensemble) runs multiple diverse models on the same problem and combines predictions with custom aggregation such as majority or weighted voting, which improves accuracy and reduces individual bias. A Parallel state runs the models concurrently and a Lambda function can implement the weights. Sequential chaining is for dependent sub-tasks, not independent opinions on the same input. Cascading optimizes cost by escalating only when needed and does not combine multiple predictions. A single fine-tuned model removes the diversity that reduces bias.",
+    "source_topic": "AWS Skill Builder tutorial 3: Model deployment strategies for generative AI"
+  },
+  {
+    "id": "d2-q1008",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Model selection framework with model registry",
+    "difficulty": "hard",
+    "question_text": "A company routes requests to several models, including Amazon Bedrock foundation models and a custom model hosted on a SageMaker AI endpoint. The routing decision must use each model's capabilities, current operational status, recent accuracy and cost, with custom weights for these criteria. Teams must be able to add or retire models without redeploying code, and requests must fall back to the next-best model when the selected one is unavailable. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Bedrock Intelligent Prompt Routing, because it ranks every Bedrock and SageMaker model against the company's custom criteria"
+      },
+      {
+        "key": "B",
+        "text": "Store model capabilities, metrics and status in an Amazon DynamoDB registry; use a Lambda router that classifies the task, filters and scores candidate models with weighted criteria, and falls back to the next-ranked model on failure"
+      },
+      {
+        "key": "C",
+        "text": "Hard-code if/else routing rules in the application and redeploy the application whenever a model changes"
+      },
+      {
+        "key": "D",
+        "text": "Send every request to the largest model and use Amazon CloudWatch alarms to notify the team when it is slow"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A model selection framework combines task identification, a model registry holding capability, performance and status metadata, an evaluation engine that scores candidates with weighted multi-criteria logic, a router and fallback handling. A DynamoDB registry with a Lambda router implements this and lets models be added without code changes. Intelligent Prompt Routing routes between models within a Bedrock model family and does not support custom registries, SageMaker endpoints or custom weights. Hard-coded rules require redeployment, and always using the largest model ignores cost and offers no fallback.",
+    "source_topic": "AWS Skill Builder tutorial 3: Model deployment strategies for generative AI"
+  },
+  {
+    "id": "d2-q1009",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Multi-armed bandit exploration in model selection",
+    "difficulty": "hard",
+    "question_text": "A router selects among several foundation models by using a composite score from historical accuracy and cost. The team adds new, possibly better models every month, but the router always picks the top-scoring model, so new models never receive traffic and their performance is never measured. The team wants the router to keep learning from user feedback while still sending most traffic to the best-known model. Which approach will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the weight of the cost criterion in the composite score"
+      },
+      {
+        "key": "B",
+        "text": "Split traffic evenly across all models permanently and compare results at the end of each quarter"
+      },
+      {
+        "key": "C",
+        "text": "Lower the quality threshold so that more models pass the filtering step"
+      },
+      {
+        "key": "D",
+        "text": "Add a multi-armed bandit strategy to the router that balances exploration of newer models with exploitation of the best performer, and update scores from feedback"
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Adaptive selection with multi-armed bandit strategies balances exploring less-tested models and exploiting the current best, so scores keep improving from real feedback while most traffic goes to the strongest option. Changing the cost weight only reshuffles a static ranking, and the top model still gets all the traffic. A permanent even split wastes quality and cost on weak models and learns slowly. Lowering the quality threshold widens the candidate list but the ranking still always picks one winner.",
+    "source_topic": "AWS Skill Builder tutorial 3: Model deployment strategies for generative AI"
+  },
+  {
+    "id": "d2-q1010",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "Amazon Nova Forge for frontier customization",
+    "difficulty": "hard",
+    "question_text": "A pharmaceutical company has a very large proprietary corpus and wants a model that deeply understands its domain. Fine-tuning a model only on the raw proprietary data previously made the model lose general instruction following and safety behavior (catastrophic forgetting). The company wants to start from early pre-training, mid-training or post-training checkpoints, blend its data with curated data from the model provider during training, and then serve the resulting model through Amazon Bedrock. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Nova Forge through Amazon SageMaker AI, blend proprietary data with Amazon Nova-curated data during training, and import the trained model into Amazon Bedrock"
+      },
+      {
+        "key": "B",
+        "text": "Fine-tune a Bedrock model on the raw proprietary data only and increase the number of epochs"
+      },
+      {
+        "key": "C",
+        "text": "Build a Bedrock Knowledge Base on the corpus and use retrieval at inference time instead of any training"
+      },
+      {
+        "key": "D",
+        "text": "Train a new model from scratch on Amazon EC2 and host it behind an Application Load Balancer"
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Nova Forge lets you begin from Nova checkpoints across pre-, mid- and post-training and mix proprietary data with Nova-curated data, which reduces catastrophic forgetting. Training runs on SageMaker AI, and trained models can be imported into Bedrock for serving. Training on raw data alone is what caused forgetting, and more epochs make it worse. A Knowledge Base adds retrieved context but does not embed deep domain knowledge in the model. Training from scratch on EC2 is far more costly and ignores the requirement to start from existing checkpoints.",
+    "source_topic": "AWS Skill Builder tutorial 3: Model deployment strategies for generative AI"
+  },
+  {
+    "id": "d2-q1011",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "AWS AI Factories for sovereign AI infrastructure",
+    "difficulty": "medium",
+    "question_text": "A government agency has already acquired data center space and power capacity and must keep all data within its own facility to meet strict data residency and digital sovereignty requirements. The agency wants a dedicated AI environment, isolated from other customers, that gives access to Amazon Bedrock and Amazon SageMaker AI so it can train and deploy large language models on proprietary data. The agency wants AWS to deploy and manage the infrastructure. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Bedrock in the nearest AWS Region with AWS PrivateLink and customer managed keys"
+      },
+      {
+        "key": "B",
+        "text": "Purchase Amazon EC2 GPU instances in an AWS Local Zone and install open-source model servers"
+      },
+      {
+        "key": "C",
+        "text": "Deploy AWS AI Factories in the agency's data center, using the space and power the agency provides"
+      },
+      {
+        "key": "D",
+        "text": "Run Amazon EKS Anywhere on the agency's own servers and manage the models and GPU hardware internally"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "AWS AI Factories are dedicated environments built exclusively for one customer or trusted community. The customer supplies data center space and power while AWS deploys and manages the AI infrastructure and services, which supports sovereignty and residency needs. Bedrock in a public Region with PrivateLink keeps data in AWS Regions, not in the agency's facility. A Local Zone is AWS-operated infrastructure outside the agency's data center and does not provide Bedrock. EKS Anywhere leaves infrastructure and model operations to the agency and does not provide Bedrock or SageMaker AI.",
+    "source_topic": "AWS Skill Builder tutorial 3: Model deployment strategies for generative AI"
+  },
+  {
+    "id": "d2-q1012",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "AWS Security Hub for AI workload posture",
+    "difficulty": "medium",
+    "question_text": "A company runs generative AI workloads on Amazon Bedrock and Amazon SageMaker AI across many AWS accounts. The security team needs a single place to continuously assess resources against security best practices and compliance standards such as HIPAA, and to see aggregated findings about overly permissive IAM policies, unencrypted data and missing security controls on AI services. Which AWS service should the company use?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS CloudTrail, which records API activity and assesses resource configurations against compliance standards"
+      },
+      {
+        "key": "B",
+        "text": "AWS Security Hub, which aggregates findings and checks resources against security standards across accounts"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Macie, which evaluates IAM policies and the encryption settings of all AWS AI services"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Bedrock Guardrails, which scans account resources for misconfiguration"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "AWS Security Hub provides centralized security posture management, continuously evaluating resources against best practices and standards and aggregating findings from AWS services and third-party tools across accounts. CloudTrail records API calls for auditing and investigation but does not evaluate configuration compliance. Macie discovers sensitive data in Amazon S3 and does not assess IAM policies or AI service configurations. Guardrails filter model inputs and outputs and do not scan infrastructure.",
+    "source_topic": "AWS Skill Builder tutorial 3: Model deployment strategies for generative AI"
+  },
+  {
+    "id": "d2-q1033",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "On-demand deployment of customized Nova models",
+    "difficulty": "medium",
+    "question_text": "A company fine-tuned an Amazon Nova Pro model in Amazon Bedrock in us-east-1 after July 2025. The model backs an internal tool that receives a few hundred requests per week in unpredictable bursts. The finance team wants to pay only for tokens processed, will not commit to hourly capacity, and can tolerate a few seconds of added latency on the first request after an idle period. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Purchase Provisioned Throughput for the custom model with one model unit and no commitment term"
+      },
+      {
+        "key": "B",
+        "text": "Create a custom model deployment for on-demand inference and use the deployment ARN as the modelId in InvokeModel or Converse calls"
+      },
+      {
+        "key": "C",
+        "text": "Host the customized model on an always-on SageMaker AI real-time endpoint and scale it with Application Auto Scaling"
+      },
+      {
+        "key": "D",
+        "text": "Submit the requests through Amazon Bedrock batch inference jobs and poll Amazon S3 for the results"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A custom model deployment (CreateCustomModelDeployment) lets a customized Nova model run on-demand with token-based pricing, no pre-provisioned capacity, and possible cold-start latency after idle periods. Provisioned Throughput bills hourly for dedicated capacity even when idle, which violates the no-capacity-cost requirement. A SageMaker real-time endpoint also incurs continuous instance cost, and batch inference is asynchronous so it cannot serve an interactive tool.",
+    "source_topic": "AWS Skill Builder tutorial 6: Application Integration Patterns and AI-Assisted Development Tools"
+  },
+  {
+    "id": "d2-q1038",
+    "domain": 2,
+    "task_statement": "2.2",
+    "topic": "CloudFormation StackSets for multi-account AI baselines",
+    "difficulty": "medium",
+    "question_text": "A platform team manages 25 workload accounts in AWS Organizations that run generative AI applications. The team must deploy an identical CloudFormation template (Amazon Bedrock model invocation logging resources, IAM roles, and CloudWatch alarms) to all accounts in two AWS Regions. Accounts that are added to the target organizational unit later must receive the baseline automatically. The team wants to avoid maintaining per-account scripts or credentials. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run a shell script from a CI server that assumes a role in each account and calls create-stack in each Region"
+      },
+      {
+        "key": "B",
+        "text": "Create a CloudFormation stack in the management account and share the stack outputs with each workload account through AWS RAM"
+      },
+      {
+        "key": "C",
+        "text": "Attach an SCP to the organizational unit that denies Bedrock access unless the logging resources exist"
+      },
+      {
+        "key": "D",
+        "text": "Create a CloudFormation StackSet with service-managed permissions targeting the organizational unit in both Regions, with automatic deployment enabled"
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "A StackSet with service-managed permissions integrates with AWS Organizations, deploys the template to every account in the target OUs across the chosen Regions, and with automatic deployment enabled deploys to accounts that join the OU later, with no per-account credentials to manage. A CI script with per-account assume-role calls is the manual, error-prone approach that infrastructure as code is meant to replace. A single stack in the management account creates resources only in that account, and AWS RAM does not share CloudFormation-created resources as deployments. An SCP can only deny or limit permissions; it cannot create logging resources.",
+    "source_topic": "AWS Skill Builder tutorial 6: Application Integration Patterns and AI-Assisted Development Tools"
+  }
+]

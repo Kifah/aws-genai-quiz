@@ -1,0 +1,364 @@
+[
+  {
+    "id": "d4-q1001",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Hybrid predictive and reactive scaling for self-hosted LLM",
+    "difficulty": "hard",
+    "question_text": "A company serves an open-weight LLM on GPU instances in an Amazon EC2 Auto Scaling group behind an Application Load Balancer. Traffic follows a stable weekday pattern that ramps up sharply at 09:00. Each new instance needs about 7 minutes to download and load the model, so users see timeouts every morning while the group is still scaling out. Marketing campaigns also cause unpredictable spikes during the day. The company wants to avoid running peak capacity around the clock. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Replace the current policy with a step scaling policy that uses CloudWatch alarms on CPU utilization and add 1 instance per breach."
+      },
+      {
+        "key": "B",
+        "text": "Create two scheduled actions that set the desired capacity to peak size at 08:30 and to the minimum at 18:00 on weekdays, and remove all dynamic scaling policies."
+      },
+      {
+        "key": "C",
+        "text": "Enable a predictive scaling policy in forecast-and-scale mode so capacity is launched ahead of the recurring 09:00 ramp, and keep a target tracking policy on a load metric to absorb unplanned spikes."
+      },
+      {
+        "key": "D",
+        "text": "Set the group's minimum and desired capacity to the peak size 24 hours a day and rely on the ALB to queue excess requests."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Predictive scaling learns the recurring daily pattern and launches instances before demand arrives, which hides the 7-minute model load time; a target tracking policy still handles unforecast spikes (the hybrid approach). Step scaling alone is purely reactive, so users still hit the cold-start window. Fixed scheduled actions cannot react to unplanned campaign spikes and do not adapt as the pattern drifts. Running peak capacity 24/7 meets the SLA but defeats the cost goal.",
+    "source_topic": "AWS Skill Builder tutorial 10: Cost optimization and resource efficiency for generative AI"
+  },
+  {
+    "id": "d4-q1002",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Instance warmup and cooldown for slow model-loading instances",
+    "difficulty": "hard",
+    "question_text": "A team runs an LLM inference service on GPU instances in an EC2 Auto Scaling group with a target tracking policy on average GPU utilization. During load increases the group keeps launching more instances than needed, then terminates many of them a few minutes later, which wastes money and causes request failures. CloudWatch shows that a new instance takes about 8 minutes to load the model and start serving, and that its metrics look idle or erratic during that time. Which change will MOST effectively stop this oscillation?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Set the group's default instance warmup to at least the model load time so that instances still loading are not counted in the aggregated metric and the policy does not keep scaling out, and use a longer scale-in delay."
+      },
+      {
+        "key": "B",
+        "text": "Lower the target utilization value from 60% to 20% so the group scales out earlier and more aggressively."
+      },
+      {
+        "key": "C",
+        "text": "Replace the target tracking policy with a step scaling policy that has a cooldown of 0 seconds so it can react on every alarm evaluation."
+      },
+      {
+        "key": "D",
+        "text": "Increase the group's maximum capacity so that the policy is never limited while instances are loading."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Models take minutes to initialize, so metrics from instances that are not yet serving mislead the policy into adding capacity and later removing it. Configuring the instance warmup/cooldown to match the real initialization time (and keeping scale-in conservative) is the documented fix for oscillation. A lower target makes over-scaling worse. A zero cooldown removes the protection against rapid repeated actions. Raising the maximum only allows even more unnecessary launches.",
+    "source_topic": "AWS Skill Builder tutorial 10: Cost optimization and resource efficiency for generative AI"
+  },
+  {
+    "id": "d4-q1003",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Deterministic request hashing for exact-match response cache",
+    "difficulty": "hard",
+    "question_text": "A company's HR assistant calls Amazon Bedrock with temperature 0 and a fixed system prompt. The same policy questions arrive many times a day with trivial differences such as extra whitespace, letter case, or inference parameters listed in a different order in the JSON body. A first cache design hashes the raw request body, including a request ID and timestamp, and the cache hit rate is near 0%. The answers must be identical for identical requests and must never be served across different prompt template versions or models. Which cache key design will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use the raw request body plus the client IP address as the key so that every caller has an isolated cache entry."
+      },
+      {
+        "key": "B",
+        "text": "Compute a SHA-256 hash of the user prompt text only, ignoring model ID, parameters and template version, and store the response in Amazon ElastiCache."
+      },
+      {
+        "key": "C",
+        "text": "Replace the hash with a vector embedding of the prompt and return the nearest cached response whenever the cosine similarity is above 0.70."
+      },
+      {
+        "key": "D",
+        "text": "Normalize the prompt (trim and collapse whitespace, lowercase), serialize the inference parameters with sorted keys, and hash these together with the model ID and the prompt template version, excluding request IDs and timestamps. Store responses under that key with a TTL."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Deterministic request hashing builds the key only from attributes that affect the output, after normalizing harmless variations (whitespace, case, parameter order); including the model ID and template version prevents serving a stale or wrong answer after a change, and request IDs or timestamps must be excluded or no two requests would ever match. Hashing only the prompt can return answers produced by a different model or template. A per-IP key fragments the cache and destroys the hit rate. A 0.70 embedding threshold is a semantic cache, which cannot guarantee identical answers for identical requests and risks mismatched answers.",
+    "source_topic": "AWS Skill Builder tutorial 10: Cost optimization and resource efficiency for generative AI"
+  },
+  {
+    "id": "d4-q1004",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Tuning semantic cache similarity threshold",
+    "difficulty": "hard",
+    "question_text": "A support chatbot uses a semantic cache: incoming questions are embedded and the cached answer is returned when cosine similarity to a stored question is at least 0.80. Cost has dropped, but QA finds that questions such as \"How do I cancel my order?\" and \"How do I track my order?\" sometimes receive each other's cached answer. The team wants to keep most of the cost savings. Which action should the team take?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Raise the similarity threshold, validate the new value against a labeled set of equivalent and non-equivalent question pairs (or an A/B test), and monitor hit rate and answer quality together."
+      },
+      {
+        "key": "B",
+        "text": "Lower the similarity threshold to 0.60 so that more questions are served from the cache and the answers converge."
+      },
+      {
+        "key": "C",
+        "text": "Increase the cache TTL to seven days so that every answer is regenerated less often."
+      },
+      {
+        "key": "D",
+        "text": "Disable the cache and invoke the largest available model for every request."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Wrong answers on near-miss questions mean the threshold is too permissive; raising it and tuning with labeled pairs or an A/B test balances hit rate against answer quality, which is the central trade-off of semantic caching. Lowering the threshold increases false hits. A longer TTL affects freshness, not matching accuracy. Removing the cache gives up the savings the team wants to keep, and a bigger model does not fix a retrieval-matching error.",
+    "source_topic": "AWS Skill Builder tutorial 10: Cost optimization and resource efficiency for generative AI"
+  },
+  {
+    "id": "d4-q1005",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Edge caching of repeated generative responses with CloudFront",
+    "difficulty": "medium",
+    "question_text": "A travel company publishes a public \"destination guide\" feature. Users worldwide request AI-generated guides for the same few hundred destinations through an Amazon API Gateway REST API that invokes Amazon Bedrock through AWS Lambda. The content is not personalized and can be up to 12 hours old. Latency for distant users is high and the company is paying for the same generations repeatedly. Which solution will reduce both cost and latency with the LEAST operational effort?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use a POST request with the destination in the JSON body and put Amazon CloudFront in front of the API with a default cache policy so the response bodies are cached at edge locations."
+      },
+      {
+        "key": "B",
+        "text": "Increase Lambda provisioned concurrency in every AWS Region and call Bedrock from the nearest Region on every request."
+      },
+      {
+        "key": "C",
+        "text": "Expose the destination as a path or query string parameter on a GET method, put Amazon CloudFront in front of the API, and use a cache policy with a 12-hour TTL keyed on that parameter so repeat requests are served from edge locations without invoking the model."
+      },
+      {
+        "key": "D",
+        "text": "Store each generated guide in the user's browser local storage and ask Bedrock to regenerate it when local storage is empty."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "CloudFront caches responses at edge locations close to users; for non-personalized, tolerably stale content a GET request keyed on the destination with a TTL matching the freshness limit avoids repeated model invocations and cuts latency. CloudFront does not cache POST responses, so the body-based design would never hit the cache. Provisioned concurrency and multi-Region calls reduce cold starts but still pay for every generation. Browser storage helps only a returning user on one device and does not share generations across users.",
+    "source_topic": "AWS Skill Builder tutorial 10: Cost optimization and resource efficiency for generative AI"
+  },
+  {
+    "id": "d4-q1006",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "SageMaker HyperPod checkpointless and elastic training",
+    "difficulty": "hard",
+    "question_text": "A company is continuing pre-training and fine-tuning a custom foundation model on an Amazon SageMaker HyperPod cluster. Training runs last several weeks. Profiling shows that periodic checkpoint writes to storage and slow recovery after node failures consume a noticeable share of total training time. The cluster is shared with other teams, available capacity fluctuates, and the project has no hard completion deadline. The company wants to improve training throughput and reduce cost. Which combination of actions will meet these requirements? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Move the training job to Amazon Bedrock on-demand inference so that AWS manages the infrastructure."
+      },
+      {
+        "key": "B",
+        "text": "Use HyperPod checkpointless training so that failed nodes recover state from healthy peers instead of reloading from storage checkpoints."
+      },
+      {
+        "key": "C",
+        "text": "Buy Amazon Bedrock Provisioned Throughput model units for the base model to speed up training."
+      },
+      {
+        "key": "D",
+        "text": "Checkpoint to Amazon S3 more frequently so that less work is lost after a node failure."
+      },
+      {
+        "key": "E",
+        "text": "Use HyperPod elastic training so the job scales its node count up and down within a configured minimum and maximum as cluster resources become available."
+      }
+    ],
+    "correct_answers": [
+      "B",
+      "E"
+    ],
+    "explanation": "Checkpointless training removes most of the checkpoint I/O and recovery delay by restoring state from peer nodes, and elastic training lets a flexible-deadline job use free capacity on a shared cluster and release it when others need it, raising utilization and lowering cost. Bedrock on-demand inference and Provisioned Throughput serve inference, not custom pre-training on HyperPod, so they do not change training throughput. More frequent checkpointing reduces lost work but increases the very checkpoint overhead the company wants to remove.",
+    "source_topic": "AWS Skill Builder tutorial 10: Cost optimization and resource efficiency for generative AI"
+  },
+  {
+    "id": "d4-q1007",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "SageMaker Savings Plans for baseline plus auto scaling for peaks",
+    "difficulty": "medium",
+    "question_text": "A company hosts a fine-tuned LLM on Amazon SageMaker real-time endpoints. Traffic needs a steady baseline of six GPU instances 24 hours a day, and the endpoint auto scales to as many as fourteen instances for a few hours each weekday. The workload will run for at least two years. The company wants to lower the hourly cost without reducing availability during peaks. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Purchase a SageMaker AI Savings Plan sized to the steady baseline usage and keep endpoint auto scaling so that peak capacity above the baseline is billed at on-demand rates only while it is running."
+      },
+      {
+        "key": "B",
+        "text": "Purchase a SageMaker AI Savings Plan sized to the fourteen-instance peak so that all capacity is discounted."
+      },
+      {
+        "key": "C",
+        "text": "Configure the endpoint to run on Spot Instances to get the lowest hourly price for all capacity."
+      },
+      {
+        "key": "D",
+        "text": "Remove auto scaling and permanently run six instances, queueing requests that exceed that capacity."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "A committed-spend discount such as a SageMaker AI Savings Plan should cover the predictable, always-on baseline, while auto scaling handles the variable peak at on-demand rates, so you only pay for peak capacity when it is used. Sizing the commitment to the peak means paying for unused commitment most of the day. SageMaker real-time endpoints do not run on Spot Instances, and interruptions would also threaten availability. Capping capacity at the baseline would breach the availability requirement during peaks.",
+    "source_topic": "AWS Skill Builder tutorial 10: Cost optimization and resource efficiency for generative AI"
+  },
+  {
+    "id": "d4-q1008",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Hybrid real-time and batch inference routing by priority",
+    "difficulty": "hard",
+    "question_text": "A company's document platform generates AI summaries with Anthropic Claude on Amazon Bedrock. About 20% of requests come from users waiting in an interactive UI and need an answer within seconds. The other 80% are triggered by bulk uploads, and the business accepts results within several hours. Inference spend is high, and the platform team wants the lowest cost without hurting the interactive experience. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Send all requests through the synchronous InvokeModel API and buy Provisioned Throughput sized for the peak combined traffic."
+      },
+      {
+        "key": "B",
+        "text": "Queue every request in Amazon SQS and process the whole queue once a night with a Bedrock batch inference job."
+      },
+      {
+        "key": "C",
+        "text": "Route interactive requests to the synchronous Bedrock API, and send bulk requests to an Amazon SQS queue; a scheduled AWS Lambda function assembles them into JSONL files in Amazon S3 and starts Amazon Bedrock batch inference jobs, whose results are written back to S3."
+      },
+      {
+        "key": "D",
+        "text": "Run the bulk requests through the interactive path but add a client-side delay between calls to avoid throttling."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "A hybrid design keeps latency-sensitive traffic on real-time inference and moves delay-tolerant traffic to Bedrock batch inference, which is billed at a discount to on-demand and removes throttling pressure; SQS plus a Lambda batch builder decouples submission from processing. Provisioned Throughput sized for the peak is costly and mostly idle. Sending everything to a nightly batch breaks the seconds-level requirement for interactive users. Delaying calls still pays full on-demand prices for work that could have been batched.",
+    "source_topic": "AWS Skill Builder tutorial 10: Cost optimization and resource efficiency for generative AI"
+  },
+  {
+    "id": "d4-q1009",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Per-tenant token quota enforcement with response usage data",
+    "difficulty": "hard",
+    "question_text": "A SaaS provider exposes a Bedrock-powered assistant to thousands of tenants with different monthly token allowances. The provider must block or downgrade a tenant in near real time when its quota is exhausted, and finance needs per-tenant token usage for billing. The default Amazon CloudWatch metrics for Bedrock are aggregated by model, not by tenant. Which solution will meet these requirements with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Review the Bedrock InputTokenCount and OutputTokenCount metrics in CloudWatch once a month and email tenants that appear to exceed their allowance."
+      },
+      {
+        "key": "B",
+        "text": "Place a gateway Lambda function in front of Bedrock. Before each call, check the tenant's remaining quota in Amazon DynamoDB. After each call, read the input and output token counts returned in the Bedrock response and atomically add them to the tenant's counter (and publish them as a custom metric with a tenant dimension)."
+      },
+      {
+        "key": "C",
+        "text": "Create one AWS account per tenant and use AWS Budgets alerts to notify the operations team when a tenant's spend rises."
+      },
+      {
+        "key": "D",
+        "text": "Enable Amazon Bedrock Guardrails and add a denied topic for tenants that have used more than their quota."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock returns the exact input and output token counts with each response, so a gateway can enforce quotas before the call and record actual usage afterward with an atomic DynamoDB update, giving real-time enforcement and per-tenant billing data. Monthly review of aggregate metrics is retrospective and not tenant-aware. One account per tenant is heavy operational overhead and Budgets alerts only notify after the spend occurs. Guardrails filter content; they do not track per-tenant token consumption.",
+    "source_topic": "AWS Skill Builder tutorial 10: Cost optimization and resource efficiency for generative AI"
+  },
+  {
+    "id": "d4-q1010",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Validating a cheaper model before downgrading",
+    "difficulty": "hard",
+    "question_text": "A company's contract-analysis feature uses a large, expensive model on Amazon Bedrock. Leadership wants to know whether a smaller, cheaper model can take over most requests without noticeably reducing quality. The team has 2,000 representative production prompts with approved reference answers. Which combination of steps should the team take to make a defensible cost-capability decision? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run Amazon Bedrock model evaluation jobs on the representative prompt dataset for both candidate models, and compare quality scores against cost per request calculated from actual input and output token counts."
+      },
+      {
+        "key": "B",
+        "text": "Select the model with the lowest published per-token price because token price is the only cost factor."
+      },
+      {
+        "key": "C",
+        "text": "Pick the model that ranks highest on a public general-purpose leaderboard, since it should generalize to contract analysis."
+      },
+      {
+        "key": "D",
+        "text": "Pilot the smaller model on a fraction of production traffic (or a shadow deployment), compare quality and cost metrics against the baseline, and keep a fallback to the larger model for low-confidence cases."
+      },
+      {
+        "key": "E",
+        "text": "Choose whichever model has the largest context window so that no document is ever truncated."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "D"
+    ],
+    "explanation": "A sound tradeoff evaluation uses a benchmark built from your own representative data to compare quality with actual cost per request, then validates under real usage with a limited pilot or shadow traffic and an escalation path. Lowest token price ignores quality, which can raise cost through retries and failures. Public leaderboards do not reflect the domain or the prompt format. Context window size is only one capability dimension and larger windows usually cost more.",
+    "source_topic": "AWS Skill Builder tutorial 10: Cost optimization and resource efficiency for generative AI"
+  },
+  {
+    "id": "d4-q1011",
+    "domain": 4,
+    "task_statement": "4.1",
+    "topic": "Combining instructions with max_tokens for response limiting",
+    "difficulty": "medium",
+    "question_text": "A Bedrock-based support assistant sets max_tokens to 80 to control output cost. Customers now complain that answers stop in the middle of a sentence. Most useful answers need two to four sentences. The company wants to keep output tokens low without cutting answers off. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Remove max_tokens completely so that the model can decide how long each answer should be."
+      },
+      {
+        "key": "B",
+        "text": "Set max_tokens to the model maximum and rely on post-processing to delete the last sentence of each answer."
+      },
+      {
+        "key": "C",
+        "text": "Raise temperature to 1.0 so that the model produces shorter, more varied answers."
+      },
+      {
+        "key": "D",
+        "text": "Add explicit length and format instructions to the prompt (for example, answer in two to four sentences or a short structured JSON), and keep max_tokens as a safety cap set just above the expected maximum length."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Instruction and format constraints shape the model to finish naturally within the desired length, while max_tokens acts only as a hard backstop; a cap set below the natural answer length simply truncates the output. Removing max_tokens loses protection against unexpectedly long (costly) outputs. A maximum cap with post-processing pays for tokens that are then thrown away. Temperature controls randomness, not length.",
+    "source_topic": "AWS Skill Builder tutorial 10: Cost optimization and resource efficiency for generative AI"
+  }
+]

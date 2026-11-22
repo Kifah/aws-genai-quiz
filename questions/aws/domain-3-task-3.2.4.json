@@ -1,0 +1,364 @@
+[
+  {
+    "id": "d3-q1001",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Cross-account access for third-party with external ID",
+    "difficulty": "hard",
+    "question_text": "A company hires a third-party SaaS vendor that serves many customers to run scheduled analyses that call Amazon Bedrock in the company's AWS account. The security team requires that the vendor use only temporary credentials. They also require protection against the vendor being tricked into using the company's role on behalf of a different vendor customer (the confused deputy problem). Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create an IAM user with access keys for the vendor and rotate the keys every 90 days"
+      },
+      {
+        "key": "B",
+        "text": "Create an IAM role whose trust policy names the vendor's account and requires a unique sts:ExternalId condition, and have the vendor call AWS STS AssumeRole with that external ID"
+      },
+      {
+        "key": "C",
+        "text": "Create an IAM role whose trust policy trusts the vendor's account root with no conditions, and restrict the role with an aws:SourceIp condition on the vendor's public IP range"
+      },
+      {
+        "key": "D",
+        "text": "Share the company's Bedrock model access by attaching a bucket policy to an Amazon S3 bucket that the vendor can read"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A cross-account role with a unique external ID condition lets the vendor obtain short-lived credentials through STS AssumeRole, and the external ID prevents another customer of the vendor from causing the vendor to assume this company's role. Access keys are long-term credentials, so rotation does not meet the temporary-credentials requirement. A source-IP restriction does not help because all of the vendor's customers' requests come from the same vendor IP range, so it does not mitigate the confused deputy problem. An S3 bucket policy does not grant any Bedrock invocation permission.",
+    "source_topic": "AWS Skill Builder tutorial 6: Application Integration Patterns and AI-Assisted Development Tools"
+  },
+  {
+    "id": "d3-q1012",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "VPC endpoint policy for Bedrock model restriction",
+    "difficulty": "hard",
+    "question_text": "A company runs generative AI workloads from several teams in one shared VPC. All Amazon Bedrock traffic already flows through an interface VPC endpoint for bedrock-runtime, and the VPC has no internet gateway or NAT gateway. The security team must guarantee that any call made through this endpoint can invoke only the two approved foundation models, even if a team's IAM role is accidentally granted bedrock:InvokeModel on all models. The solution must be enforced at the network boundary and must not require editing each team's IAM roles. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Attach an endpoint policy to the bedrock-runtime interface VPC endpoint that allows bedrock:InvokeModel and bedrock:InvokeModelWithResponseStream only on the two approved foundation model ARNs."
+      },
+      {
+        "key": "B",
+        "text": "Add inbound rules to the endpoint's security group that allow HTTPS only from the approved model's IP address ranges."
+      },
+      {
+        "key": "C",
+        "text": "Configure a network ACL on the endpoint subnets that blocks requests for unapproved model IDs in the HTTPS payload."
+      },
+      {
+        "key": "D",
+        "text": "Update every team's IAM role to list the approved model ARNs and review the roles quarterly with IAM Access Analyzer."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "A VPC endpoint policy is evaluated together with the caller's IAM policy, so it caps what any principal can do through that endpoint, regardless of how broad a role's own permissions are, and it requires no role changes. Security groups and network ACLs operate on IPs, ports and protocols; they cannot inspect the API action or model ID inside an HTTPS request. Editing every IAM role is the manual, per-role approach the company wants to avoid and it does not create a boundary at the endpoint.",
+    "source_topic": "AWS Skill Builder tutorial 8: Data Security and Privacy for GenAI (defense in depth)"
+  },
+  {
+    "id": "d3-q1013",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "IAM Access Analyzer least-privilege refinement",
+    "difficulty": "medium",
+    "question_text": "A data science team initially received a role with bedrock:* and broad Amazon S3 permissions so it could experiment with foundation models. The project is now moving to production. A security engineer must tighten the role to least privilege based on what the workload actually calls, and must also identify permissions and roles in the account that have not been used recently. The engineer wants to avoid building the policy by hand from documentation. (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use IAM Access Analyzer policy generation to create a least-privilege policy from the role's AWS CloudTrail activity."
+      },
+      {
+        "key": "B",
+        "text": "Run Amazon Macie discovery jobs against the role to list the actions it has not used."
+      },
+      {
+        "key": "C",
+        "text": "Enable Amazon GuardDuty and replace the role's policy with its findings summary."
+      },
+      {
+        "key": "D",
+        "text": "Enable IAM Access Analyzer unused access analysis to find unused roles, unused permissions and unused access keys."
+      },
+      {
+        "key": "E",
+        "text": "Attach the AWS managed AmazonBedrockFullAccess policy and rely on CloudWatch alarms to detect misuse."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "D"
+    ],
+    "explanation": "IAM Access Analyzer can generate a fine-grained policy from the access activity recorded in CloudTrail, and its unused access analyzer reports unused roles, permissions and credentials, which supports ongoing least-privilege review. Macie discovers sensitive data in S3 and has no view of IAM action usage. GuardDuty detects threats and does not produce IAM policies. A full-access managed policy is the opposite of least privilege and alarms only detect misuse after it happens.",
+    "source_topic": "AWS Skill Builder tutorial 8: Data Security and Privacy for GenAI (defense in depth)"
+  },
+  {
+    "id": "d3-q1014",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Comprehend asynchronous PII redaction job vs synchronous API",
+    "difficulty": "hard",
+    "question_text": "A company is preparing 3 million support documents stored in Amazon S3 for fine-tuning a foundation model. Many documents are several megabytes each and contain names, email addresses, and card numbers. The company needs redacted copies written back to S3 before training starts and wants a fully managed approach with no ML model to build. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run a Lambda function that calls the Amazon Comprehend DetectPiiEntities synchronous API once for each full document and replaces the returned character offsets."
+      },
+      {
+        "key": "B",
+        "text": "Configure an Amazon Macie sensitive data discovery job on the bucket and have Macie rewrite the objects with PII masked."
+      },
+      {
+        "key": "C",
+        "text": "Start an Amazon Comprehend asynchronous PII entities detection job on the S3 input location with redaction enabled, and write the redacted output to a separate S3 output location."
+      },
+      {
+        "key": "D",
+        "text": "Apply an Amazon Bedrock guardrail with a sensitive information filter to each document by sending it to the model during fine-tuning."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Comprehend asynchronous jobs read large document collections from S3, can replace PII with the entity type or a mask character, and write results to an S3 output location with no ML work. The synchronous DetectPiiEntities and ContainsPiiEntities APIs are meant for single small inputs (roughly 100 KB), so multi-megabyte documents would have to be split and throttled. Macie only discovers and reports sensitive data and does not modify objects. Guardrails filter inference-time inputs and outputs and are not a bulk data-preparation tool.",
+    "source_topic": "AWS Skill Builder tutorial 8: Data Security and Privacy for GenAI (defense in depth)"
+  },
+  {
+    "id": "d3-q1015",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Macie and S3 Vectors: scanning source data",
+    "difficulty": "hard",
+    "question_text": "A company builds a semantic search application by embedding customer documents with an Amazon Bedrock embedding model and storing the vectors in an Amazon S3 Vectors index. The compliance team requires evidence that customer PII is not embedded into the vector store. The original documents are in a general purpose S3 bucket. Which approach will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable an Amazon Macie classification job on the vector bucket so that Macie inspects the numeric embeddings for PII values."
+      },
+      {
+        "key": "B",
+        "text": "Run Amazon Macie discovery on the source document bucket and sanitize or remove PII (for example with Amazon Comprehend) before generating embeddings, while using Macie and CloudTrail to monitor access to the vector bucket."
+      },
+      {
+        "key": "C",
+        "text": "Apply an Amazon Bedrock guardrail to the vector index so that sensitive vectors are masked when stored."
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Comprehend DetectPiiEntities directly on the embedding vectors after they are written to the index."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Embeddings are numeric representations, so sensitive-data discovery has to happen on the original content before vectors are created; Macie can find the PII in the source bucket and Comprehend or a pipeline can redact it, and access to the vector storage can still be monitored. Macie does not inspect the vector values themselves. Guardrails evaluate model inputs and outputs, not stored vector indexes, and Comprehend detects PII in text, not in embedding vectors.",
+    "source_topic": "AWS Skill Builder tutorial 8: Data Security and Privacy for GenAI (defense in depth)"
+  },
+  {
+    "id": "d3-q1016",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Macie custom data identifiers and allow lists",
+    "difficulty": "medium",
+    "question_text": "A company stores support transcripts in Amazon S3 that will feed a Bedrock knowledge base. The transcripts contain an internal customer reference in the format CUST-<8 digits>, which must be treated as sensitive but is not recognized by Macie's managed data identifiers. The same buckets also contain synthetic test records with a published dummy number that Macie keeps flagging as a finding. The security team wants accurate findings with minimal manual triage. (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a Macie custom data identifier that uses a regular expression for the CUST- pattern, optionally with keywords and a proximity rule."
+      },
+      {
+        "key": "B",
+        "text": "Create a Macie allow list for the known dummy value so it no longer produces findings."
+      },
+      {
+        "key": "C",
+        "text": "Disable all managed data identifiers so that only manual review finds sensitive records."
+      },
+      {
+        "key": "D",
+        "text": "Replace Macie with an Amazon Bedrock guardrail that applies a regex filter to the S3 objects at rest."
+      },
+      {
+        "key": "E",
+        "text": "Increase the discovery job sampling depth to 100 percent so that the dummy value is no longer detected."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "B"
+    ],
+    "explanation": "Custom data identifiers let Macie detect organization-specific patterns using a regex plus optional keywords and proximity rules, and allow lists suppress findings for text that looks sensitive but is known to be safe, such as test data. Disabling managed identifiers removes useful coverage. Guardrails operate on model inputs and outputs, not objects at rest in S3. Raising sampling depth only changes how much data is scanned and would not suppress a known false positive.",
+    "source_topic": "AWS Skill Builder tutorial 8: Data Security and Privacy for GenAI (defense in depth)"
+  },
+  {
+    "id": "d3-q1017",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "Pseudonymization vs anonymization for AI training data",
+    "difficulty": "hard",
+    "question_text": "A retailer will fine-tune a model on purchase histories. The data science team needs every record for the same customer to carry the same artificial identifier across several datasets so relationships and sequences are preserved. A small privacy team must also be able to re-identify a customer to answer a data subject access request. Analysts and the training pipeline must never see real identities. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Replace names and IDs with the entity label (for example [NAME]) by using Amazon Comprehend redaction before storing the data."
+      },
+      {
+        "key": "B",
+        "text": "Apply k-anonymity generalization and differential privacy noise to the dataset so that individuals cannot be identified."
+      },
+      {
+        "key": "C",
+        "text": "Delete all direct identifiers from the dataset and keep no mapping, so the data is permanently anonymous."
+      },
+      {
+        "key": "D",
+        "text": "Pseudonymize identifiers with consistent artificial tokens, and store the token-to-identity mapping in a separate encrypted store protected by an AWS KMS customer managed key whose policy limits access to the privacy team."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Pseudonymization replaces identifiers with consistent artificial substitutes, which preserves relationships across datasets, and keeping the mapping separately under a restrictive KMS key policy allows authorized re-identification while hiding identity from analysts and the pipeline. Generic label redaction, k-anonymity or noise, and deletion of identifiers are anonymization approaches that are irreversible or break record linkage, so they fail either the linkage requirement or the re-identification requirement.",
+    "source_topic": "AWS Skill Builder tutorial 8: Data Security and Privacy for GenAI (defense in depth)"
+  },
+  {
+    "id": "d3-q1018",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "S3 Lifecycle for versioned FM logs and multipart uploads",
+    "difficulty": "hard",
+    "question_text": "A company stores Amazon Bedrock prompt and response logs in a versioned S3 bucket under the prefix fm-logs/. Policy requires that current objects move to S3 Glacier Instant Retrieval after 30 days and be deleted after 180 days, that all previous versions of overwritten objects also be permanently removed 180 days after they become noncurrent, and that failed large uploads not accumulate cost. Which S3 Lifecycle configuration meets these requirements with the LEAST operational effort?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "A rule filtered on fm-logs/ with a transition action and an expiration action for current versions only."
+      },
+      {
+        "key": "B",
+        "text": "A rule filtered on fm-logs/ with a 30-day transition, a 180-day expiration for current versions, a noncurrent version expiration after 180 days, and an AbortIncompleteMultipartUpload action."
+      },
+      {
+        "key": "C",
+        "text": "S3 Object Lock in compliance mode with a 180-day retention period on the bucket."
+      },
+      {
+        "key": "D",
+        "text": "A nightly Lambda function that lists the bucket and deletes objects older than 180 days."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "A single lifecycle rule can combine transitions, expiration of current versions, permanent deletion of noncurrent versions, and cleanup of incomplete multipart uploads, all without code. In a versioned bucket, expiring only current versions adds a delete marker and leaves noncurrent versions (and their cost and PII) in place. Object Lock prevents deletion rather than causing it, and a custom Lambda reimplements managed functionality with more operational effort.",
+    "source_topic": "AWS Skill Builder tutorial 8: Data Security and Privacy for GenAI (defense in depth)"
+  },
+  {
+    "id": "d3-q1019",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "AgentCore Runtime session isolation and private networking",
+    "difficulty": "medium",
+    "question_text": "A SaaS provider is deploying a multi-tenant AI agent on Amazon Bedrock AgentCore. Security requires that concurrent user sessions cannot leak data into each other through shared memory or local state, and the agent must reach an internal database that is reachable only inside the company's VPC without crossing the public internet. The provider wants to avoid managing its own container isolation. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Host the agent in AWS Lambda with global variables caching each tenant's data and expose the database through a public endpoint with IP allow listing."
+      },
+      {
+        "key": "B",
+        "text": "Host the agent on a single shared Amazon EC2 instance and separate tenants by tagging in-memory objects with tenant IDs."
+      },
+      {
+        "key": "C",
+        "text": "Host the agent in AgentCore Runtime, which runs each session in its own isolated microVM, and configure VPC connectivity with AWS PrivateLink for access to internal resources."
+      },
+      {
+        "key": "D",
+        "text": "Use an Amazon Bedrock guardrail to filter cross-session content and reach the database through a NAT gateway."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "AgentCore Runtime provides session isolation using a dedicated microVM per session, which addresses cross-session leakage without custom isolation work, and VPC connectivity with PrivateLink keeps access to internal resources off the public internet. Application-level tenant tagging on shared memory relies on correct code to prevent leakage. Shared global variables mix tenants' data and a public endpoint violates the private-access requirement. Guardrails filter content but do not isolate compute, and a NAT gateway still routes over the internet.",
+    "source_topic": "AWS Skill Builder tutorial 8: Data Security and Privacy for GenAI (defense in depth)"
+  },
+  {
+    "id": "d3-q1020",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "STS session policy for time-limited FM access",
+    "difficulty": "medium",
+    "question_text": "An external consultancy needs to run a two-day evaluation of one specific Amazon Bedrock model from a customer's AWS account. The consultants authenticate through the customer's corporate identity provider. The customer's security team requires temporary credentials that expire automatically, that are limited to invoking only that one model even though the underlying role can invoke several models, and that need no long-lived IAM users. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create IAM users for each consultant with access keys and ask them to rotate the keys after two days."
+      },
+      {
+        "key": "B",
+        "text": "Have the federated users assume the IAM role through AWS STS and pass an inline session policy that allows bedrock:InvokeModel only on the target model ARN, with a short session duration."
+      },
+      {
+        "key": "C",
+        "text": "Share the credentials of the role's existing long-lived access key and delete the key after the evaluation."
+      },
+      {
+        "key": "D",
+        "text": "Attach AmazonBedrockFullAccess to the consultants' role and monitor usage with CloudTrail."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "AWS STS issues temporary credentials that expire on their own, and a session policy passed on role assumption further restricts the permissions to the intersection of the role policy and the session policy, so the session can invoke only the one approved model. Access keys on IAM users and shared long-lived keys are exactly the permanent credentials the team wants to avoid, and a full-access policy with after-the-fact monitoring does not enforce least privilege.",
+    "source_topic": "AWS Skill Builder tutorial 8: Data Security and Privacy for GenAI (defense in depth)"
+  },
+  {
+    "id": "d3-q1021",
+    "domain": 3,
+    "task_statement": "3.2",
+    "topic": "CloudWatch anomaly detection for data exfiltration",
+    "difficulty": "hard",
+    "question_text": "A company hosts the source documents for a Bedrock knowledge base in an S3 bucket. Daily download volume from the bucket varies with business hours and weekly cycles. The security team wants to be notified when a role downloads an unusually large volume of data, which might indicate exfiltration, without hand-tuning a fixed threshold that would either miss attacks or cause constant false alarms. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable S3 versioning on the bucket so that downloaded objects can be restored if they are deleted."
+      },
+      {
+        "key": "B",
+        "text": "Create a CloudWatch alarm with a static threshold set to the highest historical download volume."
+      },
+      {
+        "key": "C",
+        "text": "Run Amazon Macie discovery jobs weekly and review the sensitive data findings for download counts."
+      },
+      {
+        "key": "D",
+        "text": "Create a CloudWatch alarm that uses anomaly detection on the S3 request metrics for bytes downloaded (BytesDownloaded), and send alarm notifications to an Amazon SNS topic."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "CloudWatch anomaly detection builds a baseline model from historical metric data, including daily and weekly patterns, and the alarm fires when the metric leaves the expected band, which is a good fit for variable data-access volumes; SNS delivers the notification. A static threshold cannot adapt to the daily and weekly seasonality and is either too loose or too noisy. Macie identifies sensitive content, not abnormal access volume, and versioning protects against deletion or overwrite, not against data being read and copied out.",
+    "source_topic": "AWS Skill Builder tutorial 8: Data Security and Privacy for GenAI (defense in depth)"
+  }
+]

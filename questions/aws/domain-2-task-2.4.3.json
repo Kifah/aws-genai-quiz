@@ -1,0 +1,332 @@
+[
+  {
+    "id": "d2-q1023",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "ConverseStream vs InvokeModelWithResponseStream for model portability",
+    "difficulty": "medium",
+    "question_text": "A company is building a web chat assistant on Amazon Bedrock. The assistant must stream tokens to users as they are generated. The product team plans to compare Anthropic Claude and Amazon Nova models in production and wants to switch the model by changing only the model ID, with no changes to the request or response parsing code. The application will also send image attachments and define tool configurations in the same message format. The application stores the conversation history and replays it with each request. Which solution will meet these requirements with the LEAST code change when the model changes?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use the InvokeModelWithResponseStream API and build a separate model-specific JSON request body and chunk parser for each model family."
+      },
+      {
+        "key": "B",
+        "text": "Use the InvokeModel API with a response buffer, and simulate streaming by splitting the finished response into small pieces on the server."
+      },
+      {
+        "key": "C",
+        "text": "Use the ConverseStream API with role-based messages that contain content blocks, and replay the stored messages in each request."
+      },
+      {
+        "key": "D",
+        "text": "Use the InvokeModelWithBidirectionalStream API for both models so that the connection stays open and the model keeps the conversation state."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "ConverseStream provides a uniform, model-agnostic message format (roles and content blocks for text, images, and tool configuration) and a consistent streamed event structure, so changing the model ID is enough. InvokeModelWithResponseStream (A) uses model-specific request and response bodies, so every model switch needs new formatting and parsing code. Buffering a finished InvokeModel response (B) is not real streaming and does not improve time to first token. The bidirectional stream API (D) is designed for real-time speech-to-speech models and is not a general text-chat API for Claude.",
+    "source_topic": "AWS Skill Builder tutorial 5: Foundation Model API Integrations"
+  },
+  {
+    "id": "d2-q1024",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Nova Sonic speech-to-speech with InvokeModelWithBidirectionalStream",
+    "difficulty": "hard",
+    "question_text": "A company is building a voice assistant for a mobile banking app. Users speak to the assistant and expect spoken answers with natural turn-taking. Users must be able to interrupt the assistant mid-sentence with a new question, and the model must keep the context of the conversation during a single call that lasts several minutes. The company wants to use a single managed foundation model API instead of chaining separate speech-to-text, text generation, and text-to-speech services. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Transcribe streaming, then InvokeModelWithResponseStream with a text model, then Amazon Polly, and cancel the Polly playback when the user starts speaking."
+      },
+      {
+        "key": "B",
+        "text": "Use the InvokeModelWithBidirectionalStream API with Amazon Nova Sonic, and stream base64-encoded audio input events and receive audio and text output events over one open session."
+      },
+      {
+        "key": "C",
+        "text": "Use the ConverseStream API with Amazon Nova Pro and upload each user utterance as an audio file in the messages array."
+      },
+      {
+        "key": "D",
+        "text": "Use the InvokeModel API with Amazon Nova Sonic for each utterance, and store the previous audio files in Amazon S3 to give the model context."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "InvokeModelWithBidirectionalStream keeps one stream open (up to about 8 minutes) so a single session can carry multiple prompts and responses. Audio flows in and out as events, the model keeps contextual awareness, and the user can interrupt the model's speech with new input. The Transcribe, text model, and Polly chain (A) works but chains three services and does not meet the single-model requirement or provide model-aware interruption. ConverseStream with a text-oriented model (C) is unidirectional and does not provide speech-to-speech. Per-utterance InvokeModel (D) is not a streaming API and cannot support live interruption.",
+    "source_topic": "AWS Skill Builder tutorial 5: Foundation Model API Integrations"
+  },
+  {
+    "id": "d2-q1025",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Nova Sonic bidirectional stream event sequence",
+    "difficulty": "hard",
+    "question_text": "A developer is implementing a speech-to-speech client for Amazon Nova Sonic by using the InvokeModelWithBidirectionalStream API. The first test sends audio chunks, but the model never responds, and the stream returns event sequencing errors. The developer must send the JSON events in the order that the API expects. Which sequence of events is correct?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "promptStart, sessionStart, contentStart (AUDIO, USER), audioInput chunks, contentEnd, promptEnd, sessionEnd"
+      },
+      {
+        "key": "B",
+        "text": "sessionStart, contentStart (AUDIO, USER), audioInput chunks, contentEnd, promptStart, promptEnd, sessionEnd"
+      },
+      {
+        "key": "C",
+        "text": "sessionStart, promptStart, contentStart (AUDIO, USER), audioInput chunks, sessionEnd, contentEnd, promptEnd"
+      },
+      {
+        "key": "D",
+        "text": "sessionStart (inference configuration), promptStart (output configuration), contentStart (TEXT, SYSTEM) with the system prompt and contentEnd, contentStart (AUDIO, USER), audioInput chunks, contentEnd, promptEnd, sessionEnd"
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "The session must be initialized in order: sessionStart with the inference configuration, promptStart with the text and audio output configuration, then the system prompt as a TEXT content block with the SYSTEM role, and then the user's AUDIO content block with base64-encoded audioInput chunks and a contentEnd. The session is closed with promptEnd and then sessionEnd. Option A sends promptStart before sessionStart, option B sends audio before any prompt is configured, and option C ends the session before closing the content block and prompt.",
+    "source_topic": "AWS Skill Builder tutorial 5: Foundation Model API Integrations"
+  },
+  {
+    "id": "d2-q1026",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "StartAsyncInvoke for long-running video generation",
+    "difficulty": "medium",
+    "question_text": "A marketing company exposes an API that generates short promotional videos by using an Amazon Bedrock video generation model. Each generation takes several minutes, and many users submit requests at the same time. The company wants the API to return immediately, store the generated video in Amazon S3, and let the client check whether the job is finished. The company wants to avoid long-held connections and avoid building its own job runner. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Call the Bedrock StartAsyncInvoke API with an S3 output location, store the returned invocation ARN with a job status, and check progress with the GetAsyncInvoke API."
+      },
+      {
+        "key": "B",
+        "text": "Call InvokeModel from an AWS Lambda function behind Amazon API Gateway and set the Lambda timeout to 15 minutes so that the client request stays open until the video is ready."
+      },
+      {
+        "key": "C",
+        "text": "Call InvokeModelWithResponseStream and forward the video frames to the client over a WebSocket connection as the model generates them."
+      },
+      {
+        "key": "D",
+        "text": "Call the ConverseStream API with a video prompt and write the streamed content blocks to Amazon S3 from the client."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "StartAsyncInvoke is the native asynchronous Bedrock API for long-running generations: it returns an invocation ARN immediately, writes the output to the S3 location that you provide, and the job state can be checked with GetAsyncInvoke. A held-open synchronous call (B) ties up connections and is bounded by API and Lambda timeouts. Video output is not produced as a stream of frames, so InvokeModelWithResponseStream (C) and ConverseStream (D) do not fit the use case.",
+    "source_topic": "AWS Skill Builder tutorial 5: Foundation Model API Integrations"
+  },
+  {
+    "id": "d2-q1027",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "SQS partial batch failures and DLQ for Bedrock workers",
+    "difficulty": "hard",
+    "question_text": "A company processes customer documents by sending each document to Amazon Bedrock from an AWS Lambda function that is triggered by an Amazon SQS standard queue with a batch size of 10. The function currently throws an exception if any message in the batch fails. When one document is malformed, all 10 messages return to the queue and the successfully processed documents are sent to Bedrock again, which duplicates cost. The company wants to keep batching to limit Lambda invocations, and wants messages that repeatedly fail to be isolated for review. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Reduce the batch size to 1 so that only the failed document is retried, and lower the queue visibility timeout to 5 seconds."
+      },
+      {
+        "key": "B",
+        "text": "Convert the queue to a FIFO queue and set the Lambda function to process each batch sequentially."
+      },
+      {
+        "key": "C",
+        "text": "Enable ReportBatchItemFailures on the event source mapping, return only the failed message IDs in batchItemFailures, and configure a dead-letter queue with a maxReceiveCount on the source queue."
+      },
+      {
+        "key": "D",
+        "text": "Catch all exceptions in the function and always return success, and write failed documents to a log group for manual review."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "With ReportBatchItemFailures, Lambda deletes the messages that succeeded and returns only the failed IDs to the queue, so Bedrock is not called again for successful documents while batching is kept. A DLQ with maxReceiveCount isolates messages that keep failing. Batch size 1 (A) gives up batching, and a very short visibility timeout causes in-flight messages to reappear and be processed twice. A FIFO queue (B) addresses ordering, not partial failure. Always returning success (D) deletes the failed messages and loses the retry and DLQ safety net.",
+    "source_topic": "AWS Skill Builder tutorial 5: Foundation Model API Integrations"
+  },
+  {
+    "id": "d2-q1028",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Limiting SQS-triggered Lambda concurrency to protect Bedrock quota",
+    "difficulty": "hard",
+    "question_text": "A company uses Amazon SQS to buffer requests for a GenAI summarization service. An AWS Lambda function that consumes the queue calls Amazon Bedrock. When thousands of messages arrive, Lambda scales out quickly and many invocations receive ThrottlingException from Bedrock. The company must not lose messages and wants the queue to drain steadily at a rate that Bedrock quota can support, without messages being moved to the dead-letter queue only because the function was throttled. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Convert the standard queue to a FIFO queue so that the queue limits the rate of delivery to Lambda."
+      },
+      {
+        "key": "B",
+        "text": "Set the maximum concurrency on the SQS event source mapping to a value that matches the Bedrock quota, and use exponential backoff with jitter in the function for transient throttling."
+      },
+      {
+        "key": "C",
+        "text": "Set the function's reserved concurrency to the same value as the Bedrock quota and keep the unlimited event source mapping scaling."
+      },
+      {
+        "key": "D",
+        "text": "Configure provisioned concurrency on the Lambda function so that it always has enough warm environments to handle the burst."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "The maximum concurrency setting on the SQS event source mapping limits how many concurrent invocations the poller creates, so messages stay in the queue until capacity is available and the drain rate matches the Bedrock quota. Backoff with jitter handles any remaining transient throttling. Reserved concurrency (C) still lets the poller deliver messages that Lambda then throttles, and those messages return to the queue and consume receive attempts, so they can reach the DLQ. FIFO (A) does not enforce a rate that matches a Bedrock quota, and provisioned concurrency (D) increases concurrency rather than limiting it.",
+    "source_topic": "AWS Skill Builder tutorial 5: Foundation Model API Integrations"
+  },
+  {
+    "id": "d2-q1029",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "DynamoDB job tracking for async GenAI requests: TTL and Streams",
+    "difficulty": "medium",
+    "question_text": "A company runs an asynchronous content-analysis service. API Gateway accepts a request, a job record with a status of PENDING is written to Amazon DynamoDB, and SQS-triggered Lambda workers call Amazon Bedrock and update the record to COMPLETED or FAILED. The company has two new requirements. Completed job records must be removed automatically 7 days after completion without custom cleanup code or consumed write capacity. Users must be notified as soon as a job status changes, without clients repeatedly polling the table. (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run a scheduled Lambda function every hour that scans the table and deletes records older than 7 days."
+      },
+      {
+        "key": "B",
+        "text": "Enable DynamoDB Streams on the table and invoke a Lambda function from the stream to send a notification when the status attribute changes."
+      },
+      {
+        "key": "C",
+        "text": "Create an Amazon CloudWatch alarm on the table's item count and invoke a Lambda function to publish notifications."
+      },
+      {
+        "key": "D",
+        "text": "Store an expiration timestamp in a TTL attribute when the job is completed, and enable Time to Live on the table."
+      },
+      {
+        "key": "E",
+        "text": "Move job records to an S3 bucket and use S3 Lifecycle rules and polling of the bucket for status changes."
+      }
+    ],
+    "correct_answers": [
+      "B",
+      "D"
+    ],
+    "explanation": "Time to Live deletes expired items in the background without consuming write capacity or requiring custom code, which meets the cleanup requirement. DynamoDB Streams captures item changes so a Lambda function can react to status changes and send notifications without client polling. A scheduled scan-and-delete function (A) is custom code that consumes read and write capacity. A CloudWatch alarm on item count (C) does not identify individual status changes. Moving records to S3 (E) removes the key-based status lookup and still relies on polling.",
+    "source_topic": "AWS Skill Builder tutorial 5: Foundation Model API Integrations"
+  },
+  {
+    "id": "d2-q1030",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Server-Sent Events for one-way token streaming",
+    "difficulty": "medium",
+    "question_text": "A company is building a browser-based assistant that shows Amazon Bedrock answers token by token. Users only submit a prompt and read the answer, and there is no requirement to interrupt or modify a response while it is generating. Mobile users on unstable networks often lose connectivity briefly, and the front-end team wants the browser to reconnect and resume automatically with the least client-side code. The backend team wants to avoid managing persistent connection state for each user. Which streaming pattern should the company choose?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon API Gateway WebSocket API, with client code that implements heartbeats and reconnection logic."
+      },
+      {
+        "key": "B",
+        "text": "InvokeModelWithBidirectionalStream called directly from the browser, with the model ID changed to a text model."
+      },
+      {
+        "key": "C",
+        "text": "Client-side polling of an API that returns the partial answer from Amazon DynamoDB every 500 milliseconds."
+      },
+      {
+        "key": "D",
+        "text": "Server-Sent Events over a standard HTTP connection, with the browser EventSource API for automatic reconnection and event IDs so that the stream can resume."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Server-Sent Events provide one-way server-to-client streaming over plain HTTP, and the browser EventSource API reconnects automatically, using event IDs and Last-Event-ID to resume. This fits a read-only token stream with the least client code and no bidirectional connection management. WebSockets (A) are bidirectional and add heartbeat, reconnection, and state-synchronization work that this use case does not need. The bidirectional stream API (B) is for speech models and is not a browser text-streaming solution. Polling (C) adds latency and load and is not true streaming.",
+    "source_topic": "AWS Skill Builder tutorial 5: Foundation Model API Integrations"
+  },
+  {
+    "id": "d2-q1031",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "WebSocket streaming with interruption: connection IDs and PostToConnection",
+    "difficulty": "hard",
+    "question_text": "A company is building a serverless chat assistant on Amazon Bedrock. Users must be able to interrupt a response while it is being generated and send a new instruction on the same connection. The solution must support thousands of concurrent users. Lambda functions invoke Bedrock with InvokeModelWithResponseStream. The solution architect uses an Amazon API Gateway WebSocket API. Which actions are required to deliver the streamed tokens to the right user? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Save the connectionId from the $connect route in Amazon DynamoDB, with the user or session it belongs to, so that any function invocation can look it up."
+      },
+      {
+        "key": "B",
+        "text": "Keep the connectionId in a global variable in the Lambda function so that later invocations can send chunks to the same client."
+      },
+      {
+        "key": "C",
+        "text": "Use the API Gateway Management API PostToConnection operation to send each streamed chunk to the stored connection ID."
+      },
+      {
+        "key": "D",
+        "text": "Return each chunk in the response of the $default route so that API Gateway pushes the chunks to the client in order."
+      },
+      {
+        "key": "E",
+        "text": "Replace the WebSocket API with a REST API and require the client to open a new request for each chunk."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "C"
+    ],
+    "explanation": "In an API Gateway WebSocket API, the server pushes messages to a client by calling PostToConnection with the connectionId, and because Lambda invocations do not share memory, the connectionId from the $connect route must be persisted, for example in DynamoDB. This also lets the same user send an interruption message on the open connection. A global variable (B) is not shared across execution environments. A route response (D) answers only the single incoming message and cannot stream many chunks. A request per chunk (E) removes the persistent bidirectional connection that interruption requires.",
+    "source_topic": "AWS Skill Builder tutorial 5: Foundation Model API Integrations"
+  },
+  {
+    "id": "d2-q1032",
+    "domain": 2,
+    "task_statement": "2.4",
+    "topic": "Bedrock SDK read timeout for long synchronous generations",
+    "difficulty": "hard",
+    "question_text": "A company has an AWS Lambda function that calls Amazon Bedrock with the InvokeModel API to generate long reports. The Lambda timeout is 10 minutes. Some reports take about 3 minutes to generate. The function logs show read timeout errors from the SDK client after about 60 seconds, and the SDK retries the call, which causes duplicate model invocations and extra cost. The company does not want to change the architecture. Which solution will resolve the errors?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure the Bedrock Runtime client with a read timeout that is longer than the expected generation time, and keep the retry count low so that a slow call is not repeated."
+      },
+      {
+        "key": "B",
+        "text": "Increase the maximum token limit in the request so that the model finishes the report with fewer calls."
+      },
+      {
+        "key": "C",
+        "text": "Purchase Provisioned Throughput for the model so that the SDK timeout is automatically extended."
+      },
+      {
+        "key": "D",
+        "text": "Enable Amazon Bedrock Guardrails on the request so that long responses are returned in chunks."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "The AWS SDK client has its own socket read timeout, which is shorter than a long generation can take, so the client gives up and retries even though Lambda still has time left. Setting the client read timeout above the expected generation time and limiting retries prevents duplicate invocations without changing the architecture. Changing max tokens (B) does not affect the client timeout, and a larger output makes the call longer. Provisioned Throughput (C) provides capacity, not client timeout settings, and Guardrails (D) do not chunk responses.",
+    "source_topic": "AWS Skill Builder tutorial 5: Foundation Model API Integrations"
+  }
+]

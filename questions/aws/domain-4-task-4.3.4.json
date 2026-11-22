@@ -1,0 +1,332 @@
+[
+  {
+    "id": "d4-q1024",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Log sampling vs Bedrock invocation logging cost",
+    "difficulty": "hard",
+    "question_text": "A company runs a customer-support assistant on Amazon Bedrock that handles about 2 million requests per day. CloudWatch Logs ingestion cost for prompt and response logging has become the largest line item in the monitoring budget. The operations team wants to keep full detail for 100% of failed and slow (>5 seconds) requests but only about 10% of successful requests. Compliance does not require a complete record of every prompt. Which solution will meet these requirements with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Set the sampling percentage for Amazon Bedrock model invocation logging to 10% in the Bedrock console and add a CloudWatch Logs retention policy for errors."
+      },
+      {
+        "key": "B",
+        "text": "Turn off Amazon Bedrock model invocation logging and write structured application logs from the application code, with a sampling rule that always logs errors and slow requests and logs about 10% of successful requests. Rely on the native AWS/Bedrock CloudWatch metrics for token, latency, and error trends."
+      },
+      {
+        "key": "C",
+        "text": "Keep model invocation logging enabled to CloudWatch Logs and create a subscription filter that discards 90% of successful records before they are ingested."
+      },
+      {
+        "key": "D",
+        "text": "Keep model invocation logging enabled and shorten the CloudWatch Logs retention period to 1 day so that most records are deleted quickly."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock model invocation logging is all-or-nothing for the account and Region; it has no sampling setting, so A is not possible. Application-level structured logging lets you sample successes while always logging errors and slow calls, and the native AWS/Bedrock metrics are collected without log ingestion. C fails because subscription filters run after ingestion, so the ingestion charge is already incurred. D reduces storage cost only; ingestion remains the main cost.",
+    "source_topic": "AWS Skill Builder tutorial 12: Monitoring and observability systems for generative AI applications"
+  },
+  {
+    "id": "d4-q1025",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "CloudWatch dashboards as code",
+    "difficulty": "medium",
+    "question_text": "A company runs a generative AI application in development, staging, and production AWS accounts. Engineers built the CloudWatch dashboards by hand in each account. The dashboards that track AWS/Bedrock InvocationLatency, InvocationThrottles, InputTokenCount, and OutputTokenCount have drifted apart, and nobody can tell which version is correct. The company wants dashboards that are reproducible, reviewed through pull requests, and deployed consistently to every account. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Take screenshots of the production dashboard and store them in a shared wiki so engineers can re-create them in the other accounts."
+      },
+      {
+        "key": "B",
+        "text": "Define each dashboard as a JSON dashboard body in an AWS CloudFormation or AWS CDK template stored in source control, and deploy it to every account through the CI/CD pipeline."
+      },
+      {
+        "key": "C",
+        "text": "Create the dashboards in the production account only and give developers cross-account read access to production to view them."
+      },
+      {
+        "key": "D",
+        "text": "Replace the dashboards with CloudWatch Logs Insights saved queries that each engineer runs manually."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "CloudWatch dashboards are defined by a JSON dashboard body (metric widgets with namespace, metric, dimensions, period, and stat), which can be declared in CloudFormation or CDK. Keeping it in source control gives review, versioning, and identical deployment across accounts. Screenshots and manual copying keep the drift, cross-account viewing of production does not give staging or development their own dashboards, and saved queries are not a unified, versioned dashboard.",
+    "source_topic": "AWS Skill Builder tutorial 12: Monitoring and observability systems for generative AI applications"
+  },
+  {
+    "id": "d4-q1026",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Cost per request with metric math",
+    "difficulty": "medium",
+    "question_text": "A product team uses two Amazon Bedrock models in a tiered architecture and wants a CloudWatch dashboard widget that shows the estimated cost per 1,000 invocations for each model, updated near real time. The team does not want to write or maintain any code. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use a CloudWatch metric math expression on the AWS/Bedrock InputTokenCount, OutputTokenCount, and Invocations metrics for each ModelId, multiplying token sums by the per-token prices and dividing by invocation count."
+      },
+      {
+        "key": "B",
+        "text": "Use the AWS/Billing EstimatedCharges metric, which is published per request and per model ID in every Region."
+      },
+      {
+        "key": "C",
+        "text": "Write a Lambda function that parses Bedrock invocation logs every minute and publishes a custom metric by calling PutMetricData."
+      },
+      {
+        "key": "D",
+        "text": "Export AWS Cost and Usage Reports to Amazon S3 each day and build a QuickSight dashboard."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Bedrock publishes InputTokenCount, OutputTokenCount, and Invocations to CloudWatch automatically under AWS/Bedrock with a ModelId dimension, and metric math can combine them into a cost-per-1,000 expression directly in a dashboard with no custom code. EstimatedCharges is a billing metric that is aggregated per service, is updated only a few times per day, and is not per request or per model. The Lambda and Cost and Usage Report options require custom code or are delayed by a day.",
+    "source_topic": "AWS Skill Builder tutorial 12: Monitoring and observability systems for generative AI applications"
+  },
+  {
+    "id": "d4-q1027",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Prompt version effectiveness metrics",
+    "difficulty": "medium",
+    "question_text": "A team runs two versions of a summarization prompt side by side through Amazon Bedrock and wants to see in CloudWatch which version produces better results. The application already collects a 0-100 relevance score and a task-completion flag for each response. The team wants one dashboard that compares the versions and calculates a completion percentage per version, with minimal custom tooling. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Rely on the AWS/Bedrock InvocationLatency metric, because lower latency indicates a more effective prompt."
+      },
+      {
+        "key": "B",
+        "text": "Enable Bedrock model invocation logging and compare prompts by reading the raw log files in Amazon S3."
+      },
+      {
+        "key": "C",
+        "text": "Publish the relevance score and completion count as CloudWatch custom metrics with a PromptVersion dimension, then build dashboard widgets that use metric math to compare the versions side by side."
+      },
+      {
+        "key": "D",
+        "text": "Create a separate AWS account for each prompt version and compare the accounts' monthly bills."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Application-defined effectiveness values (relevance score, completion rate, satisfaction) are not emitted by Bedrock, so they are published as custom metrics. Adding a PromptVersion dimension lets a dashboard compare versions and metric math derive ratios such as completions divided by requests. Latency says nothing about relevance, raw S3 log reading is manual, and billing comparison does not measure response quality.",
+    "source_topic": "AWS Skill Builder tutorial 12: Monitoring and observability systems for generative AI applications"
+  },
+  {
+    "id": "d4-q1028",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Anomaly detection model excluded time ranges",
+    "difficulty": "hard",
+    "question_text": "A company uses a CloudWatch anomaly detection alarm on the AWS/Bedrock OutputTokenCount metric for its shopping assistant. A three-day flash sale produced an unusually high traffic and token volume. Since then, the alarm has stopped firing on moderate token spikes, because the expected-value band has become too wide. The company wants the alarm to return to its normal sensitivity without building custom statistical code. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Replace the anomaly detection alarm with a static alarm set to the maximum token value seen during the sale."
+      },
+      {
+        "key": "B",
+        "text": "Delete the alarm and re-create it as a composite alarm with no child alarms."
+      },
+      {
+        "key": "C",
+        "text": "Modify the anomaly detection model for the metric to exclude the flash-sale time range from model training, and keep the alarm on the model's band."
+      },
+      {
+        "key": "D",
+        "text": "Move the metric into a custom namespace so that CloudWatch builds a new model using only the sale data."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "CloudWatch anomaly detection models can be configured with excluded time periods so one-time events such as sales, outages, or deployments do not distort the learned baseline and seasonality. The alarm can keep using the model's band. A static threshold set at the sale peak is even less sensitive and does not adapt to seasonality, a composite alarm needs child alarms, and a new namespace trained on sale data would reproduce the same problem.",
+    "source_topic": "AWS Skill Builder tutorial 12: Monitoring and observability systems for generative AI applications"
+  },
+  {
+    "id": "d4-q1029",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Online hallucination metric via PutMetricData",
+    "difficulty": "hard",
+    "question_text": "A company has a production RAG chatbot built on Amazon Bedrock. Operations wants a hallucination-rate metric computed from live traffic, not only from a weekly test set, with an alarm when the rate is high for a sustained period rather than on a single bad response. CloudWatch has no built-in hallucination metric. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create an alarm on the AWS/Bedrock InvocationClientErrors metric, because hallucinations are returned as client errors."
+      },
+      {
+        "key": "B",
+        "text": "Enable CloudWatch anomaly detection on AWS/Bedrock InvocationLatency and treat any latency anomaly as a hallucination."
+      },
+      {
+        "key": "C",
+        "text": "Run a quarterly manual review of 50 conversations and enter the result in a spreadsheet."
+      },
+      {
+        "key": "D",
+        "text": "Have the application, or an asynchronous Lambda evaluator, score each response for grounding against the retrieved context, publish the result with the PutMetricData API as a custom metric, and create an alarm that requires several breaching datapoints within an evaluation window (for example, 3 out of 5)."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Response-quality signals such as hallucination rate must be generated by evaluation logic (for example, a grounding check or LLM-as-a-judge) and published as a CloudWatch custom metric with PutMetricData. An alarm with a datapoints-to-alarm setting filters one-off bad responses. Client errors and latency are operational signals unrelated to factual accuracy, and quarterly manual review is neither live nor automated.",
+    "source_topic": "AWS Skill Builder tutorial 12: Monitoring and observability systems for generative AI applications"
+  },
+  {
+    "id": "d4-q1030",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "AgentCore Evaluations to CloudWatch with composite alarm",
+    "difficulty": "hard",
+    "question_text": "A company runs a customer-facing agent on Amazon Bedrock AgentCore. The team uses AgentCore Evaluations to score task completion accuracy and reasoning quality, and wants to correlate those scores with latency and error rate on its existing CloudWatch dashboards. The team also wants to page on-call engineers only when quality drops and error rate rises at the same time, because that combination indicates a systemic problem. Which combination of steps will meet these requirements? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Publish the evaluation scores to a CloudWatch custom namespace by using PutMetricData, with the agent ID as a dimension, and alarm when the scores fall below the baseline set during development."
+      },
+      {
+        "key": "B",
+        "text": "Create one alarm per metric and configure every alarm to page the on-call engineer directly."
+      },
+      {
+        "key": "C",
+        "text": "Create a CloudWatch composite alarm whose rule requires both the quality-score alarm and the error-rate alarm to be in the ALARM state, and attach the paging action to the composite alarm."
+      },
+      {
+        "key": "D",
+        "text": "Disable the quality alarm and use only an AWS X-Ray trace map to decide when to page the on-call engineer."
+      },
+      {
+        "key": "E",
+        "text": "Export the evaluation scores to a spreadsheet each week and have engineers compare them with the dashboards manually."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "C"
+    ],
+    "explanation": "Evaluation scores sent to a CloudWatch custom namespace sit next to operational metrics and can be alarmed against the pre-production baseline. A composite alarm with an AND rule over the quality and error-rate alarms pages only when both indicate trouble, which reduces noise. Per-metric paging alarms create alert noise from isolated failures, an X-Ray service map does not measure quality scores, and weekly spreadsheets are not continuous monitoring.",
+    "source_topic": "AWS Skill Builder tutorial 12: Monitoring and observability systems for generative AI applications"
+  },
+  {
+    "id": "d4-q1031",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Embedding quality validation in ingestion pipeline",
+    "difficulty": "hard",
+    "question_text": "A company ingests new documents into an Amazon OpenSearch Service vector index every night. After the data science team upgraded the embedding model, retrieval relevance dropped even though no errors, latency, or throttling alarms fired. Root-cause analysis showed that some batches contained embeddings with the wrong dimension, NaN values, or vectors far from the distribution of the existing index. The company wants to catch such batches automatically before they affect search, quarantine them, and notify the team, with minimal operational overhead. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Add a validation step to an AWS Step Functions workflow before the index write. A Lambda function checks the dimension, NaN or infinite values, and the cosine similarity of a sample against a reference set. A Choice state routes failed batches to a quarantine S3 prefix and publishes an Amazon SNS notification."
+      },
+      {
+        "key": "B",
+        "text": "Create a CloudWatch alarm on OpenSearch CPUUtilization and page the team when it exceeds 60%."
+      },
+      {
+        "key": "C",
+        "text": "Enable Bedrock model invocation logging so that corrupted embeddings are rejected by Bedrock."
+      },
+      {
+        "key": "D",
+        "text": "Increase the OpenSearch domain's instance size so the index tolerates lower-quality vectors."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Embedding quality is a data issue, not an infrastructure issue. A validation stage that checks dimensions, NaN or infinite values, magnitude, and cosine similarity against a reference set detects drift or corrupted batches before indexing, and Step Functions can branch to quarantine and notification. CPU alarms and larger instances do not detect bad vectors, and Bedrock invocation logs record calls but do not validate or reject embeddings.",
+    "source_topic": "AWS Skill Builder tutorial 12: Monitoring and observability systems for generative AI applications"
+  },
+  {
+    "id": "d4-q1032",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "Automated vector index optimization orchestration",
+    "difficulty": "hard",
+    "question_text": "A company's RAG application stores embeddings in an Amazon OpenSearch Service domain. Search latency degrades periodically when segments accumulate and deleted documents pile up. The company wants an automated, event-driven remediation. When a CloudWatch alarm on search latency fires, a workflow must analyze index health, choose a fix (such as a force merge or reindex), run it during a low-traffic window, validate the result, and notify the team on failure with retries. The thresholds must be changeable without redeploying code. Which combination of steps will meet these requirements? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run a cron job on a single Amazon EC2 instance that force-merges every index every hour regardless of metrics."
+      },
+      {
+        "key": "B",
+        "text": "Use an Amazon EventBridge rule on the CloudWatch alarm state change to start an AWS Step Functions state machine whose steps (analyze, select, execute, validate) use Lambda functions with Retry and Catch handling and an SNS failure notification."
+      },
+      {
+        "key": "C",
+        "text": "Ask the engineering team to review OpenSearch metrics every morning and run the optimization commands manually."
+      },
+      {
+        "key": "D",
+        "text": "Hardcode the latency, fragmentation, and deleted-document thresholds inside each Lambda function so that no extra service calls are needed."
+      },
+      {
+        "key": "E",
+        "text": "Store the thresholds and optimization settings in AWS Systems Manager Parameter Store, so the Lambda functions read the current values at run time and operators can change them without a code deployment."
+      }
+    ],
+    "correct_answers": [
+      "B",
+      "E"
+    ],
+    "explanation": "EventBridge turns the alarm into an event, and Step Functions coordinates multistep logic with branching, retries, error handling, and notifications. Parameter Store centralizes thresholds and settings, so they can be tuned without redeploying code. An hourly blind cron job on one instance is inefficient, is a single point of failure, and ignores the metrics. A manual morning review is not automated, and hardcoded thresholds require a redeployment to change.",
+    "source_topic": "AWS Skill Builder tutorial 12: Monitoring and observability systems for generative AI applications"
+  },
+  {
+    "id": "d4-q1033",
+    "domain": 4,
+    "task_statement": "4.3",
+    "topic": "OpenSearch k-NN memory monitoring",
+    "difficulty": "hard",
+    "question_text": "A RAG application uses an Amazon OpenSearch Service domain with the k-NN plugin and an HNSW index. During peak hours, vector query latency spikes. CPUUtilization is moderate, but the k-NN graph memory usage is close to its limit and some graph segments are repeatedly evicted from and reloaded into memory. The team wants proactive detection and a durable fix. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the CloudWatch dashboard refresh interval so that the spikes are less visible."
+      },
+      {
+        "key": "B",
+        "text": "Alarm only on the account-level AWS Billing EstimatedCharges metric, because latency problems always appear as a cost increase."
+      },
+      {
+        "key": "C",
+        "text": "Disable the k-NN plugin and use only brute-force scans for all queries."
+      },
+      {
+        "key": "D",
+        "text": "Alarm on the domain's k-NN memory metrics (such as KNNGraphMemoryUsage and the circuit breaker metric) together with SearchLatency, and fix the cause by adding data-node memory or reducing the graph's memory footprint, for example through vector quantization or fewer, smaller vectors."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "HNSW graphs are held in off-heap memory, and when that memory is exhausted, graphs are evicted and reloaded, so latency spikes while CPU can stay moderate. Alarming on the k-NN memory and circuit-breaker metrics alongside SearchLatency gives early warning, and the durable fixes are more memory or a smaller graph footprint. Changing the refresh interval hides the symptom, billing metrics do not reflect query performance, and brute-force scans would increase latency at scale.",
+    "source_topic": "AWS Skill Builder tutorial 12: Monitoring and observability systems for generative AI applications"
+  }
+]

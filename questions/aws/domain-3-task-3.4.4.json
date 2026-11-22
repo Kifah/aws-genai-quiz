@@ -1,0 +1,66 @@
+[
+  {
+    "id": "d3-q1028",
+    "domain": 3,
+    "task_statement": "3.4",
+    "topic": "ApplyGuardrail for models hosted outside Amazon Bedrock",
+    "difficulty": "hard",
+    "question_text": "A company uses Anthropic Claude through Amazon Bedrock for general chat and a fine-tuned open-source model hosted on an Amazon SageMaker AI real-time endpoint for a specialized workflow. The responsible AI policy requires the same PII masking, denied topics, and content filters for both models, and the compliance team wants to maintain the policy in one place. Which solution will meet these requirements with the LEAST duplication?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Maintain separate regular-expression filters in an AWS Lambda function for the SageMaker endpoint and a Bedrock guardrail for the Claude model."
+      },
+      {
+        "key": "B",
+        "text": "Pass the guardrail identifier as a parameter on the SageMaker InvokeEndpoint call so that SageMaker applies the Bedrock guardrail automatically."
+      },
+      {
+        "key": "C",
+        "text": "Create one Amazon Bedrock guardrail. Call the ApplyGuardrail API on the user input before invoking the SageMaker endpoint and on the model output before returning it. Attach the same guardrail to the Bedrock model invocations."
+      },
+      {
+        "key": "D",
+        "text": "Retire the SageMaker endpoint and re-import the open-source model with Amazon Bedrock Custom Model Import, because guardrails can be used only with models hosted in Bedrock."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "The ApplyGuardrail API evaluates text against a guardrail independently of any model, so the same guardrail can protect Bedrock models and models hosted elsewhere, such as a SageMaker endpoint, keeping the policy defined and versioned in one place. Separate regex filters duplicate and weaken the policy. InvokeEndpoint has no guardrail parameter, so SageMaker does not apply Bedrock guardrails by itself. Guardrails are not limited to Bedrock-hosted models, so rebuilding the workflow is unnecessary.",
+    "source_topic": "AWS Skill Builder tutorial 9: Introduction to Compliance and Governance"
+  },
+  {
+    "id": "d3-q1030",
+    "domain": 3,
+    "task_statement": "3.4",
+    "topic": "LLM-as-a-judge scores as CloudWatch metrics with automated fallback",
+    "difficulty": "hard",
+    "question_text": "A company runs a customer-facing generative AI assistant on Amazon Bedrock. The responsible AI team wants ongoing, objective measurement of subjective qualities such as helpfulness and toxicity on production responses. When a quality score falls below an agreed standard, the operations team must be alerted and the application must automatically fall back to a previously approved prompt version. Human review of every response is too slow and expensive. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Have reviewers read a weekly sample of the model invocation logs and email the results to the operations team."
+      },
+      {
+        "key": "B",
+        "text": "Enable AWS X-Ray tracing on the application and create an alarm on the trace latency percentile."
+      },
+      {
+        "key": "C",
+        "text": "Run Amazon SageMaker Clarify bias reports on the Bedrock model and review them each quarter."
+      },
+      {
+        "key": "D",
+        "text": "Run a scheduled job that samples recent responses and scores them with an LLM-as-a-judge evaluation. Publish the scores as custom Amazon CloudWatch metrics, and create alarms that notify the team through Amazon SNS and invoke an AWS Lambda function to switch the application to the approved fallback prompt version."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "LLM-as-a-judge provides human-like scoring of subjective criteria at machine speed. Emitting the scores as custom CloudWatch metrics turns quality into an operational signal, so an alarm can alert the team and trigger an automated fallback. A weekly manual review is neither timely nor automated. X-Ray latency does not measure helpfulness or toxicity. Clarify bias reports reviewed quarterly are neither continuous nor an automated response mechanism.",
+    "source_topic": "AWS Skill Builder tutorial 9: Introduction to Compliance and Governance"
+  }
+]

@@ -1,0 +1,401 @@
+[
+  {
+    "id": "d2-q1013",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Webhook handler: signature validation, idempotency, fast acknowledgement",
+    "difficulty": "hard",
+    "question_text": "A company receives webhooks from a third-party ticketing SaaS whenever a ticket is created. Each ticket must be analyzed by an Amazon Bedrock foundation model, which takes 10 to 20 seconds. The SaaS provider expects an HTTP 2xx response within 5 seconds and redelivers the webhook if it does not get one, so duplicate deliveries occur. The provider signs each request body with a shared-secret HMAC. The company must reject forged requests, must not run the analysis twice for the same ticket event, and wants minimal operational effort. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Expose a Lambda function URL with AWS_IAM authorization. The function calls Bedrock synchronously and returns the analysis in the HTTP response."
+      },
+      {
+        "key": "B",
+        "text": "Place Amazon API Gateway in front of a Lambda webhook handler. The handler retrieves the shared secret from AWS Secrets Manager, validates the HMAC signature, performs a conditional write of the event ID to an Amazon DynamoDB table, sends new events to an Amazon SQS queue, and returns 202 immediately. A second Lambda function consumes the queue and invokes Bedrock."
+      },
+      {
+        "key": "C",
+        "text": "Configure API Gateway to send the webhook body directly to an Amazon SQS FIFO queue by using a service integration. Use the ticket ID as the message deduplication ID and skip signature validation because the queue is private."
+      },
+      {
+        "key": "D",
+        "text": "Create a Lambda webhook handler that validates the signature, calls Bedrock synchronously, and relies on the provider's retry behavior. Increase the Lambda timeout to 60 seconds to prevent duplicate analysis."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Verifying the HMAC signature authenticates the sender, a conditional DynamoDB write makes duplicate deliveries idempotent, and returning 202 after enqueueing meets the 5-second acknowledgement window while the queue consumer performs the slow Bedrock call. Option A cannot work because the SaaS provider cannot sign requests with SigV4 for IAM authorization, and the synchronous call exceeds 5 seconds. Option C skips signature validation, so forged requests are accepted, and FIFO deduplication only covers a 5-minute window. Option D still blocks past the provider's 5-second deadline, which triggers the redeliveries it is meant to avoid.",
+    "source_topic": "AWS Skill Builder tutorial 4: Enterprise Integration Architectures"
+  },
+  {
+    "id": "d2-q1014",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "EventBridge custom event bus, rule patterns and multi-target fan-out",
+    "difficulty": "medium",
+    "question_text": "A company runs several generative AI microservices. After a Bedrock-based service finishes summarizing a document, it must publish the result so that a Lambda function can update a search index and an Amazon SQS queue can feed a downstream reporting service. Other result types, such as image analysis, must be routed to different consumers. The producer must not know which consumers exist, and AI events must be isolated from AWS service events and from other application domains. Which combination of steps will meet these requirements? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a custom Amazon EventBridge event bus for the AI application. Publish each result to that bus by using the PutEvents API with a consistent source and detail-type."
+      },
+      {
+        "key": "B",
+        "text": "Publish the result to an Amazon SNS topic for each consumer from the producer code, and add new publish calls whenever a consumer is added."
+      },
+      {
+        "key": "C",
+        "text": "Publish the result to the default event bus and create one rule that invokes a single Lambda function, which uses if/else logic to call each downstream service."
+      },
+      {
+        "key": "D",
+        "text": "Create a rule on the custom bus whose event pattern matches the source and the summary detail-type, and add both the Lambda function and the SQS queue as targets of the rule."
+      },
+      {
+        "key": "E",
+        "text": "Have the producer start an AWS Step Functions Parallel state that calls the Lambda function and sends the SQS message directly."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "D"
+    ],
+    "explanation": "A custom event bus gives isolation and organization for application-specific events, and a rule with an event pattern on source and detail-type routes matching events to multiple targets in parallel, so producers and consumers stay decoupled. Option B makes the producer aware of every consumer. Option C mixes AI events with AWS service events on the default bus and hard-codes routing in a dispatcher function, which tightly couples consumers. Option E also makes the producer own the fan-out logic.",
+    "source_topic": "AWS Skill Builder tutorial 4: Enterprise Integration Architectures"
+  },
+  {
+    "id": "d2-q1015",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "EventBridge target dead-letter queue and retry policy",
+    "difficulty": "hard",
+    "question_text": "A retail company publishes Bedrock-generated product insights to an Amazon EventBridge custom event bus. A rule forwards matching events to an EventBridge API destination that calls a partner CRM's REST endpoint. The CRM is sometimes unavailable for several hours, and insights are lost after EventBridge exhausts its retries. The company needs to capture only the events that could not be delivered so it can reprocess them later, with minimal custom code. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure the rule target with a retry policy and an Amazon SQS dead-letter queue. Alarm on the queue depth in Amazon CloudWatch and reprocess messages from the queue after the CRM recovers."
+      },
+      {
+        "key": "B",
+        "text": "Configure a dead-letter queue and an on-failure destination on the Lambda function that sits in front of the CRM, because EventBridge delivers to the API destination through that function."
+      },
+      {
+        "key": "C",
+        "text": "Create an EventBridge archive for the custom bus and replay the whole archive each night so that missed events reach the CRM."
+      },
+      {
+        "key": "D",
+        "text": "Enable AWS CloudTrail data events for EventBridge and write a Lambda function that scans the logs to find and resend failed events."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "EventBridge targets support a configurable retry policy (maximum event age and number of retry attempts) and a dead-letter queue that receives events that EventBridge could not deliver to the target. Option B is wrong because no Lambda function is involved in this delivery path, so a Lambda DLQ would never see the failures. Option C replays every archived event rather than only the failed ones, creating duplicates and extra processing. Option D requires custom log parsing and is not a delivery-failure capture mechanism.",
+    "source_topic": "AWS Skill Builder tutorial 4: Enterprise Integration Architectures"
+  },
+  {
+    "id": "d2-q1016",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "SQS-to-Lambda partial batch failures and source queue DLQ",
+    "difficulty": "hard",
+    "question_text": "A Lambda function consumes messages from an Amazon SQS standard queue with a batch size of 10. For each message, the function invokes Amazon Bedrock and writes the result to Amazon DynamoDB. When Bedrock throttles one request, the function throws an error and the entire batch becomes visible again, so the nine successful messages are reprocessed. This causes duplicate Bedrock charges and duplicate writes. The company wants to keep the batch size for throughput, retry only the failed messages, and isolate messages that repeatedly fail. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Reduce the batch size to 1 so that a failure affects only one message, and attach a dead-letter queue to the Lambda function."
+      },
+      {
+        "key": "B",
+        "text": "Convert the queue to an SQS FIFO queue so that successfully processed messages are not delivered again."
+      },
+      {
+        "key": "C",
+        "text": "Increase the Lambda function timeout so that throttled Bedrock calls eventually succeed within the same invocation."
+      },
+      {
+        "key": "D",
+        "text": "Enable ReportBatchItemFailures on the event source mapping and return the identifiers of the failed messages. Configure a redrive policy with a maxReceiveCount and a dead-letter queue on the source SQS queue."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "With partial batch responses, Lambda deletes the successful messages and returns only the reported failures to the queue, and the source queue's redrive policy moves messages that exceed maxReceiveCount to a DLQ. Option A gives up the required batching throughput, and a Lambda-level DLQ applies to asynchronous invocations, not to SQS event source mappings. Option B does not change batch retry behavior. Option C does not prevent a thrown error from returning the whole batch to the queue and does not isolate poison messages.",
+    "source_topic": "AWS Skill Builder tutorial 4: Enterprise Integration Architectures"
+  },
+  {
+    "id": "d2-q1017",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Hybrid connectivity: keep PII on premises and encrypt traffic to Bedrock",
+    "difficulty": "hard",
+    "question_text": "A bank stores customer records containing personally identifiable information (PII) in its on-premises data center. It wants to use Amazon Bedrock in an AWS Region to summarize case notes. Regulations state that raw PII must not leave the data center. The bank also needs private connectivity with consistent bandwidth that does not use the public internet, and the data in transit between the data center and AWS must be encrypted. Which combination of steps will meet these requirements? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Upload the raw case notes to Amazon S3 with SSE-KMS and use Amazon Macie in the cloud to remove the PII before invoking Bedrock."
+      },
+      {
+        "key": "B",
+        "text": "Connect the data center to the VPC with an AWS Site-to-Site VPN over the public internet only, and reach Bedrock through a NAT gateway."
+      },
+      {
+        "key": "C",
+        "text": "Configure an Amazon Bedrock guardrail with sensitive information filters, and send the raw case notes to Bedrock for masking in the Region."
+      },
+      {
+        "key": "D",
+        "text": "Redact or tokenize the PII in the on-premises environment before any data is sent, so only de-identified text goes to the cloud-hosted foundation model."
+      },
+      {
+        "key": "E",
+        "text": "Use AWS Direct Connect for the dedicated private link and add an AWS Site-to-Site VPN for IPsec encryption of the traffic. Access Bedrock through an interface VPC endpoint (AWS PrivateLink)."
+      }
+    ],
+    "correct_answers": [
+      "D",
+      "E"
+    ],
+    "explanation": "The PII must be removed locally before transmission, which keeps sensitive data on premises while still using the cloud-hosted FM, and Direct Connect plus an encrypting VPN with PrivateLink provides private, consistent-bandwidth, encrypted connectivity. Options A and C move raw PII to AWS before it is redacted, violating the data-residency rule. Option B uses the public internet and offers no consistent bandwidth, and a NAT gateway implies internet egress.",
+    "source_topic": "AWS Skill Builder tutorial 4: Enterprise Integration Architectures"
+  },
+  {
+    "id": "d2-q1018",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Choosing AWS Local Zones for metro-area low-latency inference",
+    "difficulty": "medium",
+    "question_text": "A post-production company has studios in a large metropolitan area. Artists use workstations on wired office networks and need generative image upscaling with single-digit millisecond latency between the workstation and the GPU instances running the model. The closest AWS Region is too far away to meet this latency. The company wants to use standard VPC, Amazon EC2 and Amazon S3 constructs and does not want to buy or maintain hardware in its own facilities. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy the inference workload in AWS Wavelength Zones embedded in a telecommunications provider's 5G network."
+      },
+      {
+        "key": "B",
+        "text": "Install AWS Outposts racks in each studio and run the inference workload on them."
+      },
+      {
+        "key": "C",
+        "text": "Extend the VPC to an AWS Local Zone in the metropolitan area and run the GPU inference instances there."
+      },
+      {
+        "key": "D",
+        "text": "Put an Amazon CloudFront distribution in front of the Regional inference endpoint to cache generated images."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "AWS Local Zones place compute, storage and other services close to users in metropolitan areas, support single-digit millisecond latency and are consumed through the normal VPC and EC2 model with no hardware to own. Wavelength targets mobile devices on carrier 5G networks, not wired workstations. Outposts requires installing and hosting AWS hardware in the studios. CloudFront caches content but does not run low-latency GPU inference for newly generated output.",
+    "source_topic": "AWS Skill Builder tutorial 4: Enterprise Integration Architectures"
+  },
+  {
+    "id": "d2-q1019",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "AWS AI Factories for sovereign dedicated AI environments",
+    "difficulty": "medium",
+    "question_text": "A national agency has strict data sovereignty and digital independence requirements. It must operate generative AI workloads in a dedicated, isolated environment that is separate from other customers, keep full data residency, and retain operating independence. The agency also wants access to leading foundation models through Amazon Bedrock and Amazon SageMaker AI without negotiating separate contracts with individual model providers. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Bedrock in a commercial Region with an interface VPC endpoint and service control policies that restrict model access."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Bedrock cross-Region inference with a geographic inference profile that is limited to the agency's preferred geography."
+      },
+      {
+        "key": "C",
+        "text": "Use AWS Local Zones to place Bedrock endpoints near the agency and rely on IAM policies for isolation."
+      },
+      {
+        "key": "D",
+        "text": "Deploy AWS AI Factories to get a dedicated, isolated AWS AI environment that provides integrated services such as Amazon Bedrock and Amazon SageMaker AI."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "AWS AI Factories provide dedicated, isolated environments with complete data residency and operational independence, delivering AWS AI services such as Bedrock and SageMaker AI and foundation model access without separate provider contracts. Options A and B still run on shared multi-tenant Regional infrastructure, so they do not give a dedicated environment. Option C is a latency feature that offers a subset of services and does not provide sovereign operating independence.",
+    "source_topic": "AWS Skill Builder tutorial 4: Enterprise Integration Architectures"
+  },
+  {
+    "id": "d2-q1020",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "EventBridge Scheduler for one-time and recurring FM invocations at scale",
+    "difficulty": "hard",
+    "question_text": "A SaaS company generates a personalized AI-written report for each of its 2 million customers. Each report must be generated at a time chosen by the customer in the customer's own time zone, and some are one-time requests. The invocations of the Lambda function that calls Amazon Bedrock should be spread over a window to avoid Bedrock throttling, and failed invocations must be retried. The company wants a serverless solution with the least operational overhead. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create an Amazon EventBridge rule with a cron expression for each customer and target the Lambda function."
+      },
+      {
+        "key": "B",
+        "text": "Create one schedule per customer in Amazon EventBridge Scheduler with the customer's time zone, use one-time or recurring schedules, set a flexible time window, and configure a retry policy and dead-letter queue."
+      },
+      {
+        "key": "C",
+        "text": "Run an AWS Step Functions state machine per customer that uses a Wait state until the report time and then invokes the Lambda function."
+      },
+      {
+        "key": "D",
+        "text": "Run a Lambda function every minute that scans a DynamoDB table for due reports and calls Bedrock for all of them in one invocation."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "EventBridge Scheduler supports one-time and recurring schedules at very large scale, per-schedule time zones, flexible time windows that spread invocations, and retry policies with dead-letter queues, all with no servers to manage. Option A does not suit millions of per-customer rules and cannot express one-time schedules per time zone with a flexible window. Option C keeps millions of long-running executions open and adds cost and quota pressure. Option D concentrates all work in one invocation, which risks Bedrock throttling and the Lambda timeout.",
+    "source_topic": "AWS Skill Builder tutorial 4: Enterprise Integration Architectures"
+  },
+  {
+    "id": "d2-q1021",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Change data capture to keep FM data in sync with an operational database",
+    "difficulty": "hard",
+    "question_text": "A company uses Amazon Aurora PostgreSQL for its CRM. A generative AI application reads enterprise data from an Amazon S3 data lake, and it must reflect CRM changes within a few minutes. The company must not add significant query load to the production database and wants managed services with minimal custom code. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run an AWS Glue JDBC job every night that does a full-table read of the CRM tables and overwrites the S3 data lake."
+      },
+      {
+        "key": "B",
+        "text": "Write a Lambda function that runs SELECT queries against the database every minute and writes the full result sets to S3."
+      },
+      {
+        "key": "C",
+        "text": "Use AWS Database Migration Service with change data capture to stream ongoing changes to Amazon Kinesis Data Streams. Use an AWS Glue streaming job to transform the records and write Parquet files to the S3 data lake."
+      },
+      {
+        "key": "D",
+        "text": "Take hourly Aurora snapshots and export each snapshot to Amazon S3."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Change data capture reads the database's transaction log, so it keeps downstream systems synchronized within minutes without repeatedly querying production tables, and the DMS, Kinesis and Glue combination is fully managed. Options A and B repeatedly read full tables, adding load, and A leaves data up to a day stale. Option D is neither near real-time nor incremental.",
+    "source_topic": "AWS Skill Builder tutorial 4: Enterprise Integration Architectures"
+  },
+  {
+    "id": "d2-q1022",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "AgentCore Gateway and Identity for exposing enterprise APIs to agents",
+    "difficulty": "hard",
+    "question_text": "A company has dozens of internal REST APIs described by OpenAPI specifications and several Lambda functions. Different teams build agents with different frameworks and models, and all agents must discover and call these capabilities as tools. Security requires that callers authenticate through the corporate OpenID Connect identity provider and that downstream credentials are not hard-coded in agent code or prompts. The company wants to avoid writing and hosting a separate tool server for each API. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Bedrock AgentCore Gateway to convert the OpenAPI-described APIs and Lambda functions into agent-compatible tools. Use AgentCore Identity to authorize inbound callers with the corporate identity provider and manage outbound credentials."
+      },
+      {
+        "key": "B",
+        "text": "Write a custom MCP server on Lambda for each API and store each API key in the Lambda environment variables."
+      },
+      {
+        "key": "C",
+        "text": "Define each API as an action group in Amazon Bedrock Agents and require every team to build its agents with Bedrock Agents only."
+      },
+      {
+        "key": "D",
+        "text": "Place all APIs behind Amazon API Gateway with an Amazon Cognito authorizer and give each agent the REST endpoints in its system prompt."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "AgentCore Gateway turns existing enterprise APIs and Lambda functions into agent-compatible tools and handles authentication, rate limiting and routing, while AgentCore Identity integrates with enterprise identity providers and manages credentials for agents. Option B requires building and hosting many tool servers and stores static secrets. Option C ties every team to a single agent service and does not fit the multi-framework requirement. Option D does not expose the APIs as discoverable tools and places endpoint details in prompts.",
+    "source_topic": "AWS Skill Builder tutorial 4: Enterprise Integration Architectures"
+  },
+  {
+    "id": "d2-q1039",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "Amazon Connect for AI-assisted customer service",
+    "difficulty": "medium",
+    "question_text": "A retailer wants to modernize its contact center. Routine requests such as order status and returns should be resolved by AI agents that keep conversation context across voice and chat channels. When a customer needs empathy or complex judgment, the conversation must escalate to a human agent, who should receive real-time guidance during the interaction. The company also wants analytics that cover both AI and human interactions and wants to avoid building the contact-center platform itself. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Build a chatbot with Amazon Bedrock Agents behind Amazon API Gateway and add a custom escalation Lambda function"
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Comprehend sentiment analysis on call transcripts and route negative calls to a manager"
+      },
+      {
+        "key": "C",
+        "text": "Deploy Amazon Connect with AI agents for self-service and real-time agent assistance for human agents"
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Q Business with a web experience and publish it on the company's support page"
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Amazon Connect is an AI-powered customer experience platform in which AI agents handle routine tasks across channels while keeping context, escalate to human agents when needed, provide real-time guidance to those agents, and report analytics across AI and human interactions. A custom Bedrock Agents chatbot would force the company to build the contact-center, routing, and analytics layers itself. Comprehend sentiment analysis only analyzes text and does not provide channels, routing, or agent assist. Q Business is an internal enterprise knowledge assistant, not a customer-facing contact-center platform.",
+    "source_topic": "AWS Skill Builder tutorial 6: Application Integration Patterns and AI-Assisted Development Tools"
+  },
+  {
+    "id": "d2-q1040",
+    "domain": 2,
+    "task_statement": "2.3",
+    "topic": "CRM enhancements with Personalize and Comprehend",
+    "difficulty": "medium",
+    "question_text": "A company is adding generative AI to its CRM. AWS Lambda functions already call Amazon Bedrock to draft personalized follow-up emails. The company now also needs (1) next-best-product recommendations that are trained on each customer's purchase and browsing interaction history and updated in near real time, and (2) a low-cost, purpose-built API that scores the sentiment of thousands of incoming customer emails and chat messages per hour. Which TWO services should the company add? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Kendra"
+      },
+      {
+        "key": "B",
+        "text": "Amazon Textract"
+      },
+      {
+        "key": "C",
+        "text": "Amazon Personalize"
+      },
+      {
+        "key": "D",
+        "text": "Amazon Rekognition"
+      },
+      {
+        "key": "E",
+        "text": "Amazon Comprehend"
+      }
+    ],
+    "correct_answers": [
+      "C",
+      "E"
+    ],
+    "explanation": "Amazon Personalize builds recommendation models from user-item interaction data and serves real-time personalized recommendations and next-best-action suggestions, matching requirement 1. Amazon Comprehend provides a managed sentiment-analysis API for customer feedback and communications, matching requirement 2 without prompt engineering or per-request model cost. Kendra is an enterprise search service, Textract extracts text and data from documents and images, and Rekognition analyzes images and video; none of them produce recommendations or sentiment scores for CRM text.",
+    "source_topic": "AWS Skill Builder tutorial 6: Application Integration Patterns and AI-Assisted Development Tools"
+  }
+]

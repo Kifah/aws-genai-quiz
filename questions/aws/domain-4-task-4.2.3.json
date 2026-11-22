@@ -1,0 +1,396 @@
+[
+  {
+    "id": "d4-q1012",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Pre-computation storage, query hashing, and refresh",
+    "difficulty": "hard",
+    "question_text": "A software company runs a Bedrock-based support assistant. Analytics show that about 300 product questions account for most traffic, and each is asked thousands of times a day with different casing, spacing, and punctuation. Answers are long, formatted guides, and some exceed 1 MB. Answers must be served in under 200 ms, and they must reflect product documentation changes within an hour. The team wants to avoid invoking the model for these repeat questions. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Cache responses in Amazon ElastiCache keyed by the raw query string. Set no expiration and flush the cache manually when documentation changes."
+      },
+      {
+        "key": "B",
+        "text": "Enable Amazon Bedrock prompt caching on the system prompt and the product documentation. Send every user question to the model on each request."
+      },
+      {
+        "key": "C",
+        "text": "Normalize each query (lowercase, trim whitespace, strip punctuation) and compute a SHA-256 hash as the lookup key in an Amazon DynamoDB table. Store response metadata and an expiry timestamp in DynamoDB, and store the large response bodies in Amazon S3. Regenerate affected entries with an Amazon EventBridge-triggered workflow when documentation changes, and fall back to the model on a cache miss."
+      },
+      {
+        "key": "D",
+        "text": "Store the full pre-generated response text in DynamoDB items keyed by a SHA-256 hash of the raw query. Rely on DynamoDB TTL to refresh entries every 24 hours."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Normalizing the query before hashing makes variations of the same question resolve to one key. DynamoDB gives single-digit-millisecond lookups, and S3 holds responses larger than a DynamoDB item can hold (400 KB). Expiry plus event-driven regeneration meets the one-hour freshness requirement, and a miss falls back to the model. The raw-string key misses variants and has no expiry, so it serves stale answers. Prompt caching still runs full generation on every request, so it does not meet the 200 ms target. DynamoDB items cannot hold 1 MB responses, the raw-query hash misses variants, and 24-hour TTL is too slow.",
+    "source_topic": "AWS Skill Builder tutorial 11: Performance optimization techniques"
+  },
+  {
+    "id": "d4-q1013",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Selecting pre-computation candidates",
+    "difficulty": "medium",
+    "question_text": "A team analyzes 30 days of query logs for a generative AI application on Amazon Bedrock. They want to reduce latency and model costs by pre-computing responses for some query categories and keeping the rest real-time. Which TWO query categories are the best candidates for pre-computation? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Order-status questions that must reflect each customer's live shipment data at the moment of the request"
+      },
+      {
+        "key": "B",
+        "text": "A password-reset how-to question that is asked thousands of times per day with a stable structure and a consistent answer"
+      },
+      {
+        "key": "C",
+        "text": "Free-form questions that are almost always unique and rarely repeat across users"
+      },
+      {
+        "key": "D",
+        "text": "Quarterly earnings summaries for a fixed list of tickers that are published on a predictable calendar date and requested heavily afterward"
+      },
+      {
+        "key": "E",
+        "text": "Commentary on intraday market prices that changes every few seconds"
+      }
+    ],
+    "correct_answers": [
+      "B",
+      "D"
+    ],
+    "explanation": "Pre-computation pays off for high-frequency queries with consistent structure and similar answers, and for seasonal or cyclical content that can be generated ahead of a known date. The password-reset question and the scheduled earnings summaries both fit. Per-customer live data, unique free-form questions, and second-by-second commentary either never repeat or go stale immediately, so a stored result would be wrong or unused.",
+    "source_topic": "AWS Skill Builder tutorial 11: Performance optimization techniques"
+  },
+  {
+    "id": "d4-q1014",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Connection pool sizing for parallel Bedrock calls",
+    "difficulty": "hard",
+    "question_text": "A Python service on Amazon ECS fans out each user request into 40 parallel Amazon Bedrock InvokeModel calls by using a thread pool of 50 workers that share one boto3 bedrock-runtime client created with default settings. During peak load, logs show repeated 'Connection pool is full, discarding connection' warnings, and tail latency climbs. The service also sees occasional throttling errors. The team does not want to change the model or buy additional capacity. Which change will most directly reduce the latency?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create the shared client once with a botocore Config that sets max_pool_connections to at least the worker count and uses the adaptive retry mode."
+      },
+      {
+        "key": "B",
+        "text": "Create a new boto3 client inside each worker thread for every request so that each call has its own connection."
+      },
+      {
+        "key": "C",
+        "text": "Purchase Bedrock Provisioned Throughput for the model so that connections are reserved for the application."
+      },
+      {
+        "key": "D",
+        "text": "Double the vCPU and memory of the ECS tasks without changing the client configuration."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "The default urllib3 pool in a boto3 client holds only 10 connections, so 50 concurrent threads force connections to be discarded and re-established. Sizing max_pool_connections to the concurrency removes that overhead, and adaptive retry mode smooths client-side retries during throttling. Creating a client per call adds new TLS handshakes and defeats pooling. Provisioned Throughput reserves model capacity, not client connections. More CPU and memory do not change the pool limit.",
+    "source_topic": "AWS Skill Builder tutorial 11: Performance optimization techniques"
+  },
+  {
+    "id": "d4-q1015",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "TimeToFirstToken CloudWatch metric",
+    "difficulty": "medium",
+    "question_text": "A company runs a chat application that calls Amazon Bedrock by using the ConverseStream API. Users complain that the first words of an answer sometimes take several seconds to appear, even though total response time is acceptable. The operations team needs to alarm on the delay before the first token for each model and track a baseline over time. They do not want to add client-side instrumentation. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a CloudWatch alarm on the InvocationLatency metric in the AWS/Bedrock namespace for each model."
+      },
+      {
+        "key": "B",
+        "text": "Create a CloudWatch alarm on the TimeToFirstToken metric in the AWS/Bedrock namespace, filtered by ModelId."
+      },
+      {
+        "key": "C",
+        "text": "Use AWS CloudTrail data events for Bedrock to measure the time between the request and the first response event."
+      },
+      {
+        "key": "D",
+        "text": "Enable model invocation logging to Amazon S3 and run daily Amazon Athena queries to compute the delay."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Bedrock publishes TimeToFirstToken server-side for the streaming APIs (ConverseStream and InvokeModelWithResponseStream), so it can be alarmed on and baselined per model with no client changes. InvocationLatency measures time to the last token, so it rises with longer outputs and hides the initial delay. CloudTrail records API calls for audit, not first-token timing. Invocation logs with Athena are batch analysis and do not provide near-real-time alarming on first-token delay.",
+    "source_topic": "AWS Skill Builder tutorial 11: Performance optimization techniques"
+  },
+  {
+    "id": "d4-q1016",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "max_tokens right-sizing and quota reservation",
+    "difficulty": "hard",
+    "question_text": "A company uses on-demand Anthropic Claude models in Amazon Bedrock for a ticket-summarization service. Developers set max_tokens to 32,000 on every request, but typical summaries are about 800 tokens. During moderate traffic, the application receives ThrottlingException errors even though CloudWatch shows EstimatedTPMQuotaUsage well below the account's tokens-per-minute quota. The team cannot purchase commitments and wants the smallest change that reduces throttling. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the temperature so that responses finish sooner."
+      },
+      {
+        "key": "B",
+        "text": "Add retries with exponential backoff only and keep max_tokens unchanged."
+      },
+      {
+        "key": "C",
+        "text": "Enable prompt caching on the system prompt and keep max_tokens unchanged."
+      },
+      {
+        "key": "D",
+        "text": "Set max_tokens per request type to a value close to the expected output length, using the InputTokenCount and OutputTokenCount metrics to choose the values."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Bedrock reserves quota up front based on input tokens plus max_tokens, then adjusts it as output is generated. An oversized max_tokens temporarily consumes far more quota than the request needs and can cause throttling even when estimated usage looks low. Right-sizing max_tokens fixes the cause. Temperature does not change reserved capacity. Backoff only hides the symptom and adds latency. Prompt caching reduces input cost and quota, but it does not change the max_tokens reservation.",
+    "source_topic": "AWS Skill Builder tutorial 11: Performance optimization techniques"
+  },
+  {
+    "id": "d4-q1017",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Bedrock latency-optimized inference",
+    "difficulty": "medium",
+    "question_text": "A call-center company uses a foundation model on Amazon Bedrock to generate suggested replies for live agents. The model is available in a Region that supports latency-optimized inference for it. Response time is slightly above the target. The company does not want to change the model, rewrite prompts, or manage any infrastructure. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Submit the requests through Bedrock batch inference so that they are processed on dedicated capacity."
+      },
+      {
+        "key": "B",
+        "text": "Purchase Provisioned Throughput with a longer commitment term to reduce response time."
+      },
+      {
+        "key": "C",
+        "text": "Set the latency option to optimized in the performance configuration of the Converse or InvokeModel request for the supported model."
+      },
+      {
+        "key": "D",
+        "text": "Move to a cross-Region inference profile so that requests are always routed to the geographically closest Region."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Bedrock offers latency-optimized inference for supported models and Regions, enabled per request through the performance configuration, with no model change or infrastructure. Batch inference is asynchronous and slower per request. Provisioned Throughput guarantees capacity and throughput, not lower per-request latency. Cross-Region inference profiles improve throughput and availability, and they do not guarantee closer routing or lower latency.",
+    "source_topic": "AWS Skill Builder tutorial 11: Performance optimization techniques"
+  },
+  {
+    "id": "d4-q1018",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Score normalization in OpenSearch hybrid search",
+    "difficulty": "hard",
+    "question_text": "A company implements hybrid search for a RAG application on Amazon OpenSearch Service. A BM25 text query and a k-NN vector query are combined in a hybrid query. Raw BM25 scores range from about 0 to 30, and vector similarity scores range from 0 to 1. Results are dominated by keyword matches no matter how the two queries are weighted, and conceptually relevant documents rank low. The team wants a managed, in-cluster fix without adding another service. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase k in the k-NN query from 50 to 500 so that more vector results are returned."
+      },
+      {
+        "key": "B",
+        "text": "Create a search pipeline with a normalization processor that applies min-max normalization to each subquery's scores and combines them with a weighted arithmetic mean (or use reciprocal rank fusion)."
+      },
+      {
+        "key": "C",
+        "text": "Set the boost on the k-NN query to 100 and keep the BM25 boost at 1."
+      },
+      {
+        "key": "D",
+        "text": "Run the text and vector queries separately in the application and append the vector results to the end of the keyword results."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Scores from lexical and vector queries sit on different scales, so they must be normalized before they are combined. A search pipeline normalization processor with min-max normalization and weighted combination does this inside OpenSearch, and rank-based fusion such as reciprocal rank fusion avoids score scale entirely. A larger k changes candidate count, not scale. A fixed large boost is brittle because BM25 ranges vary by query and corpus. Appending lists is not fusion and ignores relative relevance.",
+    "source_topic": "AWS Skill Builder tutorial 11: Performance optimization techniques"
+  },
+  {
+    "id": "d4-q1019",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "OpenSearch index settings for bulk embedding ingestion",
+    "difficulty": "hard",
+    "question_text": "A company rebuilds a 200-million-document OpenSearch k-NN index every weekend before the index is opened to users. Ingestion is slow because of constant segment refreshes and replica indexing work. The rebuild window must shrink without changing the HNSW graph quality used for queries. Which TWO actions will speed up the bulk load? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Set refresh_interval to -1 (or a large value) for the duration of the load, and restore it after the load completes."
+      },
+      {
+        "key": "B",
+        "text": "Lower ef_search so that each indexing request completes faster."
+      },
+      {
+        "key": "C",
+        "text": "Request an immediate refresh on every bulk request so that documents are searchable as they are written."
+      },
+      {
+        "key": "D",
+        "text": "Set number_of_replicas to 0 during the load, and restore it to the production value after the load completes."
+      },
+      {
+        "key": "E",
+        "text": "Reduce ef_construction to the minimum so that the graph quality is lower."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "D"
+    ],
+    "explanation": "During a bulk load, disabling or lengthening the refresh interval avoids creating many small segments, and removing replicas avoids writing every document twice. Both are restored after the load for search availability. ef_search is a query-time parameter and does not affect indexing speed. Forcing a refresh on each bulk request makes ingestion slower. Reducing ef_construction speeds the build but lowers graph quality, which violates the requirement.",
+    "source_topic": "AWS Skill Builder tutorial 11: Performance optimization techniques"
+  },
+  {
+    "id": "d4-q1020",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Stemming and synonym analyzers for keyword search",
+    "difficulty": "medium",
+    "question_text": "A retail company runs hybrid search in Amazon OpenSearch Service. The keyword side misses relevant products when users search for 'running shoes' and the catalog says 'run' or 'trainers'. The team wants to improve recall of the lexical component without retraining any model and without calling a foundation model on each query. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase k in the k-NN query so that the vector side returns more candidates."
+      },
+      {
+        "key": "B",
+        "text": "Invoke a large foundation model for every search to rewrite the query into five alternatives."
+      },
+      {
+        "key": "C",
+        "text": "Store the catalog in Amazon DynamoDB and use a contains filter on each query word."
+      },
+      {
+        "key": "D",
+        "text": "Define a custom text analyzer on the index that applies lowercase, stemming or lemmatization, and a synonym token filter built from a domain thesaurus, and use it on the content field."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Analyzers handle normalization (case, stemming) and synonym expansion at the token level, so 'running', 'run', and 'trainers' match the same concepts directly in the engine with no model call and low latency. Increasing k affects only the vector side. A model rewrite on every query adds latency and cost and was ruled out. A DynamoDB contains filter is not a ranked full-text solution and does not do stemming or synonyms.",
+    "source_topic": "AWS Skill Builder tutorial 11: Performance optimization techniques"
+  },
+  {
+    "id": "d4-q1021",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Profiling multi-step agent latency",
+    "difficulty": "hard",
+    "question_text": "A company runs an agent on Amazon Bedrock AgentCore that answers employee questions by calling several internal tools. Average end-to-end latency is 14 seconds, but the CloudWatch InvocationLatency metrics show that model calls account for about 3 seconds in total. The same lookup tool is often called repeatedly with identical parameters, and independent tools are called one after another. The team wants to find and fix the bottleneck with minimal changes to quality. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Capture step-level timing (reasoning, tool execution, model invocation, memory retrieval) with structured logs or traces that share a workflow ID. Cache results of repeated identical tool calls and restructure the workflow so independent tools run in parallel."
+      },
+      {
+        "key": "B",
+        "text": "Move the agent to a larger foundation model so that reasoning completes in fewer steps."
+      },
+      {
+        "key": "C",
+        "text": "Purchase Provisioned Throughput for the current model to reduce model latency."
+      },
+      {
+        "key": "D",
+        "text": "Increase max_tokens so that the agent can complete tool planning in a single response."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Agent latency is spread across reasoning, tool execution, model calls, and memory retrieval, so total latency alone does not show the cause. Here the model is only about 3 of 14 seconds, so tool time dominates. Step-level tracing confirms that, and caching identical tool calls plus parallelizing independent tools directly removes the wasted time. A larger model or Provisioned Throughput target model latency that is not the bottleneck. A larger max_tokens does not reduce tool execution time.",
+    "source_topic": "AWS Skill Builder tutorial 11: Performance optimization techniques"
+  },
+  {
+    "id": "d4-q1022",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "Phased A/B testing across models and parameters",
+    "difficulty": "hard",
+    "question_text": "A company has chosen to improve its email-reply assistant on Amazon Bedrock. The plan is to spend six weeks tuning temperature and top-p on the current model. Bedrock now offers many models from several providers. The company wants a defensible way to find the best model-and-parameter combination while accounting for quality, latency, and cost per request. Which approach will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy each candidate model to all users for one week in sequence and compare weekly averages."
+      },
+      {
+        "key": "B",
+        "text": "Choose the model with the highest public benchmark score and skip online testing."
+      },
+      {
+        "key": "C",
+        "text": "Run randomized A/B tests with stable per-user assignment. First compare candidate model families and variants at default parameters on quality, latency, and cost per request, then tune parameters only on the winning model."
+      },
+      {
+        "key": "D",
+        "text": "Tune temperature and top-p on the current model first, then compare other models only if the tuned results miss the targets."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Model selection usually has a larger effect than parameter tuning, so the test should pick the model first and then optimize parameters on the winner. Randomized, stably assigned (for example hash-based) users make the comparison statistically valid and track cost and latency alongside quality. Sequential weekly deployments confound results with time and traffic changes. Public benchmarks do not reflect the company's task. Tuning first optimizes a possibly poor model.",
+    "source_topic": "AWS Skill Builder tutorial 11: Performance optimization techniques"
+  },
+  {
+    "id": "d4-q1023",
+    "domain": 4,
+    "task_statement": "4.2",
+    "topic": "top_k with the Converse API",
+    "difficulty": "medium",
+    "question_text": "A developer calls an Anthropic Claude model on Amazon Bedrock by using the Converse API. The application needs to set temperature to 0.2, top_p to 0.9, and top_k to 50 so that terminology stays consistent. The developer finds that temperature and top_p are available in the inferenceConfig parameter, but top_k is not. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Pass top_k in the additionalModelRequestFields parameter of the Converse request by using the model-specific field name."
+      },
+      {
+        "key": "B",
+        "text": "Switch to the Bedrock batch inference API, which exposes top_k as a top-level parameter."
+      },
+      {
+        "key": "C",
+        "text": "Set top_p to 0 so that the model behaves as if top_k were 50."
+      },
+      {
+        "key": "D",
+        "text": "Add 'use only the 50 most likely tokens' to the system prompt."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Converse standardizes only common inference parameters (such as maxTokens, temperature, topP, and stopSequences) in inferenceConfig. Model-specific options such as top_k are passed through additionalModelRequestFields using that model's field name. Batch inference does not add a top-level top_k. Top_p of 0 does not map to a top_k value. A system prompt instruction cannot control token sampling.",
+    "source_topic": "AWS Skill Builder tutorial 11: Performance optimization techniques"
+  }
+]

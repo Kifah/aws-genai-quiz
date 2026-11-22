@@ -1,0 +1,364 @@
+[
+  {
+    "id": "d5-q1001",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Sampling strategy for continuous production evaluation",
+    "difficulty": "medium",
+    "question_text": "A retail company runs a customer-facing assistant on Amazon Bedrock that handles about 2 million requests per day. The team wants continuous quality scoring (relevance and factual accuracy) with an LLM-as-a-judge. Running the judge on every response would roughly double inference cost, and the team cannot add latency to the user-facing path. The team must still be alerted when quality falls below an agreed threshold. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Invoke a judge model synchronously for every response before it is returned to the user and block responses that score below the threshold."
+      },
+      {
+        "key": "B",
+        "text": "Evaluate only the responses that receive a thumbs-down from users, and compute the quality score from that subset."
+      },
+      {
+        "key": "C",
+        "text": "Run evaluation only in the CI/CD pipeline before each release and skip evaluation of production traffic."
+      },
+      {
+        "key": "D",
+        "text": "Write invocation logs to Amazon S3, and use a scheduled AWS Step Functions workflow to score a stratified random sample of the logged responses asynchronously with a judge model. Publish the scores as Amazon CloudWatch metrics and create an alarm on the agreed threshold."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Asynchronous evaluation of a representative sample keeps the evaluation overhead small, adds no user-facing latency, and still produces a statistically useful quality signal that can drive a CloudWatch alarm. Judging every response synchronously doubles cost and adds latency. Scoring only thumbs-down responses gives a biased sample that cannot estimate overall quality. Pre-release-only evaluation misses model or data drift in production.",
+    "source_topic": "AWS Skill Builder tutorial 13: Evaluation systems for generative AI applications"
+  },
+  {
+    "id": "d5-q1002",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "A/B testing foundation model variants",
+    "difficulty": "hard",
+    "question_text": "A company wants to decide whether to replace its current Amazon Bedrock model (control) with a cheaper model (variant) for an internal HR assistant. The team has a hypothesis that the cheaper model keeps answer quality within an acceptable margin. Each employee must have a consistent experience during the test, and the decision must be supported by evidence rather than anecdotes. Which approach will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run the control model for one week and then the variant for the next week, and compare the average user ratings of the two weeks."
+      },
+      {
+        "key": "B",
+        "text": "Route each request randomly to either model, and ask the team to compare a few dozen responses by hand before choosing."
+      },
+      {
+        "key": "C",
+        "text": "Split traffic by a stable hash of the user ID (for example 90/10) in the application layer, record the model variant with quality scores and business metrics for every request, and compare control and variant with a statistical significance test over a predefined sample size."
+      },
+      {
+        "key": "D",
+        "text": "Benchmark both models offline on a public dataset and select the variant if its benchmark score is within 5 percent of the control."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "A proper A/B test defines a hypothesis and success criteria, splits concurrent traffic, keeps each user on one variant, logs the variant identifier with metrics, and checks statistical significance before deciding. Sequential weeks confound the model change with time-based effects such as seasonality. Per-request random routing breaks the consistent per-user experience, and a hand review of a few dozen responses is not statistically meaningful. A public benchmark does not reflect the company's own traffic or business metrics.",
+    "source_topic": "AWS Skill Builder tutorial 13: Evaluation systems for generative AI applications"
+  },
+  {
+    "id": "d5-q1003",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Cost per successful task for high-volume model selection",
+    "difficulty": "medium",
+    "question_text": "A company must classify and categorize more than 10 million short support messages each month with an Amazon Bedrock model. Cost is the top priority, but the classification must meet a minimum accuracy of 95 percent on a labeled test set. The team is comparing a larger, higher-quality model with a smaller, lower-cost model such as Amazon Nova Lite. Which evaluation approach will identify the best model for this workload?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Select the model with the highest quality score on the evaluation dataset, because quality determines customer satisfaction."
+      },
+      {
+        "key": "B",
+        "text": "Measure each model's cost per successfully completed task and throughput on a representative dataset, and select the lowest-cost model whose accuracy meets the 95 percent minimum."
+      },
+      {
+        "key": "C",
+        "text": "Select the model with the lowest price per 1,000 input tokens without running an accuracy evaluation."
+      },
+      {
+        "key": "D",
+        "text": "Measure only the P95 latency of each model and select the fastest model."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "For high-volume workloads, the relevant efficiency metric is cost per successful task (tokens, retries, and failures included) together with throughput, evaluated against a minimum quality threshold. The highest-quality model is likely to cost more than needed. The lowest token price ignores accuracy and the cost of failed or retried tasks. Latency alone says nothing about cost or classification quality.",
+    "source_topic": "AWS Skill Builder tutorial 13: Evaluation systems for generative AI applications"
+  },
+  {
+    "id": "d5-q1004",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Non-functional regression testing in a deployment pipeline",
+    "difficulty": "hard",
+    "question_text": "A team plans to promote a new version of its Amazon Bedrock-based summarization service. The new model passes the full golden-dataset functional regression suite, but in production a previous upgrade violated the 2-second P95 latency SLA. The team wants an automated check that prevents promotion when performance degrades, without relying on manual testing. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Score the candidate's responses with an LLM-as-a-judge and require a minimum quality score before promotion."
+      },
+      {
+        "key": "B",
+        "text": "Add 5,000 more prompts to the golden dataset so that the functional regression suite is more comprehensive."
+      },
+      {
+        "key": "C",
+        "text": "Add an AWS CodeBuild action to the AWS CodePipeline pipeline that runs a load test against both the baseline and the candidate version, records P95 latency and throughput, and fails the stage if the candidate exceeds the SLA or degrades beyond a set margin versus the baseline."
+      },
+      {
+        "key": "D",
+        "text": "Deploy the candidate to production and use AWS X-Ray traces after release to find any latency regression."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Non-functional regression testing compares latency, throughput, and efficiency between versions, and a CodeBuild stage in CodePipeline can enforce those thresholds as an automated quality gate. More golden prompts and a judge-based quality score are functional checks that do not measure latency. Using X-Ray after release detects the regression only after users are affected and is not a gate.",
+    "source_topic": "AWS Skill Builder tutorial 13: Evaluation systems for generative AI applications"
+  },
+  {
+    "id": "d5-q1005",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "AgentCore Evaluations metrics with CloudWatch composite alarms",
+    "difficulty": "hard",
+    "question_text": "A company runs a customer-facing agent on Amazon Bedrock AgentCore and uses AgentCore Evaluations to score task completion accuracy, reasoning quality, and action appropriateness. The operations team already uses Amazon CloudWatch dashboards and wants to be paged only when there is a systemic quality problem. Today, a single noisy metric dip often pages the team for isolated failures. Which combination of steps will meet these requirements? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Publish each evaluation score as a CloudWatch custom metric in a dedicated namespace with the agent ID as a dimension, so the scores appear on the existing dashboards."
+      },
+      {
+        "key": "B",
+        "text": "Create a separate alarm per metric that pages the team immediately when any one metric breaches its threshold."
+      },
+      {
+        "key": "C",
+        "text": "Export the evaluation results to Amazon S3 and have the team review them manually once a month."
+      },
+      {
+        "key": "D",
+        "text": "Create a CloudWatch composite alarm that enters the ALARM state only when the reasoning quality alarm AND the task completion accuracy alarm are both in ALARM."
+      },
+      {
+        "key": "E",
+        "text": "Enable AWS X-Ray tracing on the agent and use trace durations as the quality score."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "D"
+    ],
+    "explanation": "Publishing the AgentCore evaluation scores as custom metrics integrates them with existing CloudWatch dashboards and alarms, and a composite alarm that requires several correlated alarms reduces false positives by signaling a systemic issue rather than an isolated failure. Individual per-metric paging is exactly what causes the noise. Monthly manual review is not timely alerting, and X-Ray durations measure latency, not agent quality.",
+    "source_topic": "AWS Skill Builder tutorial 13: Evaluation systems for generative AI applications"
+  },
+  {
+    "id": "d5-q1006",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Automated agent evaluation workflow with Step Functions",
+    "difficulty": "medium",
+    "question_text": "A company wants its Amazon Bedrock AgentCore agents to be evaluated automatically every night and each time a new agent version is deployed. Each run must execute AgentCore evaluations, then custom evaluation checks, then aggregate the scores. If the overall score is below 0.85, an alert must be sent. Otherwise the metrics must be published to Amazon CloudWatch. The team wants visibility into each step and retry handling. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Write one AWS Lambda function that performs all evaluations in a polling loop and sends the alert if the score is low."
+      },
+      {
+        "key": "B",
+        "text": "Use an Amazon EventBridge schedule rule and a deployment event rule to start an AWS Step Functions state machine whose Lambda task states run the AgentCore evaluation, the custom evaluations, and the aggregation, followed by a Choice state that compares the overall score with 0.85 to route to an alert task or a metrics-publishing task."
+      },
+      {
+        "key": "C",
+        "text": "Ask the team to run the evaluations manually from a notebook after each deployment and email the results."
+      },
+      {
+        "key": "D",
+        "text": "Create a CloudWatch alarm on the agent's invocation count and start the evaluation whenever the alarm is triggered."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Step Functions orchestrates the multi-step evaluation pipeline with per-state visibility, retries, and a Choice state for the threshold decision, while EventBridge provides both the schedule and the deployment trigger. A single Lambda polling loop is limited by the 15-minute maximum duration and gives no step-level visibility or retries. Manual runs are not automated. An invocation-count alarm does not correspond to nightly or deployment-triggered evaluation.",
+    "source_topic": "AWS Skill Builder tutorial 13: Evaluation systems for generative AI applications"
+  },
+  {
+    "id": "d5-q1007",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "BM25 versus TF-IDF relevance ranking",
+    "difficulty": "hard",
+    "question_text": "A manufacturer's support search runs keyword retrieval on Amazon OpenSearch Service for a RAG application. Evaluation shows that very long manuals are ranked above short, precise articles because they repeat query terms many times. Part numbers and error codes must still match as exact terms, and the team wants to keep a lexical, explainable ranking function instead of adding an embedding pipeline. Which change will best address the issue?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Replace the ranking with plain TF-IDF scoring because term frequency should be weighted more heavily."
+      },
+      {
+        "key": "B",
+        "text": "Switch to a BERT-based semantic scorer for all queries and remove keyword matching."
+      },
+      {
+        "key": "C",
+        "text": "Increase the number of retrieved chunks (top-k) so that the shorter articles are also included."
+      },
+      {
+        "key": "D",
+        "text": "Use BM25 ranking, which improves on TF-IDF by applying document length normalization and term frequency saturation."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "BM25 is a probabilistic lexical ranking function that improves on TF-IDF with length normalization and saturating term frequency, so long documents with repeated terms stop dominating while exact identifiers still match. Plain TF-IDF has no length normalization or saturation and would worsen the problem. A purely semantic scorer would drop exact-term matching for part numbers and require embeddings. A larger top-k leaves the ranking issue in place and adds noise to the prompt.",
+    "source_topic": "AWS Skill Builder tutorial 13: Evaluation systems for generative AI applications"
+  },
+  {
+    "id": "d5-q1008",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Locating and reducing retrieval latency",
+    "difficulty": "hard",
+    "question_text": "A RAG application on Amazon Bedrock retrieves context from Amazon OpenSearch Service. The P95 retrieval latency has risen to 1.8 seconds, and users complain about slow answers. The same popular questions are asked repeatedly. The team needs to find out which part of the retrieval path is responsible and reduce latency without lowering answer quality. Which combination of actions will meet these requirements? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use AWS X-Ray and Amazon CloudWatch to trace and measure query embedding, index search, and ranking separately, and analyze P95 latency per component."
+      },
+      {
+        "key": "B",
+        "text": "Replace approximate nearest neighbor search with exact brute-force k-NN search over all vectors."
+      },
+      {
+        "key": "C",
+        "text": "Reduce monitoring overhead by turning off tracing and metrics for the retrieval path."
+      },
+      {
+        "key": "D",
+        "text": "Increase the maximum output tokens of the foundation model to speed up generation."
+      },
+      {
+        "key": "E",
+        "text": "Cache frequent query results (and precomputed embeddings) in Amazon ElastiCache so that repeated questions skip the repeated computation."
+      }
+    ],
+    "correct_answers": [
+      "A",
+      "E"
+    ],
+    "explanation": "Distributed tracing with X-Ray plus CloudWatch metrics identifies which stage drives P95 latency, and ElastiCache caching of frequent results avoids repeated retrieval work for popular questions. Exact brute-force k-NN is slower at scale than approximate nearest neighbor search. Turning off observability removes the ability to find bottlenecks. Output token limits affect generation, not retrieval latency.",
+    "source_topic": "AWS Skill Builder tutorial 13: Evaluation systems for generative AI applications"
+  },
+  {
+    "id": "d5-q1009",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Use-case-specific retrieval optimization for legal search",
+    "difficulty": "hard",
+    "question_text": "A law firm is building a RAG assistant that retrieves case documents for attorneys. Attorneys require citations to be the exact document version used, irrelevant passages must be kept to a minimum, and compliance requires an audit trail of what was retrieved for each answer. Response time of a few seconds is acceptable. Which retrieval design best fits these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Maximize recall by retrieving a very large top-k of chunks and letting the foundation model decide which are relevant."
+      },
+      {
+        "key": "B",
+        "text": "Use semantic vector search only, with aggressive caching of generated answers to keep responses under 500 ms."
+      },
+      {
+        "key": "C",
+        "text": "Combine exact-match (keyword or boolean) search with semantic search, tune and evaluate for precision (for example precision at k), and log retrieved document IDs and versions for each query for traceability."
+      },
+      {
+        "key": "D",
+        "text": "Use collaborative filtering on attorney click history to personalize and rank the results."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Legal search prioritizes precision, exact-match capability alongside semantic search, version-aware traceability, and detailed logging, and it can trade speed for accuracy. A recall-oriented large top-k is the customer-support pattern and floods the prompt with irrelevant text. Semantic-only search with cached answers loses exact matching and version traceability. Collaborative filtering is an e-commerce personalization technique and does not provide precision or audit guarantees.",
+    "source_topic": "AWS Skill Builder tutorial 13: Evaluation systems for generative AI applications"
+  },
+  {
+    "id": "d5-q1010",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "QuickSight dashboards for CloudWatch-based evaluation metrics",
+    "difficulty": "medium",
+    "question_text": "A company stores generative AI evaluation metrics and agent performance data in Amazon CloudWatch. Business stakeholders want interactive Amazon QuickSight dashboards that show model comparison and quality trends over time. A solutions architect tries to add CloudWatch as a direct QuickSight data source and cannot find that option. Which solution will provide the dashboards?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Open a request to enable the native CloudWatch connector in QuickSight Enterprise edition."
+      },
+      {
+        "key": "B",
+        "text": "Install a CloudWatch agent on the QuickSight service to forward metrics directly into SPICE."
+      },
+      {
+        "key": "C",
+        "text": "Replace QuickSight with CloudWatch Logs Insights saved queries, because QuickSight cannot visualize AWS-based operational data."
+      },
+      {
+        "key": "D",
+        "text": "Make the CloudWatch data available through Amazon Athena (for example by streaming or exporting it to Amazon S3 and querying it with Athena), and use Athena as the QuickSight data source."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "QuickSight does not connect directly to CloudWatch, so metrics or logs must be made queryable, typically by exporting or streaming them to Amazon S3 and querying with Athena, which QuickSight does support as a data source. A CloudWatch agent cannot be installed on QuickSight, which is a managed service. Logs Insights is not a stakeholder BI tool with interactive dashboards across sources. No native CloudWatch connector exists to enable.",
+    "source_topic": "AWS Skill Builder tutorial 13: Evaluation systems for generative AI applications"
+  },
+  {
+    "id": "d5-q1011",
+    "domain": 5,
+    "task_statement": "5.1",
+    "topic": "Automated stakeholder reporting of evaluation results",
+    "difficulty": "medium",
+    "question_text": "A company evaluates its generative AI models each week and stores the results in Amazon S3. Technical teams, executives, and compliance officers each need a different weekly report delivered by email and a collaboration tool without manual work. If a report-generation step fails, it must be retried automatically and administrators must be notified when it ultimately fails. Which solution will meet these requirements with the LEAST operational overhead?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create an Amazon EventBridge schedule that starts an AWS Step Functions workflow. The workflow queries the results with Amazon Athena, generates a report for each audience, and delivers it through Amazon SNS or Amazon SES. Configure retries and a catch state that notifies administrators."
+      },
+      {
+        "key": "B",
+        "text": "Have an analyst run the queries and send the reports manually every Monday."
+      },
+      {
+        "key": "C",
+        "text": "Create a CloudWatch alarm on the S3 bucket size that emails the raw result files to all stakeholders."
+      },
+      {
+        "key": "D",
+        "text": "Run a cron job on an Amazon EC2 instance that generates one combined report for all audiences and emails it to a single distribution list."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "EventBridge provides the scheduling, Step Functions orchestrates report generation per audience with built-in retry and error handling, and SNS or SES delivers the output, all serverless with little operational overhead. Manual reports are not automated. An S3 size alarm is unrelated to a weekly schedule and sends raw data. A single EC2 cron job requires server management and one combined report ignores the different needs of each stakeholder group and lacks built-in retry and failure notification.",
+    "source_topic": "AWS Skill Builder tutorial 13: Evaluation systems for generative AI applications"
+  }
+]

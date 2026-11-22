@@ -1,0 +1,332 @@
+[
+  {
+    "id": "d3-q1002",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Guardrail input vs output filter strength",
+    "difficulty": "medium",
+    "question_text": "A company runs a customer-care platform on Amazon Bedrock. Agents paste raw customer complaints, which often contain angry and abusive language, into an assistant that summarizes them. The summaries are shown to other employees and must never contain hateful, violent, or sexual language. The assistant must still accept every complaint as input and must not return a blocked-input message for abusive wording. The company wants the least custom code. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Attach a guardrail with the hate, violence, and sexual content filters set to HIGH for both input and output."
+      },
+      {
+        "key": "B",
+        "text": "Attach a guardrail whose hate, violence, and sexual content filters have the input strength set to NONE and the output strength set to HIGH."
+      },
+      {
+        "key": "C",
+        "text": "Run each complaint through Amazon Comprehend toxicity detection and discard any complaint with a high toxicity score before it reaches the model."
+      },
+      {
+        "key": "D",
+        "text": "Add a denied topic that describes abusive language and set the input action to detect only."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Content filters have separate input and output strengths, so a guardrail can leave user input unfiltered (NONE) while enforcing HIGH on the model response. This keeps abusive complaints accepted and still protects readers of the summary. Option A also blocks the abusive input. Option C rejects the complaints before summarization, which violates the requirement to accept every complaint, and adds custom code. Option D uses a denied topic, which is meant for subject areas rather than toxicity severity, and does not filter the output.",
+    "source_topic": "AWS Skill Builder tutorial 7: Input/Output Safety and Content Moderation (Task 3.1)"
+  },
+  {
+    "id": "d3-q1003",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Prompt attack filter with guard content input tags",
+    "difficulty": "hard",
+    "question_text": "A company calls an Amazon Bedrock foundation model with the InvokeModel API. Each request contains a long developer-written system prompt with detailed instructions and the end user's question. A guardrail with the prompt attack content filter set to HIGH is attached. The security team wants the filter to evaluate only what the user typed, so that the developer's own instructions are not treated as an attack and jailbreak attempts in the user text are still detected. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Lower the prompt attack filter strength to LOW so that the system prompt is not flagged."
+      },
+      {
+        "key": "B",
+        "text": "Add a denied topic that describes prompt injection and remove the prompt attack content filter."
+      },
+      {
+        "key": "C",
+        "text": "Wrap the user's text in the guardrail input tags (guard content) in the request body so that the guardrail evaluates only the tagged user input."
+      },
+      {
+        "key": "D",
+        "text": "Place AWS WAF in front of the application and remove the guardrail from the model invocation."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "Bedrock Guardrails lets you tag the part of the input that should be evaluated (input tags with InvokeModel, or guardContent blocks with Converse). Tagging the user's text lets the prompt attack filter inspect only user-supplied content and leaves the trusted system prompt out of the evaluation. Lowering the strength weakens protection for real attacks. A denied topic is not a prompt-attack detector. WAF is a useful network layer but cannot see inside the model request semantics as precisely and does not replace the guardrail's AI-based detection.",
+    "source_topic": "AWS Skill Builder tutorial 7: Input/Output Safety and Content Moderation (Task 3.1)"
+  },
+  {
+    "id": "d3-q1004",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Contextual grounding check configuration for RAG",
+    "difficulty": "hard",
+    "question_text": "A company has a custom RAG application that retrieves passages from its own vector store and then calls Amazon Bedrock with the Converse API. The company must block model responses that contain claims not supported by the retrieved passages, and also block responses that do not actually answer the user's question. The company wants to use Amazon Bedrock Guardrails. Which combination of steps will meet these requirements? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable an Automated Reasoning policy and upload the retrieved passages as the policy source document on every request."
+      },
+      {
+        "key": "B",
+        "text": "Enable the contextual grounding check in the guardrail and set both a grounding threshold and a relevance threshold."
+      },
+      {
+        "key": "C",
+        "text": "Add a word filter that blocks any phrase that does not appear in the retrieved passages."
+      },
+      {
+        "key": "D",
+        "text": "In each request, mark the retrieved passages as the grounding source and the user's question as the query, and mark the model output as the content to be guarded, by using guard content qualifiers."
+      },
+      {
+        "key": "E",
+        "text": "Set the content filter strength to HIGH for the misconduct category on the output."
+      }
+    ],
+    "correct_answers": [
+      "B",
+      "D"
+    ],
+    "explanation": "The contextual grounding check scores a response for grounding (is it supported by the source) and relevance (does it answer the query), and blocks responses that fall below the configured thresholds. For a custom RAG pipeline the guardrail needs the grounding source, the query, and the response, which are supplied through guard content qualifiers. Automated Reasoning requires a formalized policy and is not meant to check against ad hoc passages per request. Word filters are static lists and cannot compare against passages. The misconduct filter detects harmful content, not unsupported claims.",
+    "source_topic": "AWS Skill Builder tutorial 7: Input/Output Safety and Content Moderation (Task 3.1)"
+  },
+  {
+    "id": "d3-q1005",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Guardrails streaming sync vs async processing",
+    "difficulty": "hard",
+    "question_text": "A regulated insurer streams responses from an Amazon Bedrock model to a web chat by using the ConverseStream API with a guardrail attached. Compliance requires that no response text that violates the guardrail is ever displayed to a customer, even briefly. The company accepts a small increase in time to first token. Which configuration will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use asynchronous guardrail stream processing so that chunks are sent immediately and evaluated in the background."
+      },
+      {
+        "key": "B",
+        "text": "Disable streaming and use only the non-streaming Converse API, because guardrails cannot be used with streaming."
+      },
+      {
+        "key": "C",
+        "text": "Stream the response and run an AWS Lambda function after the stream ends to delete violating messages from the chat history."
+      },
+      {
+        "key": "D",
+        "text": "Use synchronous guardrail stream processing so that response chunks are buffered and evaluated before they are returned to the client."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "With streaming APIs, guardrails can run in synchronous mode, where chunks are held and evaluated before being released, which prevents violating text from reaching the user at the cost of added latency. Asynchronous mode returns chunks immediately and evaluates them afterward, so violating text may already have been shown. Guardrails do support streaming (InvokeModelWithResponseStream and ConverseStream), so option B is unnecessary. Option C deletes content after the customer has already seen it.",
+    "source_topic": "AWS Skill Builder tutorial 7: Input/Output Safety and Content Moderation (Task 3.1)"
+  },
+  {
+    "id": "d3-q1006",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Guardrail versions and working draft",
+    "difficulty": "medium",
+    "question_text": "A team operates a production chatbot that invokes Amazon Bedrock with guardrail version 3. A developer needs to add several denied topics and tighten the content filter strengths. The team wants to test the changes with the built-in test window and must not change behavior for production users until the changes are approved. Which approach meets these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Edit the working draft of the guardrail and test it. After approval, create a new guardrail version and update the application to reference that version."
+      },
+      {
+        "key": "B",
+        "text": "Edit the working draft and test it. Production will pick up the changes automatically because version 3 always points to the working draft."
+      },
+      {
+        "key": "C",
+        "text": "Delete guardrail version 3, recreate it with the new settings, and test the changes directly with production traffic."
+      },
+      {
+        "key": "D",
+        "text": "Create a new guardrail with a different name for every change and have the application read the guardrail ID from a user-supplied header."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "A guardrail has a working draft that can be edited and tested freely. Numbered versions are immutable snapshots, and applications reference a specific version, so production remains unchanged until a new version is created and the application is updated to use it. Version 3 does not follow the draft. Deleting and recreating a live version risks outages and tests on real users. Taking the guardrail ID from a user-controlled header lets users choose their own safety policy.",
+    "source_topic": "AWS Skill Builder tutorial 7: Input/Output Safety and Content Moderation (Task 3.1)"
+  },
+  {
+    "id": "d3-q1007",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Comprehend toxicity detection request limits",
+    "difficulty": "hard",
+    "question_text": "A company stores English support-chat transcripts. Each transcript is up to 60 KB. The company wants to flag transcripts that contain harassment, hate speech, or profanity by using Amazon Comprehend toxicity detection (DetectToxicContent) and then route flagged transcripts to a review queue. The company wants per-category confidence scores for each part of the text. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Send the entire 60 KB transcript as a single text segment in one DetectToxicContent call."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Comprehend DetectSentiment and treat transcripts with NEGATIVE sentiment as toxic."
+      },
+      {
+        "key": "C",
+        "text": "Split each transcript into segments of at most 1 KB, send up to 10 segments (10 KB total) per DetectToxicContent request, and compare the returned category scores with thresholds."
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Comprehend DetectPiiEntities because it returns toxicity labels for profanity and insults."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "DetectToxicContent accepts a list of up to 10 text segments, each up to 1 KB, with a 10 KB total request size, and returns an overall toxicity score plus category scores (such as hate speech, harassment or abuse, profanity, insult) per segment. Long transcripts therefore must be chunked and batched. A 60 KB segment exceeds the limit. Sentiment is not toxicity: a negative complaint is not necessarily abusive. PII detection finds personal data, not toxic language.",
+    "source_topic": "AWS Skill Builder tutorial 7: Input/Output Safety and Content Moderation (Task 3.1)"
+  },
+  {
+    "id": "d3-q1008",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Step Functions Distributed Map for bulk moderation",
+    "difficulty": "hard",
+    "question_text": "A company must run a one-time moderation backfill on 8 million user-generated text files stored in Amazon S3. For each file, an AWS Lambda function calls Amazon Comprehend toxicity detection and writes a verdict. The company wants to start with the S3 prefix instead of building a file list, process files with very high parallelism, and continue the run if a small percentage of items fail. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use an AWS Step Functions Distributed Map state with the S3 prefix as the item source, a high concurrency limit, and a tolerated failure percentage."
+      },
+      {
+        "key": "B",
+        "text": "Use an AWS Step Functions inline Map state and pass the full list of 8 million object keys in the state input."
+      },
+      {
+        "key": "C",
+        "text": "Use a Parallel state with 8 million branches, one per file."
+      },
+      {
+        "key": "D",
+        "text": "Use one Lambda function that loops over all objects and calls Comprehend sequentially."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "Distributed Map is designed for large-scale parallel processing: it can read items directly from S3, run child workflow executions at very high concurrency, and supports tolerated-failure thresholds. Inline Map runs within the parent execution, is limited in concurrency, and is constrained by the 256 KB state payload, so it cannot hold millions of keys. A Parallel state has a fixed set of branches defined in the state machine. A single sequential Lambda would exceed the 15-minute timeout and could not finish in a reasonable time.",
+    "source_topic": "AWS Skill Builder tutorial 7: Input/Output Safety and Content Moderation (Task 3.1)"
+  },
+  {
+    "id": "d3-q1009",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Custom moderation workflow with tiered human review",
+    "difficulty": "hard",
+    "question_text": "A company builds a moderation pipeline for user posts that will be summarized by Amazon Bedrock. Amazon Comprehend toxicity scores are available within 200 ms, and a small foundation model can add a policy-specific verdict. Posts with a very low risk must be approved automatically, very high risk must be rejected automatically, and only ambiguous posts may go to human reviewers to limit reviewer cost. A reviewer decision can take hours. Which combination of steps will meet these requirements with the least operational overhead? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Send every post to a human reviewer queue and let the reviewers decide, using the model scores only as hints."
+      },
+      {
+        "key": "B",
+        "text": "Run all checks one after another in a single Lambda function and poll a database every second until a reviewer responds."
+      },
+      {
+        "key": "C",
+        "text": "Use a Parallel state to run the Comprehend toxicity check and the foundation model policy check at the same time, then a Choice state that compares the combined score with an approve threshold and a reject threshold."
+      },
+      {
+        "key": "D",
+        "text": "Use an Express workflow and the .waitForTaskToken integration to pause for the reviewer's decision."
+      },
+      {
+        "key": "E",
+        "text": "For posts in the ambiguous range, use a Standard workflow task with the .waitForTaskToken integration, send the task token with the review request, and resume the execution when the reviewer calls SendTaskSuccess or SendTaskFailure."
+      }
+    ],
+    "correct_answers": [
+      "C",
+      "E"
+    ],
+    "explanation": "A Parallel state runs independent checks concurrently to keep latency low, and a Choice state implements the approve, reject, and review bands. The callback (.waitForTaskToken) pattern in a Standard workflow pauses the execution, without polling or compute cost, until the reviewer returns the task token. Sending every post to humans defeats the cost requirement. A polling Lambda is operationally heavy and subject to the 15-minute limit. Express workflows do not support the callback pattern and have a short maximum duration, so they cannot wait hours.",
+    "source_topic": "AWS Skill Builder tutorial 7: Input/Output Safety and Content Moderation (Task 3.1)"
+  },
+  {
+    "id": "d3-q1010",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Knowledge Bases maximum results and prompt template for grounding",
+    "difficulty": "medium",
+    "question_text": "A company uses Amazon Bedrock Knowledge Bases with the RetrieveAndGenerate API for a policy assistant. Reviewers report that answers to broad questions omit relevant clauses because the supporting information is spread across many document chunks. Compliance also requires that the model answers only from retrieved content and that users can see which source documents support each answer. Which solution will meet these requirements with the least effort?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Fine-tune the foundation model on the policy documents and remove the knowledge base."
+      },
+      {
+        "key": "B",
+        "text": "Reduce the number of retrieved results to 1 so the model focuses on the single best chunk, and raise the temperature."
+      },
+      {
+        "key": "C",
+        "text": "Replace the knowledge base with a larger context window model and paste all documents into every prompt."
+      },
+      {
+        "key": "D",
+        "text": "Increase the number of retrieved results (up to the supported maximum), and use a custom generation prompt template that tells the model to answer only from the search results, and return the source attributions that RetrieveAndGenerate provides."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Knowledge Bases lets you raise the number of retrieved chunks (up to 100) so broad questions get more context, and a custom prompt template lets you add explicit instructions such as answering only from the retrieved results. RetrieveAndGenerate returns citations that trace the answer back to source documents. Fine-tuning does not provide source attribution and goes stale. One chunk reduces coverage and a high temperature increases hallucination risk. Pasting all documents is costly, may exceed context limits, and gives no per-answer source tracing.",
+    "source_topic": "AWS Skill Builder tutorial 7: Input/Output Safety and Content Moderation (Task 3.1)"
+  },
+  {
+    "id": "d3-q1011",
+    "domain": 3,
+    "task_statement": "3.1",
+    "topic": "Small foundation model as specialized content moderator",
+    "difficulty": "medium",
+    "question_text": "A company runs a Bedrock-based advice assistant. Built-in guardrail filters do not detect the company's own policy category, 'requests that ask the assistant to help manipulate or deceive a third party'. Each user message must be classified before the main model is called, with a short reason for the audit log, at low latency and low cost per request. The company has no labeled dataset. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Call a small, fast foundation model in Amazon Bedrock with a targeted classification prompt that defines the policy category and returns a JSON verdict with a reason. Run it before the main model, alongside guardrails."
+      },
+      {
+        "key": "B",
+        "text": "Use the largest available foundation model for the classification prompt so that accuracy is maximized regardless of latency."
+      },
+      {
+        "key": "C",
+        "text": "Train a custom Amazon SageMaker AI classifier from scratch and deploy it on a real-time endpoint."
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Comprehend sentiment analysis and reject any message with negative sentiment."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "A smaller, fast foundation model with a targeted moderation prompt can detect organization-specific categories without labeled data, returns reasoning for audits, and adds little latency or cost; it complements guardrails as an extra layer. The largest model adds unnecessary latency and cost for a classification task. A custom SageMaker classifier needs a labeled dataset and training time that the company does not have. Sentiment does not map to the policy category: manipulative requests can be polite, and negative messages can be harmless.",
+    "source_topic": "AWS Skill Builder tutorial 7: Input/Output Safety and Content Moderation (Task 3.1)"
+  }
+]

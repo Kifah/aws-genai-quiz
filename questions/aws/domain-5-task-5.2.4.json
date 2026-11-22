@@ -1,0 +1,300 @@
+[
+  {
+    "id": "d5-q1012",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "X-Ray Insights anomaly detection",
+    "difficulty": "medium",
+    "question_text": "A company runs a RAG assistant behind Amazon API Gateway. An AWS Lambda function queries Amazon OpenSearch Service and then calls Amazon Bedrock. AWS X-Ray active tracing is already enabled. Several times a month, p95 latency rises for about an hour and the on-call team only notices after customers complain. Engineers then spend hours comparing service maps to find which downstream component caused the slowdown. The company wants automatic detection of anomalous latency and error rates, an automatically generated root cause analysis that identifies the responsible service, and notifications when an anomaly opens, with the least custom code. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a static-threshold Amazon CloudWatch alarm on the Lambda Duration metric and send the alarm to Amazon SNS."
+      },
+      {
+        "key": "B",
+        "text": "Schedule an Amazon CloudWatch Logs Insights query every five minutes with Amazon EventBridge Scheduler and compare the results with last week's values in a Lambda function."
+      },
+      {
+        "key": "C",
+        "text": "Enable X-Ray Insights on the X-Ray group that contains the application's traces, and configure Insights notifications to be delivered through Amazon EventBridge to an Amazon SNS topic."
+      },
+      {
+        "key": "D",
+        "text": "Enable AWS CloudTrail Insights on the account and subscribe the on-call team to Insights events."
+      }
+    ],
+    "correct_answers": [
+      "C"
+    ],
+    "explanation": "X-Ray Insights continuously analyzes trace data for anomalies in response time and fault rate, identifies the root-cause service, and emits notifications (through EventBridge) when an insight opens or changes, with no custom analysis code. A static Duration alarm only watches one function and cannot tell whether OpenSearch or Bedrock is responsible. A scheduled Logs Insights query plus a Lambda comparison is custom code that provides no root cause analysis. CloudTrail Insights detects unusual API call volume and error rates for management calls, not application latency across a request path.",
+    "source_topic": "AWS Skill Builder tutorial 14: Troubleshooting generative AI applications"
+  },
+  {
+    "id": "d5-q1013",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "X-Ray annotations and sampling rules",
+    "difficulty": "hard",
+    "question_text": "A GenAI platform handles about 2,000 requests per second. Each request passes through API Gateway, AWS Lambda, and Amazon Bedrock, and every request is currently traced by AWS X-Ray at 100 percent, which has become expensive. Engineers also struggle to answer questions such as 'show me the slow traces for model ID X with prompt version 7' because the model ID and prompt version were stored as free-form fields that cannot be searched in the X-Ray console. The team wants to cut tracing cost while keeping the ability to filter traces by those two values. Which combination of actions will meet these requirements? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Store the model ID and prompt version as X-Ray metadata on the Bedrock subsegment, because metadata is indexed for filter expressions."
+      },
+      {
+        "key": "B",
+        "text": "Replace X-Ray with CloudWatch Logs only, because log lines carry the same service-map and latency-breakdown information as traces."
+      },
+      {
+        "key": "C",
+        "text": "Keep sampling at 100 percent so no slow request is ever missed, and use X-Ray groups to reduce the stored volume."
+      },
+      {
+        "key": "D",
+        "text": "Create a custom X-Ray sampling rule for the high-volume route with a small reservoir and a low fixed rate, so only a representative fraction of requests is traced."
+      },
+      {
+        "key": "E",
+        "text": "Record the model ID and prompt version as X-Ray annotations on the Bedrock subsegment, and use filter expressions on those annotation keys when searching traces."
+      }
+    ],
+    "correct_answers": [
+      "D",
+      "E"
+    ],
+    "explanation": "Annotations are indexed key-value pairs that can be used in filter expressions and groups, so model ID and prompt version belong there; metadata is not indexed and cannot be searched. A custom sampling rule (reservoir plus fixed rate) reduces the number of traced requests and therefore cost while still providing representative traces. Metadata cannot be filtered on. Logs do not provide the segment and subsegment timing or the service map that X-Ray does. Tracing 100 percent keeps the cost problem, and groups only filter what has already been collected and billed.",
+    "source_topic": "AWS Skill Builder tutorial 14: Troubleshooting generative AI applications"
+  },
+  {
+    "id": "d5-q1014",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Detecting truncated FM responses with metric filters",
+    "difficulty": "medium",
+    "question_text": "Users of a document drafting assistant report that some answers stop mid-sentence. The Lambda function that calls the Amazon Bedrock Converse API already writes one JSON log line per invocation to Amazon CloudWatch Logs with fields such as requestId, modelId, and stopReason. The operations team wants to be alerted when more than 2 percent of responses in a five-minute window end with stopReason set to max_tokens, without changing application code or running manual queries. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a CloudWatch Logs metric filter on the log group that matches stopReason equal to max_tokens and publishes a custom metric. Create a CloudWatch alarm on that metric (using metric math against total invocations) that notifies an Amazon SNS topic."
+      },
+      {
+        "key": "B",
+        "text": "Create an Amazon EventBridge rule that triggers when an Amazon CloudWatch Logs Insights query finds responses with stopReason set to max_tokens."
+      },
+      {
+        "key": "C",
+        "text": "Enable AWS X-Ray Insights on the function and rely on Insights notifications to report truncated responses."
+      },
+      {
+        "key": "D",
+        "text": "Enable AWS CloudTrail data events for Amazon Bedrock and create an alarm on events whose response contains max_tokens."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "A metric filter converts a pattern in structured logs into a CloudWatch metric, and an alarm (with metric math to compute the ratio against all invocations) alerts continuously with no code change. Logs Insights queries are run on demand or by custom schedules and do not emit EventBridge events, so no such rule can fire. X-Ray Insights detects latency and fault anomalies, not the model stop reason. CloudTrail records API activity, not the contents of model responses.",
+    "source_topic": "AWS Skill Builder tutorial 14: Troubleshooting generative AI applications"
+  },
+  {
+    "id": "d5-q1015",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Golden dataset hallucination detection",
+    "difficulty": "hard",
+    "question_text": "A healthcare company validates answers from a clinical question-answering assistant against a golden dataset of expert-verified answers. The current check flags a response as a hallucination when its BLEU score against the golden answer is low. This produces many false alarms on correct paraphrases and still misses responses that are worded almost identically to the golden answer but change a drug name or dosage. The team wants a more reliable automated detector that stays inside the golden-dataset approach. Which combination of changes will meet these requirements? (Choose two.)",
+    "question_type": "multi",
+    "options": [
+      {
+        "key": "A",
+        "text": "Lower the BLEU threshold so that fewer responses are flagged."
+      },
+      {
+        "key": "B",
+        "text": "Increase the model's temperature so that responses vary more from the golden answers."
+      },
+      {
+        "key": "C",
+        "text": "Compare embeddings of each response with the embeddings of the golden answers by using cosine similarity, with a threshold tuned on labeled examples."
+      },
+      {
+        "key": "D",
+        "text": "Add a Bedrock Guardrails word filter listing every drug name the assistant must not mention."
+      },
+      {
+        "key": "E",
+        "text": "Extract named entities (such as drug names, dosages, and conditions) from the response and from the golden answer, and flag responses that contain entities not present in the verified reference."
+      }
+    ],
+    "correct_answers": [
+      "C",
+      "E"
+    ],
+    "explanation": "Embedding cosine similarity measures meaning rather than surface wording, which stops correct paraphrases from being flagged, while entity comparison catches near-identical text that swaps a drug name or dosage. Multiple signals can then be combined into a hallucination score. Lowering the BLEU threshold only hides more real errors. Raising temperature increases variability and hallucination risk. A word filter cannot know which entities are wrong for a given question and does not compare against the golden data.",
+    "source_topic": "AWS Skill Builder tutorial 14: Troubleshooting generative AI applications"
+  },
+  {
+    "id": "d5-q1016",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Streaming response error recovery",
+    "difficulty": "hard",
+    "question_text": "A customer-support web app streams answers from Amazon Bedrock by using InvokeModelWithResponseStream from AWS Lambda. Occasionally the stream terminates after a mid-response stream error or a dropped connection, and the browser then displays the partial text as if it were the complete answer. The company wants users to never see an incomplete answer presented as final, and wants most failures to recover automatically without the user resubmitting. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the max_tokens inference parameter for the model so that streams are less likely to be cut off."
+      },
+      {
+        "key": "B",
+        "text": "Increase the Lambda memory size so that the stream is processed faster and connections are less likely to drop."
+      },
+      {
+        "key": "C",
+        "text": "Move the workload to Amazon Bedrock batch inference, and poll Amazon S3 for the completed answer."
+      },
+      {
+        "key": "D",
+        "text": "Buffer the streamed chunks on the client and validate completeness (a normal stop event was received). On a stream error or incomplete result, discard the partial text, and retry once or fall back to a non-streaming call such as the Converse API before showing the answer."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Streaming failures such as token truncation, timeouts, and network instability should be detected by checking that the stream ended normally; if not, the app should recover by retrying or switching to a non-streaming request and replace the partial text. Increasing max_tokens addresses length-limit truncation, not stream errors or dropped connections. Lambda memory does not fix connection or stream failures. Batch inference is asynchronous and unsuitable for interactive chat.",
+    "source_topic": "AWS Skill Builder tutorial 14: Troubleshooting generative AI applications"
+  },
+  {
+    "id": "d5-q1017",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Parallel dynamic chunking for oversized documents",
+    "difficulty": "hard",
+    "question_text": "A legal-tech company must extract party names, effective dates, and termination clauses from commercial contracts that are often 600 pages long and far exceed the context window of the Amazon Bedrock model it uses. Each section can be analyzed independently. The results must be ready within a few minutes, related clauses must not be split mid-clause, and the Bedrock request quota must not be exceeded. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Process fixed 4,000-character blocks one after another in a single loop, passing a running summary of all previous blocks into each request."
+      },
+      {
+        "key": "B",
+        "text": "Split the contract at section and paragraph boundaries (with a small overlap), process the chunks concurrently by using an AWS Step Functions Distributed Map state with a MaxConcurrency setting that fits the Bedrock quota, and add an aggregation step that merges results and removes duplicates."
+      },
+      {
+        "key": "C",
+        "text": "Send only the first portion of each contract that fits in the context window, because the key terms usually appear early."
+      },
+      {
+        "key": "D",
+        "text": "Send the whole contract in one request and rely on the model to ignore the tokens that do not fit."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Because sections are independent, chunks split on natural semantic boundaries can be processed in parallel to meet the time target, with concurrency capped for quota and a final aggregation step to merge and deduplicate. Sequential processing with a running summary suits tasks that must build on earlier context, but it is slow here and loses detail. Using only the first part silently drops required information. A single oversized request overflows the context window and is truncated or rejected.",
+    "source_topic": "AWS Skill Builder tutorial 14: Troubleshooting generative AI applications"
+  },
+  {
+    "id": "d5-q1018",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Retrieval drift monitoring",
+    "difficulty": "hard",
+    "question_text": "A company's support assistant uses Retrieval Augmented Generation with an Amazon Bedrock knowledge base. Six months after launch, the company released new product lines with new terminology. Users now complain that answers about the new products are unhelpful. Latency, error rates, the embedding model, and the application code are unchanged, and no alarms fired. The company wants to detect this kind of retrieval degradation early in the future and have a defined starting point for remediation. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Alarm on X-Ray latency and Lambda error metrics and scale the vector store when they increase."
+      },
+      {
+        "key": "B",
+        "text": "Permanently increase the number of retrieved chunks for every query to compensate for any lost relevance."
+      },
+      {
+        "key": "C",
+        "text": "Fine-tune the foundation model each month on the latest support transcripts."
+      },
+      {
+        "key": "D",
+        "text": "Run a scheduled evaluation of a labeled query set and publish precision, recall, and F1 for retrieval, plus top-k similarity score distributions and new query-topic patterns, as custom CloudWatch metrics with alarms against a baseline. When an alarm fires, investigate the new queries and content and update the data, chunking, or add hybrid keyword search."
+      }
+    ],
+    "correct_answers": [
+      "D"
+    ],
+    "explanation": "Retrieval drift shows up as shifts in query patterns, content, and similarity score distributions, and as falling precision, recall, and F1 against a baseline, not as infrastructure errors. Scheduled evaluation with custom metrics and alarms detects it early and points to remediation such as new content preparation, chunking changes, or hybrid search for new terminology. Latency and error alarms never fired because nothing was technically failing. Retrieving more chunks for every query adds noise and cost without diagnosing anything. Fine-tuning the FM does not repair retrieval of the right documents.",
+    "source_topic": "AWS Skill Builder tutorial 14: Troubleshooting generative AI applications"
+  },
+  {
+    "id": "d5-q1019",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Powertools for structured logging and tracing",
+    "difficulty": "medium",
+    "question_text": "A team runs a Python AWS Lambda function behind Amazon API Gateway that calls Amazon Bedrock. Troubleshooting is slow because log lines are unstructured print statements and cannot be tied to a single API request. The team wants JSON logs with consistent fields, the API Gateway request ID attached as a correlation ID to every log line, searchable fields in CloudWatch Logs Insights, and X-Ray subsegments around the Bedrock call, all with minimal boilerplate. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Keep the print statements and parse them with regular expressions in every Logs Insights query."
+      },
+      {
+        "key": "B",
+        "text": "Add Powertools for AWS Lambda (Python): use the Logger with the Lambda context injected and the correlation ID path set to the API Gateway request ID, and use the Tracer to capture the Bedrock call as a subsegment, with X-Ray active tracing enabled on the function."
+      },
+      {
+        "key": "C",
+        "text": "Install the Amazon CloudWatch agent on the Lambda execution environment to collect and format the logs."
+      },
+      {
+        "key": "D",
+        "text": "Enable Lambda Insights on the function and use its enhanced metrics as the correlation ID."
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation": "Powertools for AWS Lambda provides structured JSON logging, automatic Lambda context fields, a configurable correlation ID, and an X-Ray Tracer with decorators, which gives queryable fields and subsegments with little code. Regex parsing of unstructured logs is fragile and does not add a correlation ID. The CloudWatch agent is not installed in Lambda execution environments. Lambda Insights provides system-level metrics and does not structure application logs or create subsegments.",
+    "source_topic": "AWS Skill Builder tutorial 14: Troubleshooting generative AI applications"
+  },
+  {
+    "id": "d5-q1020",
+    "domain": 5,
+    "task_statement": "5.2",
+    "topic": "Classifying FM API errors for retry handling",
+    "difficulty": "hard",
+    "question_text": "A Lambda function invokes a model that was imported into Amazon Bedrock with Custom Model Import. After periods of inactivity, the first requests fail with ModelNotReadyException while the model loads, and the function returns HTTP 500 to users. The function's SDK client has retries disabled, and a separate hand-written loop retries every exception 10 times with a fixed 100-millisecond delay, including ValidationException responses caused by malformed requests. The company wants users to succeed once the model is ready, without hammering the service or retrying requests that can never succeed, and without paying for keep-warm invocations. Which solution will meet these requirements?",
+    "question_type": "single",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable the AWS SDK's standard retry behavior with exponential backoff and jitter, a higher maximum attempt count, and a read timeout long enough to cover model load. Treat ValidationException as non-retryable, log it with the request details, and return a clear client error."
+      },
+      {
+        "key": "B",
+        "text": "Schedule an Amazon EventBridge rule to invoke the model every minute so that it is never idle."
+      },
+      {
+        "key": "C",
+        "text": "Keep the fixed-delay loop but raise it to 50 attempts so that every error type is eventually retried successfully."
+      },
+      {
+        "key": "D",
+        "text": "Catch ModelNotReadyException and ValidationException identically and fail over every request to a different Region."
+      }
+    ],
+    "correct_answers": [
+      "A"
+    ],
+    "explanation": "ModelNotReadyException is transient and should be retried with exponential backoff and jitter within a timeout long enough for the model to load, while ValidationException indicates a bad request that retries cannot fix and should be logged and returned. Scheduled keep-warm invocations incur inference charges and do not handle the error path. More fixed-delay attempts amplify load and keep retrying non-retryable errors. Regional failover for every request is unnecessary and does not fix malformed requests.",
+    "source_topic": "AWS Skill Builder tutorial 14: Troubleshooting generative AI applications"
+  }
+]
