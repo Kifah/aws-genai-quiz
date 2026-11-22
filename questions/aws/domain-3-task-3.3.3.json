@@ -138,7 +138,7 @@
     "task_statement": "3.3",
     "topic": "Glue crawlers and DataZone lineage for training data governance",
     "difficulty": "hard",
-    "question_text": "A company continuously adds new data sources to the S3 data lake that feeds its foundation model customization and RAG pipelines. Data governance requires that every source is registered in a catalog with schema information as soon as it appears, that schema changes are detected automatically, and that auditors can visually trace how a source dataset was transformed and which assets were derived from it. The company wants to avoid manual registration. Which combination of steps will meet these requirements? (Choose two.)",
+    "question_text": "A company continuously adds new data sources to the S3 data lake that feeds its foundation model customization and RAG pipelines. Data governance requires that every source is registered in a catalog with schema information without manual registration, that schema changes are detected automatically on a recurring basis, and that auditors can visually trace how a source dataset was transformed and which assets were derived from it. The company wants to avoid manual registration. Which combination of steps will meet these requirements? (Choose two.)",
     "question_type": "multi",
     "options": [
       {
@@ -159,14 +159,14 @@
       },
       {
         "key": "E",
-        "text": "Use Amazon DataZone data lineage with the cataloged assets so auditors can view the origin of assets and the chain of transformations that produced them."
+        "text": "Use Amazon DataZone data lineage, fed by lineage events from the data processing jobs such as AWS Glue jobs, so auditors can view the origin of assets and the chain of transformations that produced them."
       }
     ],
     "correct_answers": [
       "B",
       "E"
     ],
-    "explanation": "Glue crawlers automatically discover new data sources and schema changes and keep the Glue Data Catalog current without manual registration. Amazon DataZone builds on the catalog to provide lineage visualization that shows the origin of an asset and its chain of connections for auditors. A spreadsheet is manual and drifts from reality. Macie finds sensitive data but does not catalog schemas or lineage. Raw CloudTrail S3 logs show access, not a transformation lineage, and are impractical to review.",
+    "explanation": "Glue crawlers run on a schedule to discover new data sources and schema changes and keep the Glue Data Catalog current without manual registration. Amazon DataZone data lineage visualizes the origin of an asset and its chain of connections for auditors, using lineage events captured from the jobs that transform the data, not from the catalog alone. A spreadsheet is manual and drifts from reality. Macie finds sensitive data but does not catalog schemas or lineage. Raw CloudTrail S3 logs show access, not a transformation lineage, and are impractical to review.",
     "source_topic": "AWS Skill Builder tutorial 9: Introduction to Compliance and Governance"
   },
   {

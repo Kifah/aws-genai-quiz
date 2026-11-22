@@ -14,7 +14,7 @@
       },
       {
         "key": "B",
-        "text": "Place Amazon API Gateway in front of a Lambda webhook handler. The handler retrieves the shared secret from AWS Secrets Manager, validates the HMAC signature, performs a conditional write of the event ID to an Amazon DynamoDB table, sends new events to an Amazon SQS queue, and returns 202 immediately. A second Lambda function consumes the queue and invokes Bedrock."
+        "text": "Place Amazon API Gateway in front of a Lambda webhook handler. The handler retrieves the shared secret from AWS Secrets Manager, validates the HMAC signature, sends the event to an Amazon SQS queue, and returns 202 immediately. A second Lambda function consumes the queue, performs a conditional write of the event ID to an Amazon DynamoDB table, and invokes Bedrock only for event IDs it has not recorded before."
       },
       {
         "key": "C",
@@ -28,7 +28,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Verifying the HMAC signature authenticates the sender, a conditional DynamoDB write makes duplicate deliveries idempotent, and returning 202 after enqueueing meets the 5-second acknowledgement window while the queue consumer performs the slow Bedrock call. Option A cannot work because the SaaS provider cannot sign requests with SigV4 for IAM authorization, and the synchronous call exceeds 5 seconds. Option C skips signature validation, so forged requests are accepted, and FIFO deduplication only covers a 5-minute window. Option D still blocks past the provider's 5-second deadline, which triggers the redeliveries it is meant to avoid.",
+    "explanation": "Verifying the HMAC signature authenticates the sender, and returning 202 once the event is safely enqueued meets the 5-second acknowledgement window while the queue consumer performs the slow Bedrock call. Putting the conditional DynamoDB write in the consumer makes duplicate deliveries idempotent without risking a lost event: if the enqueue fails the provider simply retries, and a duplicate queue message is skipped by the same write. Option A cannot work because the SaaS provider cannot sign requests with SigV4 for IAM authorization, and the synchronous call exceeds 5 seconds. Option C skips signature validation, so forged requests are accepted, and FIFO deduplication only covers a 5-minute window. Option D still blocks past the provider's 5-second deadline, which triggers the redeliveries it is meant to avoid.",
     "source_topic": "AWS Skill Builder tutorial 4: Enterprise Integration Architectures"
   },
   {

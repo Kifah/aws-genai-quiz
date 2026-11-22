@@ -202,7 +202,7 @@
     "task_statement": "4.2",
     "topic": "Score normalization in OpenSearch hybrid search",
     "difficulty": "hard",
-    "question_text": "A company implements hybrid search for a RAG application on Amazon OpenSearch Service. A BM25 text query and a k-NN vector query are combined in a hybrid query. Raw BM25 scores range from about 0 to 30, and vector similarity scores range from 0 to 1. Results are dominated by keyword matches no matter how the two queries are weighted, and conceptually relevant documents rank low. The team wants a managed, in-cluster fix without adding another service. Which solution will meet these requirements?",
+    "question_text": "A company implements hybrid search for a RAG application on an Amazon OpenSearch Service domain that runs OpenSearch 2.19. A BM25 text query and a k-NN vector query are combined in a hybrid query. Raw BM25 scores range from about 0 to 30, and vector similarity scores range from 0 to 1. Results are dominated by keyword matches no matter how the two queries are weighted, and conceptually relevant documents rank low. The team wants a managed, in-cluster fix without adding another service. Which solution will meet these requirements?",
     "question_type": "single",
     "options": [
       {
@@ -225,7 +225,7 @@
     "correct_answers": [
       "B"
     ],
-    "explanation": "Scores from lexical and vector queries sit on different scales, so they must be normalized before they are combined. A search pipeline normalization processor with min-max normalization and weighted combination does this inside OpenSearch, and rank-based fusion such as reciprocal rank fusion avoids score scale entirely. A larger k changes candidate count, not scale. A fixed large boost is brittle because BM25 ranges vary by query and corpus. Appending lists is not fusion and ignores relative relevance.",
+    "explanation": "Scores from lexical and vector queries sit on different scales, so they must be normalized before they are combined. A search pipeline normalization processor with min-max normalization and weighted combination does this inside OpenSearch, and rank-based fusion such as reciprocal rank fusion avoids score scale entirely. A larger k changes candidate count, not scale. A fixed large boost is brittle because BM25 ranges vary by query and corpus. Appending lists is not fusion and ignores relative relevance. The normalization processor needs OpenSearch 2.10 or later, and reciprocal rank fusion needs 2.19 or later, which the domain in this scenario meets.",
     "source_topic": "AWS Skill Builder tutorial 11: Performance optimization techniques"
   },
   {
@@ -367,7 +367,7 @@
     "task_statement": "4.2",
     "topic": "top_k with the Converse API",
     "difficulty": "medium",
-    "question_text": "A developer calls an Anthropic Claude model on Amazon Bedrock by using the Converse API. The application needs to set temperature to 0.2, top_p to 0.9, and top_k to 50 so that terminology stays consistent. The developer finds that temperature and top_p are available in the inferenceConfig parameter, but top_k is not. Which solution will meet these requirements?",
+    "question_text": "A developer calls an Anthropic Claude model on Amazon Bedrock by using the Converse API. The application needs to set temperature to 0.2 and top_k to 50 so that terminology stays consistent. The developer finds that temperature is available in the inferenceConfig parameter, but top_k is not. Which solution will meet these requirements?",
     "question_type": "single",
     "options": [
       {
@@ -390,7 +390,7 @@
     "correct_answers": [
       "A"
     ],
-    "explanation": "Converse standardizes only common inference parameters (such as maxTokens, temperature, topP, and stopSequences) in inferenceConfig. Model-specific options such as top_k are passed through additionalModelRequestFields using that model's field name. Batch inference does not add a top-level top_k. Top_p of 0 does not map to a top_k value. A system prompt instruction cannot control token sampling.",
+    "explanation": "Converse standardizes only common inference parameters (such as maxTokens, temperature, topP, and stopSequences) in inferenceConfig. Model-specific options such as top_k are passed through additionalModelRequestFields using that model's field name. Batch inference does not add a top-level top_k. Setting top_p to 0 does not map to a top_k value. A system prompt instruction cannot control token sampling. AWS advises adjusting either temperature or top_p, not both, and some newer Claude models accept only one of them, so the scenario sets temperature and top_k.",
     "source_topic": "AWS Skill Builder tutorial 11: Performance optimization techniques"
   }
 ]
